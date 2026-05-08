@@ -1,0 +1,349 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://vanhavermaet.local/schemas/pc200_payroll_dataset.schema.json",
+  "title": "PC 200 Payroll Dataset",
+  "description": "JSON Schema voor het machineleesbare dataset van Paritair Comité 200. Voor inhoudelijke uitleg zie pc200_payroll_dataset_2026_CORE.md.",
+  "type": "object",
+  "required": [
+    "meta",
+    "lonen",
+    "indexatie",
+    "rsz",
+    "fiscaliteit",
+    "premies_en_voordelen",
+    "arbeidsvoorwaarden",
+    "bronnen",
+    "validatie"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "meta":                 { "$ref": "#/definitions/meta" },
+    "lonen":                { "type": "array", "items": { "$ref": "#/definitions/datapunt" } },
+    "indexatie":            { "type": "array", "items": { "$ref": "#/definitions/datapunt" } },
+    "rsz":                  { "type": "array", "items": { "$ref": "#/definitions/datapunt" } },
+    "fiscaliteit":          { "type": "array", "items": { "$ref": "#/definitions/datapunt" } },
+    "premies_en_voordelen": { "type": "array", "items": { "$ref": "#/definitions/datapunt" } },
+    "arbeidsvoorwaarden":   { "type": "array", "items": { "$ref": "#/definitions/datapunt" } },
+    "bronnen":              { "type": "array", "items": { "$ref": "#/definitions/bron_master" } },
+    "validatie":            { "$ref": "#/definitions/validatie" }
+  },
+
+  "definitions": {
+
+    "meta": {
+      "type": "object",
+      "required": ["dataset", "pc", "pc_naam", "land", "taal", "laatste_update", "doeljaar", "dekking"],
+      "properties": {
+        "dataset":         { "type": "string" },
+        "pc":              { "type": "string", "pattern": "^[0-9]{2,4}$" },
+        "pc_naam":         { "type": "string" },
+        "land":            { "type": "string", "minLength": 2, "maxLength": 2 },
+        "taal":            { "type": "string", "pattern": "^[a-z]{2}-[A-Z]{2}$" },
+        "laatste_update":  { "type": "string", "format": "date" },
+        "doeljaar":        { "type": "integer", "minimum": 2020, "maximum": 2099 },
+        "dekking":         { "type": "array", "items": { "type": "string" } },
+        "niet_gevonden": {
+          "description": "Vrije lijst — entries zijn ofwel een tekstuele beschrijving (string) ofwel een gestructureerd object.",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              { "type": "string" },
+              {
+                "type": "object",
+                "properties": {
+                  "onderwerp":  { "type": "string" },
+                  "reden":      { "type": "string" },
+                  "aanbeveling":{ "type": "string" }
+                }
+              }
+            ]
+          }
+        },
+        "conflicten": {
+          "description": "Vrije lijst — elke entry is ofwel een tekstuele beschrijving (string) ofwel een gestructureerd object.",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              { "type": "string" },
+              {
+                "type": "object",
+                "properties": {
+                  "onderwerp":     { "type": "string" },
+                  "beschrijving":  { "type": "string" },
+                  "bronnen":       { "type": "array", "items": { "type": "string" } }
+                }
+              }
+            ]
+          }
+        },
+        "opmerkingen": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+
+    "validatie": {
+      "type": "object",
+      "required": [
+        "json_schema_gevolgd",
+        "alle_datapunten_met_bron",
+        "alle_datapunten_met_status",
+        "conflicten_gemarkeerd",
+        "ontbrekende_informatie_gemarkeerd",
+        "baremamatrix_volledig_geintegreerd",
+        "baremacellen_aantal",
+        "triangulatie_uitgevoerd",
+        "monotone_loonprogressie_gecheckt"
+      ],
+      "properties": {
+        "json_schema_gevolgd":               { "type": "boolean" },
+        "alle_datapunten_met_bron":          { "type": "boolean" },
+        "alle_datapunten_met_status":        { "type": "boolean" },
+        "conflicten_gemarkeerd":             { "type": "boolean" },
+        "ontbrekende_informatie_gemarkeerd": { "type": "boolean" },
+        "baremamatrix_volledig_geintegreerd":{ "type": "boolean" },
+        "baremacellen_aantal":               { "type": "integer", "minimum": 0 },
+        "triangulatie_uitgevoerd":           { "type": "boolean" },
+        "monotone_loonprogressie_gecheckt":  { "type": "boolean" },
+        "sectorpensioen_onderzocht":         { "type": "boolean" },
+        "sociaal_fonds_200_bijdrage_geintegreerd": { "type": "boolean" }
+      }
+    },
+
+    "datapunt": {
+      "type": "object",
+      "required": [
+        "id",
+        "categorie",
+        "subcategorie",
+        "type",
+        "pc",
+        "omschrijving",
+        "status",
+        "laatst_bevestigd_op"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "id":           { "type": "string", "pattern": "^[A-Za-z0-9_]+$", "minLength": 3 },
+        "categorie":    { "$ref": "#/definitions/enum_categorie" },
+        "subcategorie": { "type": "string" },
+        "type":         { "$ref": "#/definitions/enum_type" },
+        "pc":           { "type": "string" },
+        "omschrijving": { "type": "string", "minLength": 3 },
+
+        "waarde_bron":           { "type": ["string", "null"] },
+        "waarde_genormaliseerd": { "type": ["number", "null"] },
+
+        "tabel_per_ervaring": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["ervaring_jaren", "maandloon_eur"],
+            "additionalProperties": false,
+            "properties": {
+              "ervaring_jaren": { "type": "integer", "minimum": 0, "maximum": 60 },
+              "maandloon_eur":  { "type": "number", "exclusiveMinimum": 0 }
+            }
+          }
+        },
+        "tabel_per_leeftijd": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["leeftijd_jaren", "maandloon_eur"],
+            "additionalProperties": false,
+            "properties": {
+              "leeftijd_jaren": { "type": "integer", "minimum": 14, "maximum": 30 },
+              "maandloon_eur":  { "type": "number", "exclusiveMinimum": 0 }
+            }
+          }
+        },
+
+        "eenheid":          { "type": ["string", "null"] },
+        "valuta":           { "type": ["string", "null"], "enum": ["EUR", null] },
+        "frequentie":       { "$ref": "#/definitions/enum_frequentie" },
+        "berekeningsbasis": { "type": ["string", "null"] },
+
+        "toepassingsgebied": { "type": "array", "items": { "type": "string" } },
+        "voorwaarden":       { "type": "array", "items": { "type": "string" } },
+        "uitsluitingen":     { "type": "array", "items": { "type": "string" } },
+
+        "geldig_vanaf":        { "type": ["string", "null"], "format": "date" },
+        "geldig_tot":          { "type": ["string", "null"], "format": "date" },
+        "laatst_bevestigd_op": { "type": "string", "format": "date" },
+
+        "bron_organisatie":     { "type": ["string", "null"] },
+        "bron_type":            { "$ref": "#/definitions/enum_bron_type" },
+        "bron_titel":           { "type": ["string", "null"] },
+        "bron_url":             { "type": ["string", "null"], "format": "uri" },
+        "bron_publicatiedatum": { "type": ["string", "null"], "format": "date" },
+        "bron_vindplaats":      { "type": ["string", "null"] },
+        "bron_fragment":        { "type": ["string", "null"] },
+        "betrouwbaarheid":      { "$ref": "#/definitions/enum_tier" },
+        "extractie_methode":    { "$ref": "#/definitions/enum_extractie" },
+
+        "triangulatie_bronnen": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/triangulatie_item" }
+        },
+
+        "normalisatie_toegepast":  { "type": "boolean" },
+        "normalisatie_opmerking":  { "type": ["string", "null"] },
+        "status":                  { "$ref": "#/definitions/enum_status" },
+        "conflict_opmerking":      { "type": ["string", "null"] },
+        "opmerkingen":             { "type": "array", "items": { "type": "string" } }
+      },
+
+      "allOf": [
+        {
+          "description": "Als status=actief, dan zijn bron_organisatie, bron_url en betrouwbaarheid verplicht.",
+          "if":   { "properties": { "status": { "const": "actief" } } },
+          "then": { "required": ["bron_organisatie", "bron_url", "betrouwbaarheid"] }
+        },
+        {
+          "description": "Een datapunt kan niet tegelijk tabel_per_ervaring én tabel_per_leeftijd hebben.",
+          "not": {
+            "required": ["tabel_per_ervaring", "tabel_per_leeftijd"]
+          }
+        },
+        {
+          "description": "Status conflict vereist een conflict_opmerking.",
+          "if":   { "properties": { "status": { "const": "conflict" } } },
+          "then": { "required": ["conflict_opmerking"] }
+        }
+      ]
+    },
+
+    "triangulatie_item": {
+      "type": "object",
+      "required": ["bron", "tier"],
+      "properties": {
+        "bron":             { "type": "string" },
+        "url":              { "type": ["string", "null"], "format": "uri" },
+        "tier":             { "$ref": "#/definitions/enum_tier" },
+        "overeenstemming":  {
+          "type": "string",
+          "enum": ["100%", "verwijzing geverifieerd", "gedeeltelijk"]
+        }
+      }
+    },
+
+    "bron_master": {
+      "type": "object",
+      "description": "Master-bronvermelding. Identificatie kan via 'bron_id' óf 'id'. Tier kan via 'tier' óf 'betrouwbaarheid'.",
+      "required": ["organisatie", "url"],
+      "additionalProperties": true,
+      "properties": {
+        "bron_id":          { "type": "string", "pattern": "^[A-Za-z0-9_]+$" },
+        "id":               { "type": "string", "pattern": "^[A-Za-z0-9_]+$" },
+        "organisatie":      { "type": "string" },
+        "titel":            { "type": "string" },
+        "url":              { "type": "string", "format": "uri" },
+        "publicatiedatum":  { "type": ["string", "null"], "format": "date" },
+        "geraadpleegd_op":  { "type": ["string", "null"], "format": "date" },
+        "tier":             { "$ref": "#/definitions/enum_tier" },
+        "betrouwbaarheid":  { "$ref": "#/definitions/enum_tier" },
+        "type":             { "$ref": "#/definitions/enum_bron_type" },
+        "rol":              { "type": "string" },
+        "relevante_categorieen": { "type": "array", "items": { "type": "string" } },
+        "opmerkingen":      { "type": "array", "items": { "type": "string" } }
+      },
+      "anyOf": [
+        { "required": ["bron_id"] },
+        { "required": ["id"] }
+      ]
+    },
+
+    "enum_categorie": {
+      "type": "string",
+      "enum": [
+        "lonen",
+        "indexatie",
+        "rsz",
+        "fiscaliteit",
+        "premies_en_voordelen",
+        "arbeidsvoorwaarden"
+      ]
+    },
+
+    "enum_type": {
+      "type": "string",
+      "enum": [
+        "barema",
+        "parameter",
+        "cao",
+        "koninklijk_besluit",
+        "bronverwijzing"
+      ]
+    },
+
+    "enum_status": {
+      "type": "string",
+      "enum": [
+        "actief",
+        "mogelijk_verouderd",
+        "conflict",
+        "niet_gevonden",
+        "gemarkeerd_voor_review"
+      ]
+    },
+
+    "enum_tier": {
+      "anyOf": [
+        { "type": "string", "enum": ["Tier 1", "Tier 2", "Tier 3"] },
+        { "type": "null" }
+      ]
+    },
+
+    "enum_bron_type": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "overheid",
+            "sector",
+            "sociaal_secretariaat",
+            "vakbond",
+            "werkgeversorganisatie",
+            "expert_intermediair"
+          ]
+        },
+        { "type": "null" }
+      ]
+    },
+
+    "enum_extractie": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "letterlijk",
+            "tabel_extractie",
+            "bronverwijzing",
+            "gestructureerde_overname",
+            "samenvattend_met_bronverwijzing"
+          ]
+        },
+        { "type": "null" }
+      ]
+    },
+
+    "enum_frequentie": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "eenmalig",
+            "maandelijks",
+            "jaarlijks",
+            "per_prestatie",
+            "wekelijks",
+            "kwartaal"
+          ]
+        },
+        { "type": "null" }
+      ]
+    }
+  }
+}

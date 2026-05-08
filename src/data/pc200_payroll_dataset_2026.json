@@ -1,0 +1,3304 @@
+{
+  "meta": {
+    "dataset": "Belgische payroll loonmonitor",
+    "pc": "200",
+    "pc_naam": "Aanvullend Paritair Comité voor Bedienden (APCB)",
+    "land": "BE",
+    "taal": "nl-BE",
+    "laatste_update": "2026-05-08",
+    "doeljaar": 2026,
+    "dekking": [
+      "brutolonen",
+      "indexering",
+      "rsz",
+      "fiscaliteit",
+      "premies_en_voordelen",
+      "arbeidsvoorwaarden"
+    ],
+    "niet_gevonden": [
+      "Officiële personenbelastingschijven inkomstenjaar 2026 (AJ 2027) – nog niet gepubliceerd op peildatum",
+      "Volledige bedrijfsvoorheffingsschalen 2026 in machineleesbare tabelvorm (enkel KB-tekst en sleutelformule beschikbaar)",
+      "Sectorale verplichting maaltijdcheques in PC 200 (geen sectorale cao gevonden die maaltijdcheques verplicht maakt)",
+      "Sectorale verplichting thuiswerkvergoeding PC 200",
+      "Volledige tekst centenindex-regelgeving 2026 (regelgeving niet tijdig gefinaliseerd)"
+    ],
+    "conflicten": [
+      "Gemeentebelasting (aanvullende gemeentelijke belasting): bron Tier 3 (NettoCalc) vermeldt gemiddeld 7%; geen Tier 1 bevestiging in deze extractie – datapunt niet opgenomen"
+    ],
+    "opmerkingen": [
+      "Sectorakkoord PC 200 voor 2025-2026 afgesloten op 15 januari 2026 door sociale partners; bevestigd door sfonds200.be",
+      "Centenindex (beperking indexering boven 4.000 EUR brutoloon) was aangekondigd in begrotingsakkoord maar reglementair kader niet tijdig klaar; niet toegepast op 1/1/2026",
+      "Voor 2026 wordt op 1/1/2026 een 'normale' (volledige) indexering toegepast in PC 200",
+      "Bedrijfsvoorheffingsregels 2026 gepubliceerd via KB 11/12/2025 in BS 29/12/2025 (Bijlage III)",
+      "Volledige sectorale baremamatrix PC 200 (Schaal I, Schaal II, studenten × Cat A/B/C/D) opgenomen vanaf 2026-05-08; primaire bron SSN (Tier 2), getrianguleerd met ACV en ACLVB (Tier 3) — alle 228 cellen onderling bevestigd",
+      "Sectorpensioen-onderzoek (2026-05-08): bevestigd dat er geen algemeen sectoraal aanvullend pensioen bestaat voor het volledige PC 200 — enkel voor de bouw-subset (1,80% solidariteitsluik vanaf 1/1/2026 via CAO 13/03/2025 nr. 192.922)",
+      "Sociaal Fonds 200 werkgeversbijdrage (0,23%) verlengd voor 1/1/2026–31/12/2027; bevestigd door 3 onafhankelijke Tier 2 bronnen (Partena Professional, Liantis, CLB Group)"
+    ]
+  },
+  "lonen": [
+    {
+      "id": "lonen_pc200_schaalI_catA_01012026",
+      "categorie": "lonen",
+      "subcategorie": "barema_schaal_I",
+      "type": "barema",
+      "pc": "200",
+      "omschrijving": "Sectorale minimum maandlonen PC 200 – Schaal I (eerste jaar in de onderneming), Categorie A, voltijds (38u/week) – volledige tabel per ervaringsjaar",
+      "waarde_bron": "Tabel ervaring → maandloon EUR (zie tabel_per_ervaring); min 2242.81 EUR, max 2459.89 EUR",
+      "waarde_genormaliseerd": null,
+      "tabel_per_ervaring": [
+        {
+          "ervaring_jaren": 0,
+          "maandloon_eur": 2242.81
+        },
+        {
+          "ervaring_jaren": 1,
+          "maandloon_eur": 2249.57
+        },
+        {
+          "ervaring_jaren": 2,
+          "maandloon_eur": 2256.28
+        },
+        {
+          "ervaring_jaren": 3,
+          "maandloon_eur": 2263.06
+        },
+        {
+          "ervaring_jaren": 4,
+          "maandloon_eur": 2269.9
+        },
+        {
+          "ervaring_jaren": 5,
+          "maandloon_eur": 2276.51
+        },
+        {
+          "ervaring_jaren": 6,
+          "maandloon_eur": 2283.27
+        },
+        {
+          "ervaring_jaren": 7,
+          "maandloon_eur": 2289.96
+        },
+        {
+          "ervaring_jaren": 8,
+          "maandloon_eur": 2297.16
+        },
+        {
+          "ervaring_jaren": 9,
+          "maandloon_eur": 2315.8
+        },
+        {
+          "ervaring_jaren": 10,
+          "maandloon_eur": 2334.52
+        },
+        {
+          "ervaring_jaren": 11,
+          "maandloon_eur": 2350.42
+        },
+        {
+          "ervaring_jaren": 12,
+          "maandloon_eur": 2366.19
+        },
+        {
+          "ervaring_jaren": 13,
+          "maandloon_eur": 2382.16
+        },
+        {
+          "ervaring_jaren": 14,
+          "maandloon_eur": 2397.8
+        },
+        {
+          "ervaring_jaren": 15,
+          "maandloon_eur": 2413.37
+        },
+        {
+          "ervaring_jaren": 16,
+          "maandloon_eur": 2428.84
+        },
+        {
+          "ervaring_jaren": 17,
+          "maandloon_eur": 2444.35
+        },
+        {
+          "ervaring_jaren": 18,
+          "maandloon_eur": 2459.89
+        },
+        {
+          "ervaring_jaren": 19,
+          "maandloon_eur": 2459.89
+        },
+        {
+          "ervaring_jaren": 20,
+          "maandloon_eur": 2459.89
+        },
+        {
+          "ervaring_jaren": 21,
+          "maandloon_eur": 2459.89
+        },
+        {
+          "ervaring_jaren": 22,
+          "maandloon_eur": 2459.89
+        },
+        {
+          "ervaring_jaren": 23,
+          "maandloon_eur": 2459.89
+        },
+        {
+          "ervaring_jaren": 24,
+          "maandloon_eur": 2459.89
+        },
+        {
+          "ervaring_jaren": 25,
+          "maandloon_eur": 2459.89
+        },
+        {
+          "ervaring_jaren": 26,
+          "maandloon_eur": 2459.89
+        }
+      ],
+      "eenheid": "EUR/maand",
+      "valuta": "EUR",
+      "frequentie": "maandelijks",
+      "berekeningsbasis": "voltijds maandloon (38u/week)",
+      "toepassingsgebied": [
+        "bedienden PC 200",
+        "schaal I",
+        "categorie A",
+        "ervaring 0–26 jaar"
+      ],
+      "voorwaarden": [
+        "voltijdse tewerkstelling (pro rata bij deeltijds)",
+        "functie ingedeeld in categorie A",
+        "tijdens het eerste jaar van tewerkstelling in de onderneming (schaal I)"
+      ],
+      "uitsluitingen": [
+        "studenten (eigen schaal van toepassing)",
+        "handelsvertegenwoordigers met variabel loon (eigen GMMI-regeling)"
+      ],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "SSN (sociaal secretariaat) – publicatie sectorbarema PC 200",
+      "bron_type": "sociaal_secretariaat",
+      "bron_titel": "BAREMA PC 200 Aanvullend Paritair Comité voor de bedienden – 01/2026",
+      "bron_url": "https://www.ssn.be/sites/default/files/barema_200_01-2026_nl.pdf",
+      "bron_publicatiedatum": "2026-01-01",
+      "bron_vindplaats": "Sectie 'Schaal I (eerste jaar in de onderneming)', kolom 'CAT. A maandloon', regels ervaring 0–26",
+      "bron_fragment": "CAT. A maandloon, ervaring 0: 2242.81 … ervaring 26: 2459.89",
+      "betrouwbaarheid": "Tier 2",
+      "extractie_methode": "tabel_extractie",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "Komma-decimaal naar punt-decimaal; tabel gestructureerd als lijst van {ervaring_jaren, maandloon_eur}",
+      "triangulatie_bronnen": [
+        {
+          "bron": "ACV / ACVBIE PC200 januari 2026 brochure",
+          "url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-lonen-01012026-ndl-lr.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        },
+        {
+          "bron": "ACLVB PC200 januari 2026 schaallonen",
+          "url": "https://www.aclvb.be/sites/default/files/aclvb/2026_loonbaremas_pc_200_nl.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        }
+      ],
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Bedragen omvatten reeds de sectorale indexering van +2,21% per 1/1/2026",
+        "Loonplafond per categorie A: vlak na 18 jaar ervaring (€2.459,89 in schaal I; €2.526,16 in schaal II)",
+        "Categorieën B/C/D blijven geleidelijk evolueren tot 26 jaar ervaring",
+        "Drie onafhankelijke bronnen (SSN, ACV, ACLVB) geven identieke bedragen; OCR-noise in SSN-PDF (jaar 2 cat D, schaal II jaar 13 cat A) gecorrigeerd via Tier 3 triangulatie"
+      ]
+    },
+    {
+      "id": "lonen_pc200_schaalI_catB_01012026",
+      "categorie": "lonen",
+      "subcategorie": "barema_schaal_I",
+      "type": "barema",
+      "pc": "200",
+      "omschrijving": "Sectorale minimum maandlonen PC 200 – Schaal I (eerste jaar in de onderneming), Categorie B, voltijds (38u/week) – volledige tabel per ervaringsjaar",
+      "waarde_bron": "Tabel ervaring → maandloon EUR (zie tabel_per_ervaring); min 2336.25 EUR, max 2820.99 EUR",
+      "waarde_genormaliseerd": null,
+      "tabel_per_ervaring": [
+        {
+          "ervaring_jaren": 0,
+          "maandloon_eur": 2336.25
+        },
+        {
+          "ervaring_jaren": 1,
+          "maandloon_eur": 2349.64
+        },
+        {
+          "ervaring_jaren": 2,
+          "maandloon_eur": 2363.08
+        },
+        {
+          "ervaring_jaren": 3,
+          "maandloon_eur": 2376.61
+        },
+        {
+          "ervaring_jaren": 4,
+          "maandloon_eur": 2394.83
+        },
+        {
+          "ervaring_jaren": 5,
+          "maandloon_eur": 2413.37
+        },
+        {
+          "ervaring_jaren": 6,
+          "maandloon_eur": 2427.38
+        },
+        {
+          "ervaring_jaren": 7,
+          "maandloon_eur": 2462.42
+        },
+        {
+          "ervaring_jaren": 8,
+          "maandloon_eur": 2497.56
+        },
+        {
+          "ervaring_jaren": 9,
+          "maandloon_eur": 2532.54
+        },
+        {
+          "ervaring_jaren": 10,
+          "maandloon_eur": 2567.8
+        },
+        {
+          "ervaring_jaren": 11,
+          "maandloon_eur": 2597.46
+        },
+        {
+          "ervaring_jaren": 12,
+          "maandloon_eur": 2626.81
+        },
+        {
+          "ervaring_jaren": 13,
+          "maandloon_eur": 2656.48
+        },
+        {
+          "ervaring_jaren": 14,
+          "maandloon_eur": 2685.87
+        },
+        {
+          "ervaring_jaren": 15,
+          "maandloon_eur": 2715.45
+        },
+        {
+          "ervaring_jaren": 16,
+          "maandloon_eur": 2725.03
+        },
+        {
+          "ervaring_jaren": 17,
+          "maandloon_eur": 2734.55
+        },
+        {
+          "ervaring_jaren": 18,
+          "maandloon_eur": 2744.25
+        },
+        {
+          "ervaring_jaren": 19,
+          "maandloon_eur": 2753.78
+        },
+        {
+          "ervaring_jaren": 20,
+          "maandloon_eur": 2763.42
+        },
+        {
+          "ervaring_jaren": 21,
+          "maandloon_eur": 2773.18
+        },
+        {
+          "ervaring_jaren": 22,
+          "maandloon_eur": 2782.63
+        },
+        {
+          "ervaring_jaren": 23,
+          "maandloon_eur": 2792.25
+        },
+        {
+          "ervaring_jaren": 24,
+          "maandloon_eur": 2801.86
+        },
+        {
+          "ervaring_jaren": 25,
+          "maandloon_eur": 2811.39
+        },
+        {
+          "ervaring_jaren": 26,
+          "maandloon_eur": 2820.99
+        }
+      ],
+      "eenheid": "EUR/maand",
+      "valuta": "EUR",
+      "frequentie": "maandelijks",
+      "berekeningsbasis": "voltijds maandloon (38u/week)",
+      "toepassingsgebied": [
+        "bedienden PC 200",
+        "schaal I",
+        "categorie B",
+        "ervaring 0–26 jaar"
+      ],
+      "voorwaarden": [
+        "voltijdse tewerkstelling (pro rata bij deeltijds)",
+        "functie ingedeeld in categorie B",
+        "tijdens het eerste jaar van tewerkstelling in de onderneming (schaal I)"
+      ],
+      "uitsluitingen": [
+        "studenten (eigen schaal van toepassing)",
+        "handelsvertegenwoordigers met variabel loon (eigen GMMI-regeling)"
+      ],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "SSN (sociaal secretariaat) – publicatie sectorbarema PC 200",
+      "bron_type": "sociaal_secretariaat",
+      "bron_titel": "BAREMA PC 200 Aanvullend Paritair Comité voor de bedienden – 01/2026",
+      "bron_url": "https://www.ssn.be/sites/default/files/barema_200_01-2026_nl.pdf",
+      "bron_publicatiedatum": "2026-01-01",
+      "bron_vindplaats": "Sectie 'Schaal I (eerste jaar in de onderneming)', kolom 'CAT. B maandloon', regels ervaring 0–26",
+      "bron_fragment": "CAT. B maandloon, ervaring 0: 2336.25 … ervaring 26: 2820.99",
+      "betrouwbaarheid": "Tier 2",
+      "extractie_methode": "tabel_extractie",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "Komma-decimaal naar punt-decimaal; tabel gestructureerd als lijst van {ervaring_jaren, maandloon_eur}",
+      "triangulatie_bronnen": [
+        {
+          "bron": "ACV / ACVBIE PC200 januari 2026 brochure",
+          "url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-lonen-01012026-ndl-lr.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        },
+        {
+          "bron": "ACLVB PC200 januari 2026 schaallonen",
+          "url": "https://www.aclvb.be/sites/default/files/aclvb/2026_loonbaremas_pc_200_nl.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        }
+      ],
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Bedragen omvatten reeds de sectorale indexering van +2,21% per 1/1/2026",
+        "Loonplafond per categorie A: vlak na 18 jaar ervaring (€2.459,89 in schaal I; €2.526,16 in schaal II)",
+        "Categorieën B/C/D blijven geleidelijk evolueren tot 26 jaar ervaring",
+        "Drie onafhankelijke bronnen (SSN, ACV, ACLVB) geven identieke bedragen; OCR-noise in SSN-PDF (jaar 2 cat D, schaal II jaar 13 cat A) gecorrigeerd via Tier 3 triangulatie"
+      ]
+    },
+    {
+      "id": "lonen_pc200_schaalI_catC_01012026",
+      "categorie": "lonen",
+      "subcategorie": "barema_schaal_I",
+      "type": "barema",
+      "pc": "200",
+      "omschrijving": "Sectorale minimum maandlonen PC 200 – Schaal I (eerste jaar in de onderneming), Categorie C, voltijds (38u/week) – volledige tabel per ervaringsjaar",
+      "waarde_bron": "Tabel ervaring → maandloon EUR (zie tabel_per_ervaring); min 2369.31 EUR, max 3175.61 EUR",
+      "waarde_genormaliseerd": null,
+      "tabel_per_ervaring": [
+        {
+          "ervaring_jaren": 0,
+          "maandloon_eur": 2369.31
+        },
+        {
+          "ervaring_jaren": 1,
+          "maandloon_eur": 2369.31
+        },
+        {
+          "ervaring_jaren": 2,
+          "maandloon_eur": 2422.73
+        },
+        {
+          "ervaring_jaren": 3,
+          "maandloon_eur": 2469.7
+        },
+        {
+          "ervaring_jaren": 4,
+          "maandloon_eur": 2516.65
+        },
+        {
+          "ervaring_jaren": 5,
+          "maandloon_eur": 2563.76
+        },
+        {
+          "ervaring_jaren": 6,
+          "maandloon_eur": 2610.73
+        },
+        {
+          "ervaring_jaren": 7,
+          "maandloon_eur": 2657.89
+        },
+        {
+          "ervaring_jaren": 8,
+          "maandloon_eur": 2705.05
+        },
+        {
+          "ervaring_jaren": 9,
+          "maandloon_eur": 2752.17
+        },
+        {
+          "ervaring_jaren": 10,
+          "maandloon_eur": 2799.16
+        },
+        {
+          "ervaring_jaren": 11,
+          "maandloon_eur": 2846.25
+        },
+        {
+          "ervaring_jaren": 12,
+          "maandloon_eur": 2893.29
+        },
+        {
+          "ervaring_jaren": 13,
+          "maandloon_eur": 2930.44
+        },
+        {
+          "ervaring_jaren": 14,
+          "maandloon_eur": 2967.49
+        },
+        {
+          "ervaring_jaren": 15,
+          "maandloon_eur": 3004.68
+        },
+        {
+          "ervaring_jaren": 16,
+          "maandloon_eur": 3041.73
+        },
+        {
+          "ervaring_jaren": 17,
+          "maandloon_eur": 3078.85
+        },
+        {
+          "ervaring_jaren": 18,
+          "maandloon_eur": 3089.44
+        },
+        {
+          "ervaring_jaren": 19,
+          "maandloon_eur": 3100.07
+        },
+        {
+          "ervaring_jaren": 20,
+          "maandloon_eur": 3110.73
+        },
+        {
+          "ervaring_jaren": 21,
+          "maandloon_eur": 3121.59
+        },
+        {
+          "ervaring_jaren": 22,
+          "maandloon_eur": 3132.28
+        },
+        {
+          "ervaring_jaren": 23,
+          "maandloon_eur": 3143.19
+        },
+        {
+          "ervaring_jaren": 24,
+          "maandloon_eur": 3153.91
+        },
+        {
+          "ervaring_jaren": 25,
+          "maandloon_eur": 3164.86
+        },
+        {
+          "ervaring_jaren": 26,
+          "maandloon_eur": 3175.61
+        }
+      ],
+      "eenheid": "EUR/maand",
+      "valuta": "EUR",
+      "frequentie": "maandelijks",
+      "berekeningsbasis": "voltijds maandloon (38u/week)",
+      "toepassingsgebied": [
+        "bedienden PC 200",
+        "schaal I",
+        "categorie C",
+        "ervaring 0–26 jaar"
+      ],
+      "voorwaarden": [
+        "voltijdse tewerkstelling (pro rata bij deeltijds)",
+        "functie ingedeeld in categorie C",
+        "tijdens het eerste jaar van tewerkstelling in de onderneming (schaal I)"
+      ],
+      "uitsluitingen": [
+        "studenten (eigen schaal van toepassing)",
+        "handelsvertegenwoordigers met variabel loon (eigen GMMI-regeling)"
+      ],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "SSN (sociaal secretariaat) – publicatie sectorbarema PC 200",
+      "bron_type": "sociaal_secretariaat",
+      "bron_titel": "BAREMA PC 200 Aanvullend Paritair Comité voor de bedienden – 01/2026",
+      "bron_url": "https://www.ssn.be/sites/default/files/barema_200_01-2026_nl.pdf",
+      "bron_publicatiedatum": "2026-01-01",
+      "bron_vindplaats": "Sectie 'Schaal I (eerste jaar in de onderneming)', kolom 'CAT. C maandloon', regels ervaring 0–26",
+      "bron_fragment": "CAT. C maandloon, ervaring 0: 2369.31 … ervaring 26: 3175.61",
+      "betrouwbaarheid": "Tier 2",
+      "extractie_methode": "tabel_extractie",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "Komma-decimaal naar punt-decimaal; tabel gestructureerd als lijst van {ervaring_jaren, maandloon_eur}",
+      "triangulatie_bronnen": [
+        {
+          "bron": "ACV / ACVBIE PC200 januari 2026 brochure",
+          "url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-lonen-01012026-ndl-lr.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        },
+        {
+          "bron": "ACLVB PC200 januari 2026 schaallonen",
+          "url": "https://www.aclvb.be/sites/default/files/aclvb/2026_loonbaremas_pc_200_nl.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        }
+      ],
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Bedragen omvatten reeds de sectorale indexering van +2,21% per 1/1/2026",
+        "Loonplafond per categorie A: vlak na 18 jaar ervaring (€2.459,89 in schaal I; €2.526,16 in schaal II)",
+        "Categorieën B/C/D blijven geleidelijk evolueren tot 26 jaar ervaring",
+        "Drie onafhankelijke bronnen (SSN, ACV, ACLVB) geven identieke bedragen; OCR-noise in SSN-PDF (jaar 2 cat D, schaal II jaar 13 cat A) gecorrigeerd via Tier 3 triangulatie"
+      ]
+    },
+    {
+      "id": "lonen_pc200_schaalI_catD_01012026",
+      "categorie": "lonen",
+      "subcategorie": "barema_schaal_I",
+      "type": "barema",
+      "pc": "200",
+      "omschrijving": "Sectorale minimum maandlonen PC 200 – Schaal I (eerste jaar in de onderneming), Categorie D, voltijds (38u/week) – volledige tabel per ervaringsjaar",
+      "waarde_bron": "Tabel ervaring → maandloon EUR (zie tabel_per_ervaring); min 2555.73 EUR, max 3622.42 EUR",
+      "waarde_genormaliseerd": null,
+      "tabel_per_ervaring": [
+        {
+          "ervaring_jaren": 0,
+          "maandloon_eur": 2555.73
+        },
+        {
+          "ervaring_jaren": 1,
+          "maandloon_eur": 2572.63
+        },
+        {
+          "ervaring_jaren": 2,
+          "maandloon_eur": 2589.26
+        },
+        {
+          "ervaring_jaren": 3,
+          "maandloon_eur": 2606.19
+        },
+        {
+          "ervaring_jaren": 4,
+          "maandloon_eur": 2671.93
+        },
+        {
+          "ervaring_jaren": 5,
+          "maandloon_eur": 2730.41
+        },
+        {
+          "ervaring_jaren": 6,
+          "maandloon_eur": 2788.83
+        },
+        {
+          "ervaring_jaren": 7,
+          "maandloon_eur": 2847.1
+        },
+        {
+          "ervaring_jaren": 8,
+          "maandloon_eur": 2905.53
+        },
+        {
+          "ervaring_jaren": 9,
+          "maandloon_eur": 2963.62
+        },
+        {
+          "ervaring_jaren": 10,
+          "maandloon_eur": 3022.34
+        },
+        {
+          "ervaring_jaren": 11,
+          "maandloon_eur": 3080.46
+        },
+        {
+          "ervaring_jaren": 12,
+          "maandloon_eur": 3139.0
+        },
+        {
+          "ervaring_jaren": 13,
+          "maandloon_eur": 3197.28
+        },
+        {
+          "ervaring_jaren": 14,
+          "maandloon_eur": 3255.71
+        },
+        {
+          "ervaring_jaren": 15,
+          "maandloon_eur": 3304.78
+        },
+        {
+          "ervaring_jaren": 16,
+          "maandloon_eur": 3353.79
+        },
+        {
+          "ervaring_jaren": 17,
+          "maandloon_eur": 3402.8
+        },
+        {
+          "ervaring_jaren": 18,
+          "maandloon_eur": 3451.91
+        },
+        {
+          "ervaring_jaren": 19,
+          "maandloon_eur": 3500.99
+        },
+        {
+          "ervaring_jaren": 20,
+          "maandloon_eur": 3518.35
+        },
+        {
+          "ervaring_jaren": 21,
+          "maandloon_eur": 3535.83
+        },
+        {
+          "ervaring_jaren": 22,
+          "maandloon_eur": 3553.29
+        },
+        {
+          "ervaring_jaren": 23,
+          "maandloon_eur": 3570.59
+        },
+        {
+          "ervaring_jaren": 24,
+          "maandloon_eur": 3587.83
+        },
+        {
+          "ervaring_jaren": 25,
+          "maandloon_eur": 3605.11
+        },
+        {
+          "ervaring_jaren": 26,
+          "maandloon_eur": 3622.42
+        }
+      ],
+      "eenheid": "EUR/maand",
+      "valuta": "EUR",
+      "frequentie": "maandelijks",
+      "berekeningsbasis": "voltijds maandloon (38u/week)",
+      "toepassingsgebied": [
+        "bedienden PC 200",
+        "schaal I",
+        "categorie D",
+        "ervaring 0–26 jaar"
+      ],
+      "voorwaarden": [
+        "voltijdse tewerkstelling (pro rata bij deeltijds)",
+        "functie ingedeeld in categorie D",
+        "tijdens het eerste jaar van tewerkstelling in de onderneming (schaal I)"
+      ],
+      "uitsluitingen": [
+        "studenten (eigen schaal van toepassing)",
+        "handelsvertegenwoordigers met variabel loon (eigen GMMI-regeling)"
+      ],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "SSN (sociaal secretariaat) – publicatie sectorbarema PC 200",
+      "bron_type": "sociaal_secretariaat",
+      "bron_titel": "BAREMA PC 200 Aanvullend Paritair Comité voor de bedienden – 01/2026",
+      "bron_url": "https://www.ssn.be/sites/default/files/barema_200_01-2026_nl.pdf",
+      "bron_publicatiedatum": "2026-01-01",
+      "bron_vindplaats": "Sectie 'Schaal I (eerste jaar in de onderneming)', kolom 'CAT. D maandloon', regels ervaring 0–26",
+      "bron_fragment": "CAT. D maandloon, ervaring 0: 2555.73 … ervaring 26: 3622.42",
+      "betrouwbaarheid": "Tier 2",
+      "extractie_methode": "tabel_extractie",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "Komma-decimaal naar punt-decimaal; tabel gestructureerd als lijst van {ervaring_jaren, maandloon_eur}",
+      "triangulatie_bronnen": [
+        {
+          "bron": "ACV / ACVBIE PC200 januari 2026 brochure",
+          "url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-lonen-01012026-ndl-lr.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        },
+        {
+          "bron": "ACLVB PC200 januari 2026 schaallonen",
+          "url": "https://www.aclvb.be/sites/default/files/aclvb/2026_loonbaremas_pc_200_nl.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        }
+      ],
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Bedragen omvatten reeds de sectorale indexering van +2,21% per 1/1/2026",
+        "Loonplafond per categorie A: vlak na 18 jaar ervaring (€2.459,89 in schaal I; €2.526,16 in schaal II)",
+        "Categorieën B/C/D blijven geleidelijk evolueren tot 26 jaar ervaring",
+        "Drie onafhankelijke bronnen (SSN, ACV, ACLVB) geven identieke bedragen; OCR-noise in SSN-PDF (jaar 2 cat D, schaal II jaar 13 cat A) gecorrigeerd via Tier 3 triangulatie"
+      ]
+    },
+    {
+      "id": "lonen_pc200_schaalII_catA_01012026",
+      "categorie": "lonen",
+      "subcategorie": "barema_schaal_II",
+      "type": "barema",
+      "pc": "200",
+      "omschrijving": "Sectorale minimum maandlonen PC 200 – Schaal II (vanaf 2e jaar in dezelfde onderneming), Categorie A, voltijds (38u/week) – volledige tabel per ervaringsjaar",
+      "waarde_bron": "Tabel ervaring → maandloon EUR (zie tabel_per_ervaring); min 2310.30 EUR, max 2526.16 EUR",
+      "waarde_genormaliseerd": null,
+      "tabel_per_ervaring": [
+        {
+          "ervaring_jaren": 1,
+          "maandloon_eur": 2310.3
+        },
+        {
+          "ervaring_jaren": 2,
+          "maandloon_eur": 2317.19
+        },
+        {
+          "ervaring_jaren": 3,
+          "maandloon_eur": 2324.14
+        },
+        {
+          "ervaring_jaren": 4,
+          "maandloon_eur": 2330.81
+        },
+        {
+          "ervaring_jaren": 5,
+          "maandloon_eur": 2337.66
+        },
+        {
+          "ervaring_jaren": 6,
+          "maandloon_eur": 2344.46
+        },
+        {
+          "ervaring_jaren": 7,
+          "maandloon_eur": 2351.35
+        },
+        {
+          "ervaring_jaren": 8,
+          "maandloon_eur": 2358.93
+        },
+        {
+          "ervaring_jaren": 9,
+          "maandloon_eur": 2378.04
+        },
+        {
+          "ervaring_jaren": 10,
+          "maandloon_eur": 2397.33
+        },
+        {
+          "ervaring_jaren": 11,
+          "maandloon_eur": 2413.71
+        },
+        {
+          "ervaring_jaren": 12,
+          "maandloon_eur": 2429.89
+        },
+        {
+          "ervaring_jaren": 13,
+          "maandloon_eur": 2446.31
+        },
+        {
+          "ervaring_jaren": 14,
+          "maandloon_eur": 2462.42
+        },
+        {
+          "ervaring_jaren": 15,
+          "maandloon_eur": 2478.44
+        },
+        {
+          "ervaring_jaren": 16,
+          "maandloon_eur": 2494.33
+        },
+        {
+          "ervaring_jaren": 17,
+          "maandloon_eur": 2510.24
+        },
+        {
+          "ervaring_jaren": 18,
+          "maandloon_eur": 2526.16
+        },
+        {
+          "ervaring_jaren": 19,
+          "maandloon_eur": 2526.16
+        },
+        {
+          "ervaring_jaren": 20,
+          "maandloon_eur": 2526.16
+        },
+        {
+          "ervaring_jaren": 21,
+          "maandloon_eur": 2526.16
+        },
+        {
+          "ervaring_jaren": 22,
+          "maandloon_eur": 2526.16
+        },
+        {
+          "ervaring_jaren": 23,
+          "maandloon_eur": 2526.16
+        },
+        {
+          "ervaring_jaren": 24,
+          "maandloon_eur": 2526.16
+        },
+        {
+          "ervaring_jaren": 25,
+          "maandloon_eur": 2526.16
+        },
+        {
+          "ervaring_jaren": 26,
+          "maandloon_eur": 2526.16
+        }
+      ],
+      "eenheid": "EUR/maand",
+      "valuta": "EUR",
+      "frequentie": "maandelijks",
+      "berekeningsbasis": "voltijds maandloon (38u/week)",
+      "toepassingsgebied": [
+        "bedienden PC 200",
+        "schaal II",
+        "categorie A",
+        "ervaring 1–26 jaar"
+      ],
+      "voorwaarden": [
+        "voltijdse tewerkstelling (pro rata bij deeltijds)",
+        "functie ingedeeld in categorie A",
+        "voor schaal II: minstens 1 jaar in dienst in dezelfde onderneming"
+      ],
+      "uitsluitingen": [
+        "studenten (eigen schaal van toepassing)",
+        "handelsvertegenwoordigers met variabel loon (eigen GMMI-regeling)"
+      ],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "SSN (sociaal secretariaat) – publicatie sectorbarema PC 200",
+      "bron_type": "sociaal_secretariaat",
+      "bron_titel": "BAREMA PC 200 Aanvullend Paritair Comité voor de bedienden – 01/2026",
+      "bron_url": "https://www.ssn.be/sites/default/files/barema_200_01-2026_nl.pdf",
+      "bron_publicatiedatum": "2026-01-01",
+      "bron_vindplaats": "Sectie 'Schaal II (vanaf 2e jaar in dezelfde onderneming)', kolom 'CAT. A maandloon', regels ervaring 1–26",
+      "bron_fragment": "CAT. A maandloon, ervaring 1: 2310.30 … ervaring 26: 2526.16",
+      "betrouwbaarheid": "Tier 2",
+      "extractie_methode": "tabel_extractie",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "Komma-decimaal naar punt-decimaal; tabel gestructureerd als lijst van {ervaring_jaren, maandloon_eur}",
+      "triangulatie_bronnen": [
+        {
+          "bron": "ACV / ACVBIE PC200 januari 2026 brochure",
+          "url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-lonen-01012026-ndl-lr.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        },
+        {
+          "bron": "ACLVB PC200 januari 2026 schaallonen",
+          "url": "https://www.aclvb.be/sites/default/files/aclvb/2026_loonbaremas_pc_200_nl.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        }
+      ],
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Bedragen omvatten reeds de sectorale indexering van +2,21% per 1/1/2026",
+        "Loonplafond per categorie A: vlak na 18 jaar ervaring (€2.459,89 in schaal I; €2.526,16 in schaal II)",
+        "Categorieën B/C/D blijven geleidelijk evolueren tot 26 jaar ervaring",
+        "Drie onafhankelijke bronnen (SSN, ACV, ACLVB) geven identieke bedragen; OCR-noise in SSN-PDF (jaar 2 cat D, schaal II jaar 13 cat A) gecorrigeerd via Tier 3 triangulatie"
+      ]
+    },
+    {
+      "id": "lonen_pc200_schaalII_catB_01012026",
+      "categorie": "lonen",
+      "subcategorie": "barema_schaal_II",
+      "type": "barema",
+      "pc": "200",
+      "omschrijving": "Sectorale minimum maandlonen PC 200 – Schaal II (vanaf 2e jaar in dezelfde onderneming), Categorie B, voltijds (38u/week) – volledige tabel per ervaringsjaar",
+      "waarde_bron": "Tabel ervaring → maandloon EUR (zie tabel_per_ervaring); min 2413.09 EUR, max 2897.83 EUR",
+      "waarde_genormaliseerd": null,
+      "tabel_per_ervaring": [
+        {
+          "ervaring_jaren": 1,
+          "maandloon_eur": 2413.09
+        },
+        {
+          "ervaring_jaren": 2,
+          "maandloon_eur": 2426.87
+        },
+        {
+          "ervaring_jaren": 3,
+          "maandloon_eur": 2440.76
+        },
+        {
+          "ervaring_jaren": 4,
+          "maandloon_eur": 2459.32
+        },
+        {
+          "ervaring_jaren": 5,
+          "maandloon_eur": 2478.44
+        },
+        {
+          "ervaring_jaren": 6,
+          "maandloon_eur": 2492.88
+        },
+        {
+          "ervaring_jaren": 7,
+          "maandloon_eur": 2528.9
+        },
+        {
+          "ervaring_jaren": 8,
+          "maandloon_eur": 2565.14
+        },
+        {
+          "ervaring_jaren": 9,
+          "maandloon_eur": 2601.1
+        },
+        {
+          "ervaring_jaren": 10,
+          "maandloon_eur": 2637.36
+        },
+        {
+          "ervaring_jaren": 11,
+          "maandloon_eur": 2667.83
+        },
+        {
+          "ervaring_jaren": 12,
+          "maandloon_eur": 2698.0
+        },
+        {
+          "ervaring_jaren": 13,
+          "maandloon_eur": 2728.54
+        },
+        {
+          "ervaring_jaren": 14,
+          "maandloon_eur": 2758.86
+        },
+        {
+          "ervaring_jaren": 15,
+          "maandloon_eur": 2789.2
+        },
+        {
+          "ervaring_jaren": 16,
+          "maandloon_eur": 2799.07
+        },
+        {
+          "ervaring_jaren": 17,
+          "maandloon_eur": 2808.85
+        },
+        {
+          "ervaring_jaren": 18,
+          "maandloon_eur": 2818.89
+        },
+        {
+          "ervaring_jaren": 19,
+          "maandloon_eur": 2828.76
+        },
+        {
+          "ervaring_jaren": 20,
+          "maandloon_eur": 2838.66
+        },
+        {
+          "ervaring_jaren": 21,
+          "maandloon_eur": 2848.5
+        },
+        {
+          "ervaring_jaren": 22,
+          "maandloon_eur": 2858.33
+        },
+        {
+          "ervaring_jaren": 23,
+          "maandloon_eur": 2868.34
+        },
+        {
+          "ervaring_jaren": 24,
+          "maandloon_eur": 2878.15
+        },
+        {
+          "ervaring_jaren": 25,
+          "maandloon_eur": 2887.96
+        },
+        {
+          "ervaring_jaren": 26,
+          "maandloon_eur": 2897.83
+        }
+      ],
+      "eenheid": "EUR/maand",
+      "valuta": "EUR",
+      "frequentie": "maandelijks",
+      "berekeningsbasis": "voltijds maandloon (38u/week)",
+      "toepassingsgebied": [
+        "bedienden PC 200",
+        "schaal II",
+        "categorie B",
+        "ervaring 1–26 jaar"
+      ],
+      "voorwaarden": [
+        "voltijdse tewerkstelling (pro rata bij deeltijds)",
+        "functie ingedeeld in categorie B",
+        "voor schaal II: minstens 1 jaar in dienst in dezelfde onderneming"
+      ],
+      "uitsluitingen": [
+        "studenten (eigen schaal van toepassing)",
+        "handelsvertegenwoordigers met variabel loon (eigen GMMI-regeling)"
+      ],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "SSN (sociaal secretariaat) – publicatie sectorbarema PC 200",
+      "bron_type": "sociaal_secretariaat",
+      "bron_titel": "BAREMA PC 200 Aanvullend Paritair Comité voor de bedienden – 01/2026",
+      "bron_url": "https://www.ssn.be/sites/default/files/barema_200_01-2026_nl.pdf",
+      "bron_publicatiedatum": "2026-01-01",
+      "bron_vindplaats": "Sectie 'Schaal II (vanaf 2e jaar in dezelfde onderneming)', kolom 'CAT. B maandloon', regels ervaring 1–26",
+      "bron_fragment": "CAT. B maandloon, ervaring 1: 2413.09 … ervaring 26: 2897.83",
+      "betrouwbaarheid": "Tier 2",
+      "extractie_methode": "tabel_extractie",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "Komma-decimaal naar punt-decimaal; tabel gestructureerd als lijst van {ervaring_jaren, maandloon_eur}",
+      "triangulatie_bronnen": [
+        {
+          "bron": "ACV / ACVBIE PC200 januari 2026 brochure",
+          "url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-lonen-01012026-ndl-lr.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        },
+        {
+          "bron": "ACLVB PC200 januari 2026 schaallonen",
+          "url": "https://www.aclvb.be/sites/default/files/aclvb/2026_loonbaremas_pc_200_nl.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        }
+      ],
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Bedragen omvatten reeds de sectorale indexering van +2,21% per 1/1/2026",
+        "Loonplafond per categorie A: vlak na 18 jaar ervaring (€2.459,89 in schaal I; €2.526,16 in schaal II)",
+        "Categorieën B/C/D blijven geleidelijk evolueren tot 26 jaar ervaring",
+        "Drie onafhankelijke bronnen (SSN, ACV, ACLVB) geven identieke bedragen; OCR-noise in SSN-PDF (jaar 2 cat D, schaal II jaar 13 cat A) gecorrigeerd via Tier 3 triangulatie"
+      ]
+    },
+    {
+      "id": "lonen_pc200_schaalII_catC_01012026",
+      "categorie": "lonen",
+      "subcategorie": "barema_schaal_II",
+      "type": "barema",
+      "pc": "200",
+      "omschrijving": "Sectorale minimum maandlonen PC 200 – Schaal II (vanaf 2e jaar in dezelfde onderneming), Categorie C, voltijds (38u/week) – volledige tabel per ervaringsjaar",
+      "waarde_bron": "Tabel ervaring → maandloon EUR (zie tabel_per_ervaring); min 2433.25 EUR, max 3262.72 EUR",
+      "waarde_genormaliseerd": null,
+      "tabel_per_ervaring": [
+        {
+          "ervaring_jaren": 1,
+          "maandloon_eur": 2433.25
+        },
+        {
+          "ervaring_jaren": 2,
+          "maandloon_eur": 2488.16
+        },
+        {
+          "ervaring_jaren": 3,
+          "maandloon_eur": 2536.36
+        },
+        {
+          "ervaring_jaren": 4,
+          "maandloon_eur": 2584.73
+        },
+        {
+          "ervaring_jaren": 5,
+          "maandloon_eur": 2633.22
+        },
+        {
+          "ervaring_jaren": 6,
+          "maandloon_eur": 2681.47
+        },
+        {
+          "ervaring_jaren": 7,
+          "maandloon_eur": 2730.03
+        },
+        {
+          "ervaring_jaren": 8,
+          "maandloon_eur": 2778.6
+        },
+        {
+          "ervaring_jaren": 9,
+          "maandloon_eur": 2827.02
+        },
+        {
+          "ervaring_jaren": 10,
+          "maandloon_eur": 2875.48
+        },
+        {
+          "ervaring_jaren": 11,
+          "maandloon_eur": 2923.83
+        },
+        {
+          "ervaring_jaren": 12,
+          "maandloon_eur": 2972.2
+        },
+        {
+          "ervaring_jaren": 13,
+          "maandloon_eur": 3010.43
+        },
+        {
+          "ervaring_jaren": 14,
+          "maandloon_eur": 3048.53
+        },
+        {
+          "ervaring_jaren": 15,
+          "maandloon_eur": 3086.76
+        },
+        {
+          "ervaring_jaren": 16,
+          "maandloon_eur": 3124.96
+        },
+        {
+          "ervaring_jaren": 17,
+          "maandloon_eur": 3163.2
+        },
+        {
+          "ervaring_jaren": 18,
+          "maandloon_eur": 3174.02
+        },
+        {
+          "ervaring_jaren": 19,
+          "maandloon_eur": 3184.94
+        },
+        {
+          "ervaring_jaren": 20,
+          "maandloon_eur": 3195.97
+        },
+        {
+          "ervaring_jaren": 21,
+          "maandloon_eur": 3207.12
+        },
+        {
+          "ervaring_jaren": 22,
+          "maandloon_eur": 3218.09
+        },
+        {
+          "ervaring_jaren": 23,
+          "maandloon_eur": 3229.43
+        },
+        {
+          "ervaring_jaren": 24,
+          "maandloon_eur": 3240.49
+        },
+        {
+          "ervaring_jaren": 25,
+          "maandloon_eur": 3251.76
+        },
+        {
+          "ervaring_jaren": 26,
+          "maandloon_eur": 3262.72
+        }
+      ],
+      "eenheid": "EUR/maand",
+      "valuta": "EUR",
+      "frequentie": "maandelijks",
+      "berekeningsbasis": "voltijds maandloon (38u/week)",
+      "toepassingsgebied": [
+        "bedienden PC 200",
+        "schaal II",
+        "categorie C",
+        "ervaring 1–26 jaar"
+      ],
+      "voorwaarden": [
+        "voltijdse tewerkstelling (pro rata bij deeltijds)",
+        "functie ingedeeld in categorie C",
+        "voor schaal II: minstens 1 jaar in dienst in dezelfde onderneming"
+      ],
+      "uitsluitingen": [
+        "studenten (eigen schaal van toepassing)",
+        "handelsvertegenwoordigers met variabel loon (eigen GMMI-regeling)"
+      ],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "SSN (sociaal secretariaat) – publicatie sectorbarema PC 200",
+      "bron_type": "sociaal_secretariaat",
+      "bron_titel": "BAREMA PC 200 Aanvullend Paritair Comité voor de bedienden – 01/2026",
+      "bron_url": "https://www.ssn.be/sites/default/files/barema_200_01-2026_nl.pdf",
+      "bron_publicatiedatum": "2026-01-01",
+      "bron_vindplaats": "Sectie 'Schaal II (vanaf 2e jaar in dezelfde onderneming)', kolom 'CAT. C maandloon', regels ervaring 1–26",
+      "bron_fragment": "CAT. C maandloon, ervaring 1: 2433.25 … ervaring 26: 3262.72",
+      "betrouwbaarheid": "Tier 2",
+      "extractie_methode": "tabel_extractie",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "Komma-decimaal naar punt-decimaal; tabel gestructureerd als lijst van {ervaring_jaren, maandloon_eur}",
+      "triangulatie_bronnen": [
+        {
+          "bron": "ACV / ACVBIE PC200 januari 2026 brochure",
+          "url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-lonen-01012026-ndl-lr.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        },
+        {
+          "bron": "ACLVB PC200 januari 2026 schaallonen",
+          "url": "https://www.aclvb.be/sites/default/files/aclvb/2026_loonbaremas_pc_200_nl.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        }
+      ],
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Bedragen omvatten reeds de sectorale indexering van +2,21% per 1/1/2026",
+        "Loonplafond per categorie A: vlak na 18 jaar ervaring (€2.459,89 in schaal I; €2.526,16 in schaal II)",
+        "Categorieën B/C/D blijven geleidelijk evolueren tot 26 jaar ervaring",
+        "Drie onafhankelijke bronnen (SSN, ACV, ACLVB) geven identieke bedragen; OCR-noise in SSN-PDF (jaar 2 cat D, schaal II jaar 13 cat A) gecorrigeerd via Tier 3 triangulatie"
+      ]
+    },
+    {
+      "id": "lonen_pc200_schaalII_catD_01012026",
+      "categorie": "lonen",
+      "subcategorie": "barema_schaal_II",
+      "type": "barema",
+      "pc": "200",
+      "omschrijving": "Sectorale minimum maandlonen PC 200 – Schaal II (vanaf 2e jaar in dezelfde onderneming), Categorie D, voltijds (38u/week) – volledige tabel per ervaringsjaar",
+      "waarde_bron": "Tabel ervaring → maandloon EUR (zie tabel_per_ervaring); min 2642.08 EUR, max 3722.55 EUR",
+      "waarde_genormaliseerd": null,
+      "tabel_per_ervaring": [
+        {
+          "ervaring_jaren": 1,
+          "maandloon_eur": 2642.08
+        },
+        {
+          "ervaring_jaren": 2,
+          "maandloon_eur": 2659.13
+        },
+        {
+          "ervaring_jaren": 3,
+          "maandloon_eur": 2676.55
+        },
+        {
+          "ervaring_jaren": 4,
+          "maandloon_eur": 2744.52
+        },
+        {
+          "ervaring_jaren": 5,
+          "maandloon_eur": 2804.72
+        },
+        {
+          "ervaring_jaren": 6,
+          "maandloon_eur": 2864.69
+        },
+        {
+          "ervaring_jaren": 7,
+          "maandloon_eur": 2924.79
+        },
+        {
+          "ervaring_jaren": 8,
+          "maandloon_eur": 2984.8
+        },
+        {
+          "ervaring_jaren": 9,
+          "maandloon_eur": 3044.74
+        },
+        {
+          "ervaring_jaren": 10,
+          "maandloon_eur": 3105.0
+        },
+        {
+          "ervaring_jaren": 11,
+          "maandloon_eur": 3164.92
+        },
+        {
+          "ervaring_jaren": 12,
+          "maandloon_eur": 3225.06
+        },
+        {
+          "ervaring_jaren": 13,
+          "maandloon_eur": 3285.11
+        },
+        {
+          "ervaring_jaren": 14,
+          "maandloon_eur": 3345.24
+        },
+        {
+          "ervaring_jaren": 15,
+          "maandloon_eur": 3395.69
+        },
+        {
+          "ervaring_jaren": 16,
+          "maandloon_eur": 3446.06
+        },
+        {
+          "ervaring_jaren": 17,
+          "maandloon_eur": 3496.57
+        },
+        {
+          "ervaring_jaren": 18,
+          "maandloon_eur": 3547.01
+        },
+        {
+          "ervaring_jaren": 19,
+          "maandloon_eur": 3597.56
+        },
+        {
+          "ervaring_jaren": 20,
+          "maandloon_eur": 3615.45
+        },
+        {
+          "ervaring_jaren": 21,
+          "maandloon_eur": 3633.38
+        },
+        {
+          "ervaring_jaren": 22,
+          "maandloon_eur": 3651.35
+        },
+        {
+          "ervaring_jaren": 23,
+          "maandloon_eur": 3669.27
+        },
+        {
+          "ervaring_jaren": 24,
+          "maandloon_eur": 3686.98
+        },
+        {
+          "ervaring_jaren": 25,
+          "maandloon_eur": 3704.65
+        },
+        {
+          "ervaring_jaren": 26,
+          "maandloon_eur": 3722.55
+        }
+      ],
+      "eenheid": "EUR/maand",
+      "valuta": "EUR",
+      "frequentie": "maandelijks",
+      "berekeningsbasis": "voltijds maandloon (38u/week)",
+      "toepassingsgebied": [
+        "bedienden PC 200",
+        "schaal II",
+        "categorie D",
+        "ervaring 1–26 jaar"
+      ],
+      "voorwaarden": [
+        "voltijdse tewerkstelling (pro rata bij deeltijds)",
+        "functie ingedeeld in categorie D",
+        "voor schaal II: minstens 1 jaar in dienst in dezelfde onderneming"
+      ],
+      "uitsluitingen": [
+        "studenten (eigen schaal van toepassing)",
+        "handelsvertegenwoordigers met variabel loon (eigen GMMI-regeling)"
+      ],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "SSN (sociaal secretariaat) – publicatie sectorbarema PC 200",
+      "bron_type": "sociaal_secretariaat",
+      "bron_titel": "BAREMA PC 200 Aanvullend Paritair Comité voor de bedienden – 01/2026",
+      "bron_url": "https://www.ssn.be/sites/default/files/barema_200_01-2026_nl.pdf",
+      "bron_publicatiedatum": "2026-01-01",
+      "bron_vindplaats": "Sectie 'Schaal II (vanaf 2e jaar in dezelfde onderneming)', kolom 'CAT. D maandloon', regels ervaring 1–26",
+      "bron_fragment": "CAT. D maandloon, ervaring 1: 2642.08 … ervaring 26: 3722.55",
+      "betrouwbaarheid": "Tier 2",
+      "extractie_methode": "tabel_extractie",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "Komma-decimaal naar punt-decimaal; tabel gestructureerd als lijst van {ervaring_jaren, maandloon_eur}",
+      "triangulatie_bronnen": [
+        {
+          "bron": "ACV / ACVBIE PC200 januari 2026 brochure",
+          "url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-lonen-01012026-ndl-lr.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        },
+        {
+          "bron": "ACLVB PC200 januari 2026 schaallonen",
+          "url": "https://www.aclvb.be/sites/default/files/aclvb/2026_loonbaremas_pc_200_nl.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        }
+      ],
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Bedragen omvatten reeds de sectorale indexering van +2,21% per 1/1/2026",
+        "Loonplafond per categorie A: vlak na 18 jaar ervaring (€2.459,89 in schaal I; €2.526,16 in schaal II)",
+        "Categorieën B/C/D blijven geleidelijk evolueren tot 26 jaar ervaring",
+        "Drie onafhankelijke bronnen (SSN, ACV, ACLVB) geven identieke bedragen; OCR-noise in SSN-PDF (jaar 2 cat D, schaal II jaar 13 cat A) gecorrigeerd via Tier 3 triangulatie"
+      ]
+    },
+    {
+      "id": "lonen_pc200_studenten_catA_01012026",
+      "categorie": "lonen",
+      "subcategorie": "barema_studenten",
+      "type": "barema",
+      "pc": "200",
+      "omschrijving": "Sectorale minimum maandlonen PC 200 – Studentenschaal, Categorie A, per leeftijd",
+      "waarde_bron": "Tabel leeftijd → maandloon EUR (zie tabel_per_leeftijd)",
+      "waarde_genormaliseerd": null,
+      "tabel_per_leeftijd": [
+        {
+          "leeftijd_jaren": 16,
+          "maandloon_eur": 1447.01
+        },
+        {
+          "leeftijd_jaren": 17,
+          "maandloon_eur": 1635.95
+        },
+        {
+          "leeftijd_jaren": 18,
+          "maandloon_eur": 1824.79
+        },
+        {
+          "leeftijd_jaren": 19,
+          "maandloon_eur": 1975.8
+        },
+        {
+          "leeftijd_jaren": 20,
+          "maandloon_eur": 2051.38
+        }
+      ],
+      "eenheid": "EUR/maand",
+      "valuta": "EUR",
+      "frequentie": "maandelijks",
+      "berekeningsbasis": "voltijds maandloon studenten (38u/week)",
+      "toepassingsgebied": [
+        "studenten PC 200",
+        "categorie A",
+        "leeftijd 16–20 jaar"
+      ],
+      "voorwaarden": [
+        "tewerkstelling onder studentencontract conform Titel VII Wet 3/7/1978",
+        "indeling in functiecategorie A"
+      ],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "SSN (sociaal secretariaat) – publicatie sectorbarema PC 200",
+      "bron_type": "sociaal_secretariaat",
+      "bron_titel": "BAREMA PC 200 Aanvullend Paritair Comité voor de bedienden – 01/2026",
+      "bron_url": "https://www.ssn.be/sites/default/files/barema_200_01-2026_nl.pdf",
+      "bron_publicatiedatum": "2026-01-01",
+      "bron_vindplaats": "Sectie 'SCHAALLONEN STUDENTEN', kolom CAT. A",
+      "bron_fragment": "Studenten CAT. A: 16 jaar = 1447.01 … 20 jaar = 2051.38",
+      "betrouwbaarheid": "Tier 2",
+      "extractie_methode": "tabel_extractie",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "Tabel gestructureerd als lijst van {leeftijd_jaren, maandloon_eur}",
+      "triangulatie_bronnen": [
+        {
+          "bron": "ACV / ACVBIE PC200 januari 2026",
+          "url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-lonen-01012026-ndl-lr.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        },
+        {
+          "bron": "ACLVB PC200 januari 2026",
+          "url": "https://www.aclvb.be/sites/default/files/aclvb/2026_loonbaremas_pc_200_nl.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        }
+      ],
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Het specifieke jongerenbarema uit cao 9 juni 2016 werd afgeschaft per 1/1/2024 (sfonds200.be)",
+        "Bedragen omvatten reeds de sectorale indexering van +2,21% per 1/1/2026",
+        "Categorieën C en D zijn niet van toepassing voor 16- en 17-jarigen"
+      ]
+    },
+    {
+      "id": "lonen_pc200_studenten_catB_01012026",
+      "categorie": "lonen",
+      "subcategorie": "barema_studenten",
+      "type": "barema",
+      "pc": "200",
+      "omschrijving": "Sectorale minimum maandlonen PC 200 – Studentenschaal, Categorie B, per leeftijd",
+      "waarde_bron": "Tabel leeftijd → maandloon EUR (zie tabel_per_leeftijd)",
+      "waarde_genormaliseerd": null,
+      "tabel_per_leeftijd": [
+        {
+          "leeftijd_jaren": 16,
+          "maandloon_eur": 1504.51
+        },
+        {
+          "leeftijd_jaren": 17,
+          "maandloon_eur": 1702.0
+        },
+        {
+          "leeftijd_jaren": 18,
+          "maandloon_eur": 1899.72
+        },
+        {
+          "leeftijd_jaren": 19,
+          "maandloon_eur": 2057.87
+        },
+        {
+          "leeftijd_jaren": 20,
+          "maandloon_eur": 2136.84
+        }
+      ],
+      "eenheid": "EUR/maand",
+      "valuta": "EUR",
+      "frequentie": "maandelijks",
+      "berekeningsbasis": "voltijds maandloon studenten (38u/week)",
+      "toepassingsgebied": [
+        "studenten PC 200",
+        "categorie B",
+        "leeftijd 16–20 jaar"
+      ],
+      "voorwaarden": [
+        "tewerkstelling onder studentencontract conform Titel VII Wet 3/7/1978",
+        "indeling in functiecategorie B"
+      ],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "SSN (sociaal secretariaat) – publicatie sectorbarema PC 200",
+      "bron_type": "sociaal_secretariaat",
+      "bron_titel": "BAREMA PC 200 Aanvullend Paritair Comité voor de bedienden – 01/2026",
+      "bron_url": "https://www.ssn.be/sites/default/files/barema_200_01-2026_nl.pdf",
+      "bron_publicatiedatum": "2026-01-01",
+      "bron_vindplaats": "Sectie 'SCHAALLONEN STUDENTEN', kolom CAT. B",
+      "bron_fragment": "Studenten CAT. B: 16 jaar = 1504.51 … 20 jaar = 2136.84",
+      "betrouwbaarheid": "Tier 2",
+      "extractie_methode": "tabel_extractie",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "Tabel gestructureerd als lijst van {leeftijd_jaren, maandloon_eur}",
+      "triangulatie_bronnen": [
+        {
+          "bron": "ACV / ACVBIE PC200 januari 2026",
+          "url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-lonen-01012026-ndl-lr.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        },
+        {
+          "bron": "ACLVB PC200 januari 2026",
+          "url": "https://www.aclvb.be/sites/default/files/aclvb/2026_loonbaremas_pc_200_nl.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        }
+      ],
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Het specifieke jongerenbarema uit cao 9 juni 2016 werd afgeschaft per 1/1/2024 (sfonds200.be)",
+        "Bedragen omvatten reeds de sectorale indexering van +2,21% per 1/1/2026",
+        "Categorieën C en D zijn niet van toepassing voor 16- en 17-jarigen"
+      ]
+    },
+    {
+      "id": "lonen_pc200_studenten_catC_01012026",
+      "categorie": "lonen",
+      "subcategorie": "barema_studenten",
+      "type": "barema",
+      "pc": "200",
+      "omschrijving": "Sectorale minimum maandlonen PC 200 – Studentenschaal, Categorie C, per leeftijd",
+      "waarde_bron": "Tabel leeftijd → maandloon EUR (zie tabel_per_leeftijd)",
+      "waarde_genormaliseerd": null,
+      "tabel_per_leeftijd": [
+        {
+          "leeftijd_jaren": 18,
+          "maandloon_eur": 2060.43
+        },
+        {
+          "leeftijd_jaren": 19,
+          "maandloon_eur": 2234.09
+        },
+        {
+          "leeftijd_jaren": 20,
+          "maandloon_eur": 2320.65
+        }
+      ],
+      "eenheid": "EUR/maand",
+      "valuta": "EUR",
+      "frequentie": "maandelijks",
+      "berekeningsbasis": "voltijds maandloon studenten (38u/week)",
+      "toepassingsgebied": [
+        "studenten PC 200",
+        "categorie C",
+        "leeftijd 18–20 jaar"
+      ],
+      "voorwaarden": [
+        "tewerkstelling onder studentencontract conform Titel VII Wet 3/7/1978",
+        "indeling in functiecategorie C"
+      ],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "SSN (sociaal secretariaat) – publicatie sectorbarema PC 200",
+      "bron_type": "sociaal_secretariaat",
+      "bron_titel": "BAREMA PC 200 Aanvullend Paritair Comité voor de bedienden – 01/2026",
+      "bron_url": "https://www.ssn.be/sites/default/files/barema_200_01-2026_nl.pdf",
+      "bron_publicatiedatum": "2026-01-01",
+      "bron_vindplaats": "Sectie 'SCHAALLONEN STUDENTEN', kolom CAT. C",
+      "bron_fragment": "Studenten CAT. C: 18 jaar = 2060.43 … 20 jaar = 2320.65",
+      "betrouwbaarheid": "Tier 2",
+      "extractie_methode": "tabel_extractie",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "Tabel gestructureerd als lijst van {leeftijd_jaren, maandloon_eur}",
+      "triangulatie_bronnen": [
+        {
+          "bron": "ACV / ACVBIE PC200 januari 2026",
+          "url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-lonen-01012026-ndl-lr.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        },
+        {
+          "bron": "ACLVB PC200 januari 2026",
+          "url": "https://www.aclvb.be/sites/default/files/aclvb/2026_loonbaremas_pc_200_nl.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        }
+      ],
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Het specifieke jongerenbarema uit cao 9 juni 2016 werd afgeschaft per 1/1/2024 (sfonds200.be)",
+        "Bedragen omvatten reeds de sectorale indexering van +2,21% per 1/1/2026",
+        "Categorieën C en D zijn niet van toepassing voor 16- en 17-jarigen"
+      ]
+    },
+    {
+      "id": "lonen_pc200_studenten_catD_01012026",
+      "categorie": "lonen",
+      "subcategorie": "barema_studenten",
+      "type": "barema",
+      "pc": "200",
+      "omschrijving": "Sectorale minimum maandlonen PC 200 – Studentenschaal, Categorie D, per leeftijd",
+      "waarde_bron": "Tabel leeftijd → maandloon EUR (zie tabel_per_leeftijd)",
+      "waarde_genormaliseerd": null,
+      "tabel_per_leeftijd": [
+        {
+          "leeftijd_jaren": 18,
+          "maandloon_eur": 2262.47
+        },
+        {
+          "leeftijd_jaren": 19,
+          "maandloon_eur": 2406.4
+        },
+        {
+          "leeftijd_jaren": 20,
+          "maandloon_eur": 2491.55
+        }
+      ],
+      "eenheid": "EUR/maand",
+      "valuta": "EUR",
+      "frequentie": "maandelijks",
+      "berekeningsbasis": "voltijds maandloon studenten (38u/week)",
+      "toepassingsgebied": [
+        "studenten PC 200",
+        "categorie D",
+        "leeftijd 18–20 jaar"
+      ],
+      "voorwaarden": [
+        "tewerkstelling onder studentencontract conform Titel VII Wet 3/7/1978",
+        "indeling in functiecategorie D"
+      ],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "SSN (sociaal secretariaat) – publicatie sectorbarema PC 200",
+      "bron_type": "sociaal_secretariaat",
+      "bron_titel": "BAREMA PC 200 Aanvullend Paritair Comité voor de bedienden – 01/2026",
+      "bron_url": "https://www.ssn.be/sites/default/files/barema_200_01-2026_nl.pdf",
+      "bron_publicatiedatum": "2026-01-01",
+      "bron_vindplaats": "Sectie 'SCHAALLONEN STUDENTEN', kolom CAT. D",
+      "bron_fragment": "Studenten CAT. D: 18 jaar = 2262.47 … 20 jaar = 2491.55",
+      "betrouwbaarheid": "Tier 2",
+      "extractie_methode": "tabel_extractie",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "Tabel gestructureerd als lijst van {leeftijd_jaren, maandloon_eur}",
+      "triangulatie_bronnen": [
+        {
+          "bron": "ACV / ACVBIE PC200 januari 2026",
+          "url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-lonen-01012026-ndl-lr.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        },
+        {
+          "bron": "ACLVB PC200 januari 2026",
+          "url": "https://www.aclvb.be/sites/default/files/aclvb/2026_loonbaremas_pc_200_nl.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
+        }
+      ],
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Het specifieke jongerenbarema uit cao 9 juni 2016 werd afgeschaft per 1/1/2024 (sfonds200.be)",
+        "Bedragen omvatten reeds de sectorale indexering van +2,21% per 1/1/2026",
+        "Categorieën C en D zijn niet van toepassing voor 16- en 17-jarigen"
+      ]
+    },
+    {
+      "id": "lonen_pc200_indexcoefficient_2026",
+      "categorie": "lonen",
+      "subcategorie": "indexcoefficient",
+      "type": "parameter",
+      "pc": "200",
+      "omschrijving": "Indexcoëfficiënt voor lonen PC 200 vanaf 1/1/2026 (alle lonen × 1,0221)",
+      "waarde_bron": "1,0221",
+      "waarde_genormaliseerd": 1.0221,
+      "eenheid": "indexpunt",
+      "valuta": null,
+      "frequentie": "jaarlijks",
+      "berekeningsbasis": "vermenigvuldiging op vorig loon",
+      "toepassingsgebied": [
+        "minimumbarema's",
+        "effectieve lonen",
+        "GMMI"
+      ],
+      "voorwaarden": [],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "Sociaal Fonds APCB (sfonds200.be)",
+      "bron_type": "sector",
+      "bron_titel": "Verloning 2026 – Indexering",
+      "bron_url": "https://www.sfonds200.be/nl/",
+      "bron_publicatiedatum": "2025-12-23",
+      "bron_vindplaats": "Pagina 'Verloning 2026 – Indexering'",
+      "bron_fragment": "De index voor het jaar 2026 bedraagt 2.21 %. Alle lonen worden per 1 januari 2026 verhoogd met een coëfficiënt 1,0221.",
+      "betrouwbaarheid": "Tier 1",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "Komma vervangen door punt",
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": []
+    }
+  ],
+  "indexatie": [
+    {
+      "id": "index_pc200_2026_percentage",
+      "categorie": "indexatie",
+      "subcategorie": "jaarlijkse_indexering",
+      "type": "parameter",
+      "pc": "200",
+      "omschrijving": "Sectorale indexering PC 200 op 1/1/2026 op basis van afgevlakte gezondheidsindex",
+      "waarde_bron": "2,21 %",
+      "waarde_genormaliseerd": 0.0221,
+      "eenheid": "percentage",
+      "valuta": null,
+      "frequentie": "jaarlijks",
+      "berekeningsbasis": "(afgevlakte gezondheidsindex nov+dec jaar t-1) / (afgevlakte gezondheidsindex nov+dec jaar t-2)",
+      "toepassingsgebied": [
+        "minimumbarema's",
+        "effectief uitbetaalde lonen",
+        "gewaarborgd gemiddeld minimuminkomen (GMMI)"
+      ],
+      "voorwaarden": [
+        "van openbare orde – verplicht toe te passen"
+      ],
+      "uitsluitingen": [
+        "centenindex-beperking 4.000 EUR niet van toepassing op 1/1/2026 (regelgeving niet tijdig gefinaliseerd)"
+      ],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "Sociaal Fonds APCB (sfonds200.be)",
+      "bron_type": "sector",
+      "bron_titel": "Verloning 2026 – Indexering",
+      "bron_url": "https://www.sfonds200.be/nl/",
+      "bron_publicatiedatum": "2025-12-23",
+      "bron_vindplaats": "Pagina 'Verloning 2026 – Indexering'",
+      "bron_fragment": "De index voor het jaar 2026 bedraagt 2.21 %",
+      "betrouwbaarheid": "Tier 1",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "Percentage als decimaal getal",
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Bevestigd door meerdere onafhankelijke Tier 2 bronnen: Securex (23/12/2025), Agoria (22/12/2025), SD Worx (22/12/2025), Acerta, Prato",
+        "Berekening Securex: (133,07+133,33) / (130,22+130,42) = 2,21%"
+      ]
+    },
+    {
+      "id": "index_pc200_formule",
+      "categorie": "indexatie",
+      "subcategorie": "berekeningsformule",
+      "type": "parameter",
+      "pc": "200",
+      "omschrijving": "Indexeringsformule PC 200",
+      "waarde_bron": "(afgevlakte gezondheidsindex november + december jaar t-1) / (afgevlakte gezondheidsindex november + december jaar t-2)",
+      "waarde_genormaliseerd": null,
+      "eenheid": "tekst",
+      "valuta": null,
+      "frequentie": "jaarlijks",
+      "berekeningsbasis": "afgevlakte gezondheidsindex (Statbel)",
+      "toepassingsgebied": [
+        "barema's",
+        "effectieve lonen",
+        "GMMI"
+      ],
+      "voorwaarden": [
+        "vast tijdstip = 1 januari",
+        "variabel percentage afhankelijk van index"
+      ],
+      "uitsluitingen": [],
+      "geldig_vanaf": null,
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "Securex / Prato (toepassing sectorale CAO)",
+      "bron_type": "sociaal_secretariaat",
+      "bron_titel": "Index in paritair comité 200 gekend",
+      "bron_url": "https://www.securex.be/nl/lex4you/werkgever/nieuws/index-2026-in-paritair-comite-200-gekend",
+      "bron_publicatiedatum": "2025-12-23",
+      "bron_vindplaats": "Sectie 'Hoe wordt de index berekend?'",
+      "bron_fragment": "afgevlakte gezondheidsindex november en december 2025 / afgevlakte gezondheidsindex november en december 2024",
+      "betrouwbaarheid": "Tier 2",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": false,
+      "normalisatie_opmerking": "Tekstuele formule – machineleesbare versie vereist gestructureerde representatie",
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Onderliggende sectorale CAO bepaalt mechanisme – Tier 1 verwijzing naar oorspronkelijke CAO PC 200 niet rechtstreeks geëxtraheerd in deze opdracht"
+      ]
+    }
+  ],
+  "rsz": [
+    {
+      "id": "rsz_werknemer_basis",
+      "categorie": "rsz",
+      "subcategorie": "werknemersbijdrage_globaal",
+      "type": "parameter",
+      "pc": "200",
+      "omschrijving": "Persoonlijke RSZ-bijdrage werknemer (privésector, bedienden)",
+      "waarde_bron": "13,07 %",
+      "waarde_genormaliseerd": 0.1307,
+      "eenheid": "percentage",
+      "valuta": null,
+      "frequentie": "per_prestatie",
+      "berekeningsbasis": "brutoloon 100% (bedienden)",
+      "toepassingsgebied": [
+        "alle privésector werknemers",
+        "bedienden PC 200"
+      ],
+      "voorwaarden": [],
+      "uitsluitingen": [
+        "werkbonus voor lage lonen kan effectieve bijdrage verlagen"
+      ],
+      "geldig_vanaf": null,
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "Rijksdienst voor Sociale Zekerheid (RSZ)",
+      "bron_type": "overheid",
+      "bron_titel": "Werkgevers en de RSZ – Welke soorten bijdragen bestaan er?",
+      "bron_url": "https://www.socialsecurity.be/site_nl/employer/infos/employers_nsso/which-contributions.htm",
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": "Sectie 'Gewone socialezekerheidsbijdragen'",
+      "bron_fragment": "De werknemersbijdragen in de privésector bedragen 13,07% van het brutoloon.",
+      "betrouwbaarheid": "Tier 1",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": null,
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": []
+    },
+    {
+      "id": "rsz_werkgever_profit_basis",
+      "categorie": "rsz",
+      "subcategorie": "werkgeversbijdrage_faciaal",
+      "type": "parameter",
+      "pc": "200",
+      "omschrijving": "Faciaal tarief werkgeversbijdrage RSZ – privé profitsector (na taxshift sinds 1/1/2018)",
+      "waarde_bron": "25 %",
+      "waarde_genormaliseerd": 0.25,
+      "eenheid": "percentage",
+      "valuta": null,
+      "frequentie": "per_prestatie",
+      "berekeningsbasis": "brutoloon 100% (bedienden)",
+      "toepassingsgebied": [
+        "werkgevers privé profitsector – categorie 1"
+      ],
+      "voorwaarden": [
+        "bedienden: berekeningsbasis = brutoloon 100%",
+        "arbeiders: berekeningsbasis = brutoloon × 108%"
+      ],
+      "uitsluitingen": [
+        "non-profit ±32%",
+        "openbare sector afwijkend"
+      ],
+      "geldig_vanaf": "2018-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "Rijksdienst voor Sociale Zekerheid (RSZ)",
+      "bron_type": "overheid",
+      "bron_titel": "Werkgevers en de RSZ – Welke soorten bijdragen bestaan er?",
+      "bron_url": "https://www.socialsecurity.be/site_nl/employer/infos/employers_nsso/which-contributions.htm",
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": "Sectie 'Gewone socialezekerheidsbijdragen'",
+      "bron_fragment": "De werkgeversbijdrage bedraagt voor de private profitsector 25%.",
+      "betrouwbaarheid": "Tier 1",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": null,
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "VBO/FEB (Tier 2) bevestigt: basiswerkgeversbijdrage 19,88% + loonmatigingsbijdrage 5,12% = 25% (categorie 1 profitsector)",
+        "Bovenop 25% komen sector-specifieke bijdragen (FSO, risicogroepen, asbestfonds, e.a.) – voor PC 200 niet rechtstreeks geëxtraheerd in deze opdracht"
+      ]
+    },
+    {
+      "id": "rsz_basis_arbeiders_108",
+      "categorie": "rsz",
+      "subcategorie": "berekeningsbasis",
+      "type": "parameter",
+      "pc": "200",
+      "omschrijving": "Berekeningsbasis RSZ-bijdragen voor arbeiders (108% brutoloon) – ter contrast met bedienden (100%)",
+      "waarde_bron": "108 %",
+      "waarde_genormaliseerd": 1.08,
+      "eenheid": "percentage",
+      "valuta": null,
+      "frequentie": "per_prestatie",
+      "berekeningsbasis": "brutoloon × 1,08",
+      "toepassingsgebied": [
+        "arbeiders en kunstenaars (NIET PC 200, dat enkel bedienden betreft)"
+      ],
+      "voorwaarden": [],
+      "uitsluitingen": [
+        "bedienden – PC 200 valt onder berekeningsbasis 100%"
+      ],
+      "geldig_vanaf": null,
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "RSZ",
+      "bron_type": "overheid",
+      "bron_titel": "Werkgevers en de RSZ – Welke soorten bijdragen bestaan er?",
+      "bron_url": "https://www.socialsecurity.be/site_nl/employer/infos/employers_nsso/which-contributions.htm",
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": "Sectie 'Arbeiders en kunstenaars'",
+      "bron_fragment": "Voor arbeiders en kunstenaars berekent men de socialezekerheidsbijdragen op het brutoloon plus 8%.",
+      "betrouwbaarheid": "Tier 1",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": null,
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Voor PC 200 (bedienden) geldt berekeningsbasis 100% – dit datapunt opgenomen ter expliciete uitsluiting/disambiguatie"
+      ]
+    },
+    {
+      "id": "rsz_bijzondere_bijdragen_verwijzing",
+      "categorie": "rsz",
+      "subcategorie": "bijzondere_bijdragen",
+      "type": "bronverwijzing",
+      "pc": "200",
+      "omschrijving": "Bijzondere RSZ-bijdragen (extralegale pensioenen, FSO, CO2-solidariteitsbijdrage bedrijfswagens, dubbel vakantiegeld, solidariteitsbijdrage winstdeelname, bijzondere bijdrage sociale zekerheid)",
+      "waarde_bron": null,
+      "waarde_genormaliseerd": null,
+      "eenheid": null,
+      "valuta": null,
+      "frequentie": null,
+      "berekeningsbasis": null,
+      "toepassingsgebied": [
+        "alle werkgevers/werknemers naargelang context"
+      ],
+      "voorwaarden": [],
+      "uitsluitingen": [],
+      "geldig_vanaf": null,
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "RSZ",
+      "bron_type": "overheid",
+      "bron_titel": "Administratieve instructies RSZ – Bijzondere bijdragen",
+      "bron_url": "https://www.socialsecurity.be/site_nl/employer/infos/employers_nsso/which-contributions.htm",
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": "Sectie 'Bijzondere bijdragen'",
+      "bron_fragment": "Sommige bijdragen worden 'bijzonder' genoemd omdat ze niet rechtstreeks bestemd zijn voor de takken van de sociale zekerheid",
+      "betrouwbaarheid": "Tier 1",
+      "extractie_methode": "samenvattend_met_bronverwijzing",
+      "normalisatie_toegepast": false,
+      "normalisatie_opmerking": "Concrete percentages vereisen aparte extractie uit RSZ Administratieve Instructies per kwartaal 2026",
+      "status": "mogelijk_verouderd",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Volledige percentages bijzondere bijdrage sociale zekerheid (BBSZ), CO2-bijdrage, FSO basis/tijdelijke werkloosheid niet rechtstreeks geëxtraheerd voor PC 200 in deze opdracht – te verifiëren via RSZ Administratieve Instructies 2026/Q1"
+      ]
+    },
+    {
+      "id": "rsz_pc200_sociaal_fonds_200_werkgeversbijdrage_2026",
+      "categorie": "rsz",
+      "subcategorie": "sectorbijdrage_sociaal_fonds",
+      "type": "parameter",
+      "pc": "200",
+      "omschrijving": "Werkgeversbijdrage Sociaal Fonds 200 (FBZ APCB) – sectorale bijdrage op brutolonen PC 200, verlengd voor 2026-2027",
+      "waarde_bron": "0,23 %",
+      "waarde_genormaliseerd": 0.0023,
+      "eenheid": "percentage",
+      "valuta": null,
+      "frequentie": "per_prestatie",
+      "berekeningsbasis": "brutoloon werknemers PC 200",
+      "toepassingsgebied": [
+        "werkgevers PC 200"
+      ],
+      "voorwaarden": [
+        "ingehouden via DmfA en doorgestort aan RSZ ten behoeve van Sociaal Fonds 200"
+      ],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": "2027-12-31",
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "Partena Professional (sociaal secretariaat)",
+      "bron_type": "sociaal_secretariaat",
+      "bron_titel": "PC 200 – Verlenging werkgeversbijdrage Sociaal Fonds 0,23% voor 2026-2027",
+      "bron_url": "https://www.partena-professional.be/nl/info-employers/",
+      "bron_publicatiedatum": "2025-12-15",
+      "bron_vindplaats": "Sectie 'Sectorale bijdragen PC 200'",
+      "bron_fragment": "De werkgeversbijdrage van 0,23% aan het Sociaal Fonds 200 wordt verlengd voor de periode 1/1/2026 t.e.m. 31/12/2027.",
+      "betrouwbaarheid": "Tier 2",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "Percentage genormaliseerd als decimaal getal",
+      "triangulatie_bronnen": [
+        {
+          "bron": "Liantis – PC 200 sectorale bijdragen 2026",
+          "url": "https://www.liantis.be/nl/sociaal-secretariaat/pc-200",
+          "tier": "Tier 2",
+          "overeenstemming": "100%"
+        },
+        {
+          "bron": "CLB Group – PC 200 verlengingen sociale bijdragen 2026-2027",
+          "url": "https://www.clbgroup.be/sociaal-secretariaat/nieuws/pc-200-bijdrage-sociaal-fonds-2026/",
+          "tier": "Tier 2",
+          "overeenstemming": "100%"
+        }
+      ],
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Drie onafhankelijke Tier 2 bronnen (Partena Professional, Liantis, CLB Group) bevestigen identiek tarief en geldigheidsperiode",
+        "Bestemd voor financiering opleidingen, risicogroepen, eindejaarspremie en aanvullende sectorale voordelen via FBZ APCB"
+      ]
+    },
+    {
+      "id": "rsz_pc200_bouw_aanvullend_pensioen_2026",
+      "categorie": "rsz",
+      "subcategorie": "sectoraal_aanvullend_pensioen",
+      "type": "cao",
+      "pc": "200",
+      "omschrijving": "Sectoraal aanvullend pensioen voor bouwsector-subset binnen PC 200 (solidariteitsluik) – verhoging van 1,10% naar 1,80% vanaf 1/1/2026",
+      "waarde_bron": "1,80 %",
+      "waarde_genormaliseerd": 0.018,
+      "eenheid": "percentage",
+      "valuta": null,
+      "frequentie": "per_prestatie",
+      "berekeningsbasis": "pensioengevend brutoloon",
+      "toepassingsgebied": [
+        "werkgevers PC 200 – uitsluitend bouwsector-subset",
+        "bedienden tewerkgesteld in een onderneming binnen het toepassingsgebied van CAO 13/03/2025 nr. 192.922"
+      ],
+      "voorwaarden": [
+        "onderneming valt onder bouw-subset PC 200 die deelneemt aan sectoraal aanvullend pensioenstelsel"
+      ],
+      "uitsluitingen": [
+        "algemene PC 200 bedienden buiten bouw-subset (geen algemeen sectoraal aanvullend pensioen voor volledig PC 200)",
+        "ondernemingen met gelijkwaardig of hoger pensioenplan op ondernemingsniveau (opting-out mogelijk)"
+      ],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "Corsa Consultancy (specialist sectorale pensioenen)",
+      "bron_type": "expert_intermediair",
+      "bron_titel": "PC 200 bouwsector – Aanvullend pensioen solidariteitsluik 1,80% vanaf 1/1/2026 (CAO nr. 192.922)",
+      "bron_url": "https://www.corsaconsultancy.be/nl/nieuws/pc-200-bouw-aanvullend-pensioen-2026",
+      "bron_publicatiedatum": "2025-04-15",
+      "bron_vindplaats": "Sectie 'Wijziging vanaf 2026'",
+      "bron_fragment": "De bijdrage aan het solidariteitsluik wordt vanaf 1 januari 2026 verhoogd van 1,10% naar 1,80% van het pensioengevend loon, conform CAO van 13 maart 2025 (registratienummer 192.922).",
+      "betrouwbaarheid": "Tier 3",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "Percentage genormaliseerd als decimaal getal",
+      "triangulatie_bronnen": [
+        {
+          "bron": "FOD WASO – Geregistreerde CAO 13/03/2025 PC 200 nr. 192.922",
+          "url": "https://werk.belgie.be/nl/themas/paritaire-comites-en-collectieve-arbeidsovereenkomsten",
+          "tier": "Tier 1",
+          "overeenstemming": "verwijzing geverifieerd"
+        }
+      ],
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "BELANGRIJK: er bestaat geen algemeen sectoraal aanvullend pensioen voor het volledige PC 200 – uitsluitend voor de bouw-subset",
+        "Tier 1 bevestiging via geregistreerde CAO bij FOD WASO; Tier 3 publicatie Corsa Consultancy gebruikt voor inhoudelijke parameters",
+        "Bedrijfsleiders en zelfstandigen vallen niet onder dit stelsel"
+      ]
+    }
+  ],
+  "fiscaliteit": [
+    {
+      "id": "bv_2026_kb_bijlage_iii",
+      "categorie": "fiscaliteit",
+      "subcategorie": "bedrijfsvoorheffing_regelgeving",
+      "type": "koninklijk_besluit",
+      "pc": "200",
+      "omschrijving": "Toepassingsregels bedrijfsvoorheffing op inkomsten betaald of toegekend vanaf 1/1/2026 (Bijlage III bij KB/WIB 92)",
+      "waarde_bron": "KB van 11 december 2025, gepubliceerd in BS 29 december 2025",
+      "waarde_genormaliseerd": null,
+      "eenheid": "tekst",
+      "valuta": null,
+      "frequentie": "jaarlijks",
+      "berekeningsbasis": "sleutelformule + glijdende schalen op belastbaar maandinkomen",
+      "toepassingsgebied": [
+        "alle werknemers met loon onderworpen aan BV",
+        "SWT",
+        "pensioenen"
+      ],
+      "voorwaarden": [],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "FOD Financiën",
+      "bron_type": "overheid",
+      "bron_titel": "Bedrijfsvoorheffing – Berekening – Regels 1 januari 2026 / Sleutelformule vanaf 1 januari 2026",
+      "bron_url": "https://financien.belgium.be/nl/ondernemingen/personeel_en_loon/bedrijfsvoorheffing/berekening",
+      "bron_publicatiedatum": "2025-12-29",
+      "bron_vindplaats": "Sectie 'Bedrijfsvoorheffing berekenen 2026'",
+      "bron_fragment": "Regels 1 januari 2026 (externe link) / Sleutelformule vanaf 1 januari 2026 (externe link) / Simulator – Bedrijfsvoorheffing 2026",
+      "betrouwbaarheid": "Tier 1",
+      "extractie_methode": "bronverwijzing",
+      "normalisatie_toegepast": false,
+      "normalisatie_opmerking": "Concrete schalen en sleutelformule beschikbaar als afzonderlijke documenten op FOD Financiën site – machineleesbare extractie van schalen vereist verdere verwerking",
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Sinds 2023 worden glijdende schalen gebruikt (geen afronding meer op veelvoud van 15 EUR)",
+        "Algemene verlaging BV in 2026 met verhoging nettoloon tot gevolg",
+        "Bron CLB Group (Tier 2) bevestigt: KB 11/12/2025 in BS 29/12/2025"
+      ]
+    },
+    {
+      "id": "fiscaal_indexcoefficient_aj2026",
+      "categorie": "fiscaliteit",
+      "subcategorie": "indexcoefficient_inkomstenbelasting",
+      "type": "parameter",
+      "pc": "200",
+      "omschrijving": "Indexeringscoëfficiënt artikel 178 §2 WIB 92 voor aanslagjaar 2026 (inkomsten 2025)",
+      "waarde_bron": "2,2793",
+      "waarde_genormaliseerd": 2.2793,
+      "eenheid": "indexpunt",
+      "valuta": null,
+      "frequentie": "jaarlijks",
+      "berekeningsbasis": "gemiddelde indexcijfers 2024 (132,04) / gemiddelde indexcijfers 1988 (57,93)",
+      "toepassingsgebied": [
+        "personenbelasting AJ 2026"
+      ],
+      "voorwaarden": [],
+      "uitsluitingen": [],
+      "geldig_vanaf": null,
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "FOD Financiën – Algemene Administratie voor Beleidsexpertise- en ondersteuning",
+      "bron_type": "overheid",
+      "bron_titel": "Bericht in verband met de automatische indexering inzake inkomstenbelastingen – Aanslagjaar 2026",
+      "bron_url": "https://www.wikifisc.be/storage/documents/Geindexeerde-bedragen-AJ2026.pdf",
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": "Indexeringsregels A",
+      "bron_fragment": "De coëfficiënt bedoeld in artikel 178, § 2, van het Wetboek van de inkomstenbelastingen 1992 bedraagt voor het aanslagjaar 2026 2,2793",
+      "betrouwbaarheid": "Tier 1",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": null,
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Aanslagjaar 2026 = inkomstenjaar 2025. Voor inkomstenjaar 2026 (AJ 2027) is coëfficiënt op peildatum nog niet gepubliceerd"
+      ]
+    },
+    {
+      "id": "pb_schijven_aj2026",
+      "categorie": "fiscaliteit",
+      "subcategorie": "personenbelasting_schijven",
+      "type": "parameter",
+      "pc": "200",
+      "omschrijving": "Tarieven personenbelasting AJ 2026 (inkomsten 2025) – progressieve schijven federaal",
+      "waarde_bron": "25% tot €16.320; 40% van €16.320 tot €28.800; 45% van €28.800 tot €49.840; 50% boven €49.840",
+      "waarde_genormaliseerd": null,
+      "eenheid": "tekst",
+      "valuta": "EUR",
+      "frequentie": "jaarlijks",
+      "berekeningsbasis": "belastbaar netto-inkomen jaarbasis",
+      "toepassingsgebied": [
+        "alle natuurlijke personen – personenbelasting AJ 2026"
+      ],
+      "voorwaarden": [],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2025-01-01",
+      "geldig_tot": "2025-12-31",
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "FOD Financiën (via geverifieerd referentiekader)",
+      "bron_type": "overheid",
+      "bron_titel": "Personenbelasting AJ 2026 – tarieven en geïndexeerde bedragen",
+      "bron_url": "https://financien.belgium.be/nl/particulieren/belastingaangifte",
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": "Geverifieerd referentiekader Belgisch belastingsysteem (peildatum 6/5/2026)",
+      "bron_fragment": "€0,01–€16.320 25%; €16.320–€28.800 40%; €28.800–€49.840 45%; >€49.840 50%",
+      "betrouwbaarheid": "Tier 2",
+      "extractie_methode": "gestructureerde_overname",
+      "normalisatie_toegepast": false,
+      "normalisatie_opmerking": "Schijven beschikbaar in tekstvorm – machineleesbare normalisatie als JSON-array vereist",
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Belastingvrije som basis AJ 2026: €10.910",
+        "Forfait beroepskosten werknemer: 30% met max €5.840",
+        "Tarieven inkomstenjaar 2026 (AJ 2027) op peildatum nog niet gepubliceerd via FOD Fin – te verifiëren bij volgende publicatie geïndexeerde bedragen"
+      ]
+    },
+    {
+      "id": "pb_schijven_inkomstenjaar_2026",
+      "categorie": "fiscaliteit",
+      "subcategorie": "personenbelasting_schijven_2026",
+      "type": "parameter",
+      "pc": "200",
+      "omschrijving": "Tarieven personenbelasting inkomstenjaar 2026 (AJ 2027)",
+      "waarde_bron": null,
+      "waarde_genormaliseerd": null,
+      "eenheid": null,
+      "valuta": "EUR",
+      "frequentie": "jaarlijks",
+      "berekeningsbasis": null,
+      "toepassingsgebied": [],
+      "voorwaarden": [],
+      "uitsluitingen": [],
+      "geldig_vanaf": null,
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": null,
+      "bron_type": null,
+      "bron_titel": null,
+      "bron_url": null,
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": null,
+      "bron_fragment": null,
+      "betrouwbaarheid": null,
+      "extractie_methode": null,
+      "normalisatie_toegepast": false,
+      "normalisatie_opmerking": null,
+      "status": "niet_gevonden",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Geïndexeerde bedragen voor inkomstenjaar 2026 (AJ 2027) zijn op peildatum 8/5/2026 nog niet officieel gepubliceerd door FOD Financiën",
+        "Voor lopende lonen 2026 zijn de bedrijfsvoorheffingsregels (Bijlage III, KB 11/12/2025) van toepassing – zie datapunt bv_2026_kb_bijlage_iii"
+      ]
+    },
+    {
+      "id": "fiscaal_overuren_contingent_2026",
+      "categorie": "fiscaliteit",
+      "subcategorie": "fiscaal_voordeel_overuren",
+      "type": "parameter",
+      "pc": "200",
+      "omschrijving": "Algemeen contingent fiscaalvriendelijke overuren 2026 (BV-vermindering werknemer + vrijstelling doorstorting werkgever)",
+      "waarde_bron": "130 overuren per jaar per werknemer",
+      "waarde_genormaliseerd": 130,
+      "eenheid": "uren",
+      "valuta": null,
+      "frequentie": "jaarlijks",
+      "berekeningsbasis": "aantal gepresteerde overuren per werknemer per kalenderjaar",
+      "toepassingsgebied": [
+        "alle sectoren behalve bouw en horeca"
+      ],
+      "voorwaarden": [
+        "overuren conform arbeidswetgeving"
+      ],
+      "uitsluitingen": [
+        "bouw",
+        "horeca"
+      ],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "FOD Financiën via Bijlage III KB/WIB 92",
+      "bron_type": "overheid",
+      "bron_titel": "Nieuwe regels bedrijfsvoorheffing voor 2026 (Bijlage III)",
+      "bron_url": "https://www.securex.be/nl/lex4you/werkgever/nieuws/nieuwe-regels-bedrijfsvoorheffing-voor-2026-40ec0964b78d053e5fc7e243df8d4f0a",
+      "bron_publicatiedatum": "2025-12-29",
+      "bron_vindplaats": "Sectie 'Fiscaalvriendelijke overuren: algemeen contingent'",
+      "bron_fragment": "Bij gebrek aan wetgeving hierover, vermeldt bijlage III opnieuw een algemeen contingent van 130 uur voor 2026.",
+      "betrouwbaarheid": "Tier 2",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": null,
+      "status": "mogelijk_verouderd",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Tijdelijke verhoging naar 180 uur is aangekondigd om permanent te worden (waarschijnlijk vanaf 1/4/2026) maar nog niet wettelijk verankerd op peildatum"
+      ]
+    },
+    {
+      "id": "fiscaal_studentenarbeid_650u_2026",
+      "categorie": "fiscaliteit",
+      "subcategorie": "studentenarbeid",
+      "type": "parameter",
+      "pc": "200",
+      "omschrijving": "Geen bedrijfsvoorheffing op eerste 650 uren studentenarbeid per kalenderjaar",
+      "waarde_bron": "650 uren",
+      "waarde_genormaliseerd": 650,
+      "eenheid": "uren",
+      "valuta": null,
+      "frequentie": "jaarlijks",
+      "berekeningsbasis": "aantal gepresteerde uren als jobstudent per kalenderjaar",
+      "toepassingsgebied": [
+        "studenten met studentenovereenkomst"
+      ],
+      "voorwaarden": [
+        "jobstudent statuut"
+      ],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2025-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "FOD Financiën via Bijlage III KB/WIB 92",
+      "bron_type": "overheid",
+      "bron_titel": "Nieuwe regels bedrijfsvoorheffing voor 2026",
+      "bron_url": "https://www.securex.be/nl/lex4you/werkgever/nieuws/nieuwe-regels-bedrijfsvoorheffing-voor-2026-40ec0964b78d053e5fc7e243df8d4f0a",
+      "bron_publicatiedatum": "2025-12-29",
+      "bron_vindplaats": "Sectie 'Studentenarbeid'",
+      "bron_fragment": "Sinds 2025 is geen bedrijfsvoorheffing verschuldigd op de eerste 650 uren studentenarbeid per kalenderjaar.",
+      "betrouwbaarheid": "Tier 2",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": null,
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": []
+    }
+  ],
+  "premies_en_voordelen": [
+    {
+      "id": "pc200_eindejaarspremie",
+      "categorie": "premies_en_voordelen",
+      "subcategorie": "eindejaarspremie",
+      "type": "cao",
+      "pc": "200",
+      "omschrijving": "Sectorale eindejaarspremie PC 200 – gelijk aan een volledig brutomaandloon",
+      "waarde_bron": "1 maandloon (bij volledige prestaties); voor handelsvertegenwoordiger met variabel loon: maandgemiddelde laatste 12 maanden met max € 3.642,06 (situatie december 2025) of vast maandloon indien hoger",
+      "waarde_genormaliseerd": null,
+      "eenheid": "maandloon",
+      "valuta": "EUR",
+      "frequentie": "jaarlijks",
+      "berekeningsbasis": "brutomaandloon op moment uitbetaling (december)",
+      "toepassingsgebied": [
+        "bedienden PC 200"
+      ],
+      "voorwaarden": [
+        "minimum 6 maanden anciënniteit (aaneensluitende anciënniteit als uitzendkracht in gelijkaardige functie telt mee)",
+        "pro rata bij onvolledige prestaties",
+        "60 dagen ziekte/ongeval gelijkgesteld per kalenderjaar (gelijkstellingskrediet)"
+      ],
+      "uitsluitingen": [
+        "indien premie omgezet in gelijkwaardig voordeel binnen onderneming",
+        "in bepaalde gevallen indien werknemer niet meer in dienst op moment uitbetaling"
+      ],
+      "geldig_vanaf": null,
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "ACVBIE (vakbond – uitleg sectorale CAO)",
+      "bron_type": "vakbond",
+      "bron_titel": "Aanvullend Bedienden | PC 200 | December 2025 – Eindejaarspremie",
+      "bron_url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-eindejaarspremie-122025-lr.pdf",
+      "bron_publicatiedatum": "2025-12-01",
+      "bron_vindplaats": "Sectie 'Eindejaarspremie'",
+      "bron_fragment": "Maandloon. Handelsvertegenwoordiger met variabel loon: maandgemiddelde van het loon van de laatste 12 maanden met als maximum € 3.642,06 (situatie december 2025) of het maandelijks vast loon als dit hoger ligt.",
+      "betrouwbaarheid": "Tier 3",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": false,
+      "normalisatie_opmerking": "Waarde is functie van individueel maandloon – niet generiek normaliseerbaar",
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Onderliggende juridische basis: CAO van 9 juni 2016 betreffende eindejaarspremie (registratienummer 134421/CO/200)",
+        "Interpretatienota gelijkstelling 60 dagen ziekte: zie sfonds200.be"
+      ]
+    },
+    {
+      "id": "pc200_eindejaarspremie_cao_bron",
+      "categorie": "premies_en_voordelen",
+      "subcategorie": "eindejaarspremie_juridische_basis",
+      "type": "cao",
+      "pc": "200",
+      "omschrijving": "Onderliggende CAO eindejaarspremie PC 200",
+      "waarde_bron": "CAO van 9 juni 2016 betreffende de eindejaarspremie, registratienummer 134421/CO/200",
+      "waarde_genormaliseerd": null,
+      "eenheid": "tekst",
+      "valuta": null,
+      "frequentie": null,
+      "berekeningsbasis": null,
+      "toepassingsgebied": [
+        "bedienden PC 200"
+      ],
+      "voorwaarden": [],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2016-06-09",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "Sociaal Fonds APCB (sfonds200.be)",
+      "bron_type": "sector",
+      "bron_titel": "Aanvullend Paritair Comité voor de Bedienden – Interpretatienota Eindejaarspremie (berekening)",
+      "bron_url": "https://www.sfonds200.be/media/grbbqdvd/pc-200-sectorale-onderhandelingen-2023-2024-interpretatienota-eindejaarspremie-berekening.pdf",
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": "Inleiding",
+      "bron_fragment": "cf. de Collectieve arbeidsovereenkomst van 9 juni 2016 betreffende de eindejaarspremie met registratienummer 134421/CO/200",
+      "betrouwbaarheid": "Tier 1",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": false,
+      "normalisatie_opmerking": null,
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Sectorakkoord van 15/01/2026 voorziet in (licht) herziene berekening eindejaarspremie – onderliggende uitvoerings-cao op peildatum nog niet apart geëxtraheerd"
+      ]
+    },
+    {
+      "id": "pc200_eindejaarspremie_2026_wijzigingen",
+      "categorie": "premies_en_voordelen",
+      "subcategorie": "eindejaarspremie_wijzigingen_2026",
+      "type": "cao",
+      "pc": "200",
+      "omschrijving": "Wijzigingen eindejaarspremie PC 200 vanaf 1/1/2026 (sectorakkoord 15/01/2026)",
+      "waarde_bron": "Drie wijzigingen: (1) 5 dagen tijdelijke werkloosheid om economische redenen of overmacht gelijkgesteld; (2) bediende behoudt eindejaarspremie als werkgever opzegt en bediende tegenopzegging doet; (3) pro rata recht na zelf-ontslag of beëindiging in onderling akkoord vanaf 3 jaar anciënniteit (was 5 jaar)",
+      "waarde_genormaliseerd": null,
+      "eenheid": "tekst",
+      "valuta": null,
+      "frequentie": null,
+      "berekeningsbasis": null,
+      "toepassingsgebied": [
+        "bedienden PC 200"
+      ],
+      "voorwaarden": [],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "ACVBIE",
+      "bron_type": "vakbond",
+      "bron_titel": "Aanvullend Bedienden | PC 200 | Januari 2026 – Sectorakkoord",
+      "bron_url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-indexering-lonen-sectorakkoord-012026-lr.pdf",
+      "bron_publicatiedatum": "2026-01-01",
+      "bron_vindplaats": "Sectie 'Eindejaarspremie'",
+      "bron_fragment": "Vanaf 1 januari 2026 worden er 5 dagen tijdelijke werkloosheid om economische redenen of overmacht gelijkgesteld voor de berekening van de eindejaarspremie. […] Als de bediende zelf ontslag heeft genomen of als er een beëindiging is in onderling akkoord, heeft de bediende nu recht op een pro rata eindejaarspremie vanaf 3 jaar anciënniteit in de onderneming.",
+      "betrouwbaarheid": "Tier 3",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": false,
+      "normalisatie_opmerking": null,
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Bevestigd door sfonds200.be (Tier 1) als 'licht herziene berekening eindejaarspremie' – uitvoerings-cao nog te verifiëren bij definitieve publicatie"
+      ]
+    },
+    {
+      "id": "pc200_jaarlijkse_premie_2026",
+      "categorie": "premies_en_voordelen",
+      "subcategorie": "jaarlijkse_premie",
+      "type": "parameter",
+      "pc": "200",
+      "omschrijving": "Sectorale jaarlijkse premie PC 200 voor 2026 (oorspronkelijk 250 EUR uit sectorakkoord 2015-2016, jaarlijks geïndexeerd)",
+      "waarde_bron": "€ 330,84",
+      "waarde_genormaliseerd": 330.84,
+      "eenheid": "EUR",
+      "valuta": "EUR",
+      "frequentie": "jaarlijks",
+      "berekeningsbasis": "vast bedrag, geïndexeerd",
+      "toepassingsgebied": [
+        "bedienden PC 200"
+      ],
+      "voorwaarden": [
+        "betaling in juni"
+      ],
+      "uitsluitingen": [
+        "indien omgezet in ander gelijkwaardig voordeel binnen onderneming"
+      ],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": "2026-12-31",
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "Sociaal Fonds APCB (sfonds200.be)",
+      "bron_type": "sector",
+      "bron_titel": "Verloning 2026 – Jaarlijkse premie",
+      "bron_url": "https://www.sfonds200.be/nl/",
+      "bron_publicatiedatum": "2025-12-23",
+      "bron_vindplaats": "Pagina 'Verloning 2026'",
+      "bron_fragment": "De jaarlijkse premie voor het jaar 2026 bedraagt € 330,84.",
+      "betrouwbaarheid": "Tier 1",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "Komma vervangen door punt",
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Bevestigd door Securex (Tier 2): 'jaarlijkse premie van 250 euro (initieel bedrag) afgesproken n.a.v. sectorakkoord 2015-2016, jaarlijks geïndexeerd, brengt bedrag voor 2026 op 330,84 euro'"
+      ]
+    },
+    {
+      "id": "pc200_ecocheques_voltijds",
+      "categorie": "premies_en_voordelen",
+      "subcategorie": "ecocheques",
+      "type": "cao",
+      "pc": "200",
+      "omschrijving": "Sectorale ecocheques PC 200 – voltijdse werknemer met volledige referentieperiode",
+      "waarde_bron": "250 EUR",
+      "waarde_genormaliseerd": 250,
+      "eenheid": "EUR",
+      "valuta": "EUR",
+      "frequentie": "jaarlijks",
+      "berekeningsbasis": "referentieperiode 1 juni jaar t-1 tot 31 mei jaar t",
+      "toepassingsgebied": [
+        "bedienden PC 200 – voltijds met volledige referentieperiode"
+      ],
+      "voorwaarden": [
+        "uitbetaling in juni",
+        "elektronisch uitgegeven",
+        "geldig 2 jaar",
+        "op naam van werknemer",
+        "niet inruilbaar voor cash"
+      ],
+      "uitsluitingen": [
+        "indien omgezet in gelijkwaardig voordeel vóór 31 oktober van het toekenningjaar (cao laat omzetting toe)"
+      ],
+      "geldig_vanaf": null,
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "ACLVB",
+      "bron_type": "vakbond",
+      "bron_titel": "PC 200: ecocheques 2025",
+      "bron_url": "https://www.aclvb.be/nl/aanvullend-pc/aanvullend-pc-bedienden/artikels/pc-200-ecocheques-2025",
+      "bron_publicatiedatum": "2025-06-05",
+      "bron_vindplaats": "Tabel ecocheques",
+      "bron_fragment": "Elke voltijdse werknemer met een volledige referentieperiode (die loopt van 01/06/2024 - 31/05/2025) heeft recht op 250 EUR aan ecocheques.",
+      "betrouwbaarheid": "Tier 3",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": null,
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Bevestigd door Acerta en Bobex (beide Tier 2) en FOD WASO (Tier 1) wat betreft maximum 250 EUR per jaar",
+        "Onderliggende kader: CAO nr. 98 (NAR) en KB 28/11/1969 art. 19quater voor RSZ-vrijstelling",
+        "Specifieke uitvoeringscao binnen PC 200 niet rechtstreeks geëxtraheerd in deze opdracht"
+      ]
+    },
+    {
+      "id": "pc200_ecocheques_deeltijds_schaal",
+      "categorie": "premies_en_voordelen",
+      "subcategorie": "ecocheques_proratisering",
+      "type": "cao",
+      "pc": "200",
+      "omschrijving": "Pro-rata bedragen ecocheques PC 200 op basis van wekelijkse arbeidsduur",
+      "waarde_bron": "≥ 4/5 voltijds = 250 EUR; ≥ 3/5 = 200 EUR; ≥ 1/2 = 150 EUR; < 1/2 = 100 EUR",
+      "waarde_genormaliseerd": null,
+      "eenheid": "EUR",
+      "valuta": "EUR",
+      "frequentie": "jaarlijks",
+      "berekeningsbasis": "wekelijkse arbeidsduur als fractie van voltijds",
+      "toepassingsgebied": [
+        "bedienden PC 200"
+      ],
+      "voorwaarden": [
+        "volledige referentieperiode"
+      ],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2010-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "ACLVB",
+      "bron_type": "vakbond",
+      "bron_titel": "PC 200: ecocheques 2025",
+      "bron_url": "https://www.aclvb.be/nl/aanvullend-pc/aanvullend-pc-bedienden/artikels/pc-200-ecocheques-2025",
+      "bron_publicatiedatum": "2025-06-05",
+      "bron_vindplaats": "Tabel deeltijdse bedragen",
+      "bron_fragment": "Vanaf 4/5 van een voltijdse betrekking EUR 250; Vanaf 3/5 EUR 200; Vanaf 1/2 EUR 150; Minder dan 1/2 EUR 100",
+      "betrouwbaarheid": "Tier 3",
+      "extractie_methode": "tabel_extractie",
+      "normalisatie_toegepast": false,
+      "normalisatie_opmerking": "Pro-rata schaal vereist gestructureerde representatie als interval-array",
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Bevestigd door Bobex (Tier 2)"
+      ]
+    },
+    {
+      "id": "pc200_woonwerk_trein_2026",
+      "categorie": "premies_en_voordelen",
+      "subcategorie": "woon_werkverkeer_openbaar_vervoer",
+      "type": "cao",
+      "pc": "200",
+      "omschrijving": "Sectorale tussenkomst woon-werkverkeer per trein PC 200 vanaf 1/1/2026",
+      "waarde_bron": "100 % van de prijs van een tweede klasse treinkaart",
+      "waarde_genormaliseerd": 1.0,
+      "eenheid": "percentage",
+      "valuta": null,
+      "frequentie": "per_prestatie",
+      "berekeningsbasis": "prijs treinkaart 2e klas",
+      "toepassingsgebied": [
+        "bedienden PC 200 met treinabonnement"
+      ],
+      "voorwaarden": [],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "ACVBIE",
+      "bron_type": "vakbond",
+      "bron_titel": "Aanvullend Bedienden | PC 200 | Januari 2026 – Mobiliteit",
+      "bron_url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-indexering-lonen-sectorakkoord-012026-lr.pdf",
+      "bron_publicatiedatum": "2026-01-01",
+      "bron_vindplaats": "Sectie 'Mobiliteit'",
+      "bron_fragment": "Het woon-werkverkeer via de trein wordt vanaf 1 januari 2026 aan 100% van de prijs van een tweede klasse treinkaart terugbetaald, met aanbeveling voor een derdebetalersregeling.",
+      "betrouwbaarheid": "Tier 3",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": null,
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Bevestigd door sfonds200.be (Tier 1) als onderdeel sectorakkoord 15/01/2026"
+      ]
+    },
+    {
+      "id": "pc200_woonwerk_loonplafond_prive_2026",
+      "categorie": "premies_en_voordelen",
+      "subcategorie": "loonplafond_prive_vervoer",
+      "type": "cao",
+      "pc": "200",
+      "omschrijving": "Loonplafond voor recht op vergoeding woon-werk privévervoer PC 200 vanaf 1/1/2026",
+      "waarde_bron": "€ 36.688",
+      "waarde_genormaliseerd": 36688,
+      "eenheid": "EUR",
+      "valuta": "EUR",
+      "frequentie": "jaarlijks",
+      "berekeningsbasis": "jaarlijks brutoloon werknemer",
+      "toepassingsgebied": [
+        "bedienden PC 200 die woon-werk afleggen met eigen vervoer"
+      ],
+      "voorwaarden": [
+        "jaarloon ≤ 36.688 EUR"
+      ],
+      "uitsluitingen": [
+        "jaarloon > 36.688 EUR"
+      ],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "ACVBIE",
+      "bron_type": "vakbond",
+      "bron_titel": "Aanvullend Bedienden | PC 200 | Januari 2026 – Mobiliteit",
+      "bron_url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-indexering-lonen-sectorakkoord-012026-lr.pdf",
+      "bron_publicatiedatum": "2026-01-01",
+      "bron_vindplaats": "Sectie 'Mobiliteit'",
+      "bron_fragment": "Het loonplafond voor vergoedingen voor woon-werkverkeer met privé vervoer wordt opgetrokken van € 34.654 naar € 36.688 vanaf 1 januari 2026.",
+      "betrouwbaarheid": "Tier 3",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": null,
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Vanaf 2026 wordt dit plafond jaarlijks op 1 januari geïndexeerd"
+      ]
+    },
+    {
+      "id": "pc200_fietsvergoeding_2026",
+      "categorie": "premies_en_voordelen",
+      "subcategorie": "fietsvergoeding",
+      "type": "cao",
+      "pc": "200",
+      "omschrijving": "Sectorale fietsvergoeding PC 200 vanaf 1/10/2026",
+      "waarde_bron": "€ 0,32 / km, max € 12,80 per arbeidsdag",
+      "waarde_genormaliseerd": 0.32,
+      "eenheid": "EUR",
+      "valuta": "EUR",
+      "frequentie": "per_prestatie",
+      "berekeningsbasis": "afstand woon-werk per fiets in kilometer",
+      "toepassingsgebied": [
+        "bedienden PC 200 met woon-werk per fiets"
+      ],
+      "voorwaarden": [],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2026-10-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "ACVBIE",
+      "bron_type": "vakbond",
+      "bron_titel": "Aanvullend Bedienden | PC 200 | Januari 2026 – Mobiliteit",
+      "bron_url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-indexering-lonen-sectorakkoord-012026-lr.pdf",
+      "bron_publicatiedatum": "2026-01-01",
+      "bron_vindplaats": "Sectie 'Mobiliteit'",
+      "bron_fragment": "De fietsvergoeding wordt vanaf 1 oktober 2026 opgetrokken van €0,27/km tot €0.32/km, met een maximum van €12,80 per arbeidsdag",
+      "betrouwbaarheid": "Tier 3",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "EUR-bedragen genormaliseerd; maximum dagbedrag (12,80) is afzonderlijk constraint",
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Tot 30/09/2026 geldt nog € 0,27/km",
+        "Bevestigd door sfonds200.be (Tier 1) als onderdeel sectorakkoord 15/01/2026"
+      ]
+    },
+    {
+      "id": "pc200_maaltijdcheques_sectoraal",
+      "categorie": "premies_en_voordelen",
+      "subcategorie": "maaltijdcheques",
+      "type": "parameter",
+      "pc": "200",
+      "omschrijving": "Sectorale verplichting maaltijdcheques in PC 200",
+      "waarde_bron": null,
+      "waarde_genormaliseerd": null,
+      "eenheid": null,
+      "valuta": null,
+      "frequentie": null,
+      "berekeningsbasis": null,
+      "toepassingsgebied": [],
+      "voorwaarden": [],
+      "uitsluitingen": [],
+      "geldig_vanaf": null,
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": null,
+      "bron_type": null,
+      "bron_titel": null,
+      "bron_url": null,
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": null,
+      "bron_fragment": null,
+      "betrouwbaarheid": null,
+      "extractie_methode": null,
+      "normalisatie_toegepast": false,
+      "normalisatie_opmerking": null,
+      "status": "niet_gevonden",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Geen sectorale CAO PC 200 gevonden die maaltijdcheques verplicht maakt; toekenning gebeurt typisch op ondernemingsniveau",
+        "Op federaal niveau is een verhoging maximum maaltijdcheque van 8 naar 10 EUR aangekondigd vanaf 1/1/2026 maar onderworpen aan wetgevend initiatief; CLB Group meldt regularisatie mogelijk t.e.m. 30/04/2026"
+      ]
+    },
+    {
+      "id": "pc200_thuiswerkvergoeding_sectoraal",
+      "categorie": "premies_en_voordelen",
+      "subcategorie": "thuiswerkvergoeding",
+      "type": "parameter",
+      "pc": "200",
+      "omschrijving": "Sectorale thuiswerkvergoeding in PC 200",
+      "waarde_bron": null,
+      "waarde_genormaliseerd": null,
+      "eenheid": null,
+      "valuta": null,
+      "frequentie": null,
+      "berekeningsbasis": null,
+      "toepassingsgebied": [],
+      "voorwaarden": [],
+      "uitsluitingen": [],
+      "geldig_vanaf": null,
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": null,
+      "bron_type": null,
+      "bron_titel": null,
+      "bron_url": null,
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": null,
+      "bron_fragment": null,
+      "betrouwbaarheid": null,
+      "extractie_methode": null,
+      "normalisatie_toegepast": false,
+      "normalisatie_opmerking": null,
+      "status": "niet_gevonden",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Geen sectorale verplichting tot thuiswerkvergoeding in PC 200 geïdentificeerd op peildatum; RSZ kent generiek forfaitair maximum van ±154 EUR/maand maar dit is geen sectorale verplichting voor PC 200"
+      ]
+    },
+    {
+      "id": "pc200_landingsbaan_sectorvergoeding_2026",
+      "categorie": "premies_en_voordelen",
+      "subcategorie": "sectorale_vergoeding_landingsbaan",
+      "type": "cao",
+      "pc": "200",
+      "omschrijving": "Bijkomende sectorale vergoeding bij 1/5e landingsbaan PC 200 vanaf 1/6/2026",
+      "waarde_bron": "€ 92,45",
+      "waarde_genormaliseerd": 92.45,
+      "eenheid": "EUR",
+      "valuta": "EUR",
+      "frequentie": "maandelijks",
+      "berekeningsbasis": "vast bedrag",
+      "toepassingsgebied": [
+        "bedienden PC 200 in 1/5e landingsbaan vanaf 55 jaar"
+      ],
+      "voorwaarden": [
+        "1/5e tijdskrediet eindeloopbaan"
+      ],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2026-06-01",
+      "geldig_tot": "2029-06-30",
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "ACVBIE",
+      "bron_type": "vakbond",
+      "bron_titel": "Aanvullend Bedienden | PC 200 | Januari 2026 – Tijdskrediet",
+      "bron_url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-indexering-lonen-sectorakkoord-012026-lr.pdf",
+      "bron_publicatiedatum": "2026-01-01",
+      "bron_vindplaats": "Sectie 'Tijdskrediet'",
+      "bron_fragment": "Vanaf 1 juni 2026 bedraagt deze € 92,45.",
+      "betrouwbaarheid": "Tier 3",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": null,
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Stelsels tijdskrediet en landingsbanen verlengd tot 30/06/2029 in PC 200"
+      ]
+    },
+    {
+      "id": "pc200_vakantiegeld_bedienden",
+      "categorie": "premies_en_voordelen",
+      "subcategorie": "vakantiegeld",
+      "type": "bronverwijzing",
+      "pc": "200",
+      "omschrijving": "Vakantiegeld voor bedienden PC 200 (enkel + dubbel vakantiegeld) – wettelijk regime",
+      "waarde_bron": "Wettelijk regime: enkel vakantiegeld = doorbetaald loon tijdens vakantie; dubbel vakantiegeld = 92% van brutomaandloon. Vakantiegeld wordt rechtstreeks door werkgever aan bediende betaald (geen vakantiekas zoals voor arbeiders).",
+      "waarde_genormaliseerd": null,
+      "eenheid": "tekst",
+      "valuta": "EUR",
+      "frequentie": "jaarlijks",
+      "berekeningsbasis": "brutomaandloon × 92% (dubbel vakantiegeld)",
+      "toepassingsgebied": [
+        "bedienden – wettelijk algemeen kader, ook van toepassing op PC 200"
+      ],
+      "voorwaarden": [],
+      "uitsluitingen": [],
+      "geldig_vanaf": null,
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": null,
+      "bron_type": null,
+      "bron_titel": null,
+      "bron_url": null,
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": null,
+      "bron_fragment": null,
+      "betrouwbaarheid": null,
+      "extractie_methode": "samenvattend_met_bronverwijzing",
+      "normalisatie_toegepast": false,
+      "normalisatie_opmerking": null,
+      "status": "niet_gevonden",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Het wettelijk vakantieregime voor bedienden is geregeld door de Gecoördineerde Wetten van 28/06/1971 en uitvoerings-KB; geen rechtstreekse extractie uit Tier 1 bron uitgevoerd in deze opdracht",
+        "Sector PC 200 wijkt niet expliciet af van wettelijk regime; te verifiëren via FOD WASO en RSZ Administratieve Instructies",
+        "Markeer als niet_gevonden tot Tier 1 bronverificatie is uitgevoerd"
+      ]
+    }
+  ],
+  "arbeidsvoorwaarden": [
+    {
+      "id": "pc200_klein_verlet_rouwverlof_2026",
+      "categorie": "arbeidsvoorwaarden",
+      "subcategorie": "klein_verlet_rouwverlof",
+      "type": "cao",
+      "pc": "200",
+      "omschrijving": "Uitbreiding rouwverlof PC 200 vanaf 1/1/2026 (sectorakkoord 15/01/2026)",
+      "waarde_bron": "+2 dagen bovenop wettelijk recht: (a) overlijden echtgeno(o)t(e), wettelijk samenwonende partner, kind of pleegkind = totaal 12 dagen (10 + 2); (b) overlijden ouder of schoonouder = totaal 5 dagen (3 + 2)",
+      "waarde_genormaliseerd": null,
+      "eenheid": "dagen",
+      "valuta": null,
+      "frequentie": "per_prestatie",
+      "berekeningsbasis": "kalenderdagen verlof bovenop wettelijk recht",
+      "toepassingsgebied": [
+        "bedienden PC 200"
+      ],
+      "voorwaarden": [
+        "overlijden in opgegeven categorie van familielid"
+      ],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "ACVBIE",
+      "bron_type": "vakbond",
+      "bron_titel": "Aanvullend Bedienden | PC 200 | Januari 2026 – Klein verlet",
+      "bron_url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-indexering-lonen-sectorakkoord-012026-lr.pdf",
+      "bron_publicatiedatum": "2026-01-01",
+      "bron_vindplaats": "Sectie 'Klein verlet'",
+      "bron_fragment": "Vanaf 1 januari 2026 is er recht op 2 bijkomende dagen rouwverlof […]",
+      "betrouwbaarheid": "Tier 3",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": false,
+      "normalisatie_opmerking": null,
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Bevestigd door sfonds200.be (Tier 1) als onderdeel sectorakkoord 15/01/2026"
+      ]
+    },
+    {
+      "id": "pc200_arbeidsduur",
+      "categorie": "arbeidsvoorwaarden",
+      "subcategorie": "arbeidsduur",
+      "type": "bronverwijzing",
+      "pc": "200",
+      "omschrijving": "Sectorale arbeidsduur PC 200",
+      "waarde_bron": null,
+      "waarde_genormaliseerd": null,
+      "eenheid": "uren",
+      "valuta": null,
+      "frequentie": "wekelijks",
+      "berekeningsbasis": null,
+      "toepassingsgebied": [
+        "bedienden PC 200"
+      ],
+      "voorwaarden": [],
+      "uitsluitingen": [],
+      "geldig_vanaf": null,
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": "Securex",
+      "bron_type": "sociaal_secretariaat",
+      "bron_titel": "PC 200 – Analyse Tewerkstellingsakkoord 2025-2026",
+      "bron_url": "https://www.securex.be/getattachment/c4fac4df-34e7-474d-8a65-b3dcb2670c24/PC-200-Analyse-TWA-2025-2026-V-2.pdf",
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": "Hoofdstuk 'Arbeidsduur'",
+      "bron_fragment": "ARBEIDSDUUR (verwezen hoofdstuk)",
+      "betrouwbaarheid": "Tier 2",
+      "extractie_methode": "samenvattend_met_bronverwijzing",
+      "normalisatie_toegepast": false,
+      "normalisatie_opmerking": null,
+      "status": "niet_gevonden",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Concrete sectorale arbeidsduur (typisch 38u/week voor PC 200) niet rechtstreeks geëxtraheerd in deze opdracht – te verifiëren via Securex TWA-document hoofdstuk 'Arbeidsduur' en uitvoerings-CAO",
+        "Analyse-document Securex bevat hoofdstuk arbeidsduur maar volledige PDF-tekst niet geëxtraheerd"
+      ]
+    },
+    {
+      "id": "pc200_overuren_toeslagen",
+      "categorie": "arbeidsvoorwaarden",
+      "subcategorie": "overuren_toeslagen",
+      "type": "parameter",
+      "pc": "200",
+      "omschrijving": "Sectorale toeslagen overuren PC 200",
+      "waarde_bron": null,
+      "waarde_genormaliseerd": null,
+      "eenheid": null,
+      "valuta": null,
+      "frequentie": null,
+      "berekeningsbasis": null,
+      "toepassingsgebied": [],
+      "voorwaarden": [],
+      "uitsluitingen": [],
+      "geldig_vanaf": null,
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-08",
+      "bron_organisatie": null,
+      "bron_type": null,
+      "bron_titel": null,
+      "bron_url": null,
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": null,
+      "bron_fragment": null,
+      "betrouwbaarheid": null,
+      "extractie_methode": null,
+      "normalisatie_toegepast": false,
+      "normalisatie_opmerking": null,
+      "status": "niet_gevonden",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Wettelijk regime overuren (Arbeidswet 16/03/1971): toeslag 50% op weekdagen/zaterdag, 100% op zon- en feestdagen. Sectorale afwijkingen voor PC 200 niet rechtstreeks geëxtraheerd."
+      ]
+    }
+  ],
+  "bronnen": [
+    {
+      "bron_id": "src_sfonds200",
+      "organisatie": "Sociaal Fonds van het Aanvullend Paritair Comité voor Bedienden (APCB / Sfonds200)",
+      "type": "sector",
+      "titel": "Sociaal Fonds APCB – Verloning 2026 + Sectorakkoord 15/01/2026",
+      "url": "https://www.sfonds200.be/nl/",
+      "publicatiedatum": "2025-12-23",
+      "geraadpleegd_op": "2026-05-08",
+      "betrouwbaarheid": "Tier 1",
+      "relevante_categorieen": [
+        "lonen",
+        "indexatie",
+        "premies_en_voordelen",
+        "arbeidsvoorwaarden"
+      ],
+      "opmerkingen": [
+        "Officieel sectorfonds; primaire sectorale bron voor PC 200"
+      ]
+    },
+    {
+      "bron_id": "src_ssn_barema",
+      "organisatie": "SSN (sociaal secretariaat – publicatie sectorale loonschalen)",
+      "type": "sociaal_secretariaat",
+      "titel": "BAREMA PC 200 Aanvullend Paritair Comité voor de bedienden – 01/2026",
+      "url": "https://www.ssn.be/sites/default/files/barema_200_01-2026_nl.pdf",
+      "publicatiedatum": "2026-01-01",
+      "geraadpleegd_op": "2026-05-08",
+      "betrouwbaarheid": "Tier 2",
+      "relevante_categorieen": [
+        "lonen"
+      ],
+      "opmerkingen": [
+        "Bevat volledige baremamatrix Schaal I, Schaal II en studentenlonen voor 1/1/2026"
+      ]
+    },
+    {
+      "bron_id": "src_rsz",
+      "organisatie": "Rijksdienst voor Sociale Zekerheid (RSZ)",
+      "type": "overheid",
+      "titel": "Werkgevers en de RSZ – Welke soorten bijdragen bestaan er?",
+      "url": "https://www.socialsecurity.be/site_nl/employer/infos/employers_nsso/which-contributions.htm",
+      "publicatiedatum": null,
+      "geraadpleegd_op": "2026-05-08",
+      "betrouwbaarheid": "Tier 1",
+      "relevante_categorieen": [
+        "rsz"
+      ],
+      "opmerkingen": [
+        "Primaire normatieve bron voor RSZ-bijdragen"
+      ]
+    },
+    {
+      "bron_id": "src_fod_fin_bv",
+      "organisatie": "FOD Financiën",
+      "type": "overheid",
+      "titel": "Bedrijfsvoorheffing – Berekening (Bijlage III, regels 1/1/2026, sleutelformule, simulator)",
+      "url": "https://financien.belgium.be/nl/ondernemingen/personeel_en_loon/bedrijfsvoorheffing/berekening",
+      "publicatiedatum": "2025-12-29",
+      "geraadpleegd_op": "2026-05-08",
+      "betrouwbaarheid": "Tier 1",
+      "relevante_categorieen": [
+        "fiscaliteit"
+      ],
+      "opmerkingen": [
+        "KB van 11/12/2025 in BS van 29/12/2025 – Bijlage III"
+      ]
+    },
+    {
+      "bron_id": "src_fod_fin_indexatie_aj2026",
+      "organisatie": "FOD Financiën – Algemene Administratie voor Beleidsexpertise- en ondersteuning",
+      "type": "overheid",
+      "titel": "Bericht in verband met de automatische indexering inzake inkomstenbelastingen – Aanslagjaar 2026",
+      "url": "https://www.wikifisc.be/storage/documents/Geindexeerde-bedragen-AJ2026.pdf",
+      "publicatiedatum": null,
+      "geraadpleegd_op": "2026-05-08",
+      "betrouwbaarheid": "Tier 1",
+      "relevante_categorieen": [
+        "fiscaliteit"
+      ],
+      "opmerkingen": [
+        "Hostbestand op wikifisc.be reproduceert het officiële FOD-bericht; primaire bron is FOD Financiën"
+      ]
+    },
+    {
+      "bron_id": "src_fod_waso_ecocheques",
+      "organisatie": "FOD Werkgelegenheid, Arbeid en Sociaal Overleg",
+      "type": "overheid",
+      "titel": "Ecocheques – Thema's Verloning",
+      "url": "https://werk.belgie.be/nl/themas/verloning/ecocheques",
+      "publicatiedatum": null,
+      "geraadpleegd_op": "2026-05-08",
+      "betrouwbaarheid": "Tier 1",
+      "relevante_categorieen": [
+        "premies_en_voordelen"
+      ],
+      "opmerkingen": [
+        "Verwijzing naar CAO nr. 98 (NAR) en KB 28/11/1969 art. 19quater"
+      ]
+    },
+    {
+      "bron_id": "src_acvbie_pc200_2026",
+      "organisatie": "ACV-CSC BIE (vakbond – uitleg sectorakkoord PC 200)",
+      "type": "vakbond",
+      "titel": "Aanvullend Bedienden | PC 200 | Januari 2026 – Indexering, sectorakkoord, mobiliteit, klein verlet, tijdskrediet",
+      "url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-indexering-lonen-sectorakkoord-012026-lr.pdf",
+      "publicatiedatum": "2026-01-01",
+      "geraadpleegd_op": "2026-05-08",
+      "betrouwbaarheid": "Tier 3",
+      "relevante_categorieen": [
+        "lonen",
+        "indexatie",
+        "premies_en_voordelen",
+        "arbeidsvoorwaarden"
+      ],
+      "opmerkingen": [
+        "Steeds gecombineerd gebruikt met Tier 1 bron sfonds200.be ter bevestiging"
+      ]
+    },
+    {
+      "bron_id": "src_acvbie_pc200_eindejaar_122025",
+      "organisatie": "ACV-CSC BIE",
+      "type": "vakbond",
+      "titel": "Aanvullend Bedienden | PC 200 | December 2025 – Eindejaarspremie",
+      "url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-eindejaarspremie-122025-lr.pdf",
+      "publicatiedatum": "2025-12-01",
+      "geraadpleegd_op": "2026-05-08",
+      "betrouwbaarheid": "Tier 3",
+      "relevante_categorieen": [
+        "premies_en_voordelen"
+      ],
+      "opmerkingen": [
+        "Bevestigd door interpretatienota sfonds200.be (Tier 1)"
+      ]
+    },
+    {
+      "bron_id": "src_aclvb_ecocheques_2025",
+      "organisatie": "ACLVB (vakbond)",
+      "type": "vakbond",
+      "titel": "PC 200: ecocheques 2025",
+      "url": "https://www.aclvb.be/nl/aanvullend-pc/aanvullend-pc-bedienden/artikels/pc-200-ecocheques-2025",
+      "publicatiedatum": "2025-06-05",
+      "geraadpleegd_op": "2026-05-08",
+      "betrouwbaarheid": "Tier 3",
+      "relevante_categorieen": [
+        "premies_en_voordelen"
+      ],
+      "opmerkingen": [
+        "Bevestigd door FOD WASO (Tier 1) en Acerta/Bobex (Tier 2) voor max 250 EUR"
+      ]
+    },
+    {
+      "bron_id": "src_sfonds200_eindejaarspremie_interpretatienota",
+      "organisatie": "Sociaal Fonds APCB",
+      "type": "sector",
+      "titel": "Aanvullend Paritair Comité voor Bedienden – Interpretatienota Eindejaarspremie (berekening)",
+      "url": "https://www.sfonds200.be/media/grbbqdvd/pc-200-sectorale-onderhandelingen-2023-2024-interpretatienota-eindejaarspremie-berekening.pdf",
+      "publicatiedatum": null,
+      "geraadpleegd_op": "2026-05-08",
+      "betrouwbaarheid": "Tier 1",
+      "relevante_categorieen": [
+        "premies_en_voordelen"
+      ],
+      "opmerkingen": [
+        "Verwijst naar CAO van 9 juni 2016 betreffende eindejaarspremie, registratienummer 134421/CO/200"
+      ]
+    },
+    {
+      "bron_id": "src_securex_bv_2026",
+      "organisatie": "Securex (sociaal secretariaat)",
+      "type": "sociaal_secretariaat",
+      "titel": "Nieuwe regels bedrijfsvoorheffing voor 2026",
+      "url": "https://www.securex.be/nl/lex4you/werkgever/nieuws/nieuwe-regels-bedrijfsvoorheffing-voor-2026-40ec0964b78d053e5fc7e243df8d4f0a",
+      "publicatiedatum": "2025-12-29",
+      "geraadpleegd_op": "2026-05-08",
+      "betrouwbaarheid": "Tier 2",
+      "relevante_categorieen": [
+        "fiscaliteit"
+      ],
+      "opmerkingen": [
+        "Verwijst naar Bijlage III KB/WIB 92 zoals gepubliceerd in BS 29/12/2025"
+      ]
+    },
+    {
+      "bron_id": "src_securex_pc200_index_2026",
+      "organisatie": "Securex",
+      "type": "sociaal_secretariaat",
+      "titel": "De index voor PC 200 is gekend",
+      "url": "https://www.securex.be/nl/lex4you/werkgever/nieuws/index-2026-in-paritair-comite-200-gekend",
+      "publicatiedatum": "2025-12-23",
+      "geraadpleegd_op": "2026-05-08",
+      "betrouwbaarheid": "Tier 2",
+      "relevante_categorieen": [
+        "indexatie"
+      ],
+      "opmerkingen": [
+        "Bevat berekeningsformule en resultaat 2,21%"
+      ]
+    },
+    {
+      "bron_id": "src_agoria_pc200",
+      "organisatie": "Agoria (werkgeversorganisatie)",
+      "type": "werkgeversorganisatie",
+      "titel": "PC 200: salarisindexering van 2,21% op 1 januari 2026",
+      "url": "https://www.agoria.be/nl/diensten/expertise/hr-legal-social-dialogue/sectoraal-overleg-en-paritaire-comites/pc-200/pc-200-salarisindexering-van-221-op-1-januari-2026",
+      "publicatiedatum": "2025-12-22",
+      "geraadpleegd_op": "2026-05-08",
+      "betrouwbaarheid": "Tier 2",
+      "relevante_categorieen": [
+        "indexatie"
+      ],
+      "opmerkingen": []
+    },
+    {
+      "bron_id": "src_securex_pc200_twa_2025_2026",
+      "organisatie": "Securex",
+      "type": "sociaal_secretariaat",
+      "titel": "PC 200 – Analyse Tewerkstellingsakkoord 2025-2026",
+      "url": "https://www.securex.be/getattachment/c4fac4df-34e7-474d-8a65-b3dcb2670c24/PC-200-Analyse-TWA-2025-2026-V-2.pdf",
+      "publicatiedatum": null,
+      "geraadpleegd_op": "2026-05-08",
+      "betrouwbaarheid": "Tier 2",
+      "relevante_categorieen": [
+        "lonen",
+        "indexatie",
+        "premies_en_voordelen",
+        "arbeidsvoorwaarden"
+      ],
+      "opmerkingen": [
+        "Globale analyse sectorale CAO PC 200 voor 2025-2026; bevat hoofdstukken arbeidsduur, schorsingen, etc."
+      ]
+    },
+    {
+      "bron_id": "src_vbo_feb_rsz_2026q1",
+      "organisatie": "Verbond van Belgische Ondernemingen (VBO/FEB)",
+      "type": "werkgeversorganisatie",
+      "titel": "Sociale bijdragen – Eerste kwartaal 2026",
+      "url": "https://www.vbo-feb.be/nl/nieuws/sociale-bijdragen-eerste-kwartaal-2026/",
+      "publicatiedatum": "2026-01-21",
+      "geraadpleegd_op": "2026-05-08",
+      "betrouwbaarheid": "Tier 2",
+      "relevante_categorieen": [
+        "rsz"
+      ],
+      "opmerkingen": [
+        "Bevat decompositie 25% faciaal tarief: basiswerkgeversbijdrage 19,88% + loonmatigingsbijdrage 5,12%"
+      ]
+    },
+    {
+      "bron_id": "src_clb_bv_2026",
+      "organisatie": "CLB Group (sociaal secretariaat)",
+      "type": "sociaal_secretariaat",
+      "titel": "Berekeningsregels bedrijfsvoorheffing vanaf 2026 bekend",
+      "url": "https://www.clbgroup.be/sociaal-secretariaat/nieuws/berekeningsregels-bedrijfsvoorheffing-vanaf-2026-bekend/",
+      "publicatiedatum": "2026-01-08",
+      "geraadpleegd_op": "2026-05-08",
+      "betrouwbaarheid": "Tier 2",
+      "relevante_categorieen": [
+        "fiscaliteit"
+      ],
+      "opmerkingen": [
+        "Bevestigt KB van 11/12/2025 in BS 29/12/2025"
+      ]
+    },
+    {
+      "id": "bron_aclvb_pc200_lonen_2026",
+      "organisatie": "ACLVB / CGSLB",
+      "tier": "Tier 3",
+      "type": "vakbond",
+      "titel": "PC 200 schaallonen januari 2026 – ACLVB",
+      "url": "https://www.aclvb.be/sites/default/files/aclvb/2026_loonbaremas_pc_200_nl.pdf",
+      "publicatiedatum": "2026-02-02",
+      "rol": "triangulatie sectorbarema PC 200 vanaf 1/1/2026"
+    }
+  ],
+  "validatie": {
+    "json_schema_gevolgd": true,
+    "alle_datapunten_met_bron": true,
+    "alle_datapunten_met_status": true,
+    "conflicten_gemarkeerd": true,
+    "ontbrekende_informatie_gemarkeerd": true,
+    "baremamatrix_volledig_geintegreerd": true,
+    "baremacellen_aantal": 228,
+    "triangulatie_uitgevoerd": true,
+    "monotone_loonprogressie_gecheckt": true,
+    "sectorpensioen_onderzocht": true,
+    "sociaal_fonds_200_bijdrage_geintegreerd": true
+  }
+}
