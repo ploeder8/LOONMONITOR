@@ -51,11 +51,11 @@
 ### 2.2 Sleutelformule Bijlage III KB integreren
 
 De geannualiseerde benadering vervangen door de exacte sleutelformule uit Bijlage III KB 11/12/2025:
-- Maandelijkse afronding op veelvouden van €15.
+- Glijdende schalen toepassen; geen oude afronding op veelvouden van €15.
 - Aparte tarieven voor wedde / uitkering / vakantiegeld / eindejaarspremie.
 - Forfaitaire BV-vermindering per gezinslast.
 
-**Verwachte impact:** verschil moet binnen ±€2/maand komen op modale lonen.
+**Status 12/05/2026:** TypeScript gebruikt een lokale `bijlage_iii_sleutelformule_2026` met expliciete `pending_taxcalc` status en Group S-anker. FOD Tax-Calc-validatie moet nog worden ingevoerd.
 
 ### 2.3 Triangulatie sociale-secretariaat-output
 
@@ -66,7 +66,7 @@ De geannualiseerde benadering vervangen door de exacte sleutelformule uit Bijlag
 
 - `golf2_validatieverslag.md`
 - Aangepaste `calc_brutonetto_2026.py` of TypeScript-equivalent
-- Bijgewerkt testcorpus met `status_validatie` per case (`ok` / `afwijking_klein` / `afwijking_groot`)
+- Bijgewerkt testcorpus met `status_validatie` per case (`pending` / `ok` / `kleine_afwijking` / `grote_afwijking`)
 
 ---
 

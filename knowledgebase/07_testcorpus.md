@@ -6,7 +6,7 @@
 | Laag | Naam | Aantal | Bestand | Status |
 |---|---|---|---|---|
 | 1 | **TC-01..TC-25** — bestaande golden tests | 25 | `src/lib/__tests__/golden.test.ts` | ✅ Allemaal groen |
-| 2 | **NTC-01..NTC-15** — netto-spec testcases | 15 | `src/lib/__tests__/golden.test.ts` (in te voegen) | ⚠️ Pending FOD Tax-Calc validatie |
+| 2 | **NTC-01..NTC-15** — netto-spec testcases | 15 | `src/lib/__tests__/golden.test.ts` | ⚠️ Pending FOD Tax-Calc validatie |
 | 3 | **BNTC-001..BNTC-030** — 30 bruto-netto profielen (deze pagina + `TESTCASES.json`) | 30 | `tools/calc_brutonetto_2026.py` (Python-referentie) | ⚠️ Pending FOD Tax-Calc validatie |
 
 > De drie lagen vullen elkaar aan: laag 1 valideert de barema / RSZ / sectorpremie logica, laag 2 valideert de netto-orchestratie inclusief bijzondere BV, laag 3 valideert de berekening over een brede salarisrange voor FOD-cross-check.
@@ -27,7 +27,7 @@ Voor de actuele exacte waardes: zie `src/lib/__tests__/golden.test.ts`.
 
 ---
 
-## Laag 2 — NTC-01..NTC-15 (te implementeren)
+## Laag 2 — NTC-01..NTC-15 (geïmplementeerd, FOD-validatie pending)
 
 Uit `04_calculator_netto.md §9`. Tolerantie: `expect(...).toBeCloseTo(..., 0)` (precisie ~€0,50). Markeer in code met commentaar `// PENDING: validate against FOD Fin Tax-Calc`.
 
@@ -72,10 +72,10 @@ Originele kop van het corpus:
 
 **Validatie-workflow:**
 1. Voer iedere case in op de **FOD Financiën Tax-Calc-simulator (XLSX, AJ 2027)** → noteer het officiële netto.
-2. Vergelijk met `berekend.netto_maand` — afwijking ≤ €5/maand = `ok`, ≤ €15/maand = `afwijking_klein`, > €15/maand = `afwijking_groot`.
-3. Bij `afwijking_groot`: identificeer de afwijkende component (RSZ / BV / werkbonus / BBSZ) en pas `calc_brutonetto_2026.py` aan; her-genereer corpus.
+2. Vergelijk met `berekend.netto_maand` — ontbrekende Tax-Calc data = `pending`, afwijking ≤ €5/maand = `ok`, ≤ €15/maand = `kleine_afwijking`, > €15/maand = `grote_afwijking`.
+3. Bij `grote_afwijking`: identificeer de afwijkende component (RSZ / BV / werkbonus / BBSZ) en pas `calc_brutonetto_2026.py` aan; her-genereer corpus.
 
-**BELANGRIJK:** de `berekend_netto`-kolom is een referentie-benadering met de gepubliceerde formules — niet de officiële Tax-Calc-output. De rekenmodule gebruikt de geannualiseerde benadering voor de bedrijfsvoorheffing, niet de exacte sleutelformule uit Bijlage III KB. Verwacht ±€5–€15 afwijking per maand op modale lonen, mogelijk meer aan de randen.
+**BELANGRIJK:** de `berekend_netto`-kolom is een referentie-benadering met de gepubliceerde formules — niet de officiële Tax-Calc-output. De TypeScript-rekenmodule gebruikt sinds Golf 2 een lokale Bijlage III-sleutelformule met Group S-anker; officiële FOD Tax-Calc waarden ontbreken nog. De status blijft daarom `pending` tot de XLSX-validatie is ingevoerd.
 
 ## Samenvattende tabel
 
@@ -160,7 +160,7 @@ Originele kop van het corpus:
 **Notities:**
 - RSZ-vermindering geplafonneerd op 0
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -207,7 +207,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€3232.19** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -254,7 +254,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€3513.25** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -301,7 +301,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€3934.84** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -348,7 +348,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€4215.90** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -395,7 +395,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€4689.47** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -442,7 +442,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€4918.55** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -489,7 +489,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€5621.20** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -536,7 +536,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€6323.85** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -583,7 +583,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€7026.50** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -630,7 +630,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€7729.15** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -682,7 +682,7 @@ Originele kop van het corpus:
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -734,7 +734,7 @@ Originele kop van het corpus:
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -787,7 +787,7 @@ Originele kop van het corpus:
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -839,7 +839,7 @@ Originele kop van het corpus:
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -891,7 +891,7 @@ Originele kop van het corpus:
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -940,7 +940,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€4918.55** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -987,7 +987,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€8431.80** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -1038,7 +1038,7 @@ Originele kop van het corpus:
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -1085,7 +1085,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€9837.10** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -1132,7 +1132,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€10539.75** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -1184,7 +1184,7 @@ Originele kop van het corpus:
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -1232,7 +1232,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€5621.20** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -1285,7 +1285,7 @@ Originele kop van het corpus:
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -1334,7 +1334,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€9837.10** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -1382,7 +1382,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€4918.55** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -1429,7 +1429,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€14053.00** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -1476,7 +1476,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€21079.50** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -1529,7 +1529,7 @@ Originele kop van het corpus:
 **Notities:**
 - RSZ-vermindering geplafonneerd op 0
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 
@@ -1582,7 +1582,7 @@ Originele kop van het corpus:
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
 
-**Status validatie:** `te_valideren_tegen_taxcalc` (tolerantie ±€5.00)
+**Status validatie:** `pending` (tolerantie ±€5.00)
 
 ---
 

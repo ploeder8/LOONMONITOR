@@ -28,6 +28,8 @@ bun test src/lib/__tests__/golden.test.ts   # run a single test file
 pnpm typecheck      # tsc --noEmit (tsconfig.app.json)
 pnpm build          # production build
 pnpm preview        # preview production build
+bun run typecheck   # equivalent typecheck command; currently green
+bun run build       # equivalent build command; currently green
 ```
 
 Path alias `@` maps to `src/` (configured in both `vite.config.ts` and `tsconfig.json` for Bun compatibility).
@@ -101,6 +103,10 @@ Elke module verwijst naar zijn specificatie in `knowledgebase/`:
 
 Calculations via `src/lib/dataset.ts` (`getDatapunt`, `indexById`) en `src/lib/periode.ts` (`safeGetValue`). `safeGetValue` enforced status- en period-guards. Voor parameters die in een lib hard-coded zijn (werkbonus, bbsz, bv, bvBijzonder, werkgeverskost): de lib roept `getDatapunt` direct aan voor de audit-trail, niet voor de waarde.
 
+### BV status (Golf 2)
+
+`src/lib/bv.ts` gebruikt nu een lokale `bijlage_iii_sleutelformule_2026` voor gewone bezoldiging. Het resultaat bevat `methode`, `schaal`, `validatieStatus` en `validatieOpmerking`. De implementatie blijft `pending_taxcalc` tot de 30 corpuscases extern tegen FOD Tax-Calc zijn gevalideerd; een eerste Tier-2 anker tegen Group S Salary Sim zit al in de tests.
+
 ### Profiel — velden
 
 De `Profiel` interface (`src/pages/HomePage.tsx`) bevat alle user-inputs. Relevante werkgeverskost-velden:
@@ -116,13 +122,13 @@ De `Profiel` interface (`src/pages/HomePage.tsx`) bevat alle user-inputs. Releva
 
 ### Tests
 
-`bun:test` (zelfde API als Vitest). `REF_2026 = "2026-06-01"` is de standaard referentiedatum. Voor het volledige testcorpus en de validatiestrategie: zie `knowledgebase/07_testcorpus.md`.
+`bun:test` (zelfde API als Vitest). `REF_2026 = "2026-06-01"` is de standaard referentiedatum. De repo heeft momenteel `golden.test.ts`, `schemaValidate.smoke.test.ts` en `taxcalcValidation.test.ts`. Voor het volledige testcorpus en de validatiestrategie: zie `knowledgebase/07_testcorpus.md`.
 
 ## Workflow Preferences
 
 - Keep changes as simple and small as possible. Prefer the least invasive fix that solves the actual problem.
 - After making a focused change, briefly report what changed and ask the user to confirm before running extra or time-consuming verification steps.
-- Minimal checks that directly guard against breakage are still allowed without confirmation, such as a targeted test, `bun test`, or `pnpm build` when the change affects compiled code.
+- Minimal checks that directly guard against breakage are still allowed without confirmation, such as a targeted test, `bun test`, `bun run typecheck`, or `bun run build` when the change affects compiled code.
 - Do not spend time on broad manual verification, repeated dev-server attempts, browser automation, or unrelated checks unless the user asks for it or confirms it first.
 
 ## Code Review Standards

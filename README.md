@@ -47,7 +47,7 @@ Single-page tool voor payroll-experts bij Van Havermaet om lonen en kosten te ve
 - Fietsvergoeding (€0,32/km — CAO 164, vanaf 1/10/2026)
 - Indexatie ondernemingsloon (× 1,0221 op 1/1/2026)
 
-¹ *AJ 2027 = inkomstenjaar 2026 (huidig kalenderjaar). Parameters: belastingvrije som €11.180, forfait max €6.070, schijven €16.720/€29.510/€51.070. Geverifieerd via Wet diverse bepalingen 18/12/2025 (BS 30/12/2025) + FOD Financiën. BV is een algoritmische benadering — voor exacte cijfers raadpleeg [FOD Tax-Calc](https://eservices.minfin.fgov.be/taxcalc/).*
+¹ *AJ 2027 = inkomstenjaar 2026 (huidig kalenderjaar). Parameters: belastingvrije som €11.180, forfait max €6.070, schijven €16.720/€29.510/€51.070. Geverifieerd via Wet diverse bepalingen 18/12/2025 (BS 30/12/2025) + FOD Financiën. BV gebruikt lokaal de Bijlage III-sleutelformule met pending FOD Tax-Calc-validatie; voor finale cijfers blijft [FOD Tax-Calc](https://eservices.minfin.fgov.be/taxcalc/) leidend.*
 
 ## Gebruik
 
@@ -68,8 +68,8 @@ bun test          # 25 TC-cases + 15 NTC-cases (40 golden tests + schema smoke t
 
 ### Type-check & build
 ```bash
-pnpm typecheck
-pnpm build
+bun run typecheck
+bun run build
 pnpm preview
 ```
 

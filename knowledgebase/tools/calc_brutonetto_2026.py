@@ -5,8 +5,10 @@ Doel: éénduidige, gedocumenteerde computatie van het verwachte netto
 voor de 30 testcases. Iedere component is traceerbaar naar een
 expliciete bron — zie bronnen_index.md in het bronnen-archief.
 
-BELANGRIJK: deze module is een REFERENTIE-BENADERING met de gepubliceerde
-formules. De definitieve "ground truth" is FOD Fin Tax-Calc XLSX-simulator.
+BELANGRIJK: deze Python-module is een legacy REFERENTIE-BENADERING met de
+gepubliceerde formules. De TypeScript-module bevat sinds Golf 2 de lokale
+Bijlage III-sleutelformule. De definitieve "ground truth" blijft FOD Fin
+Tax-Calc XLSX-simulator.
 Gebruik validate_corpus.py om afwijkingen te flaggen.
 
 Auteur: Loonmotor PC 200 — Golf 1

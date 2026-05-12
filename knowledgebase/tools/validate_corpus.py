@@ -5,20 +5,20 @@ Gebruik:
     python3 validate_corpus.py taxcalc_resultaten.csv
 
 CSV-formaat (1 regel per case):
-    id,taxcalc_netto_maand
-    TC-001,1923.45
-    TC-002,2010.78
+    id,taxcalc_netto_maand,root_cause
+    TC-001,1923.45,bv
+    TC-002,2010.78,afronding
     ...
 
 Output:
-    - Console-tabel met afwijkingen en status (ok / klein / groot)
-    - Bijgewerkte 03_testcorpus_brutonetto.json met `taxcalc_netto_maand`
+    - Console-tabel met afwijkingen en status (ok / kleine_afwijking / grote_afwijking)
+    - Bijgewerkte ../TESTCASES.json met `taxcalc_netto_maand`
       en `status_validatie` per case
 
 Tolerantiegrenzen:
     ≤ €5    → "ok"
-    ≤ €15   → "afwijking_klein"
-    > €15   → "afwijking_groot"
+    ≤ €15   → "kleine_afwijking"
+    > €15   → "grote_afwijking"
 """
 import csv
 import json
@@ -36,7 +36,7 @@ def main():
         sys.exit(1)
 
     taxcalc_pad = Path(sys.argv[1])
-    corpus_pad = Path(__file__).parent / "03_testcorpus_brutonetto.json"
+    corpus_pad = Path(__file__).parents[1] / "TESTCASES.json"
 
     if not taxcalc_pad.exists():
         print(f"Tax-Calc CSV niet gevonden: {taxcalc_pad}")
@@ -50,7 +50,10 @@ def main():
     with open(taxcalc_pad, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            taxcalc[row["id"]] = float(row["taxcalc_netto_maand"])
+            taxcalc[row["id"]] = {
+                "netto": float(row["taxcalc_netto_maand"]),
+                "root_cause": row.get("root_cause") or None,
+            }
 
     # Lees corpus
     corpus = json.loads(corpus_pad.read_text(encoding="utf-8"))
@@ -63,10 +66,11 @@ def main():
     for case in corpus:
         cid = case["id"]
         berekend = case["berekend"]["netto_maand"]
-        taxcalc_netto = taxcalc.get(cid)
+        taxcalc_resultaat = taxcalc.get(cid)
+        taxcalc_netto = taxcalc_resultaat["netto"] if taxcalc_resultaat else None
 
         if taxcalc_netto is None:
-            status = "geen_taxcalc_data"
+            status = "pending"
             verschil = None
             aantal_geen_data += 1
         else:
@@ -76,15 +80,21 @@ def main():
                 status = "ok"
                 aantal_ok += 1
             elif abs_verschil <= TOLERANCE_KLEIN:
-                status = "afwijking_klein"
+                status = "kleine_afwijking"
                 aantal_klein += 1
             else:
-                status = "afwijking_groot"
+                status = "grote_afwijking"
                 aantal_groot += 1
 
         case["taxcalc_netto_maand"] = taxcalc_netto
         case["verschil_eur"] = verschil
         case["status_validatie"] = status
+        if taxcalc_netto is None:
+            case["root_cause"] = "pending_taxcalc"
+        elif status == "ok":
+            case["root_cause"] = None
+        else:
+            case["root_cause"] = taxcalc_resultaat["root_cause"] or "bv"
 
         profiel = case["profiel"][:55]
         if taxcalc_netto is None:

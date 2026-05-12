@@ -766,7 +766,7 @@ function NettoPanel({ resultaat: r }: { resultaat: NettoResultaat }) {
         Netto berekening (per maand)
       </div>
 
-      {/* Approximatie disclaimer */}
+      {/* BV validatie disclaimer */}
       <div
         style={{
           background: "#f5f0e8",
@@ -779,7 +779,7 @@ function NettoPanel({ resultaat: r }: { resultaat: NettoResultaat }) {
           lineHeight: 1.5,
         }}
       >
-        <strong>Benadering:</strong> BV berekend volgens AJ 2027 schijven (€11.180 belastingvrije som, max forfait €6.070) — algoritmische benadering, niet de exacte sleutelformule Bijlage III KB 11/12/2025. Verwacht ±€5–€15/maand afwijking t.o.v. FOD Tax-Calc. BBSZ = kwartaalbedrag ÷ 3. Gemeentebelasting niet inbegrepen. Eindafrekening via PB-aangifte AJ 2027.
+        <strong>Validatie pending:</strong> BV wordt lokaal berekend met de Bijlage III-sleutelformule 2026 en is geankerd op Group S. Officiële FOD Tax-Calc waarden zijn nog niet ingevoerd; validatiestatus blijft daarom pending. BBSZ = kwartaalbedrag ÷ 3. Gemeentebelasting niet inbegrepen. Eindafrekening via PB-aangifte AJ 2027.
       </div>
 
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -798,7 +798,7 @@ function NettoPanel({ resultaat: r }: { resultaat: NettoResultaat }) {
             label={`Effectieve RSZ${r.werkbonus.totaal > 0 ? " (na werkbonus)" : ""}`}
             bedrag={r.effectieveRsz}
           />
-          <NettoRow label="Bedrijfsvoorheffing (vóór gezinsverminderingen)" bedrag={r.bv.bvPerMaand} />
+          <NettoRow label={`Bedrijfsvoorheffing (${r.bv.schaal}, vóór gezinsverminderingen)`} bedrag={r.bv.bvPerMaand} />
           {r.bv.verminderingKinderen > 0 && (
             <NettoRow
               label={`BV-vermindering kinderen ten laste`}
@@ -908,6 +908,9 @@ function NettoPanel({ resultaat: r }: { resultaat: NettoResultaat }) {
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, marginTop: 8 }}>
             <tbody>
               {[
+                ["Methode", r.bv.methode],
+                ["Schaal", r.bv.schaal],
+                ["Validatie", r.bv.validatieStatus],
                 ["Belastbaar jaarloon", formatEUR(r.bv.jaarbasis)],
                 ["Forfait beroepskosten (30%, max € 6.070 AJ 2027)", `- ${formatEUR(r.bv.forfaitBeroepskosten)}`],
                 ["Belastbaar netto-inkomen", formatEUR(r.bv.belastbaarNettoJaar)],
@@ -915,7 +918,7 @@ function NettoPanel({ resultaat: r }: { resultaat: NettoResultaat }) {
                 ["PB (bruto, schijven 25/40/45/50%)", formatEUR(r.bv.pbBruto)],
                 ["BVS-vermindering (BVS × 25%)", `- ${formatEUR(r.bv.bvsVermindering)}`],
                 ["PB (netto, jaarbasis)", formatEUR(r.bv.pbNetto)],
-                ["BV / maand (vóór gezinsvermindering)", formatEUR(r.bv.bvPerMaand)],
+                ["BV / maand sleutelformule (vóór gezinsvermindering)", formatEUR(r.bv.bvPerMaand)],
                 ["BV / maand (na gezinsvermindering)", formatEUR(r.bv.bvNaVerminderingen)],
               ].map(([lbl, val]) => (
                 <tr key={lbl} style={{ borderBottom: "1px solid #f5f0e8" }}>

@@ -369,7 +369,7 @@ Jaarloonkost = X                                       (brutomaandloon × 12)
 > *"Het is november 2026. De Loonmotor levert verkeerde netto-cijfers. Waarom?"*
 
 1. **BBSZ-banden onvolledig in dataset.** RSZ-instructie 2026 publiceert kwartaalbanden meestal pas in maart/april — als de POC dataset niet wordt geüpdatet, draait de berekening op stale 2025-banden. **Mitigatie:** `meta.laatste_update`-veld + UI-banner als > 90 dagen oud. Markeer BBSZ als info-only zolang Tier-1 tabel mist.
-2. **Sleutelformule-implementatie wijkt af van FOD Fin.** Eigen TS-implementatie van Bijlage III verschilt door afronding/vrijstellingen van de officiële simulator. **Mitigatie:** voor POC: link naar [FOD Fin BV-simulator](https://financien.belgium.be/nl/ondernemingen/personeel_en_loon/bedrijfsvoorheffing/berekening) i.p.v. eigen reken-engine. Eigen implementatie alleen post-POC.
+2. **Sleutelformule-implementatie wijkt mogelijk af van FOD Fin.** Eigen TS-implementatie van Bijlage III is nu aanwezig in `src/lib/bv.ts`, maar de 30 FOD Tax-Calc-runs zijn nog niet ingevoerd. **Mitigatie:** behoud `pending_taxcalc` in de UI en behandel FOD Tax-Calc als leidende referentie tot de validatiematrix compleet is.
 3. **Werkbonus-grenzen verschuiven door GGMMI-aanpassing buiten cyclus.** GGMMI gaat naar €2.189,81 op 1/4/2026; volgende aanpassing afhankelijk van centenindex-trigger. **Mitigatie:** datapunten met `geldig_vanaf`/`geldig_tot` strikt respecteren; UI toont actuele datum + filter op `referentiedatum`.
 
 ---

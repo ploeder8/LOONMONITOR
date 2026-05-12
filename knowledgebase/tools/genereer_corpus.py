@@ -10,9 +10,9 @@ Iedere case bevat:
   - profielbeschrijving (NL)
   - input (LoonInput-veldwaarden)
   - berekend_netto (LoonResultaat — alle tussenstappen voor traceerbaarheid)
-  - status_validatie: "te_valideren_tegen_taxcalc" — wordt na vergelijking met
-    FOD Fin Tax-Calc XLSX gewijzigd naar "ok", "afwijking_klein" (≤ €5/maand)
-    of "afwijking_groot" (> €5/maand).
+  - status_validatie: "pending" — wordt na vergelijking met
+    FOD Fin Tax-Calc XLSX gewijzigd naar "ok", "kleine_afwijking" (≤ €15/maand)
+    of "grote_afwijking" (> €15/maand).
   - tolerantie_marge_eur: aanvaardbare afwijking voor automatische validatie
 
 Iedere case dekt een specifieke combinatie van factoren — zie bronnen_index
@@ -250,7 +250,7 @@ def bouw_corpus():
             "input": case["input"],
             "berekend": asdict(res),
             "werkgeverskost": wgk,
-            "status_validatie": "te_valideren_tegen_taxcalc",
+            "status_validatie": "pending",
             "tolerantie_marge_eur": 5.00,
             "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
         })
@@ -273,15 +273,14 @@ def schrijf_markdown(corpus, pad: Path):
         "1. Voer iedere case in op de **FOD Financiën Tax-Calc-simulator (XLSX, AJ 2027)** "
         "→ noteer het officiële netto.",
         "2. Vergelijk met `berekend.netto_maand` — afwijking ≤ €5/maand = `ok`, "
-        "≤ €15/maand = `afwijking_klein`, > €15/maand = `afwijking_groot`.",
-        "3. Bij `afwijking_groot`: identificeer de afwijkende component "
+        "≤ €15/maand = `kleine_afwijking`, > €15/maand = `grote_afwijking`.",
+        "3. Bij `grote_afwijking`: identificeer de afwijkende component "
         "(RSZ / BV / werkbonus / BBSZ) en pas `calc_brutonetto_2026.py` aan; her-genereer corpus.",
         "",
         "**BELANGRIJK:** de `berekend_netto`-kolom is een referentie-benadering "
         "met de gepubliceerde formules — niet de officiële Tax-Calc-output. "
-        "De rekenmodule gebruikt de geannualiseerde benadering voor de "
-        "bedrijfsvoorheffing, niet de exacte sleutelformule uit Bijlage III KB. "
-        "Verwacht ±€5–€15 afwijking per maand op modale lonen, mogelijk meer aan de randen.",
+        "De TypeScript-rekenmodule gebruikt sinds Golf 2 een lokale Bijlage III-sleutelformule "
+        "met Group S-anker. Officiële FOD Tax-Calc waarden blijven de ground truth.",
         "",
         "## Samenvattende tabel",
         "",

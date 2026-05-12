@@ -29,7 +29,7 @@ De **PC 200 Loonmotor** stelt payroll-experts bij Van Havermaet in staat om voor
 
 ### Netto-laag (uitgebreid)
 - **Sociale werkbonus** (RSZ-vermindering) — Luik A + B, vanaf 1/4/2026
-- **Bedrijfsvoorheffing** (BV) — algoritmische benadering op AJ 2027-parameters
+- **Bedrijfsvoorheffing** (BV) — lokale Bijlage III-sleutelformule 2026 met pending FOD Tax-Calc-validatie
 - **BV-verminderingen** via maandtabel: kinderen ten laste, kind <3 jaar, fiscaal alleenstaande met kind, groepsverzekering
 - **Fiscale werkbonus** (belastingkrediet 33,14 % × Luik A + 52,54 % × Luik B)
 - **Bijzondere BV-schaal** voor variabel loon (eindejaarspremie, jaarpremie, dubbel vakantiegeld)
@@ -114,7 +114,7 @@ Een datapunt is **klaar voor productie** wanneer:
 
 Een release is **deploybaar** wanneer:
 1. ✅ Schema-validatie bij start lukt (rode startup-scherm bij failure)
-2. ✅ `pnpm typecheck` slaagt (alleen pre-existing `bun` type-fout toegelaten)
+2. ✅ `pnpm typecheck` / `bun run typecheck` slaagt
 3. ✅ Alle 25 TC-cases + 15 NTC-cases groen
 4. ✅ Geen `Datapunt` zonder `bron_url` of `status`
 5. ✅ Voor BV-implementatie: minstens 18/20 cases binnen ±€2 van FOD Tax-Calc

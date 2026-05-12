@@ -41,9 +41,12 @@
       "totale_loonkost_maand": 3077.34,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-002",
@@ -83,9 +86,12 @@
       "totale_loonkost_maand": 3232.19,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-003",
@@ -125,9 +131,12 @@
       "totale_loonkost_maand": 3513.25,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-004",
@@ -168,9 +177,12 @@
       "totale_loonkost_maand": 3934.84,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-005",
@@ -210,9 +222,12 @@
       "totale_loonkost_maand": 4215.9,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-006",
@@ -252,9 +267,12 @@
       "totale_loonkost_maand": 4689.47,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-007",
@@ -295,9 +313,12 @@
       "totale_loonkost_maand": 4918.55,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-008",
@@ -337,9 +358,12 @@
       "totale_loonkost_maand": 5621.2,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-009",
@@ -379,9 +403,12 @@
       "totale_loonkost_maand": 6323.85,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-010",
@@ -421,9 +448,12 @@
       "totale_loonkost_maand": 7026.5,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-011",
@@ -463,9 +493,12 @@
       "totale_loonkost_maand": 7729.15,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-012",
@@ -510,9 +543,12 @@
       "totale_loonkost_maand": 3513.25,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-013",
@@ -556,9 +592,12 @@
       "totale_loonkost_maand": 4215.9,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-014",
@@ -603,9 +642,12 @@
       "totale_loonkost_maand": 4918.55,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-015",
@@ -650,9 +692,12 @@
       "totale_loonkost_maand": 5621.2,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-016",
@@ -697,9 +742,12 @@
       "totale_loonkost_maand": 6323.85,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-017",
@@ -741,9 +789,12 @@
       "totale_loonkost_maand": 4918.55,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-018",
@@ -784,9 +835,12 @@
       "totale_loonkost_maand": 8431.8,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-019",
@@ -829,9 +883,12 @@
       "totale_loonkost_maand": 9134.45,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-020",
@@ -871,9 +928,12 @@
       "totale_loonkost_maand": 9837.1,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-021",
@@ -914,9 +974,12 @@
       "totale_loonkost_maand": 10539.75,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-022",
@@ -961,9 +1024,12 @@
       "totale_loonkost_maand": 11945.05,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-023",
@@ -1004,9 +1070,12 @@
       "totale_loonkost_maand": 5621.2,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-024",
@@ -1051,9 +1120,12 @@
       "totale_loonkost_maand": 7026.5,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-025",
@@ -1095,9 +1167,12 @@
       "totale_loonkost_maand": 9837.1,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-026",
@@ -1138,9 +1213,12 @@
       "totale_loonkost_maand": 4918.55,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-027",
@@ -1181,9 +1259,12 @@
       "totale_loonkost_maand": 14053.0,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-028",
@@ -1224,9 +1305,12 @@
       "totale_loonkost_maand": 21079.5,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-029",
@@ -1271,9 +1355,12 @@
       "totale_loonkost_maand": 3077.34,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   },
   {
     "id": "TC-030",
@@ -1318,8 +1405,11 @@
       "totale_loonkost_maand": 6323.85,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "te_valideren_tegen_taxcalc",
+    "status_validatie": "pending",
     "tolerantie_marge_eur": 5.0,
-    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026"
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
   }
 ]

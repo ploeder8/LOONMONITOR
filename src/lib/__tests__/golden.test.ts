@@ -339,7 +339,7 @@ describe("TC-22 — BBSZ: schijven", () => {
 });
 
 describe("TC-23 — BV: alleenstaand, 0 kinderen (AJ 2027)", () => {
-  it("brutoloon belastbaar € 2.000 → AJ 2027-berekening", () => {
+  it("belastbaar € 2.000 → Bijlage III sleutelformule wordt gebruikt", () => {
     const belastbaarMaandloon = 2000;
     const r = berekenBV({ belastbaarMaandloon, gezinstype: "alleenstaand", kinderenTenLaste: 0 });
     expect(r.jaarbasis).toBe(24000);
@@ -353,11 +353,27 @@ describe("TC-23 — BV: alleenstaand, 0 kinderen (AJ 2027)", () => {
     expect(r.bvsVermindering).toBe(2795);
     // PB netto: 4664 − 2795 = 1869
     expect(r.pbNetto).toBe(1869);
-    // BV/maand: 1869 / 12 = 155.75
-    expect(r.bvPerMaand).toBe(155.75);
-    expect(r.bvNaVerminderingen).toBe(155.75); // geen verminderingen
-    expect(r.isApproximatie).toBe(true);
+    expect(r.methode).toBe("bijlage_iii_sleutelformule_2026");
+    expect(r.schaal).toBe("I");
+    expect(r.bvPerMaand).toBeGreaterThan(155.75);
+    expect(r.bvNaVerminderingen).toBe(r.bvPerMaand); // geen verminderingen
+    expect(r.isApproximatie).toBe(false);
+    expect(r.validatieStatus).toBe("pending_taxcalc");
     expect(r.datapunten.length).toBeGreaterThanOrEqual(2);
+  });
+});
+
+describe("TC-23b — BV: Group S triangulatie-anker", () => {
+  it("benadert de Group S Salary Sim-case voor Schaal I Cat A 5j", () => {
+    const r = berekenNetto({
+      brutoloon: 2276.51,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+    });
+
+    expect(r.belastbaarMaandloon).toBe(2266.96);
+    expect(r.bv.bvNaVerminderingen).toBeCloseTo(154.22, 1);
   });
 });
 
@@ -394,8 +410,8 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
     expect(r.effectieveRsz).toBeLessThan(r.rsz.werknemerBijdrage);
     // BBSZ datapunt aanwezig
     expect(r.bbsz.datapunt.id).toBe("bv_bbsz_schijven_2026");
-    // BV is approximatie
-    expect(r.bv.isApproximatie).toBe(true);
+    expect(r.bv.methode).toBe("bijlage_iii_sleutelformule_2026");
+    expect(r.bv.validatieStatus).toBe("pending_taxcalc");
   });
 
   it("audit: alle datapunten in netto-resultaat hebben bron_url", () => {

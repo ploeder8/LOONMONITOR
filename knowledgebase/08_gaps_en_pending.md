@@ -15,7 +15,7 @@
 | P-03 | **Plafond forfaitaire beroepskosten** verhoging boven €6.070 (AJ 2027) | Wetsontwerp PB-hervorming | Midden (alleen lonen >€20.233) | Behoud €6.070; trigger update zodra wijziging geïndexeerd. |
 | P-04 | **Niet-recurrente resultaatsgebonden voordelen (CAO 90)** plafond €3.701 — geen specifieke wijziging 2026 maar telt mee in totaalberekening | Stabiel | Laag | OK voor 2026, herevaluatie januari 2027. |
 | P-05 | **Verhoogde vrijstelling overuren** (Arizona) — fiscaal en RSZ | Programmawet 18/7/2025 — gedeeltelijk in werking | Midden (bij overuren >180 uur/jaar) | Buiten scope POC; opnemen in productieversie. |
-| P-06 | **PB-hervorming sleutelformule Bijlage III KB** — coëfficiënten 2026 | Definitief KB 11/12/2025 | Hoog (BV-rekenmotor) | **Kritiek pending:** module gebruikt nu de geannualiseerde benadering. Voor productieversie de exacte sleutelformule integreren — zie §3 hieronder. |
+| P-06 | **PB-hervorming sleutelformule Bijlage III KB** — coëfficiënten 2026 | Definitief KB 11/12/2025 | Hoog (BV-rekenmotor) | **Deels opgelost 12/05/2026:** TypeScript gebruikt nu een lokale Bijlage III-sleutelformule met Group S-anker. FOD Tax-Calc-validatie blijft pending — zie §3 hieronder. |
 
 ---
 
@@ -58,26 +58,22 @@
 
 ## 3. Methodologische gaps in de rekenmodule
 
-### 3.1 Bedrijfsvoorheffing — sleutelformule vs geannualiseerde benadering
+### 3.1 Bedrijfsvoorheffing — sleutelformule en validatie
 
-**Huidige aanpak (POC-niveau):**
-```
-jaarbasis = belastbaar_maand × 12
-− kostenforfait (30%, max €6.070)
-→ progressieve schijven AJ 2027
-− belastingvermindering belastingvrije som
-/ 12 = maandelijkse BV vóór gezinsverminderingen
-```
+**Huidige aanpak (Golf 2, 12/05/2026):**
+- `src/lib/bv.ts` retourneert `methode = bijlage_iii_sleutelformule_2026`, `schaal` en `validatieStatus = pending_taxcalc`.
+- De lokale formule is geankerd op de gedocumenteerde Group S Salary Sim-case voor PC 200 Schaal I Cat A 5j.
+- Officiële FOD Tax-Calc XLSX-waarden zijn nog niet ingevoerd; de motor mag dus nog niet als FOD-gevalideerd worden beschouwd.
 
 **Verschil met de officiële sleutelformule (Bijlage III KB 11/12/2025):**
 - De BV gebruikt schaalcoëfficiënten **per loonschijf** (niet de progressieve PB-schijven verondersteld via × 12).
-- Specifieke afronding op **veelvouden van €15** voor het belastbaar bedrag.
+- Sinds 2023 gebruikt BV glijdende schalen; geen oude afronding op veelvouden van €15 toepassen.
 - Aparte tarieven voor "wedde" vs "uitkering" vs "vakantiegeld" vs "eindejaarspremie".
 - Verminderingen voor gezinslasten zijn **forfaitaire bedragen per maand**, niet via belastingvrije som geannualiseerd.
 
-**Verwachte afwijking:** ±€5–€15/maand op modale lonen, mogelijk meer aan de randen (lage lonen met werkbonus, hoge lonen rond de 50%-schijf).
+**Verwachte afwijking:** onbekend tot de 30 FOD Tax-Calc-runs zijn ingevoerd; iedere afwijking > €5 krijgt een root-cause (`rsz`, `werkbonus`, `bv`, `bbsz`, `afronding`).
 
-**Aanbeveling:** voor productie: vervang de geannualiseerde benadering door een directe implementatie van Bijlage III KB. Validatie via 30 testcases tegen FOD Fin Tax-Calc.
+**Aanbeveling:** voer de FOD Tax-Calc-validatie in via `knowledgebase/tools/validate_corpus.py` en hou deploy tegen zolang de acceptatiecriteria niet gehaald zijn.
 
 ### 3.2 BBSZ — gezinssituatie
 
@@ -127,6 +123,7 @@ Allemaal **buiten scope POC**, opnemen in roadmap voor productie.
 | # | Gap | Opgelost | Hoe |
 |---|-----|----------|-----|
 | G-01 | Extralegale voordelen werkgever (groepsverzekering, maaltijdcheques, hospitalisatieverzekering, ecocheques) waren hardgecodeerd op €0 | ✅ 12 mei 2026 | `Profiel`-interface uitgebreid met `arbeidsongevallenPct`, `extraGroepsverzekering`, `extraMaaltijdcheques`, `extraHospitalisatie`; `extraEcocheques` automatisch afgeleid. Nieuwe "Werkgeversbijdragen" accordion in de sidebar. Itemized rows in `WerkgeverskostPanel`. Zowel `bouwResultaten` als `computeSummary` fully wired. |
+| G-02 | BV-module had geen expliciete sleutelformule-metadata of validatiestatus | ✅ 12 mei 2026 | `berekenBV()` rapporteert nu methode, schaal en `pending_taxcalc`; tests bevatten een Group S-anker en het 30-cases validatieregister staat in `src/lib/taxcalcValidation.ts`. |
 
 ---
 
@@ -134,10 +131,10 @@ Allemaal **buiten scope POC**, opnemen in roadmap voor productie.
 
 | Item | Status | Actie |
 |---|---|---|
-| 30 testcases gegenereerd | ✅ `03_testcorpus_brutonetto.json` | OK |
-| Validatie tegen FOD Fin Tax-Calc XLSX | ❌ Niet uitgevoerd | **Volgende stap:** download Tax-Calc AJ 2027, runs voor 30 cases |
-| Validatie tegen sociaal-secretariaat-output (Securex/Acerta/SD Worx loonberekeningstools) | ❌ Niet uitgevoerd | Bonus-validatie — neem 5 cases en compareer |
-| Regressietest-suite (CI-integratie) | ❌ Niet aanwezig | Implementeer Vitest (TypeScript-zijde) en pytest (Python-zijde) |
+| 30 testcases gegenereerd | ✅ `TESTCASES.json` + `src/lib/taxcalcValidation.ts` | Statussen staan op `pending` tot Tax-Calc-output wordt ingevoerd |
+| Validatie tegen FOD Fin Tax-Calc XLSX | ⚠️ Pending | **Volgende stap:** download Tax-Calc AJ 2027, runs voor 30 cases, importeer CSV via `validate_corpus.py` |
+| Validatie tegen sociaal-secretariaat-output (Securex/Acerta/SD Worx loonberekeningstools) | ⚠️ Deels voorbereid | 5 triangulatie-ankers vastgelegd; Group S Schaal I Cat A 5j als eerste anker in test |
+| Regressietest-suite (CI-integratie) | ⚠️ Lokaal aanwezig | `bun test` dekt BV-metadata, Group S-anker, schema-smoke en werkgeverskost-regressie; CI nog niet ingericht |
 | Edge-case testing | Gedeeltelijk in 30 cases | Aanvullen: deeltijds, lange afwezigheid, eindejaarspremie maand, vakantiegeld maand |
 
 ---

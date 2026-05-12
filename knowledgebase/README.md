@@ -65,8 +65,8 @@
 ### AJ 2027 is correct gekozen (niet AJ 2026)
 Bij een loon dat in mei 2026 wordt uitbetaald, gelden de **AJ 2027-parameters** voor de BV-inhouding, want dat is het aanslagjaar waarin inkomstenjaar 2026 wordt aangegeven. AJ 2026-parameters (€10.910 BVS, €5.840 forfait, oude schijven) gelden enkel voor inkomsten 2025.
 
-### Benadering vs exacte FOD-simulatie
-De netto-bedragen in deze kennisbank zijn **referentie-benaderingen** gebaseerd op de gepubliceerde formules — niet de officiële Tax-Calc-output. Verwacht ±€5–€15 afwijking per maand op modale lonen. Voor productie-validatie: gebruik `tools/validate_corpus.py` tegen FOD Fin Tax-Calc.
+### Sleutelformule vs FOD-validatie
+De TypeScript-module gebruikt sinds 12/05/2026 een lokale Bijlage III-sleutelformule voor BV met expliciete `pending_taxcalc` status. De netto-bedragen zijn nog **niet officieel FOD Tax-Calc-gevalideerd**. Voor productie-validatie: voer de 30 cases in via `tools/validate_corpus.py`.
 
 ### Pending wetgeving (regering-De Wever)
 Sommige parameters zijn **wetsontwerp**, nog niet in BS:
