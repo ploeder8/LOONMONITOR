@@ -5,11 +5,16 @@ import {
   DatapuntOnbekend,
 } from "@/lib/errors";
 import type { Datapunt } from "@/types/dataset";
+import { berekenBvBijzonder, type BvBijzonderResultaat } from "@/lib/bvBijzonder";
+import type { GezinsType } from "@/lib/bv";
 
 export interface EindejaarsInput {
   brutoloon: number;
-  ancienniteitMaanden: number;        // months in service on 31/12
-  prestatieMaandenInRefertepériode: number;  // months actually worked (0..12)
+  ancienniteitMaanden: number;
+  prestatieMaandenInRefertepériode: number;
+  // Optional: indien meegegeven, wordt de bijzondere BV ook berekend
+  gezinstype?: GezinsType;
+  kinderenTenLaste?: number;
 }
 
 export interface EindejaarsResultaat {
@@ -18,6 +23,9 @@ export interface EindejaarsResultaat {
   premie: number;
   datapunt: Datapunt;
   toelichting: string;
+  // Optional: alleen aanwezig als gezinstype is meegegeven
+  bvBijzonder?: BvBijzonderResultaat;
+  nettoPremie?: number;
 }
 
 const MIN_ANCIENNITEIT_MAANDEN = 6;
@@ -47,7 +55,7 @@ export function eindejaarspremie(input: EindejaarsInput): EindejaarsResultaat {
     Math.max(0, Math.min(12, input.prestatieMaandenInRefertepériode)) / 12;
   const premie = round2(input.brutoloon * factor);
 
-  return {
+  const base: EindejaarsResultaat = {
     voorwaardenVoldaan: true,
     proRataFactor: factor,
     premie,
@@ -56,4 +64,17 @@ export function eindejaarspremie(input: EindejaarsInput): EindejaarsResultaat {
       `Volledige premie = 1 maandloon (€ ${input.brutoloon.toFixed(2)}). ` +
       `Pro-rata: ${input.prestatieMaandenInRefertepériode}/12 = ${factor.toFixed(4)}.`,
   };
+
+  if (input.gezinstype && premie > 0) {
+    const bv = berekenBvBijzonder({
+      refertejaarloon: round2(input.brutoloon * 12),
+      exceptioneelBruto: premie,
+      gezinstype: input.gezinstype,
+      kinderenTenLaste: input.kinderenTenLaste ?? 0,
+    });
+    base.bvBijzonder = bv;
+    base.nettoPremie = bv.nettoBedrag;
+  }
+
+  return base;
 }

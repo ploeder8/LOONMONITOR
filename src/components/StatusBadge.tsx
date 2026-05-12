@@ -1,50 +1,50 @@
 import type { Status, Tier } from "@/types/dataset";
-import { cn } from "@/lib/cn";
 
-const STATUS_STYLES: Record<Status, string> = {
-  actief: "bg-emerald-100 text-emerald-900 border-emerald-300",
-  mogelijk_verouderd: "bg-amber-100 text-amber-900 border-amber-300",
-  conflict: "bg-rose-100 text-rose-900 border-rose-300",
-  niet_gevonden: "bg-zinc-200 text-zinc-700 border-zinc-300",
-  gemarkeerd_voor_review: "bg-orange-100 text-orange-900 border-orange-300",
+const STATUS_STYLES: Record<Status, React.CSSProperties> = {
+  actief:                 { background: "#f0fdf4", color: "#065f46", border: "1px solid #6ee7b7" },
+  mogelijk_verouderd:     { background: "#fffbeb", color: "#92400e", border: "1px solid #fcd34d" },
+  conflict:               { background: "#fff1f2", color: "#991b1b", border: "1px solid #fca5a5" },
+  niet_gevonden:          { background: "#f5f0e8", color: "#5a5a59", border: "1px solid #e2ddd5" },
+  gemarkeerd_voor_review: { background: "#fff7ed", color: "#9a3412", border: "1px solid #fdba74" },
 };
 
 const STATUS_LABEL: Record<Status, string> = {
-  actief: "actief",
-  mogelijk_verouderd: "mogelijk verouderd",
-  conflict: "conflict",
-  niet_gevonden: "niet gevonden",
+  actief:                 "actief",
+  mogelijk_verouderd:     "mogelijk verouderd",
+  conflict:               "conflict",
+  niet_gevonden:          "niet gevonden",
   gemarkeerd_voor_review: "review nodig",
+};
+
+const BADGE_BASE: React.CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  borderRadius: 4,
+  padding: "1px 7px",
+  fontSize: 11,
+  fontWeight: 600,
+  fontFamily: "var(--font-body)",
+  whiteSpace: "nowrap",
 };
 
 export function StatusBadge({ status }: { status: Status }) {
   return (
-    <span
-      className={cn(
-        "inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium",
-        STATUS_STYLES[status],
-      )}
-    >
+    <span style={{ ...BADGE_BASE, ...STATUS_STYLES[status] }}>
       {STATUS_LABEL[status]}
     </span>
   );
 }
 
+const TIER_STYLES: Record<string, React.CSSProperties> = {
+  "Tier 1": { background: "#e8dfcf", color: "#3c3c3b", border: "1px solid #cbbba0" },
+  "Tier 2": { background: "#f5f0e8", color: "#7b6a58", border: "1px solid #cbbba0" },
+  "Tier 3": { background: "#ffffff", color: "#9a8b7a", border: "1px solid #e2ddd5" },
+};
+
 export function TierBadge({ tier }: { tier: Tier }) {
   if (!tier) return null;
-  const cls =
-    tier === "Tier 1"
-      ? "bg-blue-100 text-blue-900 border-blue-300"
-      : tier === "Tier 2"
-        ? "bg-indigo-100 text-indigo-900 border-indigo-300"
-        : "bg-purple-100 text-purple-900 border-purple-300";
   return (
-    <span
-      className={cn(
-        "inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium",
-        cls,
-      )}
-    >
+    <span style={{ ...BADGE_BASE, ...(TIER_STYLES[tier] ?? {}) }}>
       {tier}
     </span>
   );

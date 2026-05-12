@@ -1,0 +1,173 @@
+# Gaps & pending — Loonmotor PC 200 — peildatum 9 mei 2026
+
+**Doel:** een levend overzicht van wat de huidige rekenmodule **niet** dekt, welke wettelijke wijzigingen nog **pending** zijn, en welke datapunten aanvullende validatie vragen voordat de loonmotor naar productie kan.
+
+> Dit document is bedoeld als checklist bij elke release-cyclus. Iedere regel heeft een **eigenaar**, een **trigger** waarop herzien moet worden, en een **impact** (hoog/midden/laag) op de netto-uitkomst.
+
+---
+
+## 1. Pending wettelijke wijzigingen 2026 die de netto-rekenmodule kunnen beïnvloeden
+
+| # | Item | Status op 9/5/2026 | Impact | Triage |
+|---|------|--------------------|--------|--------|
+| P-01 | **Fiscale werkbonus — Arizona-verhoging** naar 35,00% (luik A) en 63,00% (luik B) | Aangekondigd in begrotingsakkoord, **niet** in Programmawet 18/7/2025 of Wet Diverse Bepalingen 18/12/2025 | Hoog (raakt elke werkbonus-trekker rechtstreeks) | Modelleer **beide scenario's** (33,14/52,54 en 35/63) — implementeer als feature-flag zodra wettekst in BS verschijnt. |
+| P-02 | **Belastingvrije som hervorming** — basisbedrag €11.180 → €11.550 | Wetsontwerp PB-hervorming, niet gestemd | Hoog (raakt iedereen) | Houd huidige €11.180 als referentie; voeg `vrije_som_scenario_hervorming` toe als parameter. |
+| P-03 | **Plafond forfaitaire beroepskosten** verhoging boven €6.070 (AJ 2027) | Wetsontwerp PB-hervorming | Midden (alleen lonen >€20.233) | Behoud €6.070; trigger update zodra wijziging geïndexeerd. |
+| P-04 | **Niet-recurrente resultaatsgebonden voordelen (CAO 90)** plafond €3.701 — geen specifieke wijziging 2026 maar telt mee in totaalberekening | Stabiel | Laag | OK voor 2026, herevaluatie januari 2027. |
+| P-05 | **Verhoogde vrijstelling overuren** (Arizona) — fiscaal en RSZ | Programmawet 18/7/2025 — gedeeltelijk in werking | Midden (bij overuren >180 uur/jaar) | Buiten scope POC; opnemen in productieversie. |
+| P-06 | **PB-hervorming sleutelformule Bijlage III KB** — coëfficiënten 2026 | Definitief KB 11/12/2025 | Hoog (BV-rekenmotor) | **Kritiek pending:** module gebruikt nu de geannualiseerde benadering. Voor productieversie de exacte sleutelformule integreren — zie §3 hieronder. |
+
+---
+
+## 2. Datapunten die handmatige verificatie nodig hebben
+
+### 2.1 Hard-vloeren
+
+| Datapunt | Huidige waarde | Geverifieerd? | Bron-URL | Actie |
+|---|---|---|---|---|
+| RSZ werknemer privé | 13,07% | ✅ Tier 1 RSZ | rsz.fgov.be | OK |
+| RSZ werkgever profitsector | ~25% (incl. loonmatigingsbijdrage) | ✅ Tier 1 RSZ | rsz.fgov.be | OK — sector-specifieke afwijking voor PC 200 nogmaals checken (loonmatigingsbijdrage 5,12%) |
+| GGMMI 1/4/2026 | €2.189,81 | ✅ Tier 2 Acerta + CAO 43/18 NAR | acerta.be | OK |
+| Sociale werkbonus luik A — R | €125,04 | ✅ Tier 2 Partena | partena-professional.be | OK |
+| Sociale werkbonus luik B — R | €168,62 | ✅ Tier 2 Partena | partena-professional.be | OK |
+| Sociale werkbonus hellingen | 0,2738 / 0,2699 | ✅ Tier 2 Securex | lex4you.be | OK |
+| Werkbonus cutoff loongrenzen | €2.880,32 / €3.336,98 | ⚠️ Tier 2-bevestiging | partena | **Triangulatie nodig** met SD Worx |
+| Fiscale werkbonus % luik A/B | 33,14% / 52,54% | ⚠️ Pending Arizona | KB-publicatie | Beide scenario's modelleren (zie P-01) |
+| BBSZ-banden | 4,22% / 1,1% / 3,38% / 1,10% / cap €60,94 | ⚠️ Tier 2 Liantis | liantis.be | **Triangulatie nodig** met Groups + RSZ-instructies 2026 |
+| PB-schijven AJ 2027 | 16.720 / 29.510 / 51.070 | ✅ Tier 2 Practicali + Wolters Kluwer | practicali.be | OK |
+| Belastingvrije som AJ 2027 | €11.180 | ✅ Tier 2 Practicali + Wet Diverse Bepalingen 18/12/2025 | BS 30/12/2025 | OK |
+| Forfaitaire beroepskosten max | €6.070 (30%) | ✅ Tier 2 Practicali | practicali.be | OK |
+| Toeslag belastingvrije som per kind | €2.030 / €5.230 / €11.720 / €18.970 | ⚠️ Tier 2 | Practicali | **Verificatie via FOD Fin nuttig** — exacte indexatie 2026 |
+| Toeslag kind <3 jaar | €760 | ⚠️ Tier 2 | Practicali | idem |
+| Extra alleenstaande ouder | €2.030 | ⚠️ Tier 2 | Practicali | idem |
+| BV-vermindering kinderen — maandtabel | €56 / €154 / €414 / €715 / ... | ⚠️ Tier 2-snapshot | Bijlage III KB | **Verificatie tegen exacte tabel KB 11/12/2025** — huidige waarden zijn benadering |
+
+### 2.2 PC 200-specifiek
+
+| Datapunt | Huidige waarde | Bron | Actie |
+|---|---|---|---|
+| Indexering 2026 | 2,21% (vanaf 1/1/2026) | sfonds200.be | OK — bevestigd |
+| Jaarlijkse premie 2026 | €330,84 | sfonds200.be | OK — bevestigd |
+| Sociaal Fonds 200 werkgeversbijdrage | 0,23% | sfonds200.be / cao | **Te bevestigen tegen actuele cao** — kan kwartaal-specifiek zijn |
+| Eindejaarspremie | 13e maand (formule herzien per akkoord 18/12/2025 + 15/1/2026) | cao PC 200 | **Cao-tekst rechtstreeks raadplegen** voor exacte formule (anciënniteit 5→3 jaar) |
+| Dubbel vakantiegeld bedienden | 92% × bruto / 12 (benadering) | cao algemeen | OK voor provisioneel, exact bedrag pas in mei-loon |
+| Fietsvergoeding (verhoogd akkoord 15/1/2026) | nog te kwantificeren | cao PC 200 + fiscale max €0,37/km × 3.700 km | **Triangulatie nodig** zodra cao-tekst beschikbaar |
+| Tussenkomst treinvervoer | aangepast in akkoord 15/1/2026 | cao PC 200 | idem |
+
+---
+
+## 3. Methodologische gaps in de rekenmodule
+
+### 3.1 Bedrijfsvoorheffing — sleutelformule vs geannualiseerde benadering
+
+**Huidige aanpak (POC-niveau):**
+```
+jaarbasis = belastbaar_maand × 12
+− kostenforfait (30%, max €6.070)
+→ progressieve schijven AJ 2027
+− belastingvermindering belastingvrije som
+/ 12 = maandelijkse BV vóór gezinsverminderingen
+```
+
+**Verschil met de officiële sleutelformule (Bijlage III KB 11/12/2025):**
+- De BV gebruikt schaalcoëfficiënten **per loonschijf** (niet de progressieve PB-schijven verondersteld via × 12).
+- Specifieke afronding op **veelvouden van €15** voor het belastbaar bedrag.
+- Aparte tarieven voor "wedde" vs "uitkering" vs "vakantiegeld" vs "eindejaarspremie".
+- Verminderingen voor gezinslasten zijn **forfaitaire bedragen per maand**, niet via belastingvrije som geannualiseerd.
+
+**Verwachte afwijking:** ±€5–€15/maand op modale lonen, mogelijk meer aan de randen (lage lonen met werkbonus, hoge lonen rond de 50%-schijf).
+
+**Aanbeveling:** voor productie: vervang de geannualiseerde benadering door een directe implementatie van Bijlage III KB. Validatie via 30 testcases tegen FOD Fin Tax-Calc.
+
+### 3.2 BBSZ — gezinssituatie
+
+Huidige rekenmodule gebruikt **alleen de individuele aanslag** (alleenstaand of één-inkomensgezin). Voor twee inkomens kan de definitieve BBSZ verschillen — pas vastgesteld in PB-aangifte AJ 2027. POC moet dit als info-band tonen; productieversie moet een **`bbsz_scenario`-parameter** bieden (alleenstaand / gehuwd_één_inkomen / gehuwd_twee_inkomens).
+
+### 3.3 VAA bedrijfswagen — formule niet geïmplementeerd
+
+POC accepteert VAA als input maar berekent niet zelf. Productieversie moet:
+- CO₂-formule: `cataloguswaarde × 6/7 × (5,5 + (CO₂ − ref_CO₂) × 0,1) / 100 × leeftijdscoëfficient`
+- Minimum-VAA AJ 2027: €1.690/jaar
+- Referentie-CO₂ AJ 2027: 70 g/km benzine/lpg/aardgas, 58 g/km diesel
+- Leeftijdscoëfficiënt: 100% (0–12m), 94% (13–24m), ..., 70% (>60m)
+
+### 3.4 Andere VAA niet gedekt
+
+- VAA verwarming (€1.150 werknemer, AJ 2027)
+- VAA elektriciteit (€580 werknemer, AJ 2027)
+- VAA woning (cataloguswaarde × KI-formule)
+- VAA gsm/laptop/internet (forfaitair)
+
+### 3.5 Verminderingen niet gedekt
+
+- **Verminderingen voor lage lonen** (Vlaanderen — fiscale werkbonus deelstaat)
+- **Verminderingen pensioensparen / langetermijnsparen** (alleen relevant in jaaraangifte, niet in maandelijkse BV)
+- **Mantelzorgvermindering**
+
+### 3.6 Bijzondere stelsels niet gedekt
+
+- Niet-recurrente resultaatsgebonden voordelen (CAO 90) — €3.701 vrijgesteld
+- Mobiliteitsbudget (€3.233–€17.244)
+- Bijzonder belastingstelsel ingekomen belastingplichtigen
+- Auteursrechten (15% RV, plafond €77.220)
+
+### 3.7 Afwijkingen voor specifieke groepen
+
+- **Bedrijfsleiders** (kostenforfait 3%, max €3.030)
+- **Grensarbeiders** (Frans-Belgisch en Nederlands-Belgisch dubbelbelastingverdrag)
+- **Buitenlandse werknemers** (internationale tewerkstelling)
+- **Loonbeslag** (huwelijks- en verzorgingsplicht)
+
+Allemaal **buiten scope POC**, opnemen in roadmap voor productie.
+
+---
+
+## 3b. Opgeloste gaps (implementatiehistoriek)
+
+| # | Gap | Opgelost | Hoe |
+|---|-----|----------|-----|
+| G-01 | Extralegale voordelen werkgever (groepsverzekering, maaltijdcheques, hospitalisatieverzekering, ecocheques) waren hardgecodeerd op €0 | ✅ 12 mei 2026 | `Profiel`-interface uitgebreid met `arbeidsongevallenPct`, `extraGroepsverzekering`, `extraMaaltijdcheques`, `extraHospitalisatie`; `extraEcocheques` automatisch afgeleid. Nieuwe "Werkgeversbijdragen" accordion in de sidebar. Itemized rows in `WerkgeverskostPanel`. Zowel `bouwResultaten` als `computeSummary` fully wired. |
+
+---
+
+## 4. Validatie-gaps
+
+| Item | Status | Actie |
+|---|---|---|
+| 30 testcases gegenereerd | ✅ `03_testcorpus_brutonetto.json` | OK |
+| Validatie tegen FOD Fin Tax-Calc XLSX | ❌ Niet uitgevoerd | **Volgende stap:** download Tax-Calc AJ 2027, runs voor 30 cases |
+| Validatie tegen sociaal-secretariaat-output (Securex/Acerta/SD Worx loonberekeningstools) | ❌ Niet uitgevoerd | Bonus-validatie — neem 5 cases en compareer |
+| Regressietest-suite (CI-integratie) | ❌ Niet aanwezig | Implementeer Vitest (TypeScript-zijde) en pytest (Python-zijde) |
+| Edge-case testing | Gedeeltelijk in 30 cases | Aanvullen: deeltijds, lange afwezigheid, eindejaarspremie maand, vakantiegeld maand |
+
+---
+
+## 5. Bron-divergenties die opvolging vragen
+
+| Onderwerp | Divergentie | Aanbeveling |
+|---|---|---|
+| Fiscale werkbonus % | 33,14/52,54 (huidig) vs 35/63 (Arizona pending) | Beide scenario's, default = huidig |
+| BBSZ overgangsregime 2028 | Liantis kondigt 4% en cap €30,47 aan vanaf 2028; nog geen wettekst | Niet in 2026-versie opnemen |
+| Eindejaarspremie PC 200 | "Lichte herziening" akkoord 15/1/2026 — exacte formule afhankelijk van anciënniteit (5→3 jaar) | **Cao-tekst rechtstreeks raadplegen** |
+
+---
+
+## 6. Roadmap voor pending-tracking
+
+- **Maandelijks** (1ste week): scan **Belgisch Staatsblad** op nieuwe KB's en wetten met fiscale of socialezekerheidsimpact.
+- **Per kwartaal**: heronderzoek **Liantis / Securex / Partena / Acerta nieuwsalerts** voor parameteractualisatie.
+- **Twee keer per jaar** (1/4 en 1/1): GGMMI- en werkbonus-actualisatie automatisch verifiëren.
+- **Jaarlijks januari**: PB-schijven, belastingvrije som, kostenforfait, VAA-bedragen.
+- **Bij elk PC 200 sectorakkoord**: cao-tekst lezen + parameteraanpassingen.
+
+---
+
+## 7. Eigenaarschap en herzieningsritme
+
+| Categorie | Eigenaar | Herzien |
+|---|---|---|
+| Fiscale parameters AJ 2027 | Loonmotor productowner | Jaarlijks januari |
+| RSZ-parameters | Loonmotor productowner | Halfjaarlijks (1/1, 1/7) |
+| Werkbonus | Loonmotor productowner | Telkens GGMMI-update (1/1, 1/4 minimaal) |
+| PC 200-specifieke parameters | PC 200 cao-volger / sectorspecialist | Per cao-akkoord |
+| Pending-tabel | Loonmotor productowner | Maandelijks |
