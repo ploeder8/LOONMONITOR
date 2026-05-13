@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "pc200-loonmotor",
+      "name": "jaakie",
       "dependencies": {
         "@base-ui/react": "^1.4.1",
         "class-variance-authority": "^0.7.1",

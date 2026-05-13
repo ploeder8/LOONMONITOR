@@ -7,7 +7,6 @@ import type {
 
 export const DATAPUNT_CATEGORIEEN: Categorie[] = [
   "lonen",
-  "indexatie",
   "rsz",
   "fiscaliteit",
   "premies_en_voordelen",

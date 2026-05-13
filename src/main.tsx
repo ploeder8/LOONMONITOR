@@ -4,10 +4,12 @@ import { App } from "@/App";
 import { validateDataset } from "@/lib/schemaValidate";
 import dataset from "@/data/pc200_payroll_dataset_2026.json";
 import schema from "@/data/pc200_payroll_dataset.schema.json";
+import { APP_BRAND } from "@/branding/brand";
 import "@/index.css";
 
 const rootEl = document.getElementById("root")!;
 const root = ReactDOM.createRoot(rootEl);
+document.title = APP_BRAND.documentTitle;
 
 const result = validateDataset(dataset, schema);
 
@@ -26,7 +28,7 @@ if (!result.valid) {
           Dataset-validatie mislukt
         </h1>
         <p style={{ marginBottom: "1rem" }}>
-          De PC 200 Loonmotor weigert te starten omdat het meegeleverde
+          Jaakie weigert te starten omdat het meegeleverde
           dataset (<code>pc200_payroll_dataset_2026.json</code>) niet voldoet
           aan het schema (<code>pc200_payroll_dataset.schema.json</code>).
         </p>

@@ -2,9 +2,9 @@ export type BannerKind = "info" | "warning" | "error" | "success";
 
 const STYLES: Record<BannerKind, React.CSSProperties> = {
   info: {
-    background: "#f5f0e8",
-    border: "1px solid #cbbba0",
-    color: "#3c3c3b",
+    background: "var(--color-info-soft)",
+    border: "1px solid rgba(37,99,235,0.25)",
+    color: "var(--color-navy-700)",
   },
   warning: {
     background: "#fffbeb",
@@ -17,9 +17,9 @@ const STYLES: Record<BannerKind, React.CSSProperties> = {
     color: "#991b1b",
   },
   success: {
-    background: "#f0fdf4",
-    border: "1px solid #6ee7b7",
-    color: "#065f46",
+    background: "var(--color-mint-soft)",
+    border: "1px solid rgba(28,210,163,0.35)",
+    color: "var(--color-success-dark)",
   },
 };
 
@@ -44,7 +44,7 @@ export function Banner({
       style={{
         display: "flex",
         gap: 12,
-        borderRadius: 8,
+        borderRadius: "var(--radius-md)",
         padding: "12px 16px",
         fontSize: 13,
         fontFamily: "var(--font-body)",

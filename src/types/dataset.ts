@@ -4,7 +4,6 @@
 
 export type Categorie =
   | "lonen"
-  | "indexatie"
   | "rsz"
   | "fiscaliteit"
   | "premies_en_voordelen"
@@ -174,7 +173,6 @@ export interface Validatie {
 export interface Dataset {
   meta: Meta;
   lonen: Datapunt[];
-  indexatie: Datapunt[];
   rsz: Datapunt[];
   fiscaliteit: Datapunt[];
   premies_en_voordelen: Datapunt[];

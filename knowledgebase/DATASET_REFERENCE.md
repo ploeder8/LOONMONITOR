@@ -8,7 +8,7 @@
 
 ---
 
-## `lonen` (13 datapunten)
+## `lonen` (12 datapunten)
 
 | ID | Status | Tier | Omschrijving |
 |---|---|---|---|
@@ -24,15 +24,6 @@
 | `lonen_pc200_studenten_catB_01012026` | actief | Tier 2 | Sectorale minimum maandlonen PC 200 â€“ Studentenschaal, Categorie B, per lee... |
 | `lonen_pc200_studenten_catC_01012026` | actief | Tier 2 | Sectorale minimum maandlonen PC 200 â€“ Studentenschaal, Categorie C, per lee... |
 | `lonen_pc200_studenten_catD_01012026` | actief | Tier 2 | Sectorale minimum maandlonen PC 200 â€“ Studentenschaal, Categorie D, per lee... |
-| `lonen_pc200_indexcoefficient_2026` | actief | Tier 1 | IndexcoÃ«fficiÃ«nt voor lonen PC 200 vanaf 1/1/2026 (alle lonen Ã— 1,0221) |
-
-## `indexatie` (2 datapunten)
-
-| ID | Status | Tier | Omschrijving |
-|---|---|---|---|
-| `index_pc200_2026_percentage` | actief | Tier 1 | Sectorale indexering PC 200 op 1/1/2026 op basis van afgevlakte gezondheidsindex |
-| `index_pc200_formule` | actief | Tier 2 | Indexeringsformule PC 200 |
-
 ## `rsz` (6 datapunten)
 
 | ID | Status | Tier | Omschrijving |

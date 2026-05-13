@@ -16,9 +16,13 @@ export interface WerkgeverskostInput {
   premieVakantiegeldPct?: number;        // default 0.0667 (92%/12)
   // Optionele extralegale voordelen:
   extraGroepsverzekering?: number;       // €/maand werkgever-deel
-  extraMaaltijdcheques?: number;         // €/maand werkgever-deel
+  extraMaaltijdcheques?: number;         // legacy: €/maand werkgever-deel
+  maaltijdchequeWerkgeversaandeelPerDag?: number; // €/dag werkgever-deel
+  maaltijdchequeWerkdagen?: number;      // aantal werkdagen in de maand
   extraHospitalisatie?: number;          // €/maand
   extraEcocheques?: number;              // €/maand
+  woonwerkVergoedingPerMaand?: number;   // €/maand vrijgestelde woon-werkvergoeding
+  onkostenvergoedingPerMaand?: number;   // €/maand vrijgestelde onkostenvergoeding
 }
 
 export interface WerkgeverskostResultaat {
@@ -32,6 +36,7 @@ export interface WerkgeverskostResultaat {
   provisieVakantiegeld: number;          // 6,67%
   // Optioneel
   extraVoordelen: number;                // som van extra werkgeverskosten
+  woonwerkVergoedingPerMaand: number;
   // Totalen
   totaleLoonkostSmal: number;            // bruto + RSZ wg + SF200 + bouw + AO (geen provisies)
   totaleLoonkostBreed: number;           // smal + provisies + extra voordelen
@@ -45,6 +50,8 @@ export interface WerkgeverskostResultaat {
 const DEFAULT_AO_PCT = 0.003;
 const DEFAULT_EJP_PCT = 0.0833;
 const DEFAULT_VG_PCT = 0.0667;
+export const MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026 = 8.91;
+const MAALTIJDCHEQUE_MAX_WG_PER_DAG_PRE_2026 = 6.91;
 
 export function werkgeverskost(input: WerkgeverskostInput): WerkgeverskostResultaat {
   const {
@@ -56,8 +63,12 @@ export function werkgeverskost(input: WerkgeverskostInput): WerkgeverskostResult
     premieVakantiegeldPct = DEFAULT_VG_PCT,
     extraGroepsverzekering = 0,
     extraMaaltijdcheques = 0,
+    maaltijdchequeWerkgeversaandeelPerDag,
+    maaltijdchequeWerkdagen = 0,
     extraHospitalisatie = 0,
     extraEcocheques = 0,
+    woonwerkVergoedingPerMaand = 0,
+    onkostenvergoedingPerMaand = 0,
   } = input;
 
   const rszR: RszResultaat = rszBijdragen({ brutoloon, refDatum, bouwVlag });
@@ -65,9 +76,22 @@ export function werkgeverskost(input: WerkgeverskostInput): WerkgeverskostResult
   const ao = round2(brutoloon * arbeidsongevallenPct);
   const provEjp = round2(brutoloon * premieEjpPct);
   const provVg = round2(brutoloon * premieVakantiegeldPct);
+  const maaltijdcheques = maaltijdchequeWerkgeversaandeelPerDag === undefined
+    ? extraMaaltijdcheques
+    : round2(
+        Math.min(
+          Math.max(maaltijdchequeWerkgeversaandeelPerDag, 0),
+          maxMaaltijdchequeWerkgeversaandeel(refDatum),
+        ) * Math.max(maaltijdchequeWerkdagen, 0),
+      );
 
   const extraVoordelen = round2(
-    extraGroepsverzekering + extraMaaltijdcheques + extraHospitalisatie + extraEcocheques,
+    extraGroepsverzekering +
+      maaltijdcheques +
+      extraHospitalisatie +
+      extraEcocheques +
+      Math.max(woonwerkVergoedingPerMaand, 0) +
+      Math.max(onkostenvergoedingPerMaand, 0),
   );
 
   const smal = round2(brutoloon + rszR.totaalWerkgever + ao);
@@ -92,6 +116,7 @@ export function werkgeverskost(input: WerkgeverskostInput): WerkgeverskostResult
     provisieEindejaarspremie: provEjp,
     provisieVakantiegeld: provVg,
     extraVoordelen,
+    woonwerkVergoedingPerMaand: round2(Math.max(woonwerkVergoedingPerMaand, 0)),
     totaleLoonkostSmal: smal,
     totaleLoonkostBreed: breed,
     datapunten,
@@ -102,4 +127,10 @@ export function werkgeverskost(input: WerkgeverskostInput): WerkgeverskostResult
 export function loonwig(totaleLoonkost: number, netto: number): number {
   if (totaleLoonkost <= 0) return 0;
   return round2(((totaleLoonkost - netto) / totaleLoonkost) * 100) / 100;
+}
+
+function maxMaaltijdchequeWerkgeversaandeel(refDatum: string): number {
+  return refDatum >= "2026-01-01"
+    ? MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026
+    : MAALTIJDCHEQUE_MAX_WG_PER_DAG_PRE_2026;
 }

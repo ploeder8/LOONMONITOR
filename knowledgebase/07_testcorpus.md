@@ -5,7 +5,7 @@
 
 | Laag | Naam | Aantal | Bestand | Status |
 |---|---|---|---|---|
-| 1 | **TC-01..TC-25** — bestaande golden tests | 25 | `src/lib/__tests__/golden.test.ts` | ✅ Allemaal groen |
+| 1 | **TC-01..TC-16, TC-18..TC-25** — bestaande golden tests | 24 | `src/lib/__tests__/golden.test.ts` | ✅ Allemaal groen |
 | 2 | **NTC-01..NTC-15** — netto-spec testcases | 15 | `src/lib/__tests__/golden.test.ts` | ⚠️ Pending FOD Tax-Calc validatie |
 | 3 | **BNTC-001..BNTC-030** — 30 bruto-netto profielen (deze pagina + `TESTCASES.json`) | 30 | `tools/calc_brutonetto_2026.py` (Python-referentie) | ⚠️ Pending FOD Tax-Calc validatie |
 
@@ -13,13 +13,13 @@
 
 ---
 
-## Laag 1 — TC-01..TC-25 (geïmplementeerd in `golden.test.ts`)
+## Laag 1 — TC-01..TC-16, TC-18..TC-25 (geïmplementeerd in `golden.test.ts`)
 
 Deze cases zijn gekoppeld aan specifieke datapunt-id's en exacte EUR-bedragen. Precisie matters — `expect(...).toBe(...)` (geen tolerantie). Ze dekken:
 
 - **TC-01..TC-08:** Schaal I/II baremas + RSZ + OCR-correcties + bouw-vlag
 - **TC-09..TC-10:** Studentenbaremas + faalpaden
-- **TC-11..TC-17:** Premies + ecocheques + woon-werk + indexatie
+- **TC-11..TC-16:** Premies + ecocheques + woon-werk
 - **TC-18..TC-20:** Niet-gevonden datapunten + mogelijk_verouderd + audit-trail
 - **TC-21..TC-25:** Netto-module (werkbonus, BBSZ, BV, netto end-to-end)
 

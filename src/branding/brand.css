@@ -1,0 +1,73 @@
+@theme {
+  --font-display: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-body:    "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono:    "SFMono-Regular", "Cascadia Code", "Liberation Mono", Menlo, monospace;
+}
+
+:root {
+  --color-primary: #D83A18;
+  --color-primary-hover: #B92F12;
+  --color-primary-pressed: #8F230D;
+  --color-primary-soft: #FFF3EF;
+  --color-primary-border: #FFE0D6;
+
+  --color-navy-900: #131F37;
+  --color-navy-700: #1D2B46;
+  --color-navy-500: #34425D;
+  --color-navy-300: #8D9AAF;
+  --color-navy-100: #E5EAF2;
+  --color-navy-50: #F3F6FA;
+
+  --color-mint: #1CD2A3;
+  --color-mint-dark: #10A982;
+  --color-mint-soft: #EFFFFA;
+
+  --color-background: #FAFBFC;
+  --color-surface: #FFFFFF;
+  --color-border: #E5EAF2;
+  --color-text: #131F37;
+  --color-text-muted: #6B7280;
+  --color-disabled: #CBD5E1;
+
+  --color-success: #1CD2A3;
+  --color-success-dark: #087F63;
+  --color-warning: #F59E0B;
+  --color-warning-soft: #FFFBEB;
+  --color-error: #E11D48;
+  --color-error-soft: #FFF1F2;
+  --color-info: #2563EB;
+  --color-info-soft: #EFF6FF;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 4px 12px rgba(19, 31, 55, 0.06);
+  --shadow-md: 0 10px 28px rgba(19, 31, 55, 0.08);
+  --shadow-lg: 0 18px 45px rgba(19, 31, 55, 0.10);
+  --shadow-focus: 0 0 0 3px rgba(216, 58, 24, 0.16);
+
+  --background:        var(--color-background);
+  --foreground:        var(--color-text);
+  --muted:             var(--color-navy-50);
+  --muted-foreground:  var(--color-text-muted);
+  --border:            var(--color-border);
+  --primary:           var(--color-primary);
+  --primary-foreground:#ffffff;
+  --destructive:       var(--color-error);
+  --destructive-foreground: #ffffff;
+  --warning:           var(--color-warning);
+  --warning-foreground:#111827;
+  --success:           var(--color-success);
+  --card:              var(--color-surface);
+  --card-foreground:   var(--color-text);
+  --sand:              var(--color-primary);
+  --sand-light:        var(--color-primary-border);
+  --sand-pale:         var(--color-primary-soft);
+  --brown:             var(--color-primary);
+  --brown-light:       var(--color-text-muted);
+  --charcoal:          var(--color-text);
+  --charcoal-light:    var(--color-navy-500);
+}

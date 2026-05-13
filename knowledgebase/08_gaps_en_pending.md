@@ -122,7 +122,7 @@ Allemaal **buiten scope POC**, opnemen in roadmap voor productie.
 
 | # | Gap | Opgelost | Hoe |
 |---|-----|----------|-----|
-| G-01 | Extralegale voordelen werkgever (groepsverzekering, maaltijdcheques, hospitalisatieverzekering, ecocheques) waren hardgecodeerd op €0 | ✅ 12 mei 2026 | `Profiel`-interface uitgebreid met `arbeidsongevallenPct`, `extraGroepsverzekering`, `extraMaaltijdcheques`, `extraHospitalisatie`; `extraEcocheques` automatisch afgeleid. Nieuwe "Werkgeversbijdragen" accordion in de sidebar. Itemized rows in `WerkgeverskostPanel`. Zowel `bouwResultaten` als `computeSummary` fully wired. |
+| G-01 | Extralegale voordelen werkgever (groepsverzekering, maaltijdcheques, hospitalisatieverzekering, ecocheques) waren hardgecodeerd op €0 | ✅ 12 mei 2026 | `Profiel`-interface uitgebreid met `arbeidsongevallenPct`, `extraGroepsverzekering`, `maaltijdchequeWerkgeversaandeelPerDag`, `arbeidsdagenPerMaand`, `extraHospitalisatie`; `extraEcocheques` automatisch afgeleid. Maaltijdcheques = dagbedrag × werkdagen, met max €8,91/dag vanaf 01/01/2026. Nieuwe "Werkgeversbijdragen" accordion in de sidebar. Itemized rows in `WerkgeverskostPanel`. Zowel `bouwResultaten` als `computeSummary` fully wired. |
 | G-02 | BV-module had geen expliciete sleutelformule-metadata of validatiestatus | ✅ 12 mei 2026 | `berekenBV()` rapporteert nu methode, schaal en `pending_taxcalc`; tests bevatten een Group S-anker en het 30-cases validatieregister staat in `src/lib/taxcalcValidation.ts`. |
 
 ---

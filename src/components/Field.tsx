@@ -13,18 +13,18 @@ export function FormField({
 }) {
   return (
     <label htmlFor={htmlFor} className="flex flex-col gap-1 text-sm">
-      <span className="font-medium" style={{ color: "#3c3c3b", fontFamily: "var(--font-body)" }}>
+      <span className="font-medium" style={{ color: "var(--color-text)", fontFamily: "var(--font-body)" }}>
         {label}
       </span>
       {children}
-      {helper && <span className="text-xs" style={{ color: "#9a8b7a" }}>{helper}</span>}
+      {helper && <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>{helper}</span>}
     </label>
   );
 }
 
 export const inputClass = cn(
-  "rounded-[8px] border bg-white px-3 py-2 text-sm w-full text-[#3c3c3b]",
+  "rounded-[12px] border bg-white px-3 py-2 text-sm w-full text-[var(--color-text)]",
   "focus:outline-none focus:ring-2",
-  "border-[#e2ddd5] focus:border-[#7b6a58] focus:ring-[rgba(123,106,88,0.2)]",
+  "border-[var(--color-border)] focus:border-[var(--color-primary)] focus:ring-[rgba(216,58,24,0.16)]",
 );
 export const selectClass = inputClass;

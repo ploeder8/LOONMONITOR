@@ -18,6 +18,12 @@ export interface NettoInput {
   kinderenOnder3?: number;
   fiscaalAlleenstaandeMetKind?: boolean;
   groepsverzekeringEigenBijdrage?: number;
+  maaltijdchequeWerknemersbijdragePerDag?: number;
+  maaltijdchequeWerkdagen?: number;
+  woonwerkVrijgesteldPerMaand?: number;
+  hospitalisatieEigenBijdrage?: number;
+  onkostenvergoedingPerMaand?: number;
+  vaaBedrijfswagenPerMaand?: number;
 }
 
 export interface NettoResultaat {
@@ -27,8 +33,16 @@ export interface NettoResultaat {
   fiscaleWerkbonus: number;        // 33,14% × Luik A + 52,54% × Luik B
   effectieveRsz: number;
   belastbaarMaandloon: number;
+  belastbaarMaandloonVoorBV: number;
+  woonwerkVrijgesteldPerMaand: number;
+  vaaBedrijfswagenPerMaand: number;
   bbsz: BbszResultaat;
   bv: BvResultaat;
+  maaltijdchequeWerknemersbijdragePerDag: number;
+  maaltijdchequeWerkdagen: number;
+  maaltijdchequeWerknemersbijdrage: number;
+  hospitalisatieEigenBijdrage: number;
+  onkostenvergoedingPerMaand: number;
   nettoloon: number;
 }
 
@@ -42,6 +56,12 @@ export function berekenNetto(input: NettoInput): NettoResultaat {
     kinderenOnder3 = 0,
     fiscaalAlleenstaandeMetKind = false,
     groepsverzekeringEigenBijdrage = 0,
+    maaltijdchequeWerknemersbijdragePerDag = 0,
+    maaltijdchequeWerkdagen = 0,
+    woonwerkVrijgesteldPerMaand = 0,
+    hospitalisatieEigenBijdrage = 0,
+    onkostenvergoedingPerMaand = 0,
+    vaaBedrijfswagenPerMaand = 0,
   } = input;
 
   const rszR = rszBijdragen({ brutoloon, refDatum, bouwVlag });
@@ -51,6 +71,9 @@ export function berekenNetto(input: NettoInput): NettoResultaat {
   // Effective RSZ = statutory RSZ minus social bonus (werkbonus), minimum 0
   const effectieveRsz = round2(Math.max(0, rszR.werknemerBijdrage - werkbonusR.totaal));
   const belastbaarMaandloon = round2(brutoloon - effectieveRsz);
+  const belastbaarMaandloonVoorBV = round2(
+    belastbaarMaandloon + Math.max(vaaBedrijfswagenPerMaand, 0),
+  );
 
   // Fiscale werkbonus = belastingkrediet op de BV (33,14% × Luik A + 52,54% × Luik B)
   const fiscaleWerkbonus = round2(
@@ -59,7 +82,7 @@ export function berekenNetto(input: NettoInput): NettoResultaat {
   );
 
   const bvR = berekenBV({
-    belastbaarMaandloon,
+    belastbaarMaandloon: belastbaarMaandloonVoorBV,
     gezinstype,
     kinderenTenLaste,
     kinderenOnder3,
@@ -68,8 +91,26 @@ export function berekenNetto(input: NettoInput): NettoResultaat {
     fiscaleWerkbonusKrediet: fiscaleWerkbonus,
   });
 
+  const maaltijdchequeWerknemersbijdrage = round2(
+    Math.max(maaltijdchequeWerknemersbijdragePerDag, 0) *
+      Math.max(maaltijdchequeWerkdagen, 0),
+  );
+  const maaltijdchequeBijdragePerDag = round2(
+    Math.max(maaltijdchequeWerknemersbijdragePerDag, 0),
+  );
+  const maaltijdchequeDagen = Math.max(maaltijdchequeWerkdagen, 0);
+  const hospitalisatieEigenBijdrageBedrag = round2(Math.max(hospitalisatieEigenBijdrage, 0));
+  const onkostenvergoedingBedrag = round2(Math.max(onkostenvergoedingPerMaand, 0));
+
   const nettoloon = round2(
-    brutoloon - effectieveRsz - bvR.bvNaVerminderingen - bbszR.maandelijksBedrag,
+    brutoloon -
+      effectieveRsz -
+      bvR.bvNaVerminderingen -
+      bbszR.maandelijksBedrag -
+      maaltijdchequeWerknemersbijdrage +
+      Math.max(woonwerkVrijgesteldPerMaand, 0) -
+      hospitalisatieEigenBijdrageBedrag +
+      onkostenvergoedingBedrag,
   );
 
   return {
@@ -79,8 +120,16 @@ export function berekenNetto(input: NettoInput): NettoResultaat {
     fiscaleWerkbonus,
     effectieveRsz,
     belastbaarMaandloon,
+    belastbaarMaandloonVoorBV,
+    woonwerkVrijgesteldPerMaand: round2(Math.max(woonwerkVrijgesteldPerMaand, 0)),
+    vaaBedrijfswagenPerMaand: round2(Math.max(vaaBedrijfswagenPerMaand, 0)),
     bbsz: bbszR,
     bv: bvR,
+    maaltijdchequeWerknemersbijdragePerDag: maaltijdchequeBijdragePerDag,
+    maaltijdchequeWerkdagen: maaltijdchequeDagen,
+    maaltijdchequeWerknemersbijdrage,
+    hospitalisatieEigenBijdrage: hospitalisatieEigenBijdrageBedrag,
+    onkostenvergoedingPerMaand: onkostenvergoedingBedrag,
     nettoloon,
   };
 }

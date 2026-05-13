@@ -13,7 +13,7 @@ Elke parameter in de dataset is een `Datapunt`-object met de volgende velden:
 ```typescript
 interface Datapunt {
   id: string;                          // uniek, bv. "rsz_werknemer_basis"
-  categorie: "lonen" | "indexatie" | "rsz" | "fiscaliteit" | "premies_en_voordelen" | "arbeidsvoorwaarden";
+  categorie: "lonen" | "rsz" | "fiscaliteit" | "premies_en_voordelen" | "arbeidsvoorwaarden";
   subcategorie: string;
   type: "barema" | "parameter" | "cao" | "koninklijk_besluit" | "bronverwijzing";
   pc: "200";
@@ -183,8 +183,7 @@ Calculation-functies retourneren altijd het bron-`Datapunt`-object zodat de UI-c
 
 | Categorie | Beschrijving | Voorbeelden |
 |---|---|---|
-| `lonen` | Sectorale baremas + indexcoëfficiënt | Schaal I/II × Cat A/B/C/D, studentenbarema |
-| `indexatie` | Indexerings-percentage + formule | `index_pc200_2026_percentage` |
+| `lonen` | Sectorale baremas | Schaal I/II × Cat A/B/C/D, studentenbarema |
 | `rsz` | RSZ-bijdragen | `rsz_werknemer_basis`, `rsz_werkgever_profit_basis`, `rsz_pc200_sociaal_fonds_200_*` |
 | `fiscaliteit` | PB-schijven, belastingvrije som, forfait, werkbonus, BV-verminderingen | `pb_schijven_aj2027`, `belastingvrije_som_aj2027`, `werkbonus_*` |
 | `premies_en_voordelen` | Sectorale CAO-premies en -voordelen | `pc200_eindejaarspremie`, `pc200_ecocheques_*`, `pc200_woonwerk_trein_*` |

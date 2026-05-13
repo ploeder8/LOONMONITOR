@@ -7,7 +7,6 @@
   "required": [
     "meta",
     "lonen",
-    "indexatie",
     "rsz",
     "fiscaliteit",
     "premies_en_voordelen",
@@ -19,7 +18,6 @@
   "properties": {
     "meta":                 { "$ref": "#/definitions/meta" },
     "lonen":                { "type": "array", "items": { "$ref": "#/definitions/datapunt" } },
-    "indexatie":            { "type": "array", "items": { "$ref": "#/definitions/datapunt" } },
     "rsz":                  { "type": "array", "items": { "$ref": "#/definitions/datapunt" } },
     "fiscaliteit":          { "type": "array", "items": { "$ref": "#/definitions/datapunt" } },
     "premies_en_voordelen": { "type": "array", "items": { "$ref": "#/definitions/datapunt" } },
@@ -259,7 +257,6 @@
       "type": "string",
       "enum": [
         "lonen",
-        "indexatie",
         "rsz",
         "fiscaliteit",
         "premies_en_voordelen",

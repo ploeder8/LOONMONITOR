@@ -46,7 +46,7 @@ Samenstelling (RSZ-instructies werkgevers, peildatum 2026):
 
 **Tarief:** **0,23%** van bruto loon (werkgeversbijdrage).
 
-**Bron:** sfonds200.be ("verloning"-rubriek, indexatie 2,21% inkomstenjaar 2026).
+**Bron:** sfonds200.be ("verloning"-rubriek, inkomstenjaar 2026).
 
 Doel: financiering eindejaarspremie + collectieve voorzieningen + opleidingen.
 
@@ -77,14 +77,14 @@ Voor PC 200-bedienden in een typisch bureauomgeving is dit aan de lage kant (ver
 | Voordeel | Werkgeverskost-typisch | Bron / wettelijk kader | UI-status |
 |----------|--------------------------|--------------------------|-----------|
 | Groepsverzekering | 3–8% van brutoloon (werkgeverdeel) | WAP, ondernemingsspecifiek | ✅ Configureerbaar (€/m) |
-| Maaltijdcheques | €6,91/dag (max werkgeverdeel €6,91) | KB indexering 2026 | ✅ Configureerbaar (€/m) |
+| Maaltijdcheques | €8,91/dag vanaf 01/01/2026 (max werkgeverdeel €8,91) × werkdagen in maand | KB indexering 2026 | ✅ Configureerbaar (€/dag + werkdagen) |
 | Hospitalisatieverzekering | €30–€90/m per persoon | sectorbreed | ✅ Configureerbaar (€/m) |
 | ECO-cheques | tot €250/jaar | cao 98 nationale arbeidsraad | ✅ Automatisch afgeleid van tewerkstellingsbreuk (÷ 12/maand) |
 | Mobiliteitsvergoeding | tot €0,37/km × max 3.700 km/jaar | fiscaal vrijgesteld AJ 2027 | ⏳ Buiten scope |
 | Bedrijfswagen | TCO autoleasing — verschilt sterk per model | apart luik | ⏳ Buiten scope |
 | GSM/laptop/internet | €4–€20/m forfaitair | KB BV-tabellen | ⏳ Buiten scope |
 
-Loonmotor accepteert groepsverzekering, maaltijdcheques, hospitalisatieverzekering en ecocheques als configureerbare UI-inputs. De AO-verzekeringtarief (default 0,30%) is eveneens aanpasbaar per werkgever via de "Werkgeversbijdragen"-sectie in het profiel-formulier.
+Loonmotor accepteert groepsverzekering, maaltijdcheques, hospitalisatieverzekering en ecocheques als configureerbare UI-inputs. Maaltijdcheques worden berekend als werkgeversaandeel per dag × werkdagen in de gekozen maand; werkdagen wordt vooringevuld op basis van weekdagen en blijft aanpasbaar. De AO-verzekeringtarief (default 0,30%) is eveneens aanpasbaar per werkgever via de "Werkgeversbijdragen"-sectie in het profiel-formulier.
 
 ### 2.7 Structurele vermindering werkgever
 

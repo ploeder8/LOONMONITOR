@@ -22,11 +22,11 @@ export function ResultCard(props: ResultCardProps) {
         display: "flex",
         flexDirection: "column",
         gap: 8,
-        borderRadius: 14,
-        border: props.highlight ? "1px solid #cbbba0" : "1px solid #e2ddd5",
-        background: "#ffffff",
+        borderRadius: "var(--radius-lg)",
+        border: props.highlight ? "1px solid var(--color-primary-border)" : "1px solid var(--color-border)",
+        background: "var(--color-surface)",
         padding: "1rem 1.1rem",
-        boxShadow: props.highlight ? "0 0 0 3px rgba(203,187,160,0.25)" : "none",
+        boxShadow: props.highlight ? "var(--shadow-focus)" : "var(--shadow-sm)",
       }}
     >
       <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 12 }}>
@@ -34,7 +34,7 @@ export function ResultCard(props: ResultCardProps) {
           style={{
             fontSize: 13,
             fontFamily: "var(--font-body)",
-            color: "#5a5a59",
+            color: "var(--color-navy-500)",
             fontWeight: 500,
           }}
         >
@@ -45,7 +45,7 @@ export function ResultCard(props: ResultCardProps) {
             fontSize: 20,
             fontFamily: "var(--font-mono)",
             fontWeight: 600,
-            color: "#3c3c3b",
+            color: "var(--color-text)",
             whiteSpace: "nowrap",
             fontVariantNumeric: "tabular-nums",
           }}
@@ -54,7 +54,7 @@ export function ResultCard(props: ResultCardProps) {
         </div>
       </div>
       {props.helper && (
-        <div style={{ fontSize: 12, color: "#9a8b7a", fontFamily: "var(--font-body)" }}>
+        <div style={{ fontSize: 12, color: "var(--color-text-muted)", fontFamily: "var(--font-body)" }}>
           {props.helper}
         </div>
       )}

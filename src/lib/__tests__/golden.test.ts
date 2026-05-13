@@ -13,8 +13,9 @@ import { berekenNetto } from "@/lib/netto";
 import { eindejaarspremie } from "@/lib/eindejaarspremie";
 import { ecocheques } from "@/lib/ecocheques";
 import { fietsvergoeding } from "@/lib/fietsvergoeding";
-import { indexeerLoon } from "@/lib/indexatie";
 import { woonwerkTrein } from "@/lib/woonwerkTrein";
+import { berekenWoonwerkVerkeer } from "@/lib/woonwerkVerkeer";
+import { vaaBedrijfswagen } from "@/lib/vaaBedrijfswagen";
 import { jaarlijksePremie2026 } from "@/lib/jaarpremie";
 import { getDatapunt } from "@/lib/dataset";
 import { safeGetValue } from "@/lib/periode";
@@ -242,11 +243,143 @@ describe("TC-16 — Woon-werk trein 100 %", () => {
   });
 });
 
-describe("TC-17 — Indexatie van een ondernemingsloon", () => {
-  it("€ 3.500 × 1,0221 = € 3.577,35", () => {
-    const r = indexeerLoon({ oudLoon: 3500, refDatum: "2026-01-01" });
-    expect(r.coefficient).toBe(1.0221);
-    expect(r.nieuwLoon).toBe(3577.35);
+describe("TC-16b — Woon-werk verkeer via PC200-tabellen", () => {
+  it("trein 15 km, volledige maand juni 2026 → €92,00", () => {
+    const r = berekenWoonwerkVerkeer({
+      refDatum: REF_2026,
+      brutoloon: 3000,
+      arbeidsdagenPerMaand: 22,
+      werkdagenInMaand: 22,
+      fiets: { actief: false, kmPerDag: 0 },
+      trein: { actief: true, kmEnkel: 15 },
+      busTramMetro: { actief: false, kmEnkel: 0, prijsPerMaand: 0 },
+      privewagen: { actief: false, kmEnkel: 0 },
+    });
+
+    expect(r.componenten.trein?.vergoeding).toBe(92);
+    expect(r.totaalVergoeding).toBe(92);
+    expect(r.datapunten.map((dp) => dp.id)).toContain("pc200_woonwerk_trein_tabel_2026");
+  });
+
+  it("privéwagen 15 km onder loonplafond → €46,00", () => {
+    const r = berekenWoonwerkVerkeer({
+      refDatum: REF_2026,
+      brutoloon: 3000,
+      arbeidsdagenPerMaand: 22,
+      werkdagenInMaand: 22,
+      fiets: { actief: false, kmPerDag: 0 },
+      trein: { actief: false, kmEnkel: 0 },
+      busTramMetro: { actief: false, kmEnkel: 0, prijsPerMaand: 0 },
+      privewagen: { actief: true, kmEnkel: 15 },
+    });
+
+    expect(r.componenten.privewagen?.vergoeding).toBe(46);
+    expect(r.totaalVergoeding).toBe(46);
+  });
+
+  it("privéwagen boven jaarloonplafond → €0 + waarschuwing", () => {
+    const r = berekenWoonwerkVerkeer({
+      refDatum: REF_2026,
+      brutoloon: 4000,
+      arbeidsdagenPerMaand: 22,
+      werkdagenInMaand: 22,
+      fiets: { actief: false, kmPerDag: 0 },
+      trein: { actief: false, kmEnkel: 0 },
+      busTramMetro: { actief: false, kmEnkel: 0, prijsPerMaand: 0 },
+      privewagen: { actief: true, kmEnkel: 15 },
+    });
+
+    expect(r.componenten.privewagen?.vergoeding).toBe(0);
+    expect(r.waarschuwingen.join(" ")).toContain("loonplafond");
+  });
+
+  it("bus/tram/metro 10 km wordt begrensd op 75% van de werkelijke prijs", () => {
+    const r = berekenWoonwerkVerkeer({
+      refDatum: REF_2026,
+      brutoloon: 3000,
+      arbeidsdagenPerMaand: 22,
+      werkdagenInMaand: 22,
+      fiets: { actief: false, kmPerDag: 0 },
+      trein: { actief: false, kmEnkel: 0 },
+      busTramMetro: { actief: true, kmEnkel: 10, prijsPerMaand: 60 },
+      privewagen: { actief: false, kmEnkel: 0 },
+    });
+
+    expect(r.componenten.busTramMetro?.vergoeding).toBe(45);
+    expect(r.componenten.busTramMetro?.basisMaandbedrag).toBe(52);
+  });
+
+  it("past maandtabellen pro rata toe op effectieve pendeldagen", () => {
+    const r = berekenWoonwerkVerkeer({
+      refDatum: REF_2026,
+      brutoloon: 3000,
+      arbeidsdagenPerMaand: 10,
+      werkdagenInMaand: 22,
+      fiets: { actief: false, kmPerDag: 0 },
+      trein: { actief: true, kmEnkel: 15 },
+      busTramMetro: { actief: false, kmEnkel: 0, prijsPerMaand: 0 },
+      privewagen: { actief: false, kmEnkel: 0 },
+    });
+
+    expect(r.componenten.trein?.vergoeding).toBe(41.82);
+    expect(r.totaalVergoeding).toBe(41.82);
+  });
+});
+
+describe("TC-16c — VAA bedrijfswagen", () => {
+  it("berekent benzine-VAA met referentie-CO2 70 g/km", () => {
+    const r = vaaBedrijfswagen({
+      cataloguswaarde: 40000,
+      datumEersteInschrijving: "2026-01-01",
+      brandstof: "benzine",
+      co2: 100,
+      refDatum: REF_2026,
+    });
+
+    expect(r.refCO2).toBe(70);
+    expect(r.co2Percentage).toBe(8.5);
+    expect(r.vaaJaar).toBe(2914.29);
+    expect(r.vaaMaand).toBe(242.86);
+  });
+
+  it("berekent diesel-VAA met referentie-CO2 58 g/km", () => {
+    const r = vaaBedrijfswagen({
+      cataloguswaarde: 40000,
+      datumEersteInschrijving: "2026-01-01",
+      brandstof: "diesel",
+      co2: 100,
+      refDatum: REF_2026,
+    });
+
+    expect(r.refCO2).toBe(58);
+    expect(r.co2Percentage).toBe(9.7);
+  });
+
+  it("past voor elektriciteit geen CO2-input toe en dwingt het minimum af", () => {
+    const r = vaaBedrijfswagen({
+      cataloguswaarde: 30000,
+      datumEersteInschrijving: "2026-01-01",
+      brandstof: "elektriciteit",
+      refDatum: REF_2026,
+    });
+
+    expect(r.refCO2).toBe(0);
+    expect(r.co2Percentage).toBe(5.5);
+    expect(r.vaaJaar).toBe(1690);
+    expect(r.minimumToegepast).toBe(true);
+  });
+
+  it("laat de leeftijdscoëfficiënt zakken tot minimum 70%", () => {
+    const r = vaaBedrijfswagen({
+      cataloguswaarde: 50000,
+      datumEersteInschrijving: "2020-01-01",
+      brandstof: "benzine",
+      co2: 100,
+      refDatum: REF_2026,
+    });
+
+    expect(r.leeftijdsCoefficient).toBe(0.7);
+    expect(r.vaaJaar).toBe(2550);
   });
 });
 
@@ -426,6 +559,102 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
     for (const dp of r.bv.datapunten) {
       expect(dp.bron_url).toBeTruthy();
     }
+  });
+
+  it("trekt werknemersbijdrage maaltijdcheques af van het cash-nettoloon", () => {
+    const basis = berekenNetto({
+      brutoloon: 2276.51,
+      refDatum: "2026-06-01",
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+    });
+    const metMaaltijdcheques = berekenNetto({
+      brutoloon: 2276.51,
+      refDatum: "2026-06-01",
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+      maaltijdchequeWerknemersbijdragePerDag: 1.09,
+      maaltijdchequeWerkdagen: 20,
+    });
+    expect(metMaaltijdcheques.maaltijdchequeWerknemersbijdrage).toBe(21.8);
+    expect(metMaaltijdcheques.nettoloon).toBe(basis.nettoloon - 21.8);
+    expect(metMaaltijdcheques.belastbaarMaandloon).toBe(basis.belastbaarMaandloon);
+  });
+
+  it("zonder maaltijdcheque-input blijft de werknemersbijdrage nul", () => {
+    const r = berekenNetto({
+      brutoloon: 2276.51,
+      refDatum: "2026-06-01",
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+    });
+    expect(r.maaltijdchequeWerknemersbijdrage).toBe(0);
+  });
+
+  it("telt woon-werkvergoeding bij het cash-nettoloon zonder de BV-basis te wijzigen", () => {
+    const basis = berekenNetto({
+      brutoloon: 3000,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+    });
+    const metWoonwerk = berekenNetto({
+      brutoloon: 3000,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+      woonwerkVrijgesteldPerMaand: 100,
+    });
+
+    expect(metWoonwerk.woonwerkVrijgesteldPerMaand).toBe(100);
+    expect(metWoonwerk.belastbaarMaandloon).toBe(basis.belastbaarMaandloon);
+    expect(metWoonwerk.bv.bvNaVerminderingen).toBe(basis.bv.bvNaVerminderingen);
+    expect(metWoonwerk.nettoloon).toBe(basis.nettoloon + 100);
+  });
+
+  it("past bijkomende netto-looncomponenten toe zonder RSZ/BV-basis te wijzigen", () => {
+    const basis = berekenNetto({
+      brutoloon: 3000,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+    });
+    const metComponenten = berekenNetto({
+      brutoloon: 3000,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+      hospitalisatieEigenBijdrage: 25,
+      onkostenvergoedingPerMaand: 125,
+    });
+
+    expect(metComponenten.hospitalisatieEigenBijdrage).toBe(25);
+    expect(metComponenten.onkostenvergoedingPerMaand).toBe(125);
+    expect(metComponenten.belastbaarMaandloon).toBe(basis.belastbaarMaandloon);
+    expect(metComponenten.bv.bvNaVerminderingen).toBe(basis.bv.bvNaVerminderingen);
+    expect(metComponenten.nettoloon).toBe(basis.nettoloon + 100);
+  });
+
+  it("telt bedrijfswagen-VAA bij de BV-basis maar niet bij cash", () => {
+    const basis = berekenNetto({
+      brutoloon: 4000,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+    });
+    const metVaa = berekenNetto({
+      brutoloon: 4000,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+      vaaBedrijfswagenPerMaand: 180,
+    });
+
+    expect(metVaa.vaaBedrijfswagenPerMaand).toBe(180);
+    expect(metVaa.belastbaarMaandloon).toBe(basis.belastbaarMaandloon);
+    expect(metVaa.belastbaarMaandloonVoorBV).toBe(basis.belastbaarMaandloon + 180);
+    expect(metVaa.bv.bvNaVerminderingen).toBeGreaterThan(basis.bv.bvNaVerminderingen);
+    expect(metVaa.nettoloon).toBeLessThan(basis.nettoloon);
   });
 });
 
@@ -624,9 +853,44 @@ describe("TC-WGK-01 — werkgeverskost met extralegale voordelen", () => {
     const r = werkgeverskost({
       brutoloon: bruto,
       refDatum: ref,
-      extraMaaltijdcheques: 130,
+      maaltijdchequeWerkgeversaandeelPerDag: 8.91,
+      maaltijdchequeWerkdagen: 20,
       extraHospitalisatie: 20,
     });
-    expect(r.extraVoordelen).toBe(150);
+    expect(r.extraVoordelen).toBe(198.2);
+  });
+
+  it("begrensd maaltijdcheques op het werkgeversmaximum van €8,91 per dag vanaf 2026", () => {
+    const r = werkgeverskost({
+      brutoloon: bruto,
+      refDatum: ref,
+      maaltijdchequeWerkgeversaandeelPerDag: 10,
+      maaltijdchequeWerkdagen: 22,
+    });
+    expect(r.extraVoordelen).toBe(196.02);
+  });
+
+  it("telt woon-werkvergoeding mee als werkgeverskost", () => {
+    const basis = werkgeverskost({ brutoloon: bruto, refDatum: ref });
+    const metWoonwerk = werkgeverskost({
+      brutoloon: bruto,
+      refDatum: ref,
+      woonwerkVergoedingPerMaand: 100,
+    });
+
+    expect(metWoonwerk.extraVoordelen).toBe(100);
+    expect(metWoonwerk.totaleLoonkostBreed).toBe(basis.totaleLoonkostBreed + 100);
+  });
+
+  it("telt onkostenvergoeding mee als werkgeverskost", () => {
+    const basis = werkgeverskost({ brutoloon: bruto, refDatum: ref });
+    const metOnkosten = werkgeverskost({
+      brutoloon: bruto,
+      refDatum: ref,
+      onkostenvergoedingPerMaand: 125,
+    });
+
+    expect(metOnkosten.extraVoordelen).toBe(125);
+    expect(metOnkosten.totaleLoonkostBreed).toBe(basis.totaleLoonkostBreed + 125);
   });
 });

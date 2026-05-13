@@ -1,11 +1,11 @@
 import type { Status, Tier } from "@/types/dataset";
 
 const STATUS_STYLES: Record<Status, React.CSSProperties> = {
-  actief:                 { background: "#f0fdf4", color: "#065f46", border: "1px solid #6ee7b7" },
+  actief:                 { background: "var(--color-mint-soft)", color: "var(--color-success-dark)", border: "1px solid rgba(28,210,163,0.35)" },
   mogelijk_verouderd:     { background: "#fffbeb", color: "#92400e", border: "1px solid #fcd34d" },
   conflict:               { background: "#fff1f2", color: "#991b1b", border: "1px solid #fca5a5" },
-  niet_gevonden:          { background: "#f5f0e8", color: "#5a5a59", border: "1px solid #e2ddd5" },
-  gemarkeerd_voor_review: { background: "#fff7ed", color: "#9a3412", border: "1px solid #fdba74" },
+  niet_gevonden:          { background: "var(--color-navy-50)", color: "var(--color-navy-500)", border: "1px solid var(--color-border)" },
+  gemarkeerd_voor_review: { background: "var(--color-primary-soft)", color: "var(--color-primary)", border: "1px solid var(--color-primary-border)" },
 };
 
 const STATUS_LABEL: Record<Status, string> = {
@@ -19,7 +19,7 @@ const STATUS_LABEL: Record<Status, string> = {
 const BADGE_BASE: React.CSSProperties = {
   display: "inline-flex",
   alignItems: "center",
-  borderRadius: 4,
+  borderRadius: "var(--radius-pill)",
   padding: "1px 7px",
   fontSize: 11,
   fontWeight: 600,
@@ -36,9 +36,9 @@ export function StatusBadge({ status }: { status: Status }) {
 }
 
 const TIER_STYLES: Record<string, React.CSSProperties> = {
-  "Tier 1": { background: "#e8dfcf", color: "#3c3c3b", border: "1px solid #cbbba0" },
-  "Tier 2": { background: "#f5f0e8", color: "#7b6a58", border: "1px solid #cbbba0" },
-  "Tier 3": { background: "#ffffff", color: "#9a8b7a", border: "1px solid #e2ddd5" },
+  "Tier 1": { background: "var(--color-primary-soft)", color: "var(--color-primary)", border: "1px solid var(--color-primary-border)" },
+  "Tier 2": { background: "var(--color-navy-50)", color: "var(--color-navy-700)", border: "1px solid var(--color-navy-100)" },
+  "Tier 3": { background: "var(--color-surface)", color: "var(--color-text-muted)", border: "1px solid var(--color-border)" },
 };
 
 export function TierBadge({ tier }: { tier: Tier }) {

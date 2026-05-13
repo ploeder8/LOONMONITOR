@@ -1,51 +1,83 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-
-@theme {
-  --font-display: "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body:    "DM Sans",       -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono:    "JetBrains Mono", "SFMono-Regular", Menlo, monospace;
-}
-
-:root {
-  --background:        #faf8f4;
-  --foreground:        #3c3c3b;
-  --muted:             #f5f0e8;
-  --muted-foreground:  #9a8b7a;
-  --border:            #e2ddd5;
-  --primary:           #7b6a58;
-  --primary-foreground:#ffffff;
-  --destructive:       #b91c1c;
-  --destructive-foreground: #ffffff;
-  --warning:           #b45309;
-  --warning-foreground:#fffbeb;
-  --success:           #047857;
-  --card:              #ffffff;
-  --card-foreground:   #3c3c3b;
-  --sand:              #cbbba0;
-  --sand-light:        #e8dfcf;
-  --sand-pale:         #f5f0e8;
-  --brown:             #7b6a58;
-  --brown-light:       #9a8b7a;
-  --charcoal:          #3c3c3b;
-  --charcoal-light:    #5a5a59;
-}
+@import "./branding/brand.css";
 
 html, body, #root {
   height: 100%;
 }
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body {
+  margin: 0;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-body);
-  font-feature-settings: "ss01", "cv11";
+  font-feature-settings: "tnum";
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 h1, h2, h3, h4 {
   font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.app-nav {
+  margin-left: auto;
+}
+
+.home-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.home-layout > aside {
+  overflow-wrap: anywhere;
+}
+
+.home-layout label,
+.home-layout input,
+.home-layout select,
+.home-layout section,
+.home-layout aside {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .home-layout {
+    grid-template-columns: minmax(0, 400px) minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .app-main {
+    padding-right: 14px !important;
+    padding-left: 14px !important;
+  }
+
+  .home-layout,
+  .home-layout > aside,
+  .home-layout > section {
+    width: 100% !important;
+    max-width: calc(100vw - 84px) !important;
+  }
+
+  .app-nav {
+    width: 100%;
+    margin-left: 0;
+    justify-content: center;
+    row-gap: 6px;
+  }
+
+  .app-nav-link {
+    padding: 7px 10px !important;
+    font-size: 12px !important;
+  }
 }

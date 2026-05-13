@@ -27,9 +27,9 @@ export function AuditPanel({ datapunt }: { datapunt: Datapunt }) {
   return (
     <div
       style={{
-        borderRadius: 8,
-        border: "1px solid #e2ddd5",
-        background: "#f5f0e8",
+        borderRadius: "var(--radius-md)",
+        border: "1px solid var(--color-border)",
+        background: "var(--color-navy-50)",
         fontSize: 13,
       }}
     >
@@ -48,15 +48,17 @@ export function AuditPanel({ datapunt }: { datapunt: Datapunt }) {
           cursor: "pointer",
           transition: "background 0.15s",
         }}
-        onMouseEnter={(e) => (e.currentTarget.style.background = "#e8dfcf")}
+        onMouseEnter={(e) => (e.currentTarget.style.background = "var(--color-primary-soft)")}
         onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
       >
-        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6, minWidth: 0 }}>
           <span
             style={{
               fontFamily: "var(--font-mono)",
               fontSize: 11,
-              color: "#5a5a59",
+              color: "var(--color-navy-500)",
+              overflowWrap: "anywhere",
+              minWidth: 0,
             }}
           >
             {datapunt.id}
@@ -65,15 +67,15 @@ export function AuditPanel({ datapunt }: { datapunt: Datapunt }) {
           {datapunt.betrouwbaarheid && <TierBadge tier={datapunt.betrouwbaarheid} />}
         </div>
         {open
-          ? <ChevronUp size={14} style={{ color: "#9a8b7a", flexShrink: 0 }} />
-          : <ChevronDown size={14} style={{ color: "#9a8b7a", flexShrink: 0 }} />
+          ? <ChevronUp size={14} style={{ color: "var(--color-text-muted)", flexShrink: 0 }} />
+          : <ChevronDown size={14} style={{ color: "var(--color-text-muted)", flexShrink: 0 }} />
         }
       </button>
 
       {open && (
         <div
           style={{
-            borderTop: "1px solid #e2ddd5",
+            borderTop: "1px solid var(--color-border)",
             padding: "12px",
             display: "flex",
             flexDirection: "column",
@@ -86,8 +88,8 @@ export function AuditPanel({ datapunt }: { datapunt: Datapunt }) {
             <AuditField label="Waarde (letterlijk uit bron)">
               <code
                 style={{
-                  background: "#e8dfcf",
-                  borderRadius: 4,
+                  background: "var(--color-primary-soft)",
+                  borderRadius: "var(--radius-sm)",
                   padding: "1px 5px",
                   fontSize: 11,
                   fontFamily: "var(--font-mono)",
@@ -102,8 +104,8 @@ export function AuditPanel({ datapunt }: { datapunt: Datapunt }) {
             <AuditField label="Waarde (genormaliseerd)">
               <code
                 style={{
-                  background: "#e8dfcf",
-                  borderRadius: 4,
+                  background: "var(--color-primary-soft)",
+                  borderRadius: "var(--radius-sm)",
                   padding: "1px 5px",
                   fontSize: 11,
                   fontFamily: "var(--font-mono)",
@@ -134,11 +136,11 @@ export function AuditPanel({ datapunt }: { datapunt: Datapunt }) {
             <AuditField label="Bron-citaat">
               <blockquote
                 style={{
-                  borderLeft: "2px solid #cbbba0",
+                  borderLeft: "2px solid var(--color-primary)",
                   paddingLeft: 10,
                   fontSize: 12,
                   fontStyle: "italic",
-                  color: "#5a5a59",
+                  color: "var(--color-navy-500)",
                   margin: 0,
                 }}
               >
@@ -149,7 +151,7 @@ export function AuditPanel({ datapunt }: { datapunt: Datapunt }) {
 
           {datapunt.triangulatie_bronnen && datapunt.triangulatie_bronnen.length > 0 && (
             <AuditField label="Triangulatie-bronnen">
-              <ul style={{ paddingLeft: 18, fontSize: 12, color: "#5a5a59", margin: 0 }}>
+              <ul style={{ paddingLeft: 18, fontSize: 12, color: "var(--color-navy-500)", margin: 0 }}>
                 {datapunt.triangulatie_bronnen.map((t, i) => (
                   <li key={i}>
                     {t.bron} ({t.tier}
@@ -161,7 +163,7 @@ export function AuditPanel({ datapunt }: { datapunt: Datapunt }) {
                           href={t.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          style={{ color: "#7b6a58", textDecoration: "underline" }}
+                          style={{ color: "var(--color-primary)", textDecoration: "underline" }}
                         >
                           ↗
                         </a>
@@ -175,7 +177,7 @@ export function AuditPanel({ datapunt }: { datapunt: Datapunt }) {
 
           {datapunt.opmerkingen && datapunt.opmerkingen.length > 0 && (
             <AuditField label="Opmerkingen">
-              <ul style={{ paddingLeft: 18, fontSize: 12, color: "#5a5a59", margin: 0 }}>
+              <ul style={{ paddingLeft: 18, fontSize: 12, color: "var(--color-navy-500)", margin: 0 }}>
                 {datapunt.opmerkingen.map((o, i) => (
                   <li key={i}>{o}</li>
                 ))}
@@ -185,7 +187,7 @@ export function AuditPanel({ datapunt }: { datapunt: Datapunt }) {
 
           {datapunt.conflict_opmerking && (
             <AuditField label="Bronconflict">
-              <span style={{ color: "#b91c1c" }}>{datapunt.conflict_opmerking}</span>
+              <span style={{ color: "var(--color-error)" }}>{datapunt.conflict_opmerking}</span>
             </AuditField>
           )}
         </div>
@@ -203,14 +205,14 @@ function AuditField({ label, children }: { label: string; children: React.ReactN
           fontWeight: 600,
           textTransform: "uppercase",
           letterSpacing: "0.06em",
-          color: "#9a8b7a",
+          color: "var(--color-text-muted)",
           marginBottom: 2,
           fontFamily: "var(--font-body)",
         }}
       >
         {label}
       </div>
-      <div style={{ fontSize: 13, color: "#3c3c3b" }}>{children}</div>
+      <div style={{ fontSize: 13, color: "var(--color-text)" }}>{children}</div>
     </div>
   );
 }
