@@ -26,7 +26,7 @@ if (!result.valid) {
           Dataset-validatie mislukt
         </h1>
         <p style={{ marginBottom: "1rem" }}>
-          De PC 200 Loonmonitor weigert te starten omdat het meegeleverde
+          De PC 200 Loonmotor weigert te starten omdat het meegeleverde
           dataset (<code>pc200_payroll_dataset_2026.json</code>) niet voldoet
           aan het schema (<code>pc200_payroll_dataset.schema.json</code>).
         </p>

@@ -1,72 +1,155 @@
-import { useState } from "react";
+import { createContext, useContext, useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import type { Datapunt } from "@/types/dataset";
 import { StatusBadge, TierBadge } from "@/components/StatusBadge";
 import { BronLink } from "@/components/BronLink";
 
+// "all" / "none" overrules elk individueel paneel; null = elk paneel beheert zijn eigen state.
+export type AuditForceState = "all" | "none" | null;
+
+const AuditOpenContext = createContext<AuditForceState>(null);
+
+export function AuditOpenProvider({
+  force,
+  children,
+}: {
+  force: AuditForceState;
+  children: React.ReactNode;
+}) {
+  return <AuditOpenContext.Provider value={force}>{children}</AuditOpenContext.Provider>;
+}
+
 export function AuditPanel({ datapunt }: { datapunt: Datapunt }) {
-  const [open, setOpen] = useState(false);
+  const force = useContext(AuditOpenContext);
+  const [localOpen, setLocalOpen] = useState(false);
+  const open = force === "all" ? true : force === "none" ? false : localOpen;
 
   return (
-    <div className="rounded-md border border-zinc-200 bg-zinc-50 text-sm">
+    <div
+      style={{
+        borderRadius: 8,
+        border: "1px solid #e2ddd5",
+        background: "#f5f0e8",
+        fontSize: 13,
+      }}
+    >
       <button
-        onClick={() => setOpen(!open)}
-        className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left hover:bg-zinc-100"
+        onClick={() => setLocalOpen(!open)}
+        style={{
+          display: "flex",
+          width: "100%",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 8,
+          padding: "8px 12px",
+          textAlign: "left",
+          background: "transparent",
+          border: "none",
+          cursor: "pointer",
+          transition: "background 0.15s",
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.background = "#e8dfcf")}
+        onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
       >
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="font-mono text-xs text-zinc-700">{datapunt.id}</span>
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6 }}>
+          <span
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 11,
+              color: "#5a5a59",
+            }}
+          >
+            {datapunt.id}
+          </span>
           <StatusBadge status={datapunt.status} />
           {datapunt.betrouwbaarheid && <TierBadge tier={datapunt.betrouwbaarheid} />}
         </div>
-        <span className="text-xs text-zinc-500">{open ? "▲" : "▼"}</span>
+        {open
+          ? <ChevronUp size={14} style={{ color: "#9a8b7a", flexShrink: 0 }} />
+          : <ChevronDown size={14} style={{ color: "#9a8b7a", flexShrink: 0 }} />
+        }
       </button>
 
       {open && (
-        <div className="space-y-3 border-t border-zinc-200 px-3 py-3">
-          <Field label="Omschrijving">{datapunt.omschrijving}</Field>
+        <div
+          style={{
+            borderTop: "1px solid #e2ddd5",
+            padding: "12px",
+            display: "flex",
+            flexDirection: "column",
+            gap: 12,
+          }}
+        >
+          <AuditField label="Omschrijving">{datapunt.omschrijving}</AuditField>
 
           {datapunt.waarde_bron != null && (
-            <Field label="Waarde (letterlijk uit bron)">
-              <code className="rounded bg-zinc-200 px-1 py-0.5 text-xs">
+            <AuditField label="Waarde (letterlijk uit bron)">
+              <code
+                style={{
+                  background: "#e8dfcf",
+                  borderRadius: 4,
+                  padding: "1px 5px",
+                  fontSize: 11,
+                  fontFamily: "var(--font-mono)",
+                }}
+              >
                 {datapunt.waarde_bron}
               </code>
-            </Field>
+            </AuditField>
           )}
 
           {datapunt.waarde_genormaliseerd != null && (
-            <Field label="Waarde (genormaliseerd)">
-              <code className="rounded bg-zinc-200 px-1 py-0.5 text-xs">
+            <AuditField label="Waarde (genormaliseerd)">
+              <code
+                style={{
+                  background: "#e8dfcf",
+                  borderRadius: 4,
+                  padding: "1px 5px",
+                  fontSize: 11,
+                  fontFamily: "var(--font-mono)",
+                }}
+              >
                 {datapunt.waarde_genormaliseerd}
               </code>
-            </Field>
+            </AuditField>
           )}
 
           {(datapunt.geldig_vanaf || datapunt.geldig_tot) && (
-            <Field label="Geldigheid">
+            <AuditField label="Geldigheid">
               {datapunt.geldig_vanaf ?? "—"} → {datapunt.geldig_tot ?? "open"}
-            </Field>
+            </AuditField>
           )}
 
-          <Field label="Primaire bron">
-            <div className="flex flex-col gap-0.5">
+          <AuditField label="Primaire bron">
+            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
               <span>
                 {datapunt.bron_organisatie ?? "—"}
                 {datapunt.bron_titel ? ` — ${datapunt.bron_titel}` : ""}
               </span>
               <BronLink datapunt={datapunt} />
             </div>
-          </Field>
+          </AuditField>
 
           {datapunt.bron_fragment && (
-            <Field label="Bron-citaat">
-              <blockquote className="border-l-2 border-zinc-400 pl-3 text-xs italic text-zinc-700">
+            <AuditField label="Bron-citaat">
+              <blockquote
+                style={{
+                  borderLeft: "2px solid #cbbba0",
+                  paddingLeft: 10,
+                  fontSize: 12,
+                  fontStyle: "italic",
+                  color: "#5a5a59",
+                  margin: 0,
+                }}
+              >
                 {datapunt.bron_fragment}
               </blockquote>
-            </Field>
+            </AuditField>
           )}
 
           {datapunt.triangulatie_bronnen && datapunt.triangulatie_bronnen.length > 0 && (
-            <Field label="Triangulatie-bronnen">
-              <ul className="list-disc pl-5 text-xs text-zinc-700">
+            <AuditField label="Triangulatie-bronnen">
+              <ul style={{ paddingLeft: 18, fontSize: 12, color: "#5a5a59", margin: 0 }}>
                 {datapunt.triangulatie_bronnen.map((t, i) => (
                   <li key={i}>
                     {t.bron} ({t.tier}
@@ -78,7 +161,7 @@ export function AuditPanel({ datapunt }: { datapunt: Datapunt }) {
                           href={t.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-blue-700 underline"
+                          style={{ color: "#7b6a58", textDecoration: "underline" }}
                         >
                           ↗
                         </a>
@@ -87,23 +170,23 @@ export function AuditPanel({ datapunt }: { datapunt: Datapunt }) {
                   </li>
                 ))}
               </ul>
-            </Field>
+            </AuditField>
           )}
 
           {datapunt.opmerkingen && datapunt.opmerkingen.length > 0 && (
-            <Field label="Opmerkingen">
-              <ul className="list-disc pl-5 text-xs text-zinc-700">
+            <AuditField label="Opmerkingen">
+              <ul style={{ paddingLeft: 18, fontSize: 12, color: "#5a5a59", margin: 0 }}>
                 {datapunt.opmerkingen.map((o, i) => (
                   <li key={i}>{o}</li>
                 ))}
               </ul>
-            </Field>
+            </AuditField>
           )}
 
           {datapunt.conflict_opmerking && (
-            <Field label="Bronconflict">
-              <span className="text-rose-700">{datapunt.conflict_opmerking}</span>
-            </Field>
+            <AuditField label="Bronconflict">
+              <span style={{ color: "#b91c1c" }}>{datapunt.conflict_opmerking}</span>
+            </AuditField>
           )}
         </div>
       )}
@@ -111,13 +194,23 @@ export function AuditPanel({ datapunt }: { datapunt: Datapunt }) {
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function AuditField({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+      <div
+        style={{
+          fontSize: 10,
+          fontWeight: 600,
+          textTransform: "uppercase",
+          letterSpacing: "0.06em",
+          color: "#9a8b7a",
+          marginBottom: 2,
+          fontFamily: "var(--font-body)",
+        }}
+      >
         {label}
       </div>
-      <div className="mt-0.5 text-sm text-zinc-900">{children}</div>
+      <div style={{ fontSize: 13, color: "#3c3c3b" }}>{children}</div>
     </div>
   );
 }

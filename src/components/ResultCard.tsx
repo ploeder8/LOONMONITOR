@@ -18,20 +18,48 @@ export function ResultCard(props: ResultCardProps) {
 
   return (
     <div
-      className={
-        "flex flex-col gap-2 rounded-lg border bg-white p-4 shadow-sm " +
-        (props.highlight ? "border-blue-400 ring-1 ring-blue-200" : "border-zinc-200")
-      }
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 8,
+        borderRadius: 14,
+        border: props.highlight ? "1px solid #cbbba0" : "1px solid #e2ddd5",
+        background: "#ffffff",
+        padding: "1rem 1.1rem",
+        boxShadow: props.highlight ? "0 0 0 3px rgba(203,187,160,0.25)" : "none",
+      }}
     >
-      <div className="flex items-baseline justify-between gap-3">
-        <div className="text-sm font-medium text-zinc-700">{props.label}</div>
-        <div className="text-xl font-semibold tabular-nums text-zinc-950">
+      <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 12 }}>
+        <div
+          style={{
+            fontSize: 13,
+            fontFamily: "var(--font-body)",
+            color: "#5a5a59",
+            fontWeight: 500,
+          }}
+        >
+          {props.label}
+        </div>
+        <div
+          style={{
+            fontSize: 20,
+            fontFamily: "var(--font-mono)",
+            fontWeight: 600,
+            color: "#3c3c3b",
+            whiteSpace: "nowrap",
+            fontVariantNumeric: "tabular-nums",
+          }}
+        >
           {valueDisplay}
         </div>
       </div>
-      {props.helper && <div className="text-xs text-zinc-500">{props.helper}</div>}
+      {props.helper && (
+        <div style={{ fontSize: 12, color: "#9a8b7a", fontFamily: "var(--font-body)" }}>
+          {props.helper}
+        </div>
+      )}
       {props.datapunten && props.datapunten.length > 0 && (
-        <div className="mt-1 flex flex-col gap-1">
+        <div style={{ marginTop: 4, display: "flex", flexDirection: "column", gap: 4 }}>
           {props.datapunten.map((dp) => (
             <AuditPanel key={dp.id} datapunt={dp} />
           ))}

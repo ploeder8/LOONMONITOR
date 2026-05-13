@@ -1,13 +1,20 @@
 import dataset from "@/data/pc200_payroll_dataset_2026.json";
-import type { Dataset } from "@/types/dataset";
+import type {
+  Dataset,
+  MetaConflictObject,
+  MetaNietGevondenObject,
+} from "@/types/dataset";
 
 const ds = dataset as unknown as Dataset;
+const nietGevonden = ds.meta.niet_gevonden ?? [];
+const conflicten = ds.meta.conflicten ?? [];
+const opmerkingen = ds.meta.opmerkingen ?? [];
 
 const POC_LIMITATIONS: { titel: string; tekst: string }[] = [
   {
-    titel: "1. Geen netto-berekening",
+    titel: "1. Netto validatie pending",
     tekst:
-      "Bedrijfsvoorheffing en personenbelasting (gemeente, federaal) zitten niet in deze POC. De monitor stopt op brutoloon plus werkgeverskost; voor netto verwijzen we naar het sociaal secretariaat.",
+      "De POC berekent netto met RSZ, werkbonus, BV, fiscale werkbonus en BBSZ. De BV-sleutelformule is lokaal geïmplementeerd, maar de 30 FOD Tax-Calc-validaties staan nog pending.",
   },
   {
     titel: "2. Geen maaltijdcheques",
@@ -76,7 +83,7 @@ export function ScopePage() {
             <DefRow label="Land / taal" value={`${ds.meta.land} / ${ds.meta.taal}`} />
             <DefRow label="Doeljaar" value={String(ds.meta.doeljaar)} />
             <DefRow label="Laatste update" value={ds.meta.laatste_update} />
-            <DefRow label="Dekking" value={ds.meta.dekking} />
+            <DefRow label="Dekking" value={ds.meta.dekking.join(", ")} />
           </dl>
         </div>
       </section>
@@ -100,8 +107,8 @@ export function ScopePage() {
         <h3 className="mb-3 text-base font-semibold">Niet gevonden in dataset</h3>
         <div className="rounded-lg border border-amber-300 bg-amber-50 p-4">
           <ul className="list-disc space-y-1 pl-5 text-sm text-amber-900">
-            {ds.meta.niet_gevonden.map((n, i) => (
-              <li key={i}>{n}</li>
+            {nietGevonden.map((n, i) => (
+              <li key={i}>{formatNietGevonden(n)}</li>
             ))}
           </ul>
         </div>
@@ -109,13 +116,13 @@ export function ScopePage() {
 
       <section>
         <h3 className="mb-3 text-base font-semibold">Bron-conflicten</h3>
-        {ds.meta.conflicten.length === 0 ? (
+        {conflicten.length === 0 ? (
           <p className="text-sm text-zinc-500">Geen conflicten geregistreerd.</p>
         ) : (
           <div className="rounded-lg border border-rose-300 bg-rose-50 p-4">
             <ul className="list-disc space-y-1 pl-5 text-sm text-rose-900">
-              {ds.meta.conflicten.map((c, i) => (
-                <li key={i}>{c}</li>
+              {conflicten.map((c, i) => (
+                <li key={i}>{formatConflict(c)}</li>
               ))}
             </ul>
           </div>
@@ -126,7 +133,7 @@ export function ScopePage() {
         <h3 className="mb-3 text-base font-semibold">Algemene opmerkingen</h3>
         <div className="rounded-lg border border-blue-300 bg-blue-50 p-4">
           <ul className="list-disc space-y-1 pl-5 text-sm text-blue-900">
-            {ds.meta.opmerkingen.map((o, i) => (
+            {opmerkingen.map((o, i) => (
               <li key={i}>{o}</li>
             ))}
           </ul>
@@ -143,4 +150,19 @@ function DefRow({ label, value }: { label: string; value: string }) {
       <dd className="font-medium text-zinc-900">{value}</dd>
     </>
   );
+}
+
+function formatNietGevonden(value: string | MetaNietGevondenObject): string {
+  if (typeof value === "string") return value;
+
+  return [value.onderwerp, value.reden, value.aanbeveling]
+    .filter(Boolean)
+    .join(" — ");
+}
+
+function formatConflict(value: string | MetaConflictObject): string {
+  if (typeof value === "string") return value;
+
+  const bronLabel = value.bronnen?.length ? `Brannen: ${value.bronnen.join(", ")}` : null;
+  return [value.onderwerp, value.beschrijving, bronLabel].filter(Boolean).join(" — ");
 }

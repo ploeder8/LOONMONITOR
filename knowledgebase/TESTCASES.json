@@ -1,0 +1,1415 @@
+[
+  {
+    "id": "TC-001",
+    "profiel": "Starter PC 200 op GGMMI vanaf 1/4/2026 (€2.189,81), alleenstaand, 0 kinderen",
+    "test_focus": [
+      "GGMMI hardvloer",
+      "werkbonus volledige luiken A+B",
+      "fiscale werkbonus 33,14%/52,54%"
+    ],
+    "input": {
+      "bruto_maand": 2189.81
+    },
+    "berekend": {
+      "bruto_maand": 2189.81,
+      "rsz_werknemer_basis": 286.21,
+      "sociale_werkbonus_luik_a": 125.04,
+      "sociale_werkbonus_luik_b": 168.62,
+      "sociale_werkbonus_totaal": 293.66,
+      "rsz_werknemer_netto": 0.0,
+      "belastbaar_loon_maand": 2189.81,
+      "bedrijfsvoorheffing_voor_verminderingen": 231.67,
+      "bv_vermindering_kinderen": 0.0,
+      "fiscale_werkbonus": 130.03,
+      "bedrijfsvoorheffing_netto": 101.64,
+      "bbsz": 10.31,
+      "netto_maand": 2077.86,
+      "netto_check_jaar": 24934.32,
+      "notities": [
+        "RSZ-vermindering geplafonneerd op 0"
+      ]
+    },
+    "werkgeverskost": {
+      "bruto_maand": 2189.81,
+      "rsz_werkgever": 547.45,
+      "sociaal_fonds_200": 5.04,
+      "arbeidsongevallen_verzekering": 6.57,
+      "provisie_eindejaarspremie": 182.41,
+      "provisie_dubbel_vakantiegeld": 146.06,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 3077.34,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-002",
+    "profiel": "Junior bediende €2.300, alleenstaand, werkbonus volledig",
+    "test_focus": [
+      "werkbonus B in afbouw, A volledig"
+    ],
+    "input": {
+      "bruto_maand": 2300.0
+    },
+    "berekend": {
+      "bruto_maand": 2300.0,
+      "rsz_werknemer_basis": 300.61,
+      "sociale_werkbonus_luik_a": 125.04,
+      "sociale_werkbonus_luik_b": 156.61,
+      "sociale_werkbonus_totaal": 281.65,
+      "rsz_werknemer_netto": 18.96,
+      "belastbaar_loon_maand": 2281.04,
+      "bedrijfsvoorheffing_voor_verminderingen": 268.17,
+      "bv_vermindering_kinderen": 0.0,
+      "fiscale_werkbonus": 123.72,
+      "bedrijfsvoorheffing_netto": 144.45,
+      "bbsz": 11.54,
+      "netto_maand": 2125.05,
+      "netto_check_jaar": 25500.6,
+      "notities": []
+    },
+    "werkgeverskost": {
+      "bruto_maand": 2300.0,
+      "rsz_werkgever": 575.0,
+      "sociaal_fonds_200": 5.29,
+      "arbeidsongevallen_verzekering": 6.9,
+      "provisie_eindejaarspremie": 191.59,
+      "provisie_dubbel_vakantiegeld": 153.41,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 3232.19,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-003",
+    "profiel": "Bediende €2.500, alleenstaand — werkbonus A volledig, B in afbouw",
+    "test_focus": [
+      "werkbonus afbouwzone B"
+    ],
+    "input": {
+      "bruto_maand": 2500.0
+    },
+    "berekend": {
+      "bruto_maand": 2500.0,
+      "rsz_werknemer_basis": 326.75,
+      "sociale_werkbonus_luik_a": 125.04,
+      "sociale_werkbonus_luik_b": 102.63,
+      "sociale_werkbonus_totaal": 227.67,
+      "rsz_werknemer_netto": 99.08,
+      "belastbaar_loon_maand": 2400.92,
+      "bedrijfsvoorheffing_voor_verminderingen": 316.12,
+      "bv_vermindering_kinderen": 0.0,
+      "fiscale_werkbonus": 95.36,
+      "bedrijfsvoorheffing_netto": 220.76,
+      "bbsz": 13.74,
+      "netto_maand": 2166.42,
+      "netto_check_jaar": 25997.04,
+      "notities": []
+    },
+    "werkgeverskost": {
+      "bruto_maand": 2500.0,
+      "rsz_werkgever": 625.0,
+      "sociaal_fonds_200": 5.75,
+      "arbeidsongevallen_verzekering": 7.5,
+      "provisie_eindejaarspremie": 208.25,
+      "provisie_dubbel_vakantiegeld": 166.75,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 3513.25,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-004",
+    "profiel": "Bediende €2.800, alleenstaand — werkbonus A volledig, B nul",
+    "test_focus": [
+      "werkbonus B = 0",
+      "A nog volledig"
+    ],
+    "input": {
+      "bruto_maand": 2800.0
+    },
+    "berekend": {
+      "bruto_maand": 2800.0,
+      "rsz_werknemer_basis": 365.96,
+      "sociale_werkbonus_luik_a": 125.04,
+      "sociale_werkbonus_luik_b": 21.66,
+      "sociale_werkbonus_totaal": 146.7,
+      "rsz_werknemer_netto": 219.26,
+      "belastbaar_loon_maand": 2580.74,
+      "bedrijfsvoorheffing_voor_verminderingen": 388.05,
+      "bv_vermindering_kinderen": 0.0,
+      "fiscale_werkbonus": 52.82,
+      "bedrijfsvoorheffing_netto": 335.23,
+      "bbsz": 17.04,
+      "netto_maand": 2228.47,
+      "netto_check_jaar": 26741.64,
+      "notities": []
+    },
+    "werkgeverskost": {
+      "bruto_maand": 2800.0,
+      "rsz_werkgever": 700.0,
+      "sociaal_fonds_200": 6.44,
+      "arbeidsongevallen_verzekering": 8.4,
+      "provisie_eindejaarspremie": 233.24,
+      "provisie_dubbel_vakantiegeld": 186.76,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 3934.84,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-005",
+    "profiel": "Bediende €3.000, alleenstaand — werkbonus A in afbouw, B nul",
+    "test_focus": [
+      "werkbonus A afbouwzone"
+    ],
+    "input": {
+      "bruto_maand": 3000.0
+    },
+    "berekend": {
+      "bruto_maand": 3000.0,
+      "rsz_werknemer_basis": 392.1,
+      "sociale_werkbonus_luik_a": 92.27,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 92.27,
+      "rsz_werknemer_netto": 299.83,
+      "belastbaar_loon_maand": 2700.17,
+      "bedrijfsvoorheffing_voor_verminderingen": 435.82,
+      "bv_vermindering_kinderen": 0.0,
+      "fiscale_werkbonus": 30.58,
+      "bedrijfsvoorheffing_netto": 405.24,
+      "bbsz": 19.24,
+      "netto_maand": 2275.69,
+      "netto_check_jaar": 27308.28,
+      "notities": []
+    },
+    "werkgeverskost": {
+      "bruto_maand": 3000.0,
+      "rsz_werkgever": 750.0,
+      "sociaal_fonds_200": 6.9,
+      "arbeidsongevallen_verzekering": 9.0,
+      "provisie_eindejaarspremie": 249.9,
+      "provisie_dubbel_vakantiegeld": 200.1,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 4215.9,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-006",
+    "profiel": "Bediende €3.336,98 (cutoff luik A), werkbonus net 0",
+    "test_focus": [
+      "randwaarde werkbonus cutoff"
+    ],
+    "input": {
+      "bruto_maand": 3336.98
+    },
+    "berekend": {
+      "bruto_maand": 3336.98,
+      "rsz_werknemer_basis": 436.14,
+      "sociale_werkbonus_luik_a": 0.01,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 0.01,
+      "rsz_werknemer_netto": 436.13,
+      "belastbaar_loon_maand": 2900.85,
+      "bedrijfsvoorheffing_voor_verminderingen": 516.09,
+      "bv_vermindering_kinderen": 0.0,
+      "fiscale_werkbonus": 0.0,
+      "bedrijfsvoorheffing_netto": 516.09,
+      "bbsz": 22.94,
+      "netto_maand": 2361.82,
+      "netto_check_jaar": 28341.84,
+      "notities": []
+    },
+    "werkgeverskost": {
+      "bruto_maand": 3336.98,
+      "rsz_werkgever": 834.25,
+      "sociaal_fonds_200": 7.68,
+      "arbeidsongevallen_verzekering": 10.01,
+      "provisie_eindejaarspremie": 277.97,
+      "provisie_dubbel_vakantiegeld": 222.58,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 4689.47,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-007",
+    "profiel": "Modale bediende €3.500, alleenstaand, 0 kinderen",
+    "test_focus": [
+      "werkbonus = 0",
+      "BBSZ-band 2"
+    ],
+    "input": {
+      "bruto_maand": 3500.0
+    },
+    "berekend": {
+      "bruto_maand": 3500.0,
+      "rsz_werknemer_basis": 457.45,
+      "sociale_werkbonus_luik_a": 0.0,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 0.0,
+      "rsz_werknemer_netto": 457.45,
+      "belastbaar_loon_maand": 3042.55,
+      "bedrijfsvoorheffing_voor_verminderingen": 576.65,
+      "bv_vermindering_kinderen": 0.0,
+      "fiscale_werkbonus": 0.0,
+      "bedrijfsvoorheffing_netto": 576.65,
+      "bbsz": 24.74,
+      "netto_maand": 2441.16,
+      "netto_check_jaar": 29293.92,
+      "notities": []
+    },
+    "werkgeverskost": {
+      "bruto_maand": 3500.0,
+      "rsz_werkgever": 875.0,
+      "sociaal_fonds_200": 8.05,
+      "arbeidsongevallen_verzekering": 10.5,
+      "provisie_eindejaarspremie": 291.55,
+      "provisie_dubbel_vakantiegeld": 233.45,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 4918.55,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-008",
+    "profiel": "Bediende €4.000, alleenstaand",
+    "test_focus": [
+      "BBSZ-band 3 (3,38%-helling)"
+    ],
+    "input": {
+      "bruto_maand": 4000.0
+    },
+    "berekend": {
+      "bruto_maand": 4000.0,
+      "rsz_werknemer_basis": 522.8,
+      "sociale_werkbonus_luik_a": 0.0,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 0.0,
+      "rsz_werknemer_netto": 522.8,
+      "belastbaar_loon_maand": 3477.2,
+      "bedrijfsvoorheffing_voor_verminderingen": 772.24,
+      "bv_vermindering_kinderen": 0.0,
+      "fiscale_werkbonus": 0.0,
+      "bedrijfsvoorheffing_netto": 772.24,
+      "bbsz": 36.24,
+      "netto_maand": 2668.72,
+      "netto_check_jaar": 32024.64,
+      "notities": []
+    },
+    "werkgeverskost": {
+      "bruto_maand": 4000.0,
+      "rsz_werkgever": 1000.0,
+      "sociaal_fonds_200": 9.2,
+      "arbeidsongevallen_verzekering": 12.0,
+      "provisie_eindejaarspremie": 333.2,
+      "provisie_dubbel_vakantiegeld": 266.8,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 5621.2,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-009",
+    "profiel": "Bediende €4.500, alleenstaand",
+    "test_focus": [
+      "BBSZ-band 4"
+    ],
+    "input": {
+      "bruto_maand": 4500.0
+    },
+    "berekend": {
+      "bruto_maand": 4500.0,
+      "rsz_werknemer_basis": 588.15,
+      "sociale_werkbonus_luik_a": 0.0,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 0.0,
+      "rsz_werknemer_netto": 588.15,
+      "belastbaar_loon_maand": 3911.85,
+      "bedrijfsvoorheffing_voor_verminderingen": 967.83,
+      "bv_vermindering_kinderen": 0.0,
+      "fiscale_werkbonus": 0.0,
+      "bedrijfsvoorheffing_netto": 967.83,
+      "bbsz": 44.01,
+      "netto_maand": 2900.01,
+      "netto_check_jaar": 34800.12,
+      "notities": []
+    },
+    "werkgeverskost": {
+      "bruto_maand": 4500.0,
+      "rsz_werkgever": 1125.0,
+      "sociaal_fonds_200": 10.35,
+      "arbeidsongevallen_verzekering": 13.5,
+      "provisie_eindejaarspremie": 374.85,
+      "provisie_dubbel_vakantiegeld": 300.15,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 6323.85,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-010",
+    "profiel": "Bediende €5.000, alleenstaand",
+    "test_focus": [
+      "belastbaar in 45%-schijf"
+    ],
+    "input": {
+      "bruto_maand": 5000.0
+    },
+    "berekend": {
+      "bruto_maand": 5000.0,
+      "rsz_werknemer_basis": 653.5,
+      "sociale_werkbonus_luik_a": 0.0,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 0.0,
+      "rsz_werknemer_netto": 653.5,
+      "belastbaar_loon_maand": 4346.5,
+      "bedrijfsvoorheffing_voor_verminderingen": 1163.42,
+      "bv_vermindering_kinderen": 0.0,
+      "fiscale_werkbonus": 0.0,
+      "bedrijfsvoorheffing_netto": 1163.42,
+      "bbsz": 49.51,
+      "netto_maand": 3133.57,
+      "netto_check_jaar": 37602.84,
+      "notities": []
+    },
+    "werkgeverskost": {
+      "bruto_maand": 5000.0,
+      "rsz_werkgever": 1250.0,
+      "sociaal_fonds_200": 11.5,
+      "arbeidsongevallen_verzekering": 15.0,
+      "provisie_eindejaarspremie": 416.5,
+      "provisie_dubbel_vakantiegeld": 333.5,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 7026.5,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-011",
+    "profiel": "Bediende €5.500, alleenstaand",
+    "test_focus": [
+      "volledig in 45%-schijf"
+    ],
+    "input": {
+      "bruto_maand": 5500.0
+    },
+    "berekend": {
+      "bruto_maand": 5500.0,
+      "rsz_werknemer_basis": 718.85,
+      "sociale_werkbonus_luik_a": 0.0,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 0.0,
+      "rsz_werknemer_netto": 718.85,
+      "belastbaar_loon_maand": 4781.15,
+      "bedrijfsvoorheffing_voor_verminderingen": 1359.99,
+      "bv_vermindering_kinderen": 0.0,
+      "fiscale_werkbonus": 0.0,
+      "bedrijfsvoorheffing_netto": 1359.99,
+      "bbsz": 55.01,
+      "netto_maand": 3366.15,
+      "netto_check_jaar": 40393.8,
+      "notities": []
+    },
+    "werkgeverskost": {
+      "bruto_maand": 5500.0,
+      "rsz_werkgever": 1375.0,
+      "sociaal_fonds_200": 12.65,
+      "arbeidsongevallen_verzekering": 16.5,
+      "provisie_eindejaarspremie": 458.15,
+      "provisie_dubbel_vakantiegeld": 366.85,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 7729.15,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-012",
+    "profiel": "Bediende €2.500, gehuwd, 1 kind ten laste",
+    "test_focus": [
+      "BV-vermindering 1 kind",
+      "toeslag belastingvrije som"
+    ],
+    "input": {
+      "bruto_maand": 2500.0,
+      "burgerlijke_staat": "gehuwd_dubbel",
+      "kinderen_ten_laste": 1
+    },
+    "berekend": {
+      "bruto_maand": 2500.0,
+      "rsz_werknemer_basis": 326.75,
+      "sociale_werkbonus_luik_a": 125.04,
+      "sociale_werkbonus_luik_b": 102.63,
+      "sociale_werkbonus_totaal": 227.67,
+      "rsz_werknemer_netto": 99.08,
+      "belastbaar_loon_maand": 2400.92,
+      "bedrijfsvoorheffing_voor_verminderingen": 267.74,
+      "bv_vermindering_kinderen": 56.0,
+      "fiscale_werkbonus": 95.36,
+      "bedrijfsvoorheffing_netto": 116.38,
+      "bbsz": 13.74,
+      "netto_maand": 2270.8,
+      "netto_check_jaar": 27249.6,
+      "notities": [
+        "BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027."
+      ]
+    },
+    "werkgeverskost": {
+      "bruto_maand": 2500.0,
+      "rsz_werkgever": 625.0,
+      "sociaal_fonds_200": 5.75,
+      "arbeidsongevallen_verzekering": 7.5,
+      "provisie_eindejaarspremie": 208.25,
+      "provisie_dubbel_vakantiegeld": 166.75,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 3513.25,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-013",
+    "profiel": "Bediende €3.000, gehuwd, 2 kinderen",
+    "test_focus": [
+      "BV-vermindering 2 kinderen €154/m"
+    ],
+    "input": {
+      "bruto_maand": 3000.0,
+      "burgerlijke_staat": "gehuwd_dubbel",
+      "kinderen_ten_laste": 2
+    },
+    "berekend": {
+      "bruto_maand": 3000.0,
+      "rsz_werknemer_basis": 392.1,
+      "sociale_werkbonus_luik_a": 92.27,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 92.27,
+      "rsz_werknemer_netto": 299.83,
+      "belastbaar_loon_maand": 2700.17,
+      "bedrijfsvoorheffing_voor_verminderingen": 307.44,
+      "bv_vermindering_kinderen": 154.0,
+      "fiscale_werkbonus": 30.58,
+      "bedrijfsvoorheffing_netto": 122.86,
+      "bbsz": 19.24,
+      "netto_maand": 2558.07,
+      "netto_check_jaar": 30696.84,
+      "notities": [
+        "BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027."
+      ]
+    },
+    "werkgeverskost": {
+      "bruto_maand": 3000.0,
+      "rsz_werkgever": 750.0,
+      "sociaal_fonds_200": 6.9,
+      "arbeidsongevallen_verzekering": 9.0,
+      "provisie_eindejaarspremie": 249.9,
+      "provisie_dubbel_vakantiegeld": 200.1,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 4215.9,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-014",
+    "profiel": "Bediende €3.500, gehuwd, 2 kinderen waarvan 1 jonger dan 3",
+    "test_focus": [
+      "extra €760 voor kind <3 jaar"
+    ],
+    "input": {
+      "bruto_maand": 3500.0,
+      "burgerlijke_staat": "gehuwd_dubbel",
+      "kinderen_ten_laste": 2,
+      "kinderen_jonger_dan_3": 1
+    },
+    "berekend": {
+      "bruto_maand": 3500.0,
+      "rsz_werknemer_basis": 457.45,
+      "sociale_werkbonus_luik_a": 0.0,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 0.0,
+      "rsz_werknemer_netto": 457.45,
+      "belastbaar_loon_maand": 3042.55,
+      "bedrijfsvoorheffing_voor_verminderingen": 425.52,
+      "bv_vermindering_kinderen": 154.0,
+      "fiscale_werkbonus": 0.0,
+      "bedrijfsvoorheffing_netto": 271.52,
+      "bbsz": 24.74,
+      "netto_maand": 2746.29,
+      "netto_check_jaar": 32955.48,
+      "notities": [
+        "BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027."
+      ]
+    },
+    "werkgeverskost": {
+      "bruto_maand": 3500.0,
+      "rsz_werkgever": 875.0,
+      "sociaal_fonds_200": 8.05,
+      "arbeidsongevallen_verzekering": 10.5,
+      "provisie_eindejaarspremie": 291.55,
+      "provisie_dubbel_vakantiegeld": 233.45,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 4918.55,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-015",
+    "profiel": "Bediende €4.000, gehuwd, 3 kinderen",
+    "test_focus": [
+      "belastingvrije som €11.720 toeslag",
+      "BV-vermindering €414/m"
+    ],
+    "input": {
+      "bruto_maand": 4000.0,
+      "burgerlijke_staat": "gehuwd_dubbel",
+      "kinderen_ten_laste": 3
+    },
+    "berekend": {
+      "bruto_maand": 4000.0,
+      "rsz_werknemer_basis": 522.8,
+      "sociale_werkbonus_luik_a": 0.0,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 0.0,
+      "rsz_werknemer_netto": 522.8,
+      "belastbaar_loon_maand": 3477.2,
+      "bedrijfsvoorheffing_voor_verminderingen": 430.11,
+      "bv_vermindering_kinderen": 414.0,
+      "fiscale_werkbonus": 0.0,
+      "bedrijfsvoorheffing_netto": 16.11,
+      "bbsz": 36.24,
+      "netto_maand": 3424.85,
+      "netto_check_jaar": 41098.2,
+      "notities": [
+        "BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027."
+      ]
+    },
+    "werkgeverskost": {
+      "bruto_maand": 4000.0,
+      "rsz_werkgever": 1000.0,
+      "sociaal_fonds_200": 9.2,
+      "arbeidsongevallen_verzekering": 12.0,
+      "provisie_eindejaarspremie": 333.2,
+      "provisie_dubbel_vakantiegeld": 266.8,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 5621.2,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-016",
+    "profiel": "Bediende €4.500, gehuwd, 4 kinderen",
+    "test_focus": [
+      "toeslag €18.970",
+      "BV-vermindering €715/m"
+    ],
+    "input": {
+      "bruto_maand": 4500.0,
+      "burgerlijke_staat": "gehuwd_dubbel",
+      "kinderen_ten_laste": 4
+    },
+    "berekend": {
+      "bruto_maand": 4500.0,
+      "rsz_werknemer_basis": 588.15,
+      "sociale_werkbonus_luik_a": 0.0,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 0.0,
+      "rsz_werknemer_netto": 588.15,
+      "belastbaar_loon_maand": 3911.85,
+      "bedrijfsvoorheffing_voor_verminderingen": 374.5,
+      "bv_vermindering_kinderen": 715.0,
+      "fiscale_werkbonus": 0.0,
+      "bedrijfsvoorheffing_netto": 0,
+      "bbsz": 44.01,
+      "netto_maand": 3867.84,
+      "netto_check_jaar": 46414.08,
+      "notities": [
+        "BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027."
+      ]
+    },
+    "werkgeverskost": {
+      "bruto_maand": 4500.0,
+      "rsz_werkgever": 1125.0,
+      "sociaal_fonds_200": 10.35,
+      "arbeidsongevallen_verzekering": 13.5,
+      "provisie_eindejaarspremie": 374.85,
+      "provisie_dubbel_vakantiegeld": 300.15,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 6323.85,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-017",
+    "profiel": "Bediende €3.500, alleenstaande ouder met 2 kinderen",
+    "test_focus": [
+      "extra basisbedrag alleenstaande ouder"
+    ],
+    "input": {
+      "bruto_maand": 3500.0,
+      "kinderen_ten_laste": 2,
+      "alleenstaand_met_kinderen": true
+    },
+    "berekend": {
+      "bruto_maand": 3500.0,
+      "rsz_werknemer_basis": 457.45,
+      "sociale_werkbonus_luik_a": 0.0,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 0.0,
+      "rsz_werknemer_netto": 457.45,
+      "belastbaar_loon_maand": 3042.55,
+      "bedrijfsvoorheffing_voor_verminderingen": 383.19,
+      "bv_vermindering_kinderen": 154.0,
+      "fiscale_werkbonus": 0.0,
+      "bedrijfsvoorheffing_netto": 229.19,
+      "bbsz": 24.74,
+      "netto_maand": 2788.62,
+      "netto_check_jaar": 33463.44,
+      "notities": []
+    },
+    "werkgeverskost": {
+      "bruto_maand": 3500.0,
+      "rsz_werkgever": 875.0,
+      "sociaal_fonds_200": 8.05,
+      "arbeidsongevallen_verzekering": 10.5,
+      "provisie_eindejaarspremie": 291.55,
+      "provisie_dubbel_vakantiegeld": 233.45,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 4918.55,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-018",
+    "profiel": "Senior bediende €6.000, alleenstaand",
+    "test_focus": [
+      "BBSZ-band 4",
+      "raakt 50%-schijf op jaarbasis"
+    ],
+    "input": {
+      "bruto_maand": 6000.0
+    },
+    "berekend": {
+      "bruto_maand": 6000.0,
+      "rsz_werknemer_basis": 784.2,
+      "sociale_werkbonus_luik_a": 0.0,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 0.0,
+      "rsz_werknemer_netto": 784.2,
+      "belastbaar_loon_maand": 5215.8,
+      "bedrijfsvoorheffing_voor_verminderingen": 1577.32,
+      "bv_vermindering_kinderen": 0.0,
+      "fiscale_werkbonus": 0.0,
+      "bedrijfsvoorheffing_netto": 1577.32,
+      "bbsz": 60.51,
+      "netto_maand": 3577.97,
+      "netto_check_jaar": 42935.64,
+      "notities": []
+    },
+    "werkgeverskost": {
+      "bruto_maand": 6000.0,
+      "rsz_werkgever": 1500.0,
+      "sociaal_fonds_200": 13.8,
+      "arbeidsongevallen_verzekering": 18.0,
+      "provisie_eindejaarspremie": 499.8,
+      "provisie_dubbel_vakantiegeld": 400.2,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 8431.8,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-019",
+    "profiel": "Senior bediende €6.500, gehuwd",
+    "test_focus": [
+      "50%-schijf actief"
+    ],
+    "input": {
+      "bruto_maand": 6500.0,
+      "burgerlijke_staat": "gehuwd_dubbel"
+    },
+    "berekend": {
+      "bruto_maand": 6500.0,
+      "rsz_werknemer_basis": 849.55,
+      "sociale_werkbonus_luik_a": 0.0,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 0.0,
+      "rsz_werknemer_netto": 849.55,
+      "belastbaar_loon_maand": 5650.45,
+      "bedrijfsvoorheffing_voor_verminderingen": 1794.64,
+      "bv_vermindering_kinderen": 0.0,
+      "fiscale_werkbonus": 0.0,
+      "bedrijfsvoorheffing_netto": 1794.64,
+      "bbsz": 60.94,
+      "netto_maand": 3794.87,
+      "netto_check_jaar": 45538.44,
+      "notities": [
+        "BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027."
+      ]
+    },
+    "werkgeverskost": {
+      "bruto_maand": 6500.0,
+      "rsz_werkgever": 1625.0,
+      "sociaal_fonds_200": 14.95,
+      "arbeidsongevallen_verzekering": 19.5,
+      "provisie_eindejaarspremie": 541.45,
+      "provisie_dubbel_vakantiegeld": 433.55,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 9134.45,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-020",
+    "profiel": "Kaderlid €7.000, alleenstaand",
+    "test_focus": [
+      "BBSZ cap-zone naderend"
+    ],
+    "input": {
+      "bruto_maand": 7000.0
+    },
+    "berekend": {
+      "bruto_maand": 7000.0,
+      "rsz_werknemer_basis": 914.9,
+      "sociale_werkbonus_luik_a": 0.0,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 0.0,
+      "rsz_werknemer_netto": 914.9,
+      "belastbaar_loon_maand": 6085.1,
+      "bedrijfsvoorheffing_voor_verminderingen": 2011.97,
+      "bv_vermindering_kinderen": 0.0,
+      "fiscale_werkbonus": 0.0,
+      "bedrijfsvoorheffing_netto": 2011.97,
+      "bbsz": 60.94,
+      "netto_maand": 4012.19,
+      "netto_check_jaar": 48146.28,
+      "notities": []
+    },
+    "werkgeverskost": {
+      "bruto_maand": 7000.0,
+      "rsz_werkgever": 1750.0,
+      "sociaal_fonds_200": 16.1,
+      "arbeidsongevallen_verzekering": 21.0,
+      "provisie_eindejaarspremie": 583.1,
+      "provisie_dubbel_vakantiegeld": 466.9,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 9837.1,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-021",
+    "profiel": "Kaderlid €7.500, alleenstaand, 0 kinderen",
+    "test_focus": [
+      "50%-schijf grootste deel marginaal",
+      "kostenforfait gecapt"
+    ],
+    "input": {
+      "bruto_maand": 7500.0
+    },
+    "berekend": {
+      "bruto_maand": 7500.0,
+      "rsz_werknemer_basis": 980.25,
+      "sociale_werkbonus_luik_a": 0.0,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 0.0,
+      "rsz_werknemer_netto": 980.25,
+      "belastbaar_loon_maand": 6519.75,
+      "bedrijfsvoorheffing_voor_verminderingen": 2229.29,
+      "bv_vermindering_kinderen": 0.0,
+      "fiscale_werkbonus": 0.0,
+      "bedrijfsvoorheffing_netto": 2229.29,
+      "bbsz": 60.94,
+      "netto_maand": 4229.52,
+      "netto_check_jaar": 50754.24,
+      "notities": []
+    },
+    "werkgeverskost": {
+      "bruto_maand": 7500.0,
+      "rsz_werkgever": 1875.0,
+      "sociaal_fonds_200": 17.25,
+      "arbeidsongevallen_verzekering": 22.5,
+      "provisie_eindejaarspremie": 624.75,
+      "provisie_dubbel_vakantiegeld": 500.25,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 10539.75,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-022",
+    "profiel": "Kaderlid €8.500, gehuwd, 2 kinderen",
+    "test_focus": [
+      "BBSZ cap €60,94",
+      "kostenforfait max €6.070"
+    ],
+    "input": {
+      "bruto_maand": 8500.0,
+      "burgerlijke_staat": "gehuwd_dubbel",
+      "kinderen_ten_laste": 2
+    },
+    "berekend": {
+      "bruto_maand": 8500.0,
+      "rsz_werknemer_basis": 1110.95,
+      "sociale_werkbonus_luik_a": 0.0,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 0.0,
+      "rsz_werknemer_netto": 1110.95,
+      "belastbaar_loon_maand": 7389.05,
+      "bedrijfsvoorheffing_voor_verminderingen": 2535.57,
+      "bv_vermindering_kinderen": 154.0,
+      "fiscale_werkbonus": 0.0,
+      "bedrijfsvoorheffing_netto": 2381.57,
+      "bbsz": 60.94,
+      "netto_maand": 4946.54,
+      "netto_check_jaar": 59358.48,
+      "notities": [
+        "BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027."
+      ]
+    },
+    "werkgeverskost": {
+      "bruto_maand": 8500.0,
+      "rsz_werkgever": 2125.0,
+      "sociaal_fonds_200": 19.55,
+      "arbeidsongevallen_verzekering": 25.5,
+      "provisie_eindejaarspremie": 708.05,
+      "provisie_dubbel_vakantiegeld": 566.95,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 11945.05,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-023",
+    "profiel": "Bediende €4.000 + bedrijfswagen VAA €180/m, alleenstaand",
+    "test_focus": [
+      "VAA in belastbaar maar niet in cash"
+    ],
+    "input": {
+      "bruto_maand": 4000.0,
+      "vaa_bedrijfswagen": 180.0
+    },
+    "berekend": {
+      "bruto_maand": 4000.0,
+      "rsz_werknemer_basis": 522.8,
+      "sociale_werkbonus_luik_a": 0.0,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 0.0,
+      "rsz_werknemer_netto": 522.8,
+      "belastbaar_loon_maand": 3657.2,
+      "bedrijfsvoorheffing_voor_verminderingen": 853.24,
+      "bv_vermindering_kinderen": 0.0,
+      "fiscale_werkbonus": 0.0,
+      "bedrijfsvoorheffing_netto": 853.24,
+      "bbsz": 36.24,
+      "netto_maand": 2587.72,
+      "netto_check_jaar": 31052.64,
+      "notities": []
+    },
+    "werkgeverskost": {
+      "bruto_maand": 4000.0,
+      "rsz_werkgever": 1000.0,
+      "sociaal_fonds_200": 9.2,
+      "arbeidsongevallen_verzekering": 12.0,
+      "provisie_eindejaarspremie": 333.2,
+      "provisie_dubbel_vakantiegeld": 266.8,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 5621.2,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-024",
+    "profiel": "Bediende €5.000 + minimum-VAA bedrijfswagen €1.690/12 = €140,83/m, gehuwd, 1 kind",
+    "test_focus": [
+      "minimum-VAA AJ 2027 €1.690"
+    ],
+    "input": {
+      "bruto_maand": 5000.0,
+      "burgerlijke_staat": "gehuwd_dubbel",
+      "kinderen_ten_laste": 1,
+      "vaa_bedrijfswagen": 140.83
+    },
+    "berekend": {
+      "bruto_maand": 5000.0,
+      "rsz_werknemer_basis": 653.5,
+      "sociale_werkbonus_luik_a": 0.0,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 0.0,
+      "rsz_werknemer_netto": 653.5,
+      "belastbaar_loon_maand": 4487.33,
+      "bedrijfsvoorheffing_voor_verminderingen": 1178.42,
+      "bv_vermindering_kinderen": 56.0,
+      "fiscale_werkbonus": 0.0,
+      "bedrijfsvoorheffing_netto": 1122.42,
+      "bbsz": 49.51,
+      "netto_maand": 3174.57,
+      "netto_check_jaar": 38094.84,
+      "notities": [
+        "BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027."
+      ]
+    },
+    "werkgeverskost": {
+      "bruto_maand": 5000.0,
+      "rsz_werkgever": 1250.0,
+      "sociaal_fonds_200": 11.5,
+      "arbeidsongevallen_verzekering": 15.0,
+      "provisie_eindejaarspremie": 416.5,
+      "provisie_dubbel_vakantiegeld": 333.5,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 7026.5,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-025",
+    "profiel": "Kaderlid €7.000 + bedrijfswagen VAA €350/m + andere VAA €50/m",
+    "test_focus": [
+      "meervoudige VAA-optelling"
+    ],
+    "input": {
+      "bruto_maand": 7000.0,
+      "vaa_bedrijfswagen": 350.0,
+      "vaa_andere": 50.0
+    },
+    "berekend": {
+      "bruto_maand": 7000.0,
+      "rsz_werknemer_basis": 914.9,
+      "sociale_werkbonus_luik_a": 0.0,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 0.0,
+      "rsz_werknemer_netto": 914.9,
+      "belastbaar_loon_maand": 6485.1,
+      "bedrijfsvoorheffing_voor_verminderingen": 2211.97,
+      "bv_vermindering_kinderen": 0.0,
+      "fiscale_werkbonus": 0.0,
+      "bedrijfsvoorheffing_netto": 2211.97,
+      "bbsz": 60.94,
+      "netto_maand": 3812.19,
+      "netto_check_jaar": 45746.28,
+      "notities": []
+    },
+    "werkgeverskost": {
+      "bruto_maand": 7000.0,
+      "rsz_werkgever": 1750.0,
+      "sociaal_fonds_200": 16.1,
+      "arbeidsongevallen_verzekering": 21.0,
+      "provisie_eindejaarspremie": 583.1,
+      "provisie_dubbel_vakantiegeld": 466.9,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 9837.1,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-026",
+    "profiel": "Bediende €3.500 + groepsverzekering werknemersbijdrage €40/m (extra belastbaar)",
+    "test_focus": [
+      "extra belastbaar veld"
+    ],
+    "input": {
+      "bruto_maand": 3500.0,
+      "extra_belastbare_componenten": 40.0
+    },
+    "berekend": {
+      "bruto_maand": 3500.0,
+      "rsz_werknemer_basis": 457.45,
+      "sociale_werkbonus_luik_a": 0.0,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 0.0,
+      "rsz_werknemer_netto": 457.45,
+      "belastbaar_loon_maand": 3082.55,
+      "bedrijfsvoorheffing_voor_verminderingen": 594.65,
+      "bv_vermindering_kinderen": 0.0,
+      "fiscale_werkbonus": 0.0,
+      "bedrijfsvoorheffing_netto": 594.65,
+      "bbsz": 24.74,
+      "netto_maand": 2423.16,
+      "netto_check_jaar": 29077.92,
+      "notities": []
+    },
+    "werkgeverskost": {
+      "bruto_maand": 3500.0,
+      "rsz_werkgever": 875.0,
+      "sociaal_fonds_200": 8.05,
+      "arbeidsongevallen_verzekering": 10.5,
+      "provisie_eindejaarspremie": 291.55,
+      "provisie_dubbel_vakantiegeld": 233.45,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 4918.55,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-027",
+    "profiel": "Bediende €10.000, alleenstaand — top-tarief",
+    "test_focus": [
+      "50%-schijf overheersend",
+      "BBSZ cap"
+    ],
+    "input": {
+      "bruto_maand": 10000.0
+    },
+    "berekend": {
+      "bruto_maand": 10000.0,
+      "rsz_werknemer_basis": 1307.0,
+      "sociale_werkbonus_luik_a": 0.0,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 0.0,
+      "rsz_werknemer_netto": 1307.0,
+      "belastbaar_loon_maand": 8693.0,
+      "bedrijfsvoorheffing_voor_verminderingen": 3315.92,
+      "bv_vermindering_kinderen": 0.0,
+      "fiscale_werkbonus": 0.0,
+      "bedrijfsvoorheffing_netto": 3315.92,
+      "bbsz": 60.94,
+      "netto_maand": 5316.14,
+      "netto_check_jaar": 63793.68,
+      "notities": []
+    },
+    "werkgeverskost": {
+      "bruto_maand": 10000.0,
+      "rsz_werkgever": 2500.0,
+      "sociaal_fonds_200": 23.0,
+      "arbeidsongevallen_verzekering": 30.0,
+      "provisie_eindejaarspremie": 833.0,
+      "provisie_dubbel_vakantiegeld": 667.0,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 14053.0,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-028",
+    "profiel": "Bediende €15.000, alleenstaand — extreem hoog (sanity check)",
+    "test_focus": [
+      "volledig 50%-schijf",
+      "kostenforfait gecapt"
+    ],
+    "input": {
+      "bruto_maand": 15000.0
+    },
+    "berekend": {
+      "bruto_maand": 15000.0,
+      "rsz_werknemer_basis": 1960.5,
+      "sociale_werkbonus_luik_a": 0.0,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 0.0,
+      "rsz_werknemer_netto": 1960.5,
+      "belastbaar_loon_maand": 13039.5,
+      "bedrijfsvoorheffing_voor_verminderingen": 5489.17,
+      "bv_vermindering_kinderen": 0.0,
+      "fiscale_werkbonus": 0.0,
+      "bedrijfsvoorheffing_netto": 5489.17,
+      "bbsz": 60.94,
+      "netto_maand": 7489.39,
+      "netto_check_jaar": 89872.68,
+      "notities": []
+    },
+    "werkgeverskost": {
+      "bruto_maand": 15000.0,
+      "rsz_werkgever": 3750.0,
+      "sociaal_fonds_200": 34.5,
+      "arbeidsongevallen_verzekering": 45.0,
+      "provisie_eindejaarspremie": 1249.5,
+      "provisie_dubbel_vakantiegeld": 1000.5,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 21079.5,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-029",
+    "profiel": "Bediende €2.189,81 (GGMMI), alleenstaande ouder met 1 kind <3",
+    "test_focus": [
+      "combinatie GGMMI + kind <3 + alleenstaande ouder"
+    ],
+    "input": {
+      "bruto_maand": 2189.81,
+      "kinderen_ten_laste": 1,
+      "kinderen_jonger_dan_3": 1,
+      "alleenstaand_met_kinderen": true
+    },
+    "berekend": {
+      "bruto_maand": 2189.81,
+      "rsz_werknemer_basis": 286.21,
+      "sociale_werkbonus_luik_a": 125.04,
+      "sociale_werkbonus_luik_b": 168.62,
+      "sociale_werkbonus_totaal": 293.66,
+      "rsz_werknemer_netto": 0.0,
+      "belastbaar_loon_maand": 2189.81,
+      "bedrijfsvoorheffing_voor_verminderingen": 113.55,
+      "bv_vermindering_kinderen": 56.0,
+      "fiscale_werkbonus": 130.03,
+      "bedrijfsvoorheffing_netto": 0,
+      "bbsz": 10.31,
+      "netto_maand": 2179.5,
+      "netto_check_jaar": 26154.0,
+      "notities": [
+        "RSZ-vermindering geplafonneerd op 0"
+      ]
+    },
+    "werkgeverskost": {
+      "bruto_maand": 2189.81,
+      "rsz_werkgever": 547.45,
+      "sociaal_fonds_200": 5.04,
+      "arbeidsongevallen_verzekering": 6.57,
+      "provisie_eindejaarspremie": 182.41,
+      "provisie_dubbel_vakantiegeld": 146.06,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 3077.34,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  },
+  {
+    "id": "TC-030",
+    "profiel": "Bediende €4.500, gehuwd, 5 kinderen waarvan 1 <3",
+    "test_focus": [
+      "> 4 kinderen extra-toeslag formule"
+    ],
+    "input": {
+      "bruto_maand": 4500.0,
+      "burgerlijke_staat": "gehuwd_dubbel",
+      "kinderen_ten_laste": 5,
+      "kinderen_jonger_dan_3": 1
+    },
+    "berekend": {
+      "bruto_maand": 4500.0,
+      "rsz_werknemer_basis": 588.15,
+      "sociale_werkbonus_luik_a": 0.0,
+      "sociale_werkbonus_luik_b": 0.0,
+      "sociale_werkbonus_totaal": 0.0,
+      "rsz_werknemer_netto": 588.15,
+      "belastbaar_loon_maand": 3911.85,
+      "bedrijfsvoorheffing_voor_verminderingen": 74.5,
+      "bv_vermindering_kinderen": 1019.0,
+      "fiscale_werkbonus": 0.0,
+      "bedrijfsvoorheffing_netto": 0,
+      "bbsz": 44.01,
+      "netto_maand": 3867.84,
+      "netto_check_jaar": 46414.08,
+      "notities": [
+        "BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027."
+      ]
+    },
+    "werkgeverskost": {
+      "bruto_maand": 4500.0,
+      "rsz_werkgever": 1125.0,
+      "sociaal_fonds_200": 10.35,
+      "arbeidsongevallen_verzekering": 13.5,
+      "provisie_eindejaarspremie": 374.85,
+      "provisie_dubbel_vakantiegeld": 300.15,
+      "extra_voordelen": 0.0,
+      "structurele_vermindering": 0.0,
+      "totale_loonkost_maand": 6323.85,
+      "loonwig_pct": 28.8
+    },
+    "status_validatie": "pending",
+    "tolerantie_marge_eur": 5.0,
+    "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+    "taxcalc_netto_maand": null,
+    "verschil_eur": null,
+    "root_cause": "pending_taxcalc"
+  }
+]

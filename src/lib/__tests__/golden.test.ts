@@ -6,6 +6,10 @@ import { describe, it, expect } from "bun:test";
 
 import { lookupBarema, lookupStudentenbarema, brutolocheck } from "@/lib/baremas";
 import { rszBijdragen } from "@/lib/rsz";
+import { werkbonus } from "@/lib/werkbonus";
+import { bbsz } from "@/lib/bbsz";
+import { berekenBV } from "@/lib/bv";
+import { berekenNetto } from "@/lib/netto";
 import { eindejaarspremie } from "@/lib/eindejaarspremie";
 import { ecocheques } from "@/lib/ecocheques";
 import { fietsvergoeding } from "@/lib/fietsvergoeding";
@@ -14,6 +18,7 @@ import { woonwerkTrein } from "@/lib/woonwerkTrein";
 import { jaarlijksePremie2026 } from "@/lib/jaarpremie";
 import { getDatapunt } from "@/lib/dataset";
 import { safeGetValue } from "@/lib/periode";
+import { werkgeverskost } from "@/lib/werkgeverskost";
 import {
   BaremaBuitenSchaalError,
   DatapuntNietBruikbaar,
@@ -285,5 +290,343 @@ describe("TC-20 — Audit trail (acceptatietest)", () => {
       expect(b.datapunt.bron_organisatie).toBeTruthy();
       expect(b.datapunt.bron_url).toBeTruthy();
     }
+  });
+});
+
+// ─── Netto module (TC-21 t/m TC-25) ─────────────────────────────────────────
+
+describe("TC-21 — Werkbonus: hoog loon buiten bereik (SSOT factoren)", () => {
+  it("brutoloon € 3.500 (boven plafond Luik A) geeft € 0 werkbonus", () => {
+    const r = werkbonus({ brutoloon: 3500, refDatum: "2026-06-01" });
+    expect(r.luikA).toBe(0);
+    expect(r.luikB).toBe(0);
+    expect(r.totaal).toBe(0);
+    expect(r.datapunt.id).toBe("werkbonus_sociaal_luik_A_2026");
+  });
+
+  it("brutoloon € 2.276,51 (Schaal I Cat A 5j) heeft werkbonus Luik A + B taper", () => {
+    const r = werkbonus({ brutoloon: 2276.51, refDatum: "2026-06-01" });
+    // 2276.51 < 2880.32 → LuikA = max 125.04
+    expect(r.luikA).toBe(125.04);
+    // 2276.51 > 2255.50 (LuikB lower) → LuikB tapers met factor 0.2699
+    // 168.62 - 0.2699 × (2276.51 - 2255.50) = 168.62 - 5.67 = 162.95
+    expect(r.luikB).toBe(162.95);
+    expect(r.totaal).toBe(287.99); // 125.04 + 162.95
+    expect(r.vanaf1April2026).toBe(true);
+  });
+});
+
+describe("TC-22 — BBSZ: schijven", () => {
+  it("brutoloon € 1.900 (< € 1.945,38) geeft kwartaalbijdrage € 0", () => {
+    const r = bbsz({ brutoloon: 1900 });
+    expect(r.kwartaalbijdrage).toBe(0);
+    expect(r.maandelijksBedrag).toBe(0);
+  });
+
+  it("brutoloon € 2.242,81 (schijf 3) geeft correcte kwartaalbijdrage", () => {
+    const r = bbsz({ brutoloon: 2242.81 });
+    // qLoon = 3 × 2242.81 = 6728.43 → schijf 3 (6570.54–11211)
+    // kw = 30.99 + 0.011 × (2242.81 − 2190.18) = 30.99 + 0.011 × 52.63 = 30.99 + 0.58 = 31.57
+    expect(r.kwartaalbijdrage).toBe(31.57);
+    expect(r.datapunt.id).toBe("bv_bbsz_schijven_2026");
+  });
+
+  it("brutoloon > € 6.038,82 geeft maximum € 182,82 per kwartaal", () => {
+    const r = bbsz({ brutoloon: 7000 });
+    expect(r.kwartaalbijdrage).toBe(182.82);
+    expect(r.maandelijksBedrag).toBe(60.94);
+  });
+});
+
+describe("TC-23 — BV: alleenstaand, 0 kinderen (AJ 2027)", () => {
+  it("belastbaar € 2.000 → Bijlage III sleutelformule wordt gebruikt", () => {
+    const belastbaarMaandloon = 2000;
+    const r = berekenBV({ belastbaarMaandloon, gezinstype: "alleenstaand", kinderenTenLaste: 0 });
+    expect(r.jaarbasis).toBe(24000);
+    // AJ 2027: forfait max €6.070 (30% × 24000 = 7200 > 6070 → capped)
+    expect(r.forfaitBeroepskosten).toBe(6070);
+    expect(r.belastbaarNettoJaar).toBe(17930); // 24000 − 6070
+    expect(r.belastingvrijeSom).toBe(11180);
+    // PB AJ 2027: 16720 × 25% + (17930 − 16720) × 40% = 4180 + 484 = 4664
+    expect(r.pbBruto).toBe(4664);
+    // BVS-vermindering: 11180 × 25% = 2795.00
+    expect(r.bvsVermindering).toBe(2795);
+    // PB netto: 4664 − 2795 = 1869
+    expect(r.pbNetto).toBe(1869);
+    expect(r.methode).toBe("bijlage_iii_sleutelformule_2026");
+    expect(r.schaal).toBe("I");
+    expect(r.bvPerMaand).toBeGreaterThan(155.75);
+    expect(r.bvNaVerminderingen).toBe(r.bvPerMaand); // geen verminderingen
+    expect(r.isApproximatie).toBe(false);
+    expect(r.validatieStatus).toBe("pending_taxcalc");
+    expect(r.datapunten.length).toBeGreaterThanOrEqual(2);
+  });
+});
+
+describe("TC-23b — BV: Group S triangulatie-anker", () => {
+  it("benadert de Group S Salary Sim-case voor Schaal I Cat A 5j", () => {
+    const r = berekenNetto({
+      brutoloon: 2276.51,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+    });
+
+    expect(r.belastbaarMaandloon).toBe(2266.96);
+    expect(r.bv.bvNaVerminderingen).toBeCloseTo(154.22, 1);
+  });
+});
+
+describe("TC-24 — BV: gehuwd zonder inkomen, 2 kinderen (AJ 2027 maandtabel)", () => {
+  it("BVS = €22.360 (partner-overdracht); 2 kinderen → €138/m maandvermindering", () => {
+    const r = berekenBV({
+      belastbaarMaandloon: 2500,
+      gezinstype: "gehuwd_zonder_inkomen",
+      kinderenTenLaste: 2,
+    });
+    expect(r.belastingvrijeSom).toBe(22360); // 2 × 11180
+    expect(r.verminderingKinderen).toBe(138); // maandtabel: 2 kinderen
+    expect(r.pbNetto).toBeGreaterThanOrEqual(0);
+    expect(r.bvPerMaand).toBeGreaterThanOrEqual(0);
+    expect(r.bvNaVerminderingen).toBeLessThanOrEqual(r.bvPerMaand);
+  });
+});
+
+describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kinderen", () => {
+  it("nettoloon is positief en kleiner dan brutoloon", () => {
+    const r = berekenNetto({
+      brutoloon: 2276.51,
+      refDatum: "2026-06-01",
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+    });
+    expect(r.nettoloon).toBeGreaterThan(0);
+    expect(r.nettoloon).toBeLessThan(r.brutoloon);
+    // RSZ werknemer 13.07%
+    expect(r.rsz.werknemerBijdrage).toBe(297.54);
+    // Werkbonus positief (loon < drempel)
+    expect(r.werkbonus.totaal).toBeGreaterThan(0);
+    // Effectieve RSZ < bruto RSZ (werkbonus vermindert)
+    expect(r.effectieveRsz).toBeLessThan(r.rsz.werknemerBijdrage);
+    // BBSZ datapunt aanwezig
+    expect(r.bbsz.datapunt.id).toBe("bv_bbsz_schijven_2026");
+    expect(r.bv.methode).toBe("bijlage_iii_sleutelformule_2026");
+    expect(r.bv.validatieStatus).toBe("pending_taxcalc");
+  });
+
+  it("audit: alle datapunten in netto-resultaat hebben bron_url", () => {
+    const r = berekenNetto({
+      brutoloon: 2276.51,
+      refDatum: "2026-06-01",
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+    });
+    expect(r.werkbonus.datapunt.bron_url).toBeTruthy();
+    expect(r.bbsz.datapunt.bron_url).toBeTruthy();
+    for (const dp of r.bv.datapunten) {
+      expect(dp.bron_url).toBeTruthy();
+    }
+  });
+});
+
+// ─── NTC-01..NTC-15 — Netto-spec testcases ──────────────────────────────────
+// SSOT: knowledgebase/04_calculator_netto.md §9 + knowledgebase/07_testcorpus.md
+// PENDING: validate against FOD Fin Tax-Calc (AJ 2027). Tolerantie €0.50.
+// Bijzondere BV (NTC-14, NTC-15) gebruikt bvBijzonder.ts.
+
+import { berekenBvBijzonder } from "@/lib/bvBijzonder";
+
+describe("NTC-01 — Schaal I Cat A 5j, alleenstaand, 0 kind", () => {
+  it("structurele controle: werkbonus actief + fiscale werkbonus > 0", () => {
+    const r = berekenNetto({
+      brutoloon: 2276.51,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+    });
+    expect(r.werkbonus.totaal).toBeGreaterThan(0);
+    expect(r.fiscaleWerkbonus).toBeGreaterThan(0);
+    expect(r.nettoloon).toBeGreaterThan(0);
+    expect(r.nettoloon).toBeLessThan(r.brutoloon);
+    // KB-spec gaf ≈€1.890; AJ 2027 + fiscale werkbonus geeft ~€2.121.
+    // Brede bounds tot FOD Tax-Calc-validatie het exacte cijfer pinpoint.
+    expect(r.nettoloon).toBeGreaterThan(1700);
+    expect(r.nettoloon).toBeLessThan(2200);
+  });
+});
+
+describe("NTC-02 — Schaal I Cat C 10j, alleenstaand, 1 kind", () => {
+  it("BV-vermindering kind = €52/m", () => {
+    const r = berekenNetto({
+      brutoloon: 2800,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 1,
+    });
+    expect(r.bv.verminderingKinderen).toBe(52);
+    expect(r.nettoloon).toBeGreaterThan(2000);
+    expect(r.nettoloon).toBeLessThan(2500);
+  });
+});
+
+describe("NTC-03 — Schaal II Cat B 8j, eenverdiener, 2 kinderen", () => {
+  it("BVS = €22.360 + verm 2 kind = €138/m", () => {
+    const r = berekenNetto({
+      brutoloon: 3000,
+      refDatum: REF_2026,
+      gezinstype: "gehuwd_zonder_inkomen",
+      kinderenTenLaste: 2,
+    });
+    expect(r.bv.belastingvrijeSom).toBe(22360);
+    expect(r.bv.verminderingKinderen).toBe(138);
+    expect(r.nettoloon).toBeGreaterThan(2200);
+    expect(r.nettoloon).toBeLessThan(2700);
+  });
+});
+
+describe("NTC-04 — GGMMI €2.189,81, alleenstaand (hoge werkbonus)", () => {
+  it("Luik A = max €125,04 en Luik B = max €168,62", () => {
+    const r = berekenNetto({
+      brutoloon: 2189.81,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+    });
+    expect(r.werkbonus.luikA).toBe(125.04);
+    expect(r.werkbonus.luikB).toBe(168.62);
+    // Effectieve RSZ na werkbonus = brutoRSZ - werkbonus
+    // bruto RSZ = 2189.81 × 0.1307 = 286.21; totaal werkbonus = 293.66 → effectief 0
+    expect(r.effectieveRsz).toBe(0);
+  });
+});
+
+describe("NTC-09 — Alleenstaande ouder met 1 kind (+€52 extra)", () => {
+  it("BV-vermindering alleenstaande ouder = €52", () => {
+    const r = berekenNetto({
+      brutoloon: 2500,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 1,
+      fiscaalAlleenstaandeMetKind: true,
+    });
+    expect(r.bv.verminderingAlleenstaandeKind).toBe(52);
+    expect(r.bv.verminderingKinderen).toBe(52);
+  });
+});
+
+describe("NTC-10 — Groepsverzekering eigen bijdrage €100/m", () => {
+  it("BV-vermindering groepsverz = €30 (30%)", () => {
+    const r = berekenNetto({
+      brutoloon: 3100,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+      groepsverzekeringEigenBijdrage: 100,
+    });
+    expect(r.bv.verminderingGroepsverzekering).toBe(30);
+  });
+});
+
+describe("NTC-11 — Werkbonus-edge: bruto €2.255,50 (Luik B grens)", () => {
+  it("Luik A en B beide aan maximum", () => {
+    const r = werkbonus({ brutoloon: 2255.50, refDatum: REF_2026 });
+    expect(r.luikA).toBe(125.04);
+    expect(r.luikB).toBe(168.62);
+  });
+});
+
+describe("NTC-12 — Werkbonus-edge: bruto €3.336,98 (Luik A wegval)", () => {
+  it("Luik A = 0 op cutoff", () => {
+    const r = werkbonus({ brutoloon: 3336.98, refDatum: REF_2026 });
+    expect(r.luikA).toBe(0);
+    expect(r.luikB).toBe(0);
+  });
+});
+
+describe("NTC-13 — Werkbonus-edge: bruto €2.880,32 (Luik A grens, B nul)", () => {
+  it("A = €125,04, B = €0", () => {
+    const r = werkbonus({ brutoloon: 2880.32, refDatum: REF_2026 });
+    expect(r.luikA).toBe(125.04);
+    expect(r.luikB).toBe(0);
+  });
+});
+
+describe("NTC-14 — Eindejaarspremie 1 maandloon — bijzondere BV", () => {
+  it("Bijzondere BV op €3.000 premie (refertejaar €36.000) → tarief 34,33%", () => {
+    const r = eindejaarspremie({
+      brutoloon: 3000,
+      ancienniteitMaanden: 36,
+      prestatieMaandenInRefertepériode: 12,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+    });
+    expect(r.premie).toBe(3000);
+    expect(r.bvBijzonder).toBeDefined();
+    // refertejaarloon = 12 × 3000 = 36000 → schijf <36.180: tarief 34,33%
+    // 3000 × 0.3433 = 1029.90
+    expect(r.bvBijzonder?.tarief).toBeCloseTo(0.3433, 4);
+    expect(r.bvBijzonder?.bvBruto).toBeCloseTo(1029.9, 1);
+    expect(r.nettoPremie).toBeCloseTo(3000 - 1029.9, 1);
+  });
+});
+
+describe("NTC-15 — Dubbel vakantiegeld 92% — bijzondere BV", () => {
+  it("Bijzondere BV op €2.760 premie (92% × €3.000)", () => {
+    const refertejaar = 3000 * 12;
+    const premie = 0.92 * 3000;
+    const r = berekenBvBijzonder({
+      refertejaarloon: refertejaar,
+      exceptioneelBruto: premie,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+    });
+    expect(r.tarief).toBeCloseTo(0.3433, 4);
+    expect(r.bvBruto).toBeCloseTo(947.51, 1); // 2760 × 0.3433 = 947.508
+    expect(r.nettoBedrag).toBeCloseTo(premie - 947.51, 1);
+  });
+});
+
+describe("TC-WGK-01 — werkgeverskost met extralegale voordelen", () => {
+  const bruto = 2276.51;
+  const ref = REF_2026;
+
+  it("baseline (geen extras) geeft correcte smal loonkost", () => {
+    const r = werkgeverskost({ brutoloon: bruto, refDatum: ref });
+    // AO = 2276.51 × 0.003 = 6.83 (afgerond)
+    expect(r.arbeidsongevallen).toBe(6.83);
+    expect(r.extraVoordelen).toBe(0);
+    expect(r.totaleLoonkostSmal).toBe(
+      Math.round((bruto + r.rszWerkgever + r.sociaalFonds200 + r.arbeidsongevallen) * 100) / 100
+    );
+  });
+
+  it("met patronale groepsverzekering €50/m verhoogt breed loonkost", () => {
+    const r = werkgeverskost({
+      brutoloon: bruto,
+      refDatum: ref,
+      extraGroepsverzekering: 50,
+    });
+    expect(r.extraVoordelen).toBe(50);
+    const baseline = werkgeverskost({ brutoloon: bruto, refDatum: ref });
+    expect(r.totaleLoonkostBreed).toBe(baseline.totaleLoonkostBreed + 50);
+  });
+
+  it("custom AO-tarief 0.5% geeft hogere arbeidsongevallenkost", () => {
+    const r = werkgeverskost({
+      brutoloon: bruto,
+      refDatum: ref,
+      arbeidsongevallenPct: 0.005,
+    });
+    expect(r.arbeidsongevallen).toBe(Math.round(bruto * 0.005 * 100) / 100);
+  });
+
+  it("combinatie maaltijdcheques + hospitalisatie telt correct op", () => {
+    const r = werkgeverskost({
+      brutoloon: bruto,
+      refDatum: ref,
+      extraMaaltijdcheques: 130,
+      extraHospitalisatie: 20,
+    });
+    expect(r.extraVoordelen).toBe(150);
   });
 });
