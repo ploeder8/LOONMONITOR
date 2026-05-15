@@ -3,7 +3,6 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
 import { fietsvergoeding } from "@/lib/fietsvergoeding";
-import { DatapuntNietGeldigOpDatum } from "@/lib/errors";
 import {
   aantalWeekdagenInMaand,
   eindejaarspremieMaandenVoorCheckbox,
@@ -34,17 +33,17 @@ describe("Maand van berekening", () => {
       fietsvergoeding({
         kmPerDag: 8,
         arbeidsdagen: 22,
-        refDatum: refDatumVoorMaand("2026", "10"),
+        refDatum: refDatumVoorMaand("2026", "09"),
       }).tariefPerKm,
-    ).toBe(0.32);
+    ).toBe(0.27);
 
-    expect(() =>
+    expect(
       fietsvergoeding({
         kmPerDag: 8,
         arbeidsdagen: 22,
-        refDatum: refDatumVoorMaand("2026", "09"),
-      }),
-    ).toThrow(DatapuntNietGeldigOpDatum);
+        refDatum: refDatumVoorMaand("2026", "10"),
+      }).tariefPerKm,
+    ).toBe(0.32);
   });
 });
 
@@ -88,5 +87,12 @@ describe("Profiel formulier", () => {
     expect(html.indexOf("Groepsverz. eigen bijdrage (€/m)")).toBeGreaterThan(
       html.indexOf("Bijkomende looncomponenten"),
     );
+  });
+
+  it("plaatst werkgeversbijdragen als laatste invulsectie", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+
+    expect(html.indexOf("Woon-werk verkeer")).toBeGreaterThanOrEqual(0);
+    expect(html.indexOf("Werkgeversbijdragen")).toBeGreaterThan(html.indexOf("Woon-werk verkeer"));
   });
 });

@@ -29,7 +29,7 @@ const POC_LIMITATIONS: { titel: string; tekst: string }[] = [
   {
     titel: "4. Fietsvergoeding vóór 1/10/2026",
     tekst:
-      "Pad A — historische tarief € 0,27/km wordt niet berekend. Voor maanden vóór oktober 2026 toont de UI enkel een banner; vanaf oktober 2026 rekenen we met het CAO 164-tarief van € 0,32/km.",
+      "Voor maanden vóór oktober 2026 rekent de tool met het sectorale tarief van € 0,27/km en maximum € 10,80 per dag. Vanaf oktober 2026 geldt € 0,32/km met maximum € 12,80 per dag.",
   },
   {
     titel: "5. Bouw-subset opt-in",

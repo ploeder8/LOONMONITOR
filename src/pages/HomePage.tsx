@@ -408,6 +408,116 @@ function CheckboxLine({
   );
 }
 
+type BaremaInlineResult =
+  | { kind: "checked"; check: ReturnType<typeof brutolocheck> }
+  | { kind: "error"; message: string };
+
+function BaremaInlineCheck({ profiel }: { profiel: Profiel }) {
+  const result = berekenBaremaInlineCheck(profiel);
+
+  if (result.kind === "error") {
+    return (
+      <Banner kind="warning" title="Barema-check niet beschikbaar">
+        {result.message}
+      </Banner>
+    );
+  }
+
+  return <BaremaInlineCheckCard profiel={profiel} check={result.check} />;
+}
+
+function berekenBaremaInlineCheck(profiel: Profiel): BaremaInlineResult {
+  const refDatum = refDatumVoorMaand(profiel.berekeningsJaar, profiel.berekeningsMaand);
+
+  try {
+    return {
+      kind: "checked",
+      check: brutolocheck(
+        profiel.schaal,
+        profiel.cat,
+        profiel.ervaringJaren,
+        profiel.brutoloon,
+        refDatum,
+      ),
+    };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Barema kon niet worden gecontroleerd.";
+    return { kind: "error", message };
+  }
+}
+
+function BaremaInlineCheckCard({
+  profiel,
+  check,
+}: {
+  profiel: Profiel;
+  check: ReturnType<typeof brutolocheck>;
+}) {
+  return (
+    <div style={baremaInlineStyle(check.ok)}>
+      <BaremaInlineHeader
+        profiel={profiel}
+        minimum={check.sectoraalMinimum}
+        effectieveErvaring={check.effectieveErvaring}
+      />
+      {check.ok ? (
+        <span>Brutoloon voldoet aan het sectoraal minimum.</span>
+      ) : (
+        <span style={{ fontWeight: 600 }}>
+          Brutoloon ligt {formatEUR(Math.abs(check.verschil))} onder het minimum.
+        </span>
+      )}
+      {check.geclampt && <BaremaClampNote ok={check.ok} />}
+    </div>
+  );
+}
+
+function BaremaInlineHeader({
+  profiel,
+  minimum,
+  effectieveErvaring,
+}: {
+  profiel: Profiel;
+  minimum: number;
+  effectieveErvaring: number;
+}) {
+  const ervaringLabel = profiel.ervaringJaren === effectieveErvaring
+    ? `${profiel.ervaringJaren} jaar`
+    : `${profiel.ervaringJaren} jaar (barema ${effectieveErvaring} jaar)`;
+
+  return (
+    <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
+      <span style={{ fontWeight: 600 }}>
+        Minimum Schaal {profiel.schaal} · Cat {profiel.cat} · {ervaringLabel}
+      </span>
+      <span style={{ fontFamily: "var(--font-mono)", fontWeight: 700 }}>
+        {formatEUR(minimum)}
+      </span>
+    </div>
+  );
+}
+
+function BaremaClampNote({ ok }: { ok: boolean }) {
+  return (
+    <span style={{ color: ok ? "var(--color-text-muted)" : "#7f1d1d" }}>
+      Loonplafond bereikt: de barematabel gebruikt de hoogste beschikbare ervaring.
+    </span>
+  );
+}
+
+function baremaInlineStyle(ok: boolean): CSSProperties {
+  return {
+    border: `1px solid ${ok ? "var(--color-border)" : "#fca5a5"}`,
+    borderRadius: 8,
+    background: ok ? "var(--color-navy-50)" : "#fff1f2",
+    color: ok ? "var(--color-navy-500)" : "#991b1b",
+    padding: "9px 10px",
+    fontSize: 12,
+    display: "grid",
+    gap: 4,
+  };
+}
+
 // ─── ProfileForm ─────────────────────────────────────────────────────────────
 
 function ProfileForm({
@@ -575,6 +685,8 @@ function ProfileForm({
             />
           </FormField>
 
+          <BaremaInlineCheck profiel={profiel} />
+
           <label
             style={{
               display: "flex",
@@ -593,80 +705,6 @@ function ProfileForm({
             />
             Bouw-subset (extra 1,80 % aanvullend pensioen)
           </label>
-
-          <FormSection label="Werkgeversbijdragen" icon={<Building2 size={13} />}>
-            <FormField
-              label="Arbeidsongevallen-tarief (%)"
-              helper="Burelen: ~0,3 %. Controleer uw polis."
-            >
-              <input
-                className={inputClass}
-                type="number"
-                step="0.01"
-                min={0}
-                max={10}
-                value={(profiel.arbeidsongevallenPct * 100).toFixed(2)}
-                onChange={(e) =>
-                  set("arbeidsongevallenPct", parseFloat(e.target.value || "0") / 100)
-                }
-              />
-            </FormField>
-            <FormField label="Patronale groepsverzekering (€/m)">
-              <input
-                className={inputClass}
-                type="number"
-                step="0.01"
-                min={0}
-                value={profiel.extraGroepsverzekering}
-                onChange={(e) =>
-                  set("extraGroepsverzekering", parseFloat(e.target.value || "0"))
-                }
-              />
-            </FormField>
-            <FormField
-              label="Maaltijdcheques — werkgeversaandeel (€/dag)"
-              helper={`Max €${MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026.toFixed(2).replace(".", ",")}/dag × ${profiel.arbeidsdagenPerMaand} werkdagen. Niet verplicht in PC 200.`}
-            >
-              <input
-                className={inputClass}
-                type="number"
-                step="0.01"
-                min={0}
-                max={MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026}
-                value={profiel.maaltijdchequeWerkgeversaandeelPerDag}
-                onChange={(e) =>
-                  set("maaltijdchequeWerkgeversaandeelPerDag", parseFloat(e.target.value || "0"))
-                }
-              />
-            </FormField>
-            <FormField
-              label="Maaltijdcheques — werknemersbijdrage (€/dag)"
-              helper={`Min €1,09/dag × ${profiel.arbeidsdagenPerMaand} werkdagen. Mag hoger liggen volgens de werkgeverregeling.`}
-            >
-              <input
-                className={inputClass}
-                type="number"
-                step="0.01"
-                min={0}
-                value={profiel.maaltijdchequeWerknemersbijdragePerDag}
-                onChange={(e) =>
-                  set("maaltijdchequeWerknemersbijdragePerDag", parseFloat(e.target.value || "0"))
-                }
-              />
-            </FormField>
-            <FormField label="Hospitalisatieverzekering (€/m)">
-              <input
-                className={inputClass}
-                type="number"
-                step="0.01"
-                min={0}
-                value={profiel.extraHospitalisatie}
-                onChange={(e) =>
-                  set("extraHospitalisatie", parseFloat(e.target.value || "0"))
-                }
-              />
-            </FormField>
-          </FormSection>
 
           <FormSection label="Bijkomende looncomponenten" icon={<Wallet size={13} />} defaultOpen>
             <FormField label="Groepsverz. eigen bijdrage (€/m)">
@@ -942,6 +980,82 @@ function ProfileForm({
           )}
         </div>
       </FormSection>
+
+      {profiel.statuut !== "student" && (
+        <FormSection label="Werkgeversbijdragen" icon={<Building2 size={13} />}>
+          <FormField
+            label="Arbeidsongevallen-tarief (%)"
+            helper="Burelen: ~0,3 %. Controleer uw polis."
+          >
+            <input
+              className={inputClass}
+              type="number"
+              step="0.01"
+              min={0}
+              max={10}
+              value={(profiel.arbeidsongevallenPct * 100).toFixed(2)}
+              onChange={(e) =>
+                set("arbeidsongevallenPct", parseFloat(e.target.value || "0") / 100)
+              }
+            />
+          </FormField>
+          <FormField label="Patronale groepsverzekering (€/m)">
+            <input
+              className={inputClass}
+              type="number"
+              step="0.01"
+              min={0}
+              value={profiel.extraGroepsverzekering}
+              onChange={(e) =>
+                set("extraGroepsverzekering", parseFloat(e.target.value || "0"))
+              }
+            />
+          </FormField>
+          <FormField
+            label="Maaltijdcheques — werkgeversaandeel (€/dag)"
+            helper={`Max €${MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026.toFixed(2).replace(".", ",")}/dag × ${profiel.arbeidsdagenPerMaand} werkdagen. Niet verplicht in PC 200.`}
+          >
+            <input
+              className={inputClass}
+              type="number"
+              step="0.01"
+              min={0}
+              max={MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026}
+              value={profiel.maaltijdchequeWerkgeversaandeelPerDag}
+              onChange={(e) =>
+                set("maaltijdchequeWerkgeversaandeelPerDag", parseFloat(e.target.value || "0"))
+              }
+            />
+          </FormField>
+          <FormField
+            label="Maaltijdcheques — werknemersbijdrage (€/dag)"
+            helper={`Min €1,09/dag × ${profiel.arbeidsdagenPerMaand} werkdagen. Mag hoger liggen volgens de werkgeverregeling.`}
+          >
+            <input
+              className={inputClass}
+              type="number"
+              step="0.01"
+              min={0}
+              value={profiel.maaltijdchequeWerknemersbijdragePerDag}
+              onChange={(e) =>
+                set("maaltijdchequeWerknemersbijdragePerDag", parseFloat(e.target.value || "0"))
+              }
+            />
+          </FormField>
+          <FormField label="Hospitalisatieverzekering (€/m)">
+            <input
+              className={inputClass}
+              type="number"
+              step="0.01"
+              min={0}
+              value={profiel.extraHospitalisatie}
+              onChange={(e) =>
+                set("extraHospitalisatie", parseFloat(e.target.value || "0"))
+              }
+            />
+          </FormField>
+        </FormSection>
+      )}
 
     </aside>
   );
@@ -1730,8 +1844,8 @@ function bouwResultaten(p: Profiel): BouwResultaten {
     loonbasisBlocks.push(
       safeRender(
         () => {
-          const r = lookupBarema(p.schaal, p.cat, p.ervaringJaren);
-          const c = brutolocheck(p.schaal, p.cat, p.ervaringJaren, p.brutoloon);
+          const r = lookupBarema(p.schaal, p.cat, p.ervaringJaren, refDatum);
+          const c = brutolocheck(p.schaal, p.cat, p.ervaringJaren, p.brutoloon, refDatum);
           return { r, c };
         },
         ({ r, c }) => (
@@ -1763,7 +1877,7 @@ function bouwResultaten(p: Profiel): BouwResultaten {
   } else {
     loonbasisBlocks.push(
       safeRender(
-        () => lookupStudentenbarema(p.studentenCat, p.studentLeeftijd),
+        () => lookupStudentenbarema(p.studentenCat, p.studentLeeftijd, refDatum),
         (r) => (
           <ResultCard
             label={`Studentenbarema — Cat ${p.studentenCat}, ${p.studentLeeftijd} jaar`}

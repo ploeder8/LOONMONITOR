@@ -43,9 +43,15 @@ describe("TC-01 — Schaal I, Cat A, 0 jaar", () => {
   });
 
   it("brutoloon-check OK bij gelijk-aan-minimum", () => {
-    const c = brutolocheck("I", "A", 0, 2242.81);
+    const c = brutolocheck("I", "A", 0, 2242.81, REF_2026);
     expect(c.ok).toBe(true);
     expect(c.verschil).toBe(0);
+  });
+
+  it("weigert barema lookup wanneer het gekozen jaar buiten de geldigheidsperiode valt", () => {
+    expect(() => lookupBarema("I", "A", 0, "2025-12-31")).toThrow(
+      DatapuntNietGeldigOpDatum,
+    );
   });
 });
 
@@ -106,11 +112,17 @@ describe("TC-06 — Schaal II, Cat C, 10 jaar", () => {
 
 describe("TC-07 — Brutoloon onder sectoraal minimum (faalpad)", () => {
   it("brutoloon-check signaleert tekort", () => {
-    const c = brutolocheck("II", "C", 10, 2500);
+    const c = brutolocheck("II", "C", 10, 2500, REF_2026);
     expect(c.ok).toBe(false);
     expect(c.sectoraalMinimum).toBe(2875.48);
     expect(c.verschil).toBe(-375.48);
     expect(c.datapuntId).toBe("lonen_pc200_schaalII_catC_01012026");
+  });
+
+  it("brutoloon-check gebruikt de bron van het barema voor de gekozen datum", () => {
+    const c = brutolocheck("II", "C", 10, 2500, REF_2026);
+    expect(c.datapunt.bron_url).toBeTruthy();
+    expect(c.datapunt.bron_titel).toContain("01/2026");
   });
 });
 
@@ -213,6 +225,17 @@ describe("TC-14 — Ecocheques deeltijds 3/5", () => {
 });
 
 describe("TC-15 — Fietsvergoeding 2026 (overgang oktober)", () => {
+  it("juni 2026: 8 km/dag × € 0,27 × 22 dagen = € 47,52", () => {
+    const r = fietsvergoeding({
+      kmPerDag: 8,
+      arbeidsdagen: 22,
+      refDatum: "2026-06-01",
+    });
+    expect(r.datapunt.id).toBe("pc200_fietsvergoeding_2026_pre_oktober");
+    expect(r.tariefPerKm).toBe(0.27);
+    expect(r.vergoeding).toBe(47.52);
+  });
+
   it("oktober 2026: 8 km/dag × € 0,32 × 22 dagen = € 56,32", () => {
     const r = fietsvergoeding({
       kmPerDag: 8,
@@ -223,14 +246,15 @@ describe("TC-15 — Fietsvergoeding 2026 (overgang oktober)", () => {
     expect(r.vergoeding).toBe(56.32);
   });
 
-  it("september 2026: datapunt is niet geldig (vóór 1/10/2026) en gooit DatapuntNietGeldigOpDatum", () => {
-    expect(() =>
-      fietsvergoeding({
-        kmPerDag: 8,
-        arbeidsdagen: 22,
-        refDatum: "2026-09-15",
-      }),
-    ).toThrow(DatapuntNietGeldigOpDatum);
+  it("september 2026 gebruikt het pre-oktober datapunt", () => {
+    const r = fietsvergoeding({
+      kmPerDag: 8,
+      arbeidsdagen: 22,
+      refDatum: "2026-09-15",
+    });
+    expect(r.datapunt.id).toBe("pc200_fietsvergoeding_2026_pre_oktober");
+    expect(r.tariefPerKm).toBe(0.27);
+    expect(r.vergoeding).toBe(47.52);
   });
 });
 
@@ -323,6 +347,23 @@ describe("TC-16b — Woon-werk verkeer via PC200-tabellen", () => {
 
     expect(r.componenten.trein?.vergoeding).toBe(41.82);
     expect(r.totaalVergoeding).toBe(41.82);
+  });
+
+  it("fiets actief in juni 2026 gebruikt het pre-oktober datapunt", () => {
+    const r = berekenWoonwerkVerkeer({
+      refDatum: REF_2026,
+      brutoloon: 3000,
+      arbeidsdagenPerMaand: 22,
+      werkdagenInMaand: 22,
+      fiets: { actief: true, kmPerDag: 8 },
+      trein: { actief: false, kmEnkel: 0 },
+      busTramMetro: { actief: false, kmEnkel: 0, prijsPerMaand: 0 },
+      privewagen: { actief: false, kmEnkel: 0 },
+    });
+
+    expect(r.componenten.fiets?.vergoeding).toBe(47.52);
+    expect(r.totaalVergoeding).toBe(47.52);
+    expect(r.datapunten.map((dp) => dp.id)).toContain("pc200_fietsvergoeding_2026_pre_oktober");
   });
 });
 

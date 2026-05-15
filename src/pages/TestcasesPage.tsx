@@ -167,19 +167,13 @@ const TESTCASES: TC[] = [
     id: "TC-15",
     titel: "Fietsvergoeding — vóór en na 1/10/2026",
     toelichting:
-      "Pad A: pre-overgang levert geen berekening (banner). Post-overgang rekent met € 0,32/km.",
+      "Pre-overgang rekent met € 0,27/km en vanaf oktober met € 0,32/km.",
     render: () => {
-      let pre: React.ReactNode;
-      try {
-        fietsvergoeding({ kmPerDag: 8, arbeidsdagen: 22, refDatum: "2026-06-01" });
-        pre = <Banner kind="error" title="Onverwacht">Geen exception?</Banner>;
-      } catch (e) {
-        pre = (
-          <Banner kind="info" title="Pre-1/10/2026">
-            {(e as Error).message}
-          </Banner>
-        );
-      }
+      const pre = fietsvergoeding({
+        kmPerDag: 8,
+        arbeidsdagen: 22,
+        refDatum: "2026-06-01",
+      });
       const post = fietsvergoeding({
         kmPerDag: 8,
         arbeidsdagen: 22,
@@ -187,7 +181,11 @@ const TESTCASES: TC[] = [
       });
       return (
         <div className="flex flex-col gap-3">
-          {pre}
+          <ResultCard
+            label={`Fietsvergoeding 1/6/2026 — € ${pre.tariefPerKm.toFixed(2)}/km × 8 km × 22 dgn`}
+            amountEUR={pre.vergoeding}
+            datapunten={[pre.datapunt]}
+          />
           <ResultCard
             label={`Fietsvergoeding 1/11/2026 — € ${post.tariefPerKm.toFixed(2)}/km × 8 km × 22 dgn`}
             amountEUR={post.vergoeding}

@@ -3419,6 +3419,50 @@
       ]
     },
     {
+      "id": "pc200_fietsvergoeding_2026_pre_oktober",
+      "categorie": "premies_en_voordelen",
+      "subcategorie": "fietsvergoeding",
+      "type": "cao",
+      "pc": "200",
+      "omschrijving": "Sectorale fietsvergoeding PC 200 tot en met 30/09/2026",
+      "waarde_bron": "€ 0,27 / km, max € 10,80 per arbeidsdag, max 40 km heen-terug per dag",
+      "waarde_genormaliseerd": 0.27,
+      "maximum_dagbedrag_genormaliseerd": 10.8,
+      "maximum_km_per_dag": 40,
+      "eenheid": "EUR",
+      "valuta": "EUR",
+      "frequentie": "per_prestatie",
+      "berekeningsbasis": "effectief gereden afstand woon-werk per fiets in kilometer",
+      "toepassingsgebied": [
+        "bedienden PC 200 met regelmatig woon-werkverkeer per fiets"
+      ],
+      "voorwaarden": [
+        "werknemer bevestigt het fietsgebruik via een ondertekende verklaring"
+      ],
+      "uitsluitingen": [
+        "niet combineerbaar met andere vervoersvergoedingen behalve openbaar vervoer"
+      ],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": "2026-09-30",
+      "laatst_bevestigd_op": "2026-05-15",
+      "bron_organisatie": "Sociaal Fonds 200",
+      "bron_type": "sector",
+      "bron_titel": "De sectorale regeling voor de verschillende vervoerswijzen",
+      "bron_url": "https://live.sfonds200.be/nl/sectorinformatie/vervoerskosten/regeling-vervoerskosten/",
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": "Fietsvergoeding",
+      "bron_fragment": "Vergoeding €0,27/km per dag, max €10,8 per dag en max 40 km heen-terug per dag.",
+      "betrouwbaarheid": "Tier 1",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "EUR-bedragen genormaliseerd; maximum dagbedrag en maximum kilometers zijn afzonderlijke constraints.",
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Vanaf 01/10/2026 geldt pc200_fietsvergoeding_2026."
+      ]
+    },
+    {
       "id": "pc200_fietsvergoeding_2026",
       "categorie": "premies_en_voordelen",
       "subcategorie": "fietsvergoeding",
@@ -3427,6 +3471,8 @@
       "omschrijving": "Sectorale fietsvergoeding PC 200 vanaf 1/10/2026",
       "waarde_bron": "€ 0,32 / km, max € 12,80 per arbeidsdag",
       "waarde_genormaliseerd": 0.32,
+      "maximum_dagbedrag_genormaliseerd": 12.8,
+      "maximum_km_per_dag": 40,
       "eenheid": "EUR",
       "valuta": "EUR",
       "frequentie": "per_prestatie",
@@ -3438,23 +3484,23 @@
       "uitsluitingen": [],
       "geldig_vanaf": "2026-10-01",
       "geldig_tot": null,
-      "laatst_bevestigd_op": "2026-05-08",
-      "bron_organisatie": "ACVBIE",
-      "bron_type": "vakbond",
-      "bron_titel": "Aanvullend Bedienden | PC 200 | Januari 2026 – Mobiliteit",
-      "bron_url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-indexering-lonen-sectorakkoord-012026-lr.pdf",
-      "bron_publicatiedatum": "2026-01-01",
-      "bron_vindplaats": "Sectie 'Mobiliteit'",
-      "bron_fragment": "De fietsvergoeding wordt vanaf 1 oktober 2026 opgetrokken van €0,27/km tot €0.32/km, met een maximum van €12,80 per arbeidsdag",
-      "betrouwbaarheid": "Tier 3",
+      "laatst_bevestigd_op": "2026-05-15",
+      "bron_organisatie": "Sociaal Fonds 200",
+      "bron_type": "sector",
+      "bron_titel": "De sectorale regeling voor de verschillende vervoerswijzen",
+      "bron_url": "https://live.sfonds200.be/nl/sectorinformatie/vervoerskosten/regeling-vervoerskosten/",
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": "Fietsvergoeding",
+      "bron_fragment": "Vanaf 1 oktober 2026 zal die vergoeding opgetrokken worden tot € 0,32 per dag met een maximum van € 12,8 per dag.",
+      "betrouwbaarheid": "Tier 1",
       "extractie_methode": "letterlijk",
       "normalisatie_toegepast": true,
       "normalisatie_opmerking": "EUR-bedragen genormaliseerd; maximum dagbedrag (12,80) is afzonderlijk constraint",
       "status": "actief",
       "conflict_opmerking": null,
       "opmerkingen": [
-        "Tot 30/09/2026 geldt nog € 0,27/km",
-        "Bevestigd door sfonds200.be (Tier 1) als onderdeel sectorakkoord 15/01/2026"
+        "Tot 30/09/2026 geldt pc200_fietsvergoeding_2026_pre_oktober.",
+        "De Sfonds200-pagina formuleert de verhoging als € 0,32 per dag, maar in context van de voorgaande zin en het dagmaximum gaat het om €/km."
       ]
     },
     {

@@ -1,6 +1,7 @@
 // Woon-werk verkeer PC 200 — sectorale tussenkomsten 2026.
 // SSOT: knowledgebase/02_regelkader_2026.md §11 + sfonds200 vervoerskosten.
 
+import { safeGetFietsvergoeding } from "@/lib/fietsvergoeding";
 import { round2 } from "@/lib/money";
 import { safeGetValue } from "@/lib/periode";
 import type { Datapunt } from "@/types/dataset";
@@ -76,8 +77,6 @@ const BUS_TRAM_METRO_TABEL_2026: KmRij[] = [
   r(116, 200, 245),
 ];
 
-const FIETS_DAGMAX_2026 = 12.8;
-
 export function berekenWoonwerkVerkeer(input: WoonwerkVerkeerInput): WoonwerkVerkeerResultaat {
   const componenten: WoonwerkVerkeerResultaat["componenten"] = {};
   const waarschuwingen: string[] = [];
@@ -134,9 +133,10 @@ export function berekenWoonwerkVerkeer(input: WoonwerkVerkeerInput): WoonwerkVer
 }
 
 function berekenFiets(input: WoonwerkVerkeerInput): WoonwerkComponentResultaat {
-  const rsz = safeGetValue("pc200_fietsvergoeding_2026", { refDatum: input.refDatum });
+  const rsz = safeGetFietsvergoeding(input.refDatum);
   const kmPerDag = Math.max(input.fiets.kmPerDag ?? 0, 0);
-  const dagbedrag = Math.min(kmPerDag * (rsz.waarde ?? 0), FIETS_DAGMAX_2026);
+  const dagmaximum = rsz.datapunt.maximum_dagbedrag_genormaliseerd ?? Number.POSITIVE_INFINITY;
+  const dagbedrag = Math.min(kmPerDag * (rsz.waarde ?? 0), dagmaximum);
   const vergoeding = round2(dagbedrag * Math.max(input.arbeidsdagenPerMaand, 0));
   return {
     label: "Fiets",
@@ -144,7 +144,7 @@ function berekenFiets(input: WoonwerkVerkeerInput): WoonwerkComponentResultaat {
     basisMaandbedrag: vergoeding,
     km: kmPerDag,
     datapunt: rsz.datapunt,
-    toelichting: `€ ${round2(rsz.waarde ?? 0).toFixed(2)} / km, begrensd op € ${FIETS_DAGMAX_2026.toFixed(2)} per dag.`,
+    toelichting: `€ ${round2(rsz.waarde ?? 0).toFixed(2)} / km, begrensd op € ${dagmaximum.toFixed(2)} per dag.`,
   };
 }
 
