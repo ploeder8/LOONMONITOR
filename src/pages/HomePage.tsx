@@ -1,14 +1,15 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import {
   ChevronDown,
   ChevronUp,
   Calendar,
+  Calculator,
   Leaf,
   Bike,
   Train,
-  TrendingUp,
-  Calculator,
+  Bus,
+  Car,
   Wallet,
   Briefcase,
   Gift,
@@ -32,15 +33,23 @@ import { rszBijdragen } from "@/lib/rsz";
 import { eindejaarspremie } from "@/lib/eindejaarspremie";
 import { ecocheques } from "@/lib/ecocheques";
 import {
-  fietsvergoeding,
-  FIETSVERGOEDING_HISTORISCHE_BANNER,
-} from "@/lib/fietsvergoeding";
-import { woonwerkTrein } from "@/lib/woonwerkTrein";
+  berekenWoonwerkVerkeer,
+  type WoonwerkVerkeerResultaat,
+} from "@/lib/woonwerkVerkeer";
+import {
+  vaaBedrijfswagen,
+  type BrandstofBedrijfswagen,
+  type VaaBedrijfswagenResultaat,
+} from "@/lib/vaaBedrijfswagen";
 import { jaarlijksePremie2026 } from "@/lib/jaarpremie";
-import { indexeerLoon } from "@/lib/indexatie";
 import { berekenNetto } from "@/lib/netto";
 import type { GezinsType, NettoResultaat } from "@/lib/netto";
-import { werkgeverskost, loonwig, type WerkgeverskostResultaat } from "@/lib/werkgeverskost";
+import {
+  MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026,
+  werkgeverskost,
+  loonwig,
+  type WerkgeverskostResultaat,
+} from "@/lib/werkgeverskost";
 import {
   BaremaBuitenSchaalError,
   DatapuntNietBruikbaar,
@@ -49,10 +58,11 @@ import {
 } from "@/lib/errors";
 import { formatEUR } from "@/lib/money";
 
-type Modus = "bediende" | "student";
+type Statuut = "bediende" | "student";
+type ProfielSetter = <K extends keyof Profiel>(k: K, v: Profiel[K]) => void;
 
 interface Profiel {
-  modus: Modus;
+  statuut: Statuut;
   schaal: Schaal;
   cat: BaremaCat;
   ervaringJaren: number;
@@ -60,14 +70,26 @@ interface Profiel {
   studentLeeftijd: number;
   brutoloon: number;
   bouwVlag: boolean;
-  refDatum: string;
+  berekeningsMaand: string;
+  berekeningsJaar: string;
   ancienniteitMaanden: number;
   prestatieMaanden: number;
   tewerkstellingsbreuk: number;
+  woonwerkFiets: boolean;
+  woonwerkPrivewagen: boolean;
+  woonwerkBusTramMetro: boolean;
+  woonwerkTrein: boolean;
+  woonwerkBedrijfswagen: boolean;
   kmPerDag: number;
+  treinKm: number;
+  busTramMetroKm: number;
+  busTramMetroPrijs: number;
+  privewagenKm: number;
+  bedrijfswagenCataloguswaarde: number;
+  bedrijfswagenDatumEersteInschrijving: string;
+  bedrijfswagenBrandstof: BrandstofBedrijfswagen;
+  bedrijfswagenCo2: number;
   arbeidsdagenPerMaand: number;
-  treinkaartPrijs: number;
-  oudLoon: number;
   gezinstype: GezinsType;
   kinderenTenLaste: number;
   kinderenOnder3: number;
@@ -76,12 +98,15 @@ interface Profiel {
   // Werkgeversbijdragen (extralegale voordelen)
   arbeidsongevallenPct: number;
   extraGroepsverzekering: number;
-  extraMaaltijdcheques: number;
+  maaltijdchequeWerkgeversaandeelPerDag: number;
+  maaltijdchequeWerknemersbijdragePerDag: number;
   extraHospitalisatie: number;
+  hospitalisatieEigenBijdrage: number;
+  onkostenvergoedingPerMaand: number;
 }
 
 const DEFAULTS: Profiel = {
-  modus: "bediende",
+  statuut: "bediende",
   schaal: "I",
   cat: "A",
   ervaringJaren: 5,
@@ -89,14 +114,26 @@ const DEFAULTS: Profiel = {
   studentLeeftijd: 17,
   brutoloon: 2276.51,
   bouwVlag: false,
-  refDatum: "2026-06-01",
+  berekeningsMaand: "06",
+  berekeningsJaar: "2026",
   ancienniteitMaanden: 12,
   prestatieMaanden: 12,
   tewerkstellingsbreuk: 1,
+  woonwerkFiets: false,
+  woonwerkPrivewagen: false,
+  woonwerkBusTramMetro: false,
+  woonwerkTrein: true,
+  woonwerkBedrijfswagen: false,
   kmPerDag: 8,
-  arbeidsdagenPerMaand: 22,
-  treinkaartPrijs: 92,
-  oudLoon: 3500,
+  treinKm: 15,
+  busTramMetroKm: 10,
+  busTramMetroPrijs: 60,
+  privewagenKm: 15,
+  bedrijfswagenCataloguswaarde: 40000,
+  bedrijfswagenDatumEersteInschrijving: "2026-01-01",
+  bedrijfswagenBrandstof: "benzine",
+  bedrijfswagenCo2: 100,
+  arbeidsdagenPerMaand: aantalWeekdagenInMaand("2026", "06"),
   gezinstype: "alleenstaand",
   kinderenTenLaste: 0,
   kinderenOnder3: 0,
@@ -104,20 +141,116 @@ const DEFAULTS: Profiel = {
   groepsverzekeringEigenBijdrage: 0,
   arbeidsongevallenPct: 0.003,
   extraGroepsverzekering: 0,
-  extraMaaltijdcheques: 0,
+  maaltijdchequeWerkgeversaandeelPerDag: MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026,
+  maaltijdchequeWerknemersbijdragePerDag: 1.09,
   extraHospitalisatie: 0,
+  hospitalisatieEigenBijdrage: 0,
+  onkostenvergoedingPerMaand: 0,
 };
+
+export function aantalWeekdagenInMaand(berekeningsJaar: string, berekeningsMaand: string): number {
+  const jaar = parseInt(berekeningsJaar, 10);
+  const maandIndex = parseInt(berekeningsMaand, 10) - 1;
+  if (!Number.isFinite(jaar) || !Number.isFinite(maandIndex)) return 0;
+
+  let dagen = 0;
+  const datum = new Date(Date.UTC(jaar, maandIndex, 1));
+  while (datum.getUTCMonth() === maandIndex) {
+    const weekdag = datum.getUTCDay();
+    if (weekdag !== 0 && weekdag !== 6) dagen += 1;
+    datum.setUTCDate(datum.getUTCDate() + 1);
+  }
+  return dagen;
+}
+
+export function refDatumVoorMaand(
+  berekeningsJaar: string | undefined,
+  berekeningsMaand: string | undefined,
+): string {
+  if (berekeningsMaand && /^\d{4}-\d{2}$/.test(berekeningsMaand)) {
+    return `${berekeningsMaand}-01`;
+  }
+  return `${berekeningsJaar ?? DEFAULTS.berekeningsJaar}-${berekeningsMaand ?? DEFAULTS.berekeningsMaand}-01`;
+}
+
+export function tewerkstellingsbreukNaarPercentage(tewerkstellingsbreuk: number): number {
+  return tewerkstellingsbreuk * 100;
+}
+
+export function percentageNaarTewerkstellingsbreuk(percentage: number): number {
+  return percentage / 100;
+}
+
+export function eindejaarspremieMaandenVoorCheckbox(eindejaarspremieAan: boolean): Pick<
+  Profiel,
+  "ancienniteitMaanden" | "prestatieMaanden"
+> {
+  const maanden = eindejaarspremieAan ? 12 : 0;
+  return {
+    ancienniteitMaanden: maanden,
+    prestatieMaanden: maanden,
+  };
+}
+
+function normaliseerProfiel(profiel: Profiel): Profiel {
+  if (/^\d{4}-\d{2}$/.test(profiel.berekeningsMaand)) {
+    const [berekeningsJaar, berekeningsMaand] = profiel.berekeningsMaand.split("-");
+    return {
+      ...profiel,
+      berekeningsJaar: profiel.berekeningsJaar ?? berekeningsJaar,
+      berekeningsMaand,
+    };
+  }
+  if (!profiel.berekeningsJaar) {
+    return { ...profiel, berekeningsJaar: DEFAULTS.berekeningsJaar };
+  }
+  return profiel;
+}
+
+interface MobiliteitBerekening {
+  woonwerk: WoonwerkVerkeerResultaat;
+  vaaBedrijfswagen: VaaBedrijfswagenResultaat | null;
+}
+
+function berekenMobiliteitVoorProfiel(p: Profiel, refDatum: string): MobiliteitBerekening {
+  const werkdagenInMaand = aantalWeekdagenInMaand(p.berekeningsJaar, p.berekeningsMaand);
+  const woonwerk = berekenWoonwerkVerkeer({
+    refDatum,
+    brutoloon: p.brutoloon,
+    arbeidsdagenPerMaand: p.arbeidsdagenPerMaand,
+    werkdagenInMaand,
+    fiets: { actief: p.woonwerkFiets, kmPerDag: p.kmPerDag },
+    trein: { actief: p.woonwerkTrein, kmEnkel: p.treinKm },
+    busTramMetro: {
+      actief: p.woonwerkBusTramMetro,
+      kmEnkel: p.busTramMetroKm,
+      prijsPerMaand: p.busTramMetroPrijs,
+    },
+    privewagen: { actief: p.woonwerkPrivewagen, kmEnkel: p.privewagenKm },
+  });
+  const vaa = p.woonwerkBedrijfswagen
+    ? vaaBedrijfswagen({
+        cataloguswaarde: p.bedrijfswagenCataloguswaarde,
+        datumEersteInschrijving: p.bedrijfswagenDatumEersteInschrijving,
+        brandstof: p.bedrijfswagenBrandstof,
+        co2: p.bedrijfswagenCo2,
+        refDatum,
+      })
+    : null;
+  return { woonwerk, vaaBedrijfswagen: vaa };
+}
 
 export function HomePage() {
   const [p, setP] = useState<Profiel>(DEFAULTS);
+  const profiel = normaliseerProfiel(p);
 
   function set<K extends keyof Profiel>(k: K, v: Profiel[K]) {
-    setP((prev) => ({ ...prev, [k]: v }));
+    setP((prev) => ({ ...normaliseerProfiel(prev), [k]: v }));
   }
 
   return (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[400px_1fr]">
-      <ProfileForm profiel={p} set={set} />
+    <div className="home-layout">
+      <ProfileForm profiel={profiel} set={set} />
       <ErrorBoundary
         fallbackRender={({ error, resetErrorBoundary }) => (
           <Banner kind="error" title="Onverwachte fout">
@@ -127,21 +260,21 @@ export function HomePage() {
               style={{
                 marginTop: 8,
                 borderRadius: 4,
-                background: "#e8dfcf",
+                background: "var(--color-primary-border)",
                 border: "none",
                 padding: "4px 12px",
                 fontSize: 12,
                 cursor: "pointer",
-                color: "#3c3c3b",
+                color: "var(--color-text)",
               }}
             >
               Opnieuw proberen
             </button>
           </Banner>
         )}
-        resetKeys={[JSON.stringify(p)]}
+        resetKeys={[JSON.stringify(profiel)]}
       >
-        <ResultsPanel profiel={p} />
+        <ResultsPanel profiel={profiel} />
       </ErrorBoundary>
     </div>
   );
@@ -166,7 +299,7 @@ function FormSection({
     <div
       style={{
         borderRadius: 8,
-        border: "1px solid #e2ddd5",
+        border: "1px solid var(--color-border)",
         overflow: "hidden",
         flexShrink: 0,
       }}
@@ -180,14 +313,14 @@ function FormSection({
           alignItems: "center",
           justifyContent: "space-between",
           padding: "9px 12px",
-          background: open ? "#f5f0e8" : "#faf8f4",
+          background: open ? "var(--color-navy-50)" : "var(--color-background)",
           border: "none",
           cursor: "pointer",
           transition: "background 0.15s",
           gap: 8,
         }}
-        onMouseEnter={(e) => (e.currentTarget.style.background = "#e8dfcf")}
-        onMouseLeave={(e) => (e.currentTarget.style.background = open ? "#f5f0e8" : "#faf8f4")}
+        onMouseEnter={(e) => (e.currentTarget.style.background = "var(--color-primary-border)")}
+        onMouseLeave={(e) => (e.currentTarget.style.background = open ? "var(--color-navy-50)" : "var(--color-background)")}
       >
         <span
           style={{
@@ -196,17 +329,17 @@ function FormSection({
             gap: 6,
             fontSize: 13,
             fontWeight: 600,
-            color: "#5a5a59",
+            color: "var(--color-navy-500)",
             fontFamily: "var(--font-display)",
-            letterSpacing: "-0.01em",
+            letterSpacing: 0,
           }}
         >
-          {icon && <span style={{ color: "#9a8b7a" }}>{icon}</span>}
+          {icon && <span style={{ color: "var(--color-text-muted)" }}>{icon}</span>}
           {label}
         </span>
         {open
-          ? <ChevronUp size={14} style={{ color: "#9a8b7a" }} />
-          : <ChevronDown size={14} style={{ color: "#9a8b7a" }} />
+          ? <ChevronUp size={14} style={{ color: "var(--color-text-muted)" }} />
+          : <ChevronDown size={14} style={{ color: "var(--color-text-muted)" }} />
         }
       </button>
       {open && (
@@ -216,7 +349,7 @@ function FormSection({
             display: "flex",
             flexDirection: "column",
             gap: 10,
-            background: "#ffffff",
+            background: "var(--color-surface)",
           }}
         >
           {children}
@@ -226,6 +359,165 @@ function FormSection({
   );
 }
 
+const miniButtonStyle: CSSProperties = {
+  border: "1px solid var(--color-primary-border)",
+  borderRadius: "var(--radius-md)",
+  background: "var(--color-primary-soft)",
+  color: "var(--color-primary)",
+  cursor: "pointer",
+  fontSize: 12,
+  fontWeight: 600,
+  padding: "5px 9px",
+};
+
+function CheckboxLine({
+  checked,
+  label,
+  icon,
+  onChange,
+}: {
+  checked: boolean;
+  label: string;
+  icon: React.ReactNode;
+  onChange: (checked: boolean) => void;
+}) {
+  return (
+    <label
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
+        border: "1px solid var(--color-border)",
+        borderRadius: 8,
+        padding: "8px 10px",
+        fontSize: 13,
+        color: "var(--color-navy-500)",
+        cursor: "pointer",
+        background: checked ? "var(--color-primary-soft)" : "var(--color-surface)",
+      }}
+    >
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+        style={{ accentColor: "var(--color-primary)", width: 15, height: 15 }}
+      />
+      <span style={{ display: "inline-flex", color: "var(--color-primary)" }}>{icon}</span>
+      <span>{label}</span>
+    </label>
+  );
+}
+
+type BaremaInlineResult =
+  | { kind: "checked"; check: ReturnType<typeof brutolocheck> }
+  | { kind: "error"; message: string };
+
+function BaremaInlineCheck({ profiel }: { profiel: Profiel }) {
+  const result = berekenBaremaInlineCheck(profiel);
+
+  if (result.kind === "error") {
+    return (
+      <Banner kind="warning" title="Barema-check niet beschikbaar">
+        {result.message}
+      </Banner>
+    );
+  }
+
+  return <BaremaInlineCheckCard profiel={profiel} check={result.check} />;
+}
+
+function berekenBaremaInlineCheck(profiel: Profiel): BaremaInlineResult {
+  const refDatum = refDatumVoorMaand(profiel.berekeningsJaar, profiel.berekeningsMaand);
+
+  try {
+    return {
+      kind: "checked",
+      check: brutolocheck(
+        profiel.schaal,
+        profiel.cat,
+        profiel.ervaringJaren,
+        profiel.brutoloon,
+        refDatum,
+      ),
+    };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Barema kon niet worden gecontroleerd.";
+    return { kind: "error", message };
+  }
+}
+
+function BaremaInlineCheckCard({
+  profiel,
+  check,
+}: {
+  profiel: Profiel;
+  check: ReturnType<typeof brutolocheck>;
+}) {
+  return (
+    <div style={baremaInlineStyle(check.ok)}>
+      <BaremaInlineHeader
+        profiel={profiel}
+        minimum={check.sectoraalMinimum}
+        effectieveErvaring={check.effectieveErvaring}
+      />
+      {check.ok ? (
+        <span>Brutoloon voldoet aan het sectoraal minimum.</span>
+      ) : (
+        <span style={{ fontWeight: 600 }}>
+          Brutoloon ligt {formatEUR(Math.abs(check.verschil))} onder het minimum.
+        </span>
+      )}
+      {check.geclampt && <BaremaClampNote ok={check.ok} />}
+    </div>
+  );
+}
+
+function BaremaInlineHeader({
+  profiel,
+  minimum,
+  effectieveErvaring,
+}: {
+  profiel: Profiel;
+  minimum: number;
+  effectieveErvaring: number;
+}) {
+  const ervaringLabel = profiel.ervaringJaren === effectieveErvaring
+    ? `${profiel.ervaringJaren} jaar`
+    : `${profiel.ervaringJaren} jaar (barema ${effectieveErvaring} jaar)`;
+
+  return (
+    <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
+      <span style={{ fontWeight: 600 }}>
+        Minimum Schaal {profiel.schaal} · Cat {profiel.cat} · {ervaringLabel}
+      </span>
+      <span style={{ fontFamily: "var(--font-mono)", fontWeight: 700 }}>
+        {formatEUR(minimum)}
+      </span>
+    </div>
+  );
+}
+
+function BaremaClampNote({ ok }: { ok: boolean }) {
+  return (
+    <span style={{ color: ok ? "var(--color-text-muted)" : "#7f1d1d" }}>
+      Loonplafond bereikt: de barematabel gebruikt de hoogste beschikbare ervaring.
+    </span>
+  );
+}
+
+function baremaInlineStyle(ok: boolean): CSSProperties {
+  return {
+    border: `1px solid ${ok ? "var(--color-border)" : "#fca5a5"}`,
+    borderRadius: 8,
+    background: ok ? "var(--color-navy-50)" : "#fff1f2",
+    color: ok ? "var(--color-navy-500)" : "#991b1b",
+    padding: "9px 10px",
+    fontSize: 12,
+    display: "grid",
+    gap: 4,
+  };
+}
+
 // ─── ProfileForm ─────────────────────────────────────────────────────────────
 
 function ProfileForm({
@@ -233,21 +525,41 @@ function ProfileForm({
   set,
 }: {
   profiel: Profiel;
-  set: <K extends keyof Profiel>(k: K, v: Profiel[K]) => void;
+  set: ProfielSetter;
 }) {
+  function setBerekeningsMaand(maand: string) {
+    set("berekeningsMaand", maand);
+    set("arbeidsdagenPerMaand", aantalWeekdagenInMaand(profiel.berekeningsJaar, maand));
+  }
+
+  function setBerekeningsJaar(jaar: string) {
+    set("berekeningsJaar", jaar);
+    set("arbeidsdagenPerMaand", aantalWeekdagenInMaand(jaar, profiel.berekeningsMaand));
+  }
+
+  function setAlleWoonwerk(actief: boolean) {
+    set("woonwerkFiets", actief);
+    set("woonwerkPrivewagen", actief);
+    set("woonwerkBusTramMetro", actief);
+    set("woonwerkTrein", actief);
+    set("woonwerkBedrijfswagen", actief);
+  }
+
   return (
     <aside
-      className="lg:sticky lg:self-start"
+      className="min-w-0 lg:sticky lg:self-start"
       style={{
         top: 73,
+        width: "100%",
+        boxSizing: "border-box",
         maxHeight: "calc(100vh - 73px - 56px)",
         overflowY: "auto",
         display: "flex",
         flexDirection: "column",
         gap: 12,
         borderRadius: 14,
-        border: "1px solid #e2ddd5",
-        background: "#ffffff",
+        border: "1px solid var(--color-border)",
+        background: "var(--color-surface)",
         padding: "1.2rem 1.1rem",
       }}
     >
@@ -256,37 +568,78 @@ function ProfileForm({
           fontFamily: "var(--font-display)",
           fontSize: 15,
           fontWeight: 600,
-          color: "#3c3c3b",
-          letterSpacing: "-0.01em",
+          color: "var(--color-text)",
+          letterSpacing: 0,
           margin: 0,
         }}
       >
         Profiel
       </h2>
 
-      <FormField label="Modus">
+      {profiel.statuut === "bediende" && (
+        <TaxProfileFields profiel={profiel} set={set} />
+      )}
+
+      <FormField label="Statuut">
         <select
           className={selectClass}
-          value={profiel.modus}
-          onChange={(e) => set("modus", e.target.value as Modus)}
+          value={profiel.statuut}
+          onChange={(e) => set("statuut", e.target.value as Statuut)}
         >
-          <option value="bediende">Bediende (Schaal I/II)</option>
+          <option value="bediende">Bediende</option>
           <option value="student">Student</option>
         </select>
       </FormField>
 
-      <FormField label="Referentiedatum">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <FormField label="Maand">
+          <select
+            className={selectClass}
+            value={profiel.berekeningsMaand}
+            onChange={(e) => setBerekeningsMaand(e.target.value)}
+          >
+            <option value="01">Januari</option>
+            <option value="02">Februari</option>
+            <option value="03">Maart</option>
+            <option value="04">April</option>
+            <option value="05">Mei</option>
+            <option value="06">Juni</option>
+            <option value="07">Juli</option>
+            <option value="08">Augustus</option>
+            <option value="09">September</option>
+            <option value="10">Oktober</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+        </FormField>
+        <FormField label="Jaar">
+          <select
+            className={selectClass}
+            value={profiel.berekeningsJaar}
+            onChange={(e) => setBerekeningsJaar(e.target.value)}
+          >
+            <option value="2026">2026</option>
+          </select>
+        </FormField>
+      </div>
+
+      <FormField
+        label="Werkdagen in maand"
+        helper="Vooringevuld op basis van weekdagen in de gekozen maand. Aanpasbaar voor feestdagen, verlof of afwijkende prestaties."
+      >
         <input
           className={inputClass}
-          type="date"
-          value={profiel.refDatum}
-          onChange={(e) => set("refDatum", e.target.value)}
+          type="number"
+          min={0}
+          max={31}
+          value={profiel.arbeidsdagenPerMaand}
+          onChange={(e) => set("arbeidsdagenPerMaand", parseInt(e.target.value || "0", 10))}
         />
       </FormField>
 
-      {profiel.modus === "bediende" ? (
+      {profiel.statuut === "bediende" ? (
         <>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <FormField label="Schaal">
               <select
                 className={selectClass}
@@ -332,13 +685,15 @@ function ProfileForm({
             />
           </FormField>
 
+          <BaremaInlineCheck profiel={profiel} />
+
           <label
             style={{
               display: "flex",
               alignItems: "center",
               gap: 8,
               fontSize: 13,
-              color: "#5a5a59",
+              color: "var(--color-navy-500)",
               cursor: "pointer",
             }}
           >
@@ -346,71 +701,58 @@ function ProfileForm({
               type="checkbox"
               checked={profiel.bouwVlag}
               onChange={(e) => set("bouwVlag", e.target.checked)}
-              style={{ accentColor: "#7b6a58", width: 15, height: 15 }}
+              style={{ accentColor: "var(--color-primary)", width: 15, height: 15 }}
             />
             Bouw-subset (extra 1,80 % aanvullend pensioen)
           </label>
 
-          <FormSection label="Werkgeversbijdragen" icon={<Building2 size={13} />}>
+          <FormSection label="Bijkomende looncomponenten" icon={<Wallet size={13} />} defaultOpen>
+            <FormField label="Groepsverz. eigen bijdrage (€/m)">
+              <input
+                className={inputClass}
+                type="number"
+                step="0.01"
+                min={0}
+                value={profiel.groepsverzekeringEigenBijdrage}
+                onChange={(e) =>
+                  set("groepsverzekeringEigenBijdrage", parseFloat(e.target.value || "0"))
+                }
+              />
+            </FormField>
             <FormField
-              label="Arbeidsongevallen-tarief (%)"
-              helper="Burelen: ~0,3 %. Controleer uw polis."
+              label="Eigen bijdrage hospitalisatieverzekering (€/m)"
+              helper="Werknemersbijdrage die rechtstreeks van het cash-nettoloon wordt afgehouden."
             >
               <input
                 className={inputClass}
                 type="number"
                 step="0.01"
                 min={0}
-                max={10}
-                value={(profiel.arbeidsongevallenPct * 100).toFixed(2)}
+                value={profiel.hospitalisatieEigenBijdrage}
                 onChange={(e) =>
-                  set("arbeidsongevallenPct", parseFloat(e.target.value || "0") / 100)
-                }
-              />
-            </FormField>
-            <FormField label="Patronale groepsverzekering (€/m)">
-              <input
-                className={inputClass}
-                type="number"
-                step="0.01"
-                min={0}
-                value={profiel.extraGroepsverzekering}
-                onChange={(e) =>
-                  set("extraGroepsverzekering", parseFloat(e.target.value || "0"))
+                  set("hospitalisatieEigenBijdrage", parseFloat(e.target.value || "0"))
                 }
               />
             </FormField>
             <FormField
-              label="Maaltijdcheques — werkgeversaandeel (€/m)"
-              helper="Max €6,91/dag × arbeidsdagen. Niet verplicht in PC 200."
+              label="Onkostenvergoedingen (€/m)"
+              helper="Vrijgestelde netto-vergoeding: verhoogt nettoloon en werkgeverskost, zonder RSZ/BV-basis te wijzigen."
             >
               <input
                 className={inputClass}
                 type="number"
                 step="0.01"
                 min={0}
-                value={profiel.extraMaaltijdcheques}
+                value={profiel.onkostenvergoedingPerMaand}
                 onChange={(e) =>
-                  set("extraMaaltijdcheques", parseFloat(e.target.value || "0"))
-                }
-              />
-            </FormField>
-            <FormField label="Hospitalisatieverzekering (€/m)">
-              <input
-                className={inputClass}
-                type="number"
-                step="0.01"
-                min={0}
-                value={profiel.extraHospitalisatie}
-                onChange={(e) =>
-                  set("extraHospitalisatie", parseFloat(e.target.value || "0"))
+                  set("onkostenvergoedingPerMaand", parseFloat(e.target.value || "0"))
                 }
               />
             </FormField>
           </FormSection>
         </>
       ) : (
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <FormField label="Categorie">
             <select
               className={selectClass}
@@ -438,161 +780,384 @@ function ProfileForm({
 
       {/* ─── Accordion secties ─── */}
       <FormSection label="Eindejaarspremie" icon={<Calendar size={13} />}>
-        <div className="grid grid-cols-2 gap-3">
-          <FormField label="Anciënniteit (mnd)">
-            <input
-              className={inputClass}
-              type="number"
-              min={0}
-              value={profiel.ancienniteitMaanden}
-              onChange={(e) => set("ancienniteitMaanden", parseInt(e.target.value || "0", 10))}
-            />
-          </FormField>
-          <FormField label="Prestatie-maanden">
-            <input
-              className={inputClass}
-              type="number"
-              min={0}
-              max={12}
-              value={profiel.prestatieMaanden}
-              onChange={(e) => set("prestatieMaanden", parseInt(e.target.value || "0", 10))}
-            />
-          </FormField>
-        </div>
+        <label
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            fontSize: 13,
+            color: "var(--color-navy-500)",
+            cursor: "pointer",
+          }}
+        >
+          <input
+            type="checkbox"
+            checked={profiel.prestatieMaanden > 0}
+            onChange={(e) => {
+              const maanden = eindejaarspremieMaandenVoorCheckbox(e.target.checked);
+              set("ancienniteitMaanden", maanden.ancienniteitMaanden);
+              set("prestatieMaanden", maanden.prestatieMaanden);
+            }}
+            style={{ accentColor: "var(--color-primary)", width: 15, height: 15 }}
+          />
+          Eindejaarspremie
+        </label>
       </FormSection>
 
       <FormSection label="Ecocheques" icon={<Leaf size={13} />}>
-        <FormField label="Tewerkstellingsbreuk (0 – 1)">
+        <FormField label="Tewerkstelling (%)">
           <input
             className={inputClass}
             type="number"
-            step="0.1"
+            step="1"
             min={0}
-            max={1}
-            value={profiel.tewerkstellingsbreuk}
-            onChange={(e) => set("tewerkstellingsbreuk", parseFloat(e.target.value || "0"))}
+            max={100}
+            value={tewerkstellingsbreukNaarPercentage(profiel.tewerkstellingsbreuk)}
+            onChange={(e) =>
+              set(
+                "tewerkstellingsbreuk",
+                percentageNaarTewerkstellingsbreuk(parseFloat(e.target.value || "0")),
+              )
+            }
           />
         </FormField>
       </FormSection>
 
-      <FormSection label="Fietsvergoeding" icon={<Bike size={13} />}>
-        <div className="grid grid-cols-2 gap-3">
-          <FormField label="Km per dag">
-            <input
-              className={inputClass}
-              type="number"
-              min={0}
-              value={profiel.kmPerDag}
-              onChange={(e) => set("kmPerDag", parseFloat(e.target.value || "0"))}
-            />
-          </FormField>
-          <FormField label="Arbeidsdagen / maand">
-            <input
-              className={inputClass}
-              type="number"
-              min={0}
-              max={31}
-              value={profiel.arbeidsdagenPerMaand}
-              onChange={(e) => set("arbeidsdagenPerMaand", parseInt(e.target.value || "0", 10))}
-            />
-          </FormField>
+      <FormSection label="Woon-werk verkeer" icon={<MapIcon size={13} />}>
+        <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
+          <button
+            type="button"
+            onClick={() => setAlleWoonwerk(true)}
+            style={miniButtonStyle}
+          >
+            Alles selecteren
+          </button>
+          <button
+            type="button"
+            onClick={() => setAlleWoonwerk(false)}
+            style={miniButtonStyle}
+          >
+            Alles wissen
+          </button>
+        </div>
+
+        <div style={{ display: "grid", gap: 8 }}>
+          <CheckboxLine
+            checked={profiel.woonwerkFiets}
+            label="Fiets"
+            icon={<Bike size={14} />}
+            onChange={(checked) => set("woonwerkFiets", checked)}
+          />
+          {profiel.woonwerkFiets && (
+            <FormField label="Fiets km per dag">
+              <input
+                className={inputClass}
+                type="number"
+                min={0}
+                value={profiel.kmPerDag}
+                onChange={(e) => set("kmPerDag", parseFloat(e.target.value || "0"))}
+              />
+            </FormField>
+          )}
+
+          <CheckboxLine
+            checked={profiel.woonwerkPrivewagen}
+            label="Privéwagen"
+            icon={<Car size={14} />}
+            onChange={(checked) => set("woonwerkPrivewagen", checked)}
+          />
+          {profiel.woonwerkPrivewagen && (
+            <FormField label="Privéwagen afstand km">
+              <input
+                className={inputClass}
+                type="number"
+                min={0}
+                value={profiel.privewagenKm}
+                onChange={(e) => set("privewagenKm", parseFloat(e.target.value || "0"))}
+              />
+            </FormField>
+          )}
+
+          <CheckboxLine
+            checked={profiel.woonwerkBusTramMetro}
+            label="Bus / tram / metro"
+            icon={<Bus size={14} />}
+            onChange={(checked) => set("woonwerkBusTramMetro", checked)}
+          />
+          {profiel.woonwerkBusTramMetro && (
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <FormField label="OV afstand km">
+                <input
+                  className={inputClass}
+                  type="number"
+                  min={0}
+                  value={profiel.busTramMetroKm}
+                  onChange={(e) => set("busTramMetroKm", parseFloat(e.target.value || "0"))}
+                />
+              </FormField>
+              <FormField label="OV prijs / maand (€)">
+                <input
+                  className={inputClass}
+                  type="number"
+                  step="0.01"
+                  min={0}
+                  value={profiel.busTramMetroPrijs}
+                  onChange={(e) => set("busTramMetroPrijs", parseFloat(e.target.value || "0"))}
+                />
+              </FormField>
+            </div>
+          )}
+
+          <CheckboxLine
+            checked={profiel.woonwerkTrein}
+            label="Trein"
+            icon={<Train size={14} />}
+            onChange={(checked) => set("woonwerkTrein", checked)}
+          />
+          {profiel.woonwerkTrein && (
+            <FormField label="Trein afstand km">
+              <input
+                className={inputClass}
+                type="number"
+                min={0}
+                value={profiel.treinKm}
+                onChange={(e) => set("treinKm", parseFloat(e.target.value || "0"))}
+              />
+            </FormField>
+          )}
+
+          <CheckboxLine
+            checked={profiel.woonwerkBedrijfswagen}
+            label="Bedrijfswagen"
+            icon={<Car size={14} />}
+            onChange={(checked) => set("woonwerkBedrijfswagen", checked)}
+          />
+          {profiel.woonwerkBedrijfswagen && (
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <FormField label="Cataloguswaarde (€)">
+                <input
+                  className={inputClass}
+                  type="number"
+                  step="0.01"
+                  min={0}
+                  value={profiel.bedrijfswagenCataloguswaarde}
+                  onChange={(e) => set("bedrijfswagenCataloguswaarde", parseFloat(e.target.value || "0"))}
+                />
+              </FormField>
+              <FormField label="Eerste inschrijving">
+                <input
+                  className={inputClass}
+                  type="date"
+                  value={profiel.bedrijfswagenDatumEersteInschrijving}
+                  onChange={(e) => set("bedrijfswagenDatumEersteInschrijving", e.target.value)}
+                />
+              </FormField>
+              <FormField label="Brandstof">
+                <select
+                  className={selectClass}
+                  value={profiel.bedrijfswagenBrandstof}
+                  onChange={(e) =>
+                    set("bedrijfswagenBrandstof", e.target.value as BrandstofBedrijfswagen)
+                  }
+                >
+                  <option value="diesel">Diesel</option>
+                  <option value="benzine">Benzine</option>
+                  <option value="elektriciteit">Elektriciteit</option>
+                </select>
+              </FormField>
+              {profiel.bedrijfswagenBrandstof !== "elektriciteit" && (
+                <FormField label="CO2-waarde">
+                  <input
+                    className={inputClass}
+                    type="number"
+                    min={0}
+                    value={profiel.bedrijfswagenCo2}
+                    onChange={(e) => set("bedrijfswagenCo2", parseFloat(e.target.value || "0"))}
+                  />
+                </FormField>
+              )}
+            </div>
+          )}
         </div>
       </FormSection>
 
-      <FormSection label="Woon-werk trein" icon={<Train size={13} />}>
-        <FormField label="Treinkaart 2e klasse / maand (€)">
-          <input
-            className={inputClass}
-            type="number"
-            step="0.01"
-            min={0}
-            value={profiel.treinkaartPrijs}
-            onChange={(e) => set("treinkaartPrijs", parseFloat(e.target.value || "0"))}
-          />
-        </FormField>
-      </FormSection>
-
-      <FormSection label="Indexatie" icon={<TrendingUp size={13} />}>
-        <FormField label="Loon op 31/12/2025 (€)">
-          <input
-            className={inputClass}
-            type="number"
-            step="0.01"
-            min={0}
-            value={profiel.oudLoon}
-            onChange={(e) => set("oudLoon", parseFloat(e.target.value || "0"))}
-          />
-        </FormField>
-      </FormSection>
-
-      {profiel.modus === "bediende" && (
-        <FormSection label="Netto berekening" icon={<Calculator size={13} />} defaultOpen>
-          <FormField label="Gezinstype (voor BV)">
-            <select
-              className={selectClass}
-              value={profiel.gezinstype}
-              onChange={(e) => set("gezinstype", e.target.value as GezinsType)}
-            >
-              <option value="alleenstaand">Alleenstaand / eenoudergezin</option>
-              <option value="gehuwd_met_inkomen">Gehuwd – partner met inkomen</option>
-              <option value="gehuwd_zonder_inkomen">Gehuwd – partner zonder inkomen</option>
-            </select>
-          </FormField>
-          <div className="grid grid-cols-2 gap-3">
-            <FormField label="Kinderen ten laste">
-              <input
-                className={inputClass}
-                type="number"
-                min={0}
-                max={12}
-                value={profiel.kinderenTenLaste}
-                onChange={(e) => set("kinderenTenLaste", parseInt(e.target.value || "0", 10))}
-              />
-            </FormField>
-            <FormField label="waarvan < 3 jaar">
-              <input
-                className={inputClass}
-                type="number"
-                min={0}
-                max={profiel.kinderenTenLaste}
-                value={profiel.kinderenOnder3}
-                onChange={(e) => set("kinderenOnder3", Math.min(profiel.kinderenTenLaste, parseInt(e.target.value || "0", 10)))}
-              />
-            </FormField>
-          </div>
-          {profiel.gezinstype === "alleenstaand" && profiel.kinderenTenLaste > 0 && (
-            <label
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                fontSize: 13,
-                color: "#5a5a59",
-                cursor: "pointer",
-              }}
-            >
-              <input
-                type="checkbox"
-                checked={profiel.fiscaalAlleenstaandeMetKind}
-                onChange={(e) => set("fiscaalAlleenstaandeMetKind", e.target.checked)}
-                style={{ accentColor: "#7b6a58", width: 15, height: 15 }}
-              />
-              Fiscaal alleenstaande ouder (+€52 BV-vermindering)
-            </label>
-          )}
-          <FormField label="Groepsverz. eigen bijdrage (€/m)">
+      {profiel.statuut !== "student" && (
+        <FormSection label="Werkgeversbijdragen" icon={<Building2 size={13} />}>
+          <FormField
+            label="Arbeidsongevallen-tarief (%)"
+            helper="Burelen: ~0,3 %. Controleer uw polis."
+          >
             <input
               className={inputClass}
               type="number"
               step="0.01"
               min={0}
-              value={profiel.groepsverzekeringEigenBijdrage}
-              onChange={(e) => set("groepsverzekeringEigenBijdrage", parseFloat(e.target.value || "0"))}
+              max={10}
+              value={(profiel.arbeidsongevallenPct * 100).toFixed(2)}
+              onChange={(e) =>
+                set("arbeidsongevallenPct", parseFloat(e.target.value || "0") / 100)
+              }
+            />
+          </FormField>
+          <FormField label="Patronale groepsverzekering (€/m)">
+            <input
+              className={inputClass}
+              type="number"
+              step="0.01"
+              min={0}
+              value={profiel.extraGroepsverzekering}
+              onChange={(e) =>
+                set("extraGroepsverzekering", parseFloat(e.target.value || "0"))
+              }
+            />
+          </FormField>
+          <FormField
+            label="Maaltijdcheques — werkgeversaandeel (€/dag)"
+            helper={`Max €${MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026.toFixed(2).replace(".", ",")}/dag × ${profiel.arbeidsdagenPerMaand} werkdagen. Niet verplicht in PC 200.`}
+          >
+            <input
+              className={inputClass}
+              type="number"
+              step="0.01"
+              min={0}
+              max={MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026}
+              value={profiel.maaltijdchequeWerkgeversaandeelPerDag}
+              onChange={(e) =>
+                set("maaltijdchequeWerkgeversaandeelPerDag", parseFloat(e.target.value || "0"))
+              }
+            />
+          </FormField>
+          <FormField
+            label="Maaltijdcheques — werknemersbijdrage (€/dag)"
+            helper={`Min €1,09/dag × ${profiel.arbeidsdagenPerMaand} werkdagen. Mag hoger liggen volgens de werkgeverregeling.`}
+          >
+            <input
+              className={inputClass}
+              type="number"
+              step="0.01"
+              min={0}
+              value={profiel.maaltijdchequeWerknemersbijdragePerDag}
+              onChange={(e) =>
+                set("maaltijdchequeWerknemersbijdragePerDag", parseFloat(e.target.value || "0"))
+              }
+            />
+          </FormField>
+          <FormField label="Hospitalisatieverzekering (€/m)">
+            <input
+              className={inputClass}
+              type="number"
+              step="0.01"
+              min={0}
+              value={profiel.extraHospitalisatie}
+              onChange={(e) =>
+                set("extraHospitalisatie", parseFloat(e.target.value || "0"))
+              }
             />
           </FormField>
         </FormSection>
       )}
+
     </aside>
+  );
+}
+
+function TaxProfileFields({
+  profiel,
+  set,
+}: {
+  profiel: Profiel;
+  set: ProfielSetter;
+}) {
+  return (
+    <>
+      <GezinstypeField profiel={profiel} set={set} />
+      <KinderenVoorheffingFields profiel={profiel} set={set} />
+      {profiel.gezinstype === "alleenstaand" && profiel.kinderenTenLaste > 0 && (
+        <AlleenstaandeOuderField profiel={profiel} set={set} />
+      )}
+    </>
+  );
+}
+
+function GezinstypeField({ profiel, set }: { profiel: Profiel; set: ProfielSetter }) {
+  return (
+    <FormField label="Gezinstype (voor BV)">
+      <select
+        className={selectClass}
+        value={profiel.gezinstype}
+        onChange={(e) => set("gezinstype", e.target.value as GezinsType)}
+      >
+        <option value="alleenstaand">Alleenstaand / eenoudergezin</option>
+        <option value="gehuwd_met_inkomen">Gehuwd - partner met inkomen</option>
+        <option value="gehuwd_zonder_inkomen">Gehuwd - partner zonder inkomen</option>
+      </select>
+    </FormField>
+  );
+}
+
+function KinderenVoorheffingFields({ profiel, set }: { profiel: Profiel; set: ProfielSetter }) {
+  function setKinderenTenLaste(aantal: number) {
+    set("kinderenTenLaste", aantal);
+    set("kinderenOnder3", Math.min(profiel.kinderenOnder3, aantal));
+  }
+
+  return (
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <FormField label="Kinderen ten laste">
+        <input
+          className={inputClass}
+          type="number"
+          min={0}
+          max={12}
+          value={profiel.kinderenTenLaste}
+          onChange={(e) => setKinderenTenLaste(parseInt(e.target.value || "0", 10))}
+        />
+      </FormField>
+      <KinderenOnderDrieField profiel={profiel} set={set} />
+    </div>
+  );
+}
+
+function KinderenOnderDrieField({ profiel, set }: { profiel: Profiel; set: ProfielSetter }) {
+  return (
+    <FormField
+      label="Kinderen < 3 jaar"
+      helper="Extra BV-vermindering: €76/m per kind, als er geen kinderopvangaftrek wordt toegepast."
+    >
+      <input
+        className={inputClass}
+        type="number"
+        min={0}
+        max={profiel.kinderenTenLaste}
+        value={profiel.kinderenOnder3}
+        onChange={(e) =>
+          set("kinderenOnder3", Math.min(profiel.kinderenTenLaste, parseInt(e.target.value || "0", 10)))
+        }
+      />
+    </FormField>
+  );
+}
+
+function AlleenstaandeOuderField({ profiel, set }: { profiel: Profiel; set: ProfielSetter }) {
+  return (
+    <label
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
+        fontSize: 13,
+        color: "var(--color-navy-500)",
+        cursor: "pointer",
+      }}
+    >
+      <input
+        type="checkbox"
+        checked={profiel.fiscaalAlleenstaandeMetKind}
+        onChange={(e) => set("fiscaalAlleenstaandeMetKind", e.target.checked)}
+        style={{ accentColor: "var(--color-primary)", width: 15, height: 15 }}
+      />
+      Fiscaal alleenstaande ouder (+€52 BV-vermindering)
+    </label>
   );
 }
 
@@ -623,7 +1188,7 @@ function ResultsPanel({ profiel }: { profiel: Profiel }) {
   const { summary, bands } = useMemo(() => bouwResultaten(profiel), [profiel]);
 
   const cells: SummaryCell[] =
-    profiel.modus === "bediende"
+    profiel.statuut === "bediende"
       ? [
           { label: "Bruto", bedrag: summary.bruto },
           { label: "Netto", bedrag: summary.netto, highlight: true },
@@ -635,7 +1200,7 @@ function ResultsPanel({ profiel }: { profiel: Profiel }) {
   const anchors: JumpAnchor[] = bands.map((b) => ({ id: b.id, label: b.shortLabel }));
 
   return (
-    <section style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+    <section style={{ display: "flex", flexDirection: "column", gap: 16, minWidth: 0 }}>
       <ResultsSummaryStrip
         cells={cells}
         anchors={anchors}
@@ -713,11 +1278,11 @@ function NettoRow({
   dimmed?: boolean;
 }) {
   return (
-    <tr style={{ borderBottom: "1px solid #f5f0e8" }}>
+    <tr style={{ borderBottom: "1px solid var(--color-navy-50)" }}>
       <td
         style={{
           padding: "7px 8px 7px 0",
-          color: dimmed ? "#9a8b7a" : highlight ? "#3c3c3b" : "#5a5a59",
+          color: dimmed ? "var(--color-text-muted)" : highlight ? "var(--color-text)" : "var(--color-navy-500)",
           fontWeight: highlight ? 700 : 400,
           fontSize: highlight ? 15 : 13,
         }}
@@ -730,7 +1295,7 @@ function NettoRow({
           textAlign: "right",
           fontFamily: "var(--font-mono)",
           fontWeight: highlight ? 700 : 500,
-          color: highlight ? "#7b6a58" : dimmed ? "#9a8b7a" : "#3c3c3b",
+          color: highlight ? "var(--color-primary)" : dimmed ? "var(--color-text-muted)" : "var(--color-text)",
           fontSize: highlight ? 15 : 13,
         }}
       >
@@ -746,9 +1311,9 @@ function NettoPanel({ resultaat: r }: { resultaat: NettoResultaat }) {
   return (
     <div
       style={{
-        borderRadius: 14,
-        border: "2px solid #cbbba0",
-        background: "#ffffff",
+        borderRadius: "var(--radius-lg)",
+        border: "2px solid var(--color-primary)",
+        background: "var(--color-surface)",
         padding: "1rem 1.1rem",
       }}
     >
@@ -757,9 +1322,9 @@ function NettoPanel({ resultaat: r }: { resultaat: NettoResultaat }) {
         style={{
           fontSize: 15,
           fontWeight: 700,
-          color: "#3c3c3b",
+          color: "var(--color-text)",
           fontFamily: "var(--font-display)",
-          letterSpacing: "-0.01em",
+          letterSpacing: 0,
           marginBottom: 12,
         }}
       >
@@ -769,12 +1334,12 @@ function NettoPanel({ resultaat: r }: { resultaat: NettoResultaat }) {
       {/* BV validatie disclaimer */}
       <div
         style={{
-          background: "#f5f0e8",
-          border: "1px solid #cbbba0",
+          background: "var(--color-primary-soft)",
+          border: "1px solid var(--color-primary-border)",
           borderRadius: 8,
           padding: "8px 12px",
           fontSize: 12,
-          color: "#7b6a58",
+          color: "var(--color-primary)",
           marginBottom: 14,
           lineHeight: 1.5,
         }}
@@ -798,6 +1363,14 @@ function NettoPanel({ resultaat: r }: { resultaat: NettoResultaat }) {
             label={`Effectieve RSZ${r.werkbonus.totaal > 0 ? " (na werkbonus)" : ""}`}
             bedrag={r.effectieveRsz}
           />
+          {r.vaaBedrijfswagenPerMaand > 0 && (
+            <NettoRow
+              label="VAA bedrijfswagen (alleen BV-basis)"
+              bedrag={r.vaaBedrijfswagenPerMaand}
+              prefix="+"
+              dimmed
+            />
+          )}
           <NettoRow label={`Bedrijfsvoorheffing (${r.bv.schaal}, vóór gezinsverminderingen)`} bedrag={r.bv.bvPerMaand} />
           {r.bv.verminderingKinderen > 0 && (
             <NettoRow
@@ -844,12 +1417,40 @@ function NettoPanel({ resultaat: r }: { resultaat: NettoResultaat }) {
             label={`BBSZ (kwartaal ${formatEUR(r.bbsz.kwartaalbijdrage)} ÷ 3)`}
             bedrag={r.bbsz.maandelijksBedrag}
           />
-          <tr style={{ borderTop: "2px solid #cbbba0" }}>
+          {r.maaltijdchequeWerknemersbijdrage > 0 && (
+            <NettoRow
+              label={`Maaltijdcheques werknemersbijdrage (${formatEUR(r.maaltijdchequeWerknemersbijdragePerDag)} × ${r.maaltijdchequeWerkdagen} dagen)`}
+              bedrag={r.maaltijdchequeWerknemersbijdrage}
+            />
+          )}
+          {r.woonwerkVrijgesteldPerMaand > 0 && (
+            <NettoRow
+              label="Woon-werkvergoeding"
+              bedrag={r.woonwerkVrijgesteldPerMaand}
+              prefix="+"
+              dimmed
+            />
+          )}
+          {r.hospitalisatieEigenBijdrage > 0 && (
+            <NettoRow
+              label="Eigen bijdrage hospitalisatieverzekering"
+              bedrag={r.hospitalisatieEigenBijdrage}
+            />
+          )}
+          {r.onkostenvergoedingPerMaand > 0 && (
+            <NettoRow
+              label="Onkostenvergoedingen"
+              bedrag={r.onkostenvergoedingPerMaand}
+              prefix="+"
+              dimmed
+            />
+          )}
+          <tr style={{ borderTop: "2px solid var(--color-primary)" }}>
             <td
               style={{
                 padding: "10px 8px 4px 0",
                 fontWeight: 700,
-                color: "#3c3c3b",
+                color: "var(--color-text)",
                 fontFamily: "var(--font-display)",
                 fontSize: 15,
               }}
@@ -862,7 +1463,7 @@ function NettoPanel({ resultaat: r }: { resultaat: NettoResultaat }) {
                 textAlign: "right",
                 fontFamily: "var(--font-mono)",
                 fontWeight: 700,
-                color: "#7b6a58",
+                color: "var(--color-primary)",
                 fontSize: 22,
               }}
             >
@@ -876,10 +1477,10 @@ function NettoPanel({ resultaat: r }: { resultaat: NettoResultaat }) {
       <div
         style={{
           marginTop: 14,
-          borderTop: "1px solid #e2ddd5",
+          borderTop: "1px solid var(--color-border)",
           paddingTop: 10,
           fontSize: 12,
-          color: "#9a8b7a",
+          color: "var(--color-text-muted)",
         }}
       >
         <button
@@ -895,12 +1496,12 @@ function NettoPanel({ resultaat: r }: { resultaat: NettoResultaat }) {
             fontFamily: "var(--font-body)",
             fontSize: 13,
             fontWeight: 600,
-            color: "#5a5a59",
+            color: "var(--color-navy-500)",
           }}
         >
           {bvDetailOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
           BV-berekening detail
-          <span style={{ fontWeight: 400, color: "#9a8b7a", fontSize: 11 }}>
+          <span style={{ fontWeight: 400, color: "var(--color-text-muted)", fontSize: 11 }}>
             ({bvDetailOpen ? "verbergen" : "9 rijen"})
           </span>
         </button>
@@ -921,9 +1522,9 @@ function NettoPanel({ resultaat: r }: { resultaat: NettoResultaat }) {
                 ["BV / maand sleutelformule (vóór gezinsvermindering)", formatEUR(r.bv.bvPerMaand)],
                 ["BV / maand (na gezinsvermindering)", formatEUR(r.bv.bvNaVerminderingen)],
               ].map(([lbl, val]) => (
-                <tr key={lbl} style={{ borderBottom: "1px solid #f5f0e8" }}>
-                  <td style={{ padding: "4px 6px 4px 0", color: "#9a8b7a" }}>{lbl}</td>
-                  <td style={{ padding: "4px 0 4px 6px", textAlign: "right", fontFamily: "var(--font-mono)", color: "#5a5a59" }}>{val}</td>
+                <tr key={lbl} style={{ borderBottom: "1px solid var(--color-navy-50)" }}>
+                  <td style={{ padding: "4px 6px 4px 0", color: "var(--color-text-muted)" }}>{lbl}</td>
+                  <td style={{ padding: "4px 0 4px 6px", textAlign: "right", fontFamily: "var(--font-mono)", color: "var(--color-navy-500)" }}>{val}</td>
                 </tr>
               ))}
             </tbody>
@@ -960,14 +1561,16 @@ function WerkgeverskostPanel({
     maaltijdcheques: number;
     hospitalisatie: number;
     ecocheques: number;
+    woonwerk: number;
+    onkostenvergoeding: number;
   };
 }) {
   return (
     <div
       style={{
-        borderRadius: 14,
-        border: "2px solid #cbbba0",
-        background: "#ffffff",
+        borderRadius: "var(--radius-lg)",
+        border: "2px solid var(--color-primary)",
+        background: "var(--color-surface)",
         padding: "1rem 1.1rem",
       }}
     >
@@ -975,9 +1578,9 @@ function WerkgeverskostPanel({
         style={{
           fontSize: 15,
           fontWeight: 700,
-          color: "#3c3c3b",
+          color: "var(--color-text)",
           fontFamily: "var(--font-display)",
-          letterSpacing: "-0.01em",
+          letterSpacing: 0,
           marginBottom: 12,
         }}
       >
@@ -993,8 +1596,8 @@ function WerkgeverskostPanel({
             <NettoRow label="Bouw — aanvullend pensioen (1,80%)" bedrag={r.bouwAanvullendPensioen} prefix="+" />
           )}
           <NettoRow label={`Arbeidsongevallen (${(extras.arbeidsongevallenPct * 100).toFixed(2)} %)`} bedrag={r.arbeidsongevallen} prefix="+" />
-          <tr style={{ borderTop: "1px solid #e2ddd5" }}>
-            <td style={{ padding: "8px 8px 4px 0", fontWeight: 600, color: "#5a5a59", fontSize: 13 }}>
+          <tr style={{ borderTop: "1px solid var(--color-border)" }}>
+            <td style={{ padding: "8px 8px 4px 0", fontWeight: 600, color: "var(--color-navy-500)", fontSize: 13 }}>
               Totale loonkost — smal
             </td>
             <td
@@ -1003,7 +1606,7 @@ function WerkgeverskostPanel({
                 textAlign: "right",
                 fontFamily: "var(--font-mono)",
                 fontWeight: 600,
-                color: "#5a5a59",
+                color: "var(--color-navy-500)",
                 fontSize: 13,
               }}
             >
@@ -1024,12 +1627,18 @@ function WerkgeverskostPanel({
           {extras.ecocheques > 0 && (
             <NettoRow label={`Ecocheques (jaarlijks ÷ 12)`} bedrag={extras.ecocheques} prefix="+" dimmed />
           )}
-          <tr style={{ borderTop: "2px solid #cbbba0" }}>
+          {extras.woonwerk > 0 && (
+            <NettoRow label="Woon-werkvergoeding" bedrag={extras.woonwerk} prefix="+" dimmed />
+          )}
+          {extras.onkostenvergoeding > 0 && (
+            <NettoRow label="Onkostenvergoedingen" bedrag={extras.onkostenvergoeding} prefix="+" dimmed />
+          )}
+          <tr style={{ borderTop: "2px solid var(--color-primary)" }}>
             <td
               style={{
                 padding: "10px 8px 4px 0",
                 fontWeight: 700,
-                color: "#3c3c3b",
+                color: "var(--color-text)",
                 fontFamily: "var(--font-display)",
                 fontSize: 15,
               }}
@@ -1042,7 +1651,7 @@ function WerkgeverskostPanel({
                 textAlign: "right",
                 fontFamily: "var(--font-mono)",
                 fontWeight: 700,
-                color: "#7b6a58",
+                color: "var(--color-primary)",
                 fontSize: 22,
               }}
             >
@@ -1056,16 +1665,16 @@ function WerkgeverskostPanel({
       <div
         style={{
           marginTop: 14,
-          background: "#f5f0e8",
-          border: "1px solid #cbbba0",
+          background: "var(--color-primary-soft)",
+          border: "1px solid var(--color-primary-border)",
           borderRadius: 8,
           padding: "10px 12px",
           fontSize: 13,
-          color: "#3c3c3b",
+          color: "var(--color-text)",
         }}
       >
         <strong>Loonwig: {(loonwigPct * 100).toFixed(1)} %</strong>
-        <span style={{ color: "#9a8b7a", marginLeft: 8 }}>
+        <span style={{ color: "var(--color-text-muted)", marginLeft: 8 }}>
           = (totale loonkost {formatEUR(r.totaleLoonkostBreed)} − netto {formatEUR(netto)}) / totale loonkost
         </span>
       </div>
@@ -1080,14 +1689,75 @@ function WerkgeverskostPanel({
   );
 }
 
+function WoonwerkVerkeerCard({ mobiliteit }: { mobiliteit: MobiliteitBerekening }) {
+  const componenten = Object.values(mobiliteit.woonwerk.componenten).filter(
+    (component): component is NonNullable<typeof component> => Boolean(component),
+  );
+  const datapunten = [
+    ...mobiliteit.woonwerk.datapunten,
+    ...(mobiliteit.vaaBedrijfswagen?.datapunten ?? []),
+  ].filter((dp, index, all) => all.findIndex((item) => item.id === dp.id) === index);
+
+  return (
+    <ResultCard
+      label="Woon-werk verkeer"
+      amountEUR={mobiliteit.woonwerk.totaalVergoeding}
+      datapunten={datapunten}
+      helper={
+        <div style={{ display: "grid", gap: 6 }}>
+          {componenten.length === 0 && <span>Geen woon-werkvergoeding geselecteerd.</span>}
+          {componenten.map((component) => (
+            <div
+              key={component.label}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: 12,
+                color: "var(--color-navy-500)",
+              }}
+            >
+              <span>{component.label}</span>
+              <span style={{ fontFamily: "var(--font-mono)" }}>{formatEUR(component.vergoeding)}</span>
+            </div>
+          ))}
+          {mobiliteit.vaaBedrijfswagen && (
+            <div
+              style={{
+                borderTop: "1px solid var(--color-border)",
+                marginTop: 4,
+                paddingTop: 6,
+                display: "flex",
+                justifyContent: "space-between",
+                gap: 12,
+                color: "var(--color-navy-500)",
+              }}
+            >
+              <span>VAA bedrijfswagen / maand</span>
+              <span style={{ fontFamily: "var(--font-mono)" }}>
+                {formatEUR(mobiliteit.vaaBedrijfswagen.vaaMaand)}
+              </span>
+            </div>
+          )}
+          {mobiliteit.woonwerk.waarschuwingen.map((waarschuwing) => (
+            <span key={waarschuwing} style={{ color: "var(--color-warning)" }}>
+              {waarschuwing}
+            </span>
+          ))}
+        </div>
+      }
+    />
+  );
+}
+
 // ─── bouwResultaten ───────────────────────────────────────────────────────────
 
 function bouwResultaten(p: Profiel): BouwResultaten {
+  const refDatum = refDatumVoorMaand(p.berekeningsJaar, p.berekeningsMaand);
   const summary = computeSummary(p);
   const bands: ResultBandSpec[] = [];
 
   // Band 1 — Loonkost & netto (bediende only, FIRST per plan)
-  if (p.modus === "bediende") {
+  if (p.statuut === "bediende") {
     bands.push({
       id: "band-loonkost",
       title: "Loonkost & netto",
@@ -1096,34 +1766,47 @@ function bouwResultaten(p: Profiel): BouwResultaten {
       blocks: [
         safeRender(
           () => {
+            const heeftMaaltijdcheques = p.maaltijdchequeWerkgeversaandeelPerDag > 0;
+            const mobiliteit = berekenMobiliteitVoorProfiel(p, refDatum);
             const netto = berekenNetto({
               brutoloon: p.brutoloon,
-              refDatum: p.refDatum,
+              refDatum,
               bouwVlag: p.bouwVlag,
               gezinstype: p.gezinstype,
               kinderenTenLaste: p.kinderenTenLaste,
               kinderenOnder3: p.kinderenOnder3,
               fiscaalAlleenstaandeMetKind: p.fiscaalAlleenstaandeMetKind,
               groepsverzekeringEigenBijdrage: p.groepsverzekeringEigenBijdrage,
+              maaltijdchequeWerknemersbijdragePerDag: heeftMaaltijdcheques
+                ? p.maaltijdchequeWerknemersbijdragePerDag
+                : 0,
+              maaltijdchequeWerkdagen: heeftMaaltijdcheques ? p.arbeidsdagenPerMaand : 0,
+              hospitalisatieEigenBijdrage: p.hospitalisatieEigenBijdrage,
+              onkostenvergoedingPerMaand: p.onkostenvergoedingPerMaand,
+              woonwerkVrijgesteldPerMaand: mobiliteit.woonwerk.totaalVergoeding,
+              vaaBedrijfswagenPerMaand: mobiliteit.vaaBedrijfswagen?.vaaMaand ?? 0,
             });
             const ecoResult = ecocheques({
               tewerkstellingsbreuk: p.tewerkstellingsbreuk,
-              refDatum: p.refDatum,
+              refDatum,
             });
             const wgk = werkgeverskost({
               brutoloon: p.brutoloon,
-              refDatum: p.refDatum,
+              refDatum,
               bouwVlag: p.bouwVlag,
               arbeidsongevallenPct: p.arbeidsongevallenPct,
               extraGroepsverzekering: p.extraGroepsverzekering,
-              extraMaaltijdcheques: p.extraMaaltijdcheques,
+              maaltijdchequeWerkgeversaandeelPerDag: p.maaltijdchequeWerkgeversaandeelPerDag,
+              maaltijdchequeWerkdagen: p.arbeidsdagenPerMaand,
               extraHospitalisatie: p.extraHospitalisatie,
               extraEcocheques: ecoResult.bedrag / 12,
+              onkostenvergoedingPerMaand: p.onkostenvergoedingPerMaand,
+              woonwerkVergoedingPerMaand: mobiliteit.woonwerk.totaalVergoeding,
             });
             const wig = loonwig(wgk.totaleLoonkostBreed, netto.nettoloon);
-            return { netto, wgk, wig, ecoResult };
+            return { netto, wgk, wig, ecoResult, mobiliteit };
           },
-          ({ netto, wgk, wig, ecoResult }) => (
+          ({ netto, wgk, wig, ecoResult, mobiliteit }) => (
             <div
               className="grid grid-cols-1 xl:grid-cols-2"
               style={{ gap: 12, alignItems: "flex-start" }}
@@ -1136,9 +1819,16 @@ function bouwResultaten(p: Profiel): BouwResultaten {
                 extras={{
                   arbeidsongevallenPct: p.arbeidsongevallenPct,
                   groepsverzekering: p.extraGroepsverzekering,
-                  maaltijdcheques: p.extraMaaltijdcheques,
+                  maaltijdcheques: Math.round(
+                    Math.min(
+                      p.maaltijdchequeWerkgeversaandeelPerDag,
+                      MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026,
+                    ) * p.arbeidsdagenPerMaand * 100,
+                  ) / 100,
                   hospitalisatie: p.extraHospitalisatie,
                   ecocheques: ecoResult.bedrag / 12,
+                  woonwerk: mobiliteit.woonwerk.totaalVergoeding,
+                  onkostenvergoeding: p.onkostenvergoedingPerMaand,
                 }}
               />
             </div>
@@ -1150,12 +1840,12 @@ function bouwResultaten(p: Profiel): BouwResultaten {
 
   // Band 2 — Loonbasis (sectoraal min + bruto-check)
   const loonbasisBlocks: React.ReactNode[] = [];
-  if (p.modus === "bediende") {
+  if (p.statuut === "bediende") {
     loonbasisBlocks.push(
       safeRender(
         () => {
-          const r = lookupBarema(p.schaal, p.cat, p.ervaringJaren);
-          const c = brutolocheck(p.schaal, p.cat, p.ervaringJaren, p.brutoloon);
+          const r = lookupBarema(p.schaal, p.cat, p.ervaringJaren, refDatum);
+          const c = brutolocheck(p.schaal, p.cat, p.ervaringJaren, p.brutoloon, refDatum);
           return { r, c };
         },
         ({ r, c }) => (
@@ -1187,7 +1877,7 @@ function bouwResultaten(p: Profiel): BouwResultaten {
   } else {
     loonbasisBlocks.push(
       safeRender(
-        () => lookupStudentenbarema(p.studentenCat, p.studentLeeftijd),
+        () => lookupStudentenbarema(p.studentenCat, p.studentLeeftijd, refDatum),
         (r) => (
           <ResultCard
             label={`Studentenbarema — Cat ${p.studentenCat}, ${p.studentLeeftijd} jaar`}
@@ -1209,16 +1899,16 @@ function bouwResultaten(p: Profiel): BouwResultaten {
 
   // Band 3 — Periodieke voordelen
   const voordelenBlocks: React.ReactNode[] = [];
-  if (p.modus === "bediende") {
+  if (p.statuut === "bediende") {
     voordelenBlocks.push(
       safeRender(
-        () => rszBijdragen({ brutoloon: p.brutoloon, refDatum: p.refDatum, bouwVlag: p.bouwVlag }),
+        () => rszBijdragen({ brutoloon: p.brutoloon, refDatum, bouwVlag: p.bouwVlag }),
         (r) => (
           <div
             style={{
-              borderRadius: 14,
-              border: "1px solid #e2ddd5",
-              background: "#ffffff",
+              borderRadius: "var(--radius-lg)",
+              border: "1px solid var(--color-border)",
+              background: "var(--color-surface)",
               padding: "1rem 1.1rem",
             }}
           >
@@ -1226,7 +1916,7 @@ function bouwResultaten(p: Profiel): BouwResultaten {
               style={{
                 fontSize: 13,
                 fontWeight: 500,
-                color: "#5a5a59",
+                color: "var(--color-navy-500)",
                 marginBottom: 10,
                 fontFamily: "var(--font-body)",
               }}
@@ -1236,23 +1926,23 @@ function bouwResultaten(p: Profiel): BouwResultaten {
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
               <tbody>
                 {r.bronnen.map((b) => (
-                  <tr key={b.datapunt.id} style={{ borderBottom: "1px solid #f5f0e8" }}>
-                    <td style={{ padding: "7px 8px 7px 0", color: "#5a5a59" }}>{b.label}</td>
+                  <tr key={b.datapunt.id} style={{ borderBottom: "1px solid var(--color-navy-50)" }}>
+                    <td style={{ padding: "7px 8px 7px 0", color: "var(--color-navy-500)" }}>{b.label}</td>
                     <td
                       style={{
                         padding: "7px 0 7px 8px",
                         textAlign: "right",
                         fontFamily: "var(--font-mono)",
                         fontWeight: 600,
-                        color: "#3c3c3b",
+                        color: "var(--color-text)",
                       }}
                     >
                       {formatEUR(b.bedrag)}
                     </td>
                   </tr>
                 ))}
-                <tr style={{ borderTop: "2px solid #e2ddd5" }}>
-                  <td style={{ padding: "8px 8px 4px 0", fontWeight: 600, color: "#3c3c3b", fontSize: 13 }}>
+                <tr style={{ borderTop: "2px solid var(--color-border)" }}>
+                  <td style={{ padding: "8px 8px 4px 0", fontWeight: 600, color: "var(--color-text)", fontSize: 13 }}>
                     Totaal werkgeversbijdrage
                   </td>
                   <td
@@ -1261,7 +1951,7 @@ function bouwResultaten(p: Profiel): BouwResultaten {
                       textAlign: "right",
                       fontFamily: "var(--font-mono)",
                       fontWeight: 700,
-                      color: "#7b6a58",
+                      color: "var(--color-primary)",
                       fontSize: 15,
                     }}
                   >
@@ -1303,7 +1993,7 @@ function bouwResultaten(p: Profiel): BouwResultaten {
       () =>
         ecocheques({
           tewerkstellingsbreuk: p.tewerkstellingsbreuk,
-          refDatum: p.refDatum,
+          refDatum,
         }),
       (r) => (
         <ResultCard
@@ -1316,7 +2006,7 @@ function bouwResultaten(p: Profiel): BouwResultaten {
   );
   voordelenBlocks.push(
     safeRender(
-      () => jaarlijksePremie2026(p.refDatum),
+      () => jaarlijksePremie2026(refDatum),
       (r) => (
         <ResultCard
           label="Jaarlijkse premie 2026"
@@ -1334,64 +2024,17 @@ function bouwResultaten(p: Profiel): BouwResultaten {
     blocks: voordelenBlocks,
   });
 
-  // Band 4 — Mobiliteit & indexatie
+  // Band 4 — Mobiliteit
   const mobilityBlocks: React.ReactNode[] = [];
   mobilityBlocks.push(
     safeRender(
-      () =>
-        woonwerkTrein({
-          treinkaartPrijsPerMaand: p.treinkaartPrijs,
-          refDatum: p.refDatum,
-        }),
-      (r) => (
-        <ResultCard
-          label={`Woon-werk trein (${(r.fractie * 100).toFixed(0)} %)`}
-          amountEUR={r.werkgeverstussenkomst}
-          datapunten={[r.datapunt]}
-        />
-      ),
-    ),
-  );
-  if (p.refDatum < "2026-10-01") {
-    mobilityBlocks.push(
-      <Banner kind="info" title="Fietsvergoeding — historisch tarief">
-        {FIETSVERGOEDING_HISTORISCHE_BANNER}
-      </Banner>,
-    );
-  }
-  mobilityBlocks.push(
-    safeRender(
-      () =>
-        fietsvergoeding({
-          kmPerDag: p.kmPerDag,
-          arbeidsdagen: p.arbeidsdagenPerMaand,
-          refDatum: p.refDatum,
-        }),
-      (r) => (
-        <ResultCard
-          label={`Fietsvergoeding (€ ${r.tariefPerKm.toFixed(2)} / km × ${p.kmPerDag} km × ${p.arbeidsdagenPerMaand} dagen)`}
-          amountEUR={r.vergoeding}
-          datapunten={[r.datapunt]}
-        />
-      ),
-    ),
-  );
-  mobilityBlocks.push(
-    safeRender(
-      () => indexeerLoon({ oudLoon: p.oudLoon, refDatum: p.refDatum }),
-      (r) => (
-        <ResultCard
-          label={`Indexatie ondernemingsloon (× ${r.coefficient})`}
-          amountEUR={r.nieuwLoon}
-          helper={`Oud loon: ${formatEUR(r.oudLoon)} × ${r.coefficient}`}
-          datapunten={[r.datapunt]}
-        />
-      ),
+      () => berekenMobiliteitVoorProfiel(p, refDatum),
+      (mobiliteit) => <WoonwerkVerkeerCard mobiliteit={mobiliteit} />,
     ),
   );
   bands.push({
     id: "band-mobiliteit",
-    title: "Mobiliteit & indexatie",
+    title: "Mobiliteit",
     shortLabel: "Mobiliteit",
     icon: <MapIcon size={14} />,
     blocks: mobilityBlocks,
@@ -1401,33 +2044,47 @@ function bouwResultaten(p: Profiel): BouwResultaten {
 }
 
 function computeSummary(p: Profiel): ResultSummary {
-  if (p.modus !== "bediende") {
+  const refDatum = refDatumVoorMaand(p.berekeningsJaar, p.berekeningsMaand);
+  if (p.statuut !== "bediende") {
     return { bruto: p.brutoloon, netto: null, werkgeverskost: null, loonwig: null };
   }
   try {
+    const heeftMaaltijdcheques = p.maaltijdchequeWerkgeversaandeelPerDag > 0;
+    const mobiliteit = berekenMobiliteitVoorProfiel(p, refDatum);
     const netto = berekenNetto({
       brutoloon: p.brutoloon,
-      refDatum: p.refDatum,
+      refDatum,
       bouwVlag: p.bouwVlag,
       gezinstype: p.gezinstype,
       kinderenTenLaste: p.kinderenTenLaste,
       kinderenOnder3: p.kinderenOnder3,
       fiscaalAlleenstaandeMetKind: p.fiscaalAlleenstaandeMetKind,
       groepsverzekeringEigenBijdrage: p.groepsverzekeringEigenBijdrage,
+      maaltijdchequeWerknemersbijdragePerDag: heeftMaaltijdcheques
+        ? p.maaltijdchequeWerknemersbijdragePerDag
+        : 0,
+      maaltijdchequeWerkdagen: heeftMaaltijdcheques ? p.arbeidsdagenPerMaand : 0,
+      hospitalisatieEigenBijdrage: p.hospitalisatieEigenBijdrage,
+      onkostenvergoedingPerMaand: p.onkostenvergoedingPerMaand,
+      woonwerkVrijgesteldPerMaand: mobiliteit.woonwerk.totaalVergoeding,
+      vaaBedrijfswagenPerMaand: mobiliteit.vaaBedrijfswagen?.vaaMaand ?? 0,
     });
     const ecoForSummary = ecocheques({
       tewerkstellingsbreuk: p.tewerkstellingsbreuk,
-      refDatum: p.refDatum,
+      refDatum,
     });
     const wgk = werkgeverskost({
       brutoloon: p.brutoloon,
-      refDatum: p.refDatum,
+      refDatum,
       bouwVlag: p.bouwVlag,
       arbeidsongevallenPct: p.arbeidsongevallenPct,
       extraGroepsverzekering: p.extraGroepsverzekering,
-      extraMaaltijdcheques: p.extraMaaltijdcheques,
+      maaltijdchequeWerkgeversaandeelPerDag: p.maaltijdchequeWerkgeversaandeelPerDag,
+      maaltijdchequeWerkdagen: p.arbeidsdagenPerMaand,
       extraHospitalisatie: p.extraHospitalisatie,
       extraEcocheques: ecoForSummary.bedrag / 12,
+      onkostenvergoedingPerMaand: p.onkostenvergoedingPerMaand,
+      woonwerkVergoedingPerMaand: mobiliteit.woonwerk.totaalVergoeding,
     });
     const wig = loonwig(wgk.totaleLoonkostBreed, netto.nettoloon);
     return {

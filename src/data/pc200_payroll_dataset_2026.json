@@ -9,7 +9,6 @@
     "doeljaar": 2026,
     "dekking": [
       "brutolonen",
-      "indexering",
       "rsz",
       "fiscaliteit",
       "premies_en_voordelen",
@@ -27,8 +26,6 @@
     ],
     "opmerkingen": [
       "Sectorakkoord PC 200 voor 2025-2026 afgesloten op 15 januari 2026 door sociale partners; bevestigd door sfonds200.be",
-      "Centenindex (beperking indexering boven 4.000 EUR brutoloon) was aangekondigd in begrotingsakkoord maar reglementair kader niet tijdig klaar; niet toegepast op 1/1/2026",
-      "Voor 2026 wordt op 1/1/2026 een 'normale' (volledige) indexering toegepast in PC 200",
       "Bedrijfsvoorheffingsregels 2026 gepubliceerd via KB 11/12/2025 in BS 29/12/2025 (Bijlage III)",
       "Volledige sectorale baremamatrix PC 200 (Schaal I, Schaal II, studenten × Cat A/B/C/D) opgenomen vanaf 2026-05-08; primaire bron SSN (Tier 2), getrianguleerd met ACV en ACLVB (Tier 3) — alle 228 cellen onderling bevestigd",
       "Sectorpensioen-onderzoek (2026-05-08): bevestigd dat er geen algemeen sectoraal aanvullend pensioen bestaat voor het volledige PC 200 — enkel voor de bouw-subset (1,80% solidariteitsluik vanaf 1/1/2026 via CAO 13/03/2025 nr. 192.922)",
@@ -1727,134 +1724,6 @@
         "Bedragen omvatten reeds de sectorale indexering van +2,21% per 1/1/2026",
         "Categorieën C en D zijn niet van toepassing voor 16- en 17-jarigen"
       ]
-    },
-    {
-      "id": "lonen_pc200_indexcoefficient_2026",
-      "categorie": "lonen",
-      "subcategorie": "indexcoefficient",
-      "type": "parameter",
-      "pc": "200",
-      "omschrijving": "Indexcoëfficiënt voor lonen PC 200 vanaf 1/1/2026 (alle lonen × 1,0221)",
-      "waarde_bron": "1,0221",
-      "waarde_genormaliseerd": 1.0221,
-      "eenheid": "indexpunt",
-      "valuta": null,
-      "frequentie": "jaarlijks",
-      "berekeningsbasis": "vermenigvuldiging op vorig loon",
-      "toepassingsgebied": [
-        "minimumbarema's",
-        "effectieve lonen",
-        "GMMI"
-      ],
-      "voorwaarden": [],
-      "uitsluitingen": [],
-      "geldig_vanaf": "2026-01-01",
-      "geldig_tot": null,
-      "laatst_bevestigd_op": "2026-05-08",
-      "bron_organisatie": "Sociaal Fonds APCB (sfonds200.be)",
-      "bron_type": "sector",
-      "bron_titel": "Verloning 2026 – Indexering",
-      "bron_url": "https://www.sfonds200.be/nl/",
-      "bron_publicatiedatum": "2025-12-23",
-      "bron_vindplaats": "Pagina 'Verloning 2026 – Indexering'",
-      "bron_fragment": "De index voor het jaar 2026 bedraagt 2.21 %. Alle lonen worden per 1 januari 2026 verhoogd met een coëfficiënt 1,0221.",
-      "betrouwbaarheid": "Tier 1",
-      "extractie_methode": "letterlijk",
-      "normalisatie_toegepast": true,
-      "normalisatie_opmerking": "Komma vervangen door punt",
-      "status": "actief",
-      "conflict_opmerking": null,
-      "opmerkingen": []
-    }
-  ],
-  "indexatie": [
-    {
-      "id": "index_pc200_2026_percentage",
-      "categorie": "indexatie",
-      "subcategorie": "jaarlijkse_indexering",
-      "type": "parameter",
-      "pc": "200",
-      "omschrijving": "Sectorale indexering PC 200 op 1/1/2026 op basis van afgevlakte gezondheidsindex",
-      "waarde_bron": "2,21 %",
-      "waarde_genormaliseerd": 0.0221,
-      "eenheid": "percentage",
-      "valuta": null,
-      "frequentie": "jaarlijks",
-      "berekeningsbasis": "(afgevlakte gezondheidsindex nov+dec jaar t-1) / (afgevlakte gezondheidsindex nov+dec jaar t-2)",
-      "toepassingsgebied": [
-        "minimumbarema's",
-        "effectief uitbetaalde lonen",
-        "gewaarborgd gemiddeld minimuminkomen (GMMI)"
-      ],
-      "voorwaarden": [
-        "van openbare orde – verplicht toe te passen"
-      ],
-      "uitsluitingen": [
-        "centenindex-beperking 4.000 EUR niet van toepassing op 1/1/2026 (regelgeving niet tijdig gefinaliseerd)"
-      ],
-      "geldig_vanaf": "2026-01-01",
-      "geldig_tot": null,
-      "laatst_bevestigd_op": "2026-05-08",
-      "bron_organisatie": "Sociaal Fonds APCB (sfonds200.be)",
-      "bron_type": "sector",
-      "bron_titel": "Verloning 2026 – Indexering",
-      "bron_url": "https://www.sfonds200.be/nl/",
-      "bron_publicatiedatum": "2025-12-23",
-      "bron_vindplaats": "Pagina 'Verloning 2026 – Indexering'",
-      "bron_fragment": "De index voor het jaar 2026 bedraagt 2.21 %",
-      "betrouwbaarheid": "Tier 1",
-      "extractie_methode": "letterlijk",
-      "normalisatie_toegepast": true,
-      "normalisatie_opmerking": "Percentage als decimaal getal",
-      "status": "actief",
-      "conflict_opmerking": null,
-      "opmerkingen": [
-        "Bevestigd door meerdere onafhankelijke Tier 2 bronnen: Securex (23/12/2025), Agoria (22/12/2025), SD Worx (22/12/2025), Acerta, Prato",
-        "Berekening Securex: (133,07+133,33) / (130,22+130,42) = 2,21%"
-      ]
-    },
-    {
-      "id": "index_pc200_formule",
-      "categorie": "indexatie",
-      "subcategorie": "berekeningsformule",
-      "type": "parameter",
-      "pc": "200",
-      "omschrijving": "Indexeringsformule PC 200",
-      "waarde_bron": "(afgevlakte gezondheidsindex november + december jaar t-1) / (afgevlakte gezondheidsindex november + december jaar t-2)",
-      "waarde_genormaliseerd": null,
-      "eenheid": "tekst",
-      "valuta": null,
-      "frequentie": "jaarlijks",
-      "berekeningsbasis": "afgevlakte gezondheidsindex (Statbel)",
-      "toepassingsgebied": [
-        "barema's",
-        "effectieve lonen",
-        "GMMI"
-      ],
-      "voorwaarden": [
-        "vast tijdstip = 1 januari",
-        "variabel percentage afhankelijk van index"
-      ],
-      "uitsluitingen": [],
-      "geldig_vanaf": null,
-      "geldig_tot": null,
-      "laatst_bevestigd_op": "2026-05-08",
-      "bron_organisatie": "Securex / Prato (toepassing sectorale CAO)",
-      "bron_type": "sociaal_secretariaat",
-      "bron_titel": "Index in paritair comité 200 gekend",
-      "bron_url": "https://www.securex.be/nl/lex4you/werkgever/nieuws/index-2026-in-paritair-comite-200-gekend",
-      "bron_publicatiedatum": "2025-12-23",
-      "bron_vindplaats": "Sectie 'Hoe wordt de index berekend?'",
-      "bron_fragment": "afgevlakte gezondheidsindex november en december 2025 / afgevlakte gezondheidsindex november en december 2024",
-      "betrouwbaarheid": "Tier 2",
-      "extractie_methode": "letterlijk",
-      "normalisatie_toegepast": false,
-      "normalisatie_opmerking": "Tekstuele formule – machineleesbare versie vereist gestructureerde representatie",
-      "status": "actief",
-      "conflict_opmerking": null,
-      "opmerkingen": [
-        "Onderliggende sectorale CAO bepaalt mechanisme – Tier 1 verwijzing naar oorspronkelijke CAO PC 200 niet rechtstreeks geëxtraheerd in deze opdracht"
-      ]
     }
   ],
   "rsz": [
@@ -2989,6 +2858,114 @@
       "opmerkingen": [
         "Toepassing: refertejaarloon = 12 × normaal maandbruto; tarief op exceptioneel inkomen"
       ]
+    },
+    {
+      "id": "vaa_bedrijfswagen_min_2026",
+      "categorie": "fiscaliteit",
+      "subcategorie": "vaa_bedrijfswagen",
+      "type": "parameter",
+      "pc": "200",
+      "omschrijving": "VAA bedrijfswagen — minimum jaarbedrag 2026",
+      "waarde_bron": "Minimum VAA bedrijfswagen 2026: €1.690 per jaar",
+      "waarde_genormaliseerd": 1690,
+      "eenheid": "EUR",
+      "valuta": "EUR",
+      "frequentie": "jaarlijks",
+      "berekeningsbasis": "minimum voordeel alle aard bedrijfswagen",
+      "toepassingsgebied": [
+        "bedrijfswagen ter beschikking voor privégebruik"
+      ],
+      "voorwaarden": [],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": "2026-12-31",
+      "laatst_bevestigd_op": "2026-05-13",
+      "bron_organisatie": "FOD Financiën",
+      "bron_type": "overheid",
+      "bron_titel": "Voordeel van alle aard bedrijfswagens 2026",
+      "bron_url": "https://financien.belgium.be/sites/default/files/downloads/121-faq-bedrijfswagens-2026.pdf",
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": "FAQ bedrijfswagens 2026",
+      "bron_fragment": "Het voordeel kan nooit lager liggen dan 1.690 euro.",
+      "betrouwbaarheid": "Tier 1",
+      "extractie_methode": "gestructureerde_overname",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": null,
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": []
+    },
+    {
+      "id": "vaa_bedrijfswagen_co2_diesel_2026",
+      "categorie": "fiscaliteit",
+      "subcategorie": "vaa_bedrijfswagen",
+      "type": "parameter",
+      "pc": "200",
+      "omschrijving": "VAA bedrijfswagen — referentie-CO2 diesel 2026",
+      "waarde_bron": "Referentie-CO2-uitstoot diesel 2026: 58 g/km",
+      "waarde_genormaliseerd": 58,
+      "eenheid": "g CO2/km",
+      "valuta": null,
+      "frequentie": "jaarlijks",
+      "berekeningsbasis": "CO2-coëfficiënt bedrijfswagen",
+      "toepassingsgebied": [
+        "bedrijfswagens met dieselmotor"
+      ],
+      "voorwaarden": [],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": "2026-12-31",
+      "laatst_bevestigd_op": "2026-05-13",
+      "bron_organisatie": "FOD Financiën",
+      "bron_type": "overheid",
+      "bron_titel": "Voordeel van alle aard bedrijfswagens 2026",
+      "bron_url": "https://financien.belgium.be/sites/default/files/downloads/121-faq-bedrijfswagens-2026.pdf",
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": "FAQ bedrijfswagens 2026",
+      "bron_fragment": "Referentie-CO2-uitstoot diesel: 58 g/km.",
+      "betrouwbaarheid": "Tier 1",
+      "extractie_methode": "gestructureerde_overname",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": null,
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": []
+    },
+    {
+      "id": "vaa_bedrijfswagen_co2_benzine_2026",
+      "categorie": "fiscaliteit",
+      "subcategorie": "vaa_bedrijfswagen",
+      "type": "parameter",
+      "pc": "200",
+      "omschrijving": "VAA bedrijfswagen — referentie-CO2 benzine 2026",
+      "waarde_bron": "Referentie-CO2-uitstoot benzine/LPG/aardgas 2026: 70 g/km",
+      "waarde_genormaliseerd": 70,
+      "eenheid": "g CO2/km",
+      "valuta": null,
+      "frequentie": "jaarlijks",
+      "berekeningsbasis": "CO2-coëfficiënt bedrijfswagen",
+      "toepassingsgebied": [
+        "bedrijfswagens met benzine-, LPG- of aardgasmotor"
+      ],
+      "voorwaarden": [],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": "2026-12-31",
+      "laatst_bevestigd_op": "2026-05-13",
+      "bron_organisatie": "FOD Financiën",
+      "bron_type": "overheid",
+      "bron_titel": "Voordeel van alle aard bedrijfswagens 2026",
+      "bron_url": "https://financien.belgium.be/sites/default/files/downloads/121-faq-bedrijfswagens-2026.pdf",
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": "FAQ bedrijfswagens 2026",
+      "bron_fragment": "Referentie-CO2-uitstoot benzine/LPG/aardgas: 70 g/km.",
+      "betrouwbaarheid": "Tier 1",
+      "extractie_methode": "gestructureerde_overname",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": null,
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": []
     }
   ],
   "premies_en_voordelen": [
@@ -3283,6 +3260,123 @@
       ]
     },
     {
+      "id": "pc200_woonwerk_trein_tabel_2026",
+      "categorie": "premies_en_voordelen",
+      "subcategorie": "woon_werkverkeer_trein_tabel",
+      "type": "cao",
+      "pc": "200",
+      "omschrijving": "PC 200 tabel werkgeverstussenkomst treinvervoer — standaardabonnement vanaf 1/2/2026",
+      "waarde_bron": "Maandtabel per afstand: 1 km €39, 10 km €74, 15 km €92, 30 km €146, 146-150 km €409",
+      "waarde_genormaliseerd": null,
+      "eenheid": "EUR",
+      "valuta": "EUR",
+      "frequentie": "maandelijks",
+      "berekeningsbasis": "afstand woon-werk trein in kilometer",
+      "toepassingsgebied": [
+        "bedienden PC 200 met treinabonnement standaardabonnement"
+      ],
+      "voorwaarden": [],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2026-02-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-13",
+      "bron_organisatie": "Sociaal Fonds 200",
+      "bron_type": "sector",
+      "bron_titel": "Tussenkomst van de werkgever in de prijs van het treinvervoer voor een standaardabonnement",
+      "bron_url": "https://www.sfonds200.be/media/w3zamvtb/nl-trein-26-standaard.pdf",
+      "bron_publicatiedatum": "2026-02-01",
+      "bron_vindplaats": "Tabel standaardabonnement",
+      "bron_fragment": "De tussenkomst van de werkgever in de prijs van het treinvervoer is gelijk aan 100 % van de prijs van een treinkaart in 2de klasse.",
+      "betrouwbaarheid": "Tier 1",
+      "extractie_methode": "tabel_extractie",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "Tabelwaarden worden in src/lib/woonwerkVerkeer.ts als gestructureerde km-intervallen gebruikt.",
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Afstanden NMBS beperkt tot 150 km."
+      ]
+    },
+    {
+      "id": "pc200_woonwerk_bus_tram_metro_tabel_2026",
+      "categorie": "premies_en_voordelen",
+      "subcategorie": "woon_werkverkeer_openbaar_vervoer_tabel",
+      "type": "cao",
+      "pc": "200",
+      "omschrijving": "PC 200 forfaitaire tabel ander gemeenschappelijk openbaar vervoer — bus, tram, metro",
+      "waarde_bron": "Forfaitaire maandtabel volgens cao 19/9: 1-3 km €34, 10 km €52, 15 km €64, 116-200 km €245",
+      "waarde_genormaliseerd": null,
+      "eenheid": "EUR",
+      "valuta": "EUR",
+      "frequentie": "maandelijks",
+      "berekeningsbasis": "afstand vanaf vertrekhalte; maximum 75% van werkelijke prijs bij afstandsgebonden prijs",
+      "toepassingsgebied": [
+        "bus, tram of metro voor woon-werkverkeer PC 200"
+      ],
+      "voorwaarden": [
+        "prijs afstandsgebonden: forfaitaire tabel met maximum 75% werkelijke prijs"
+      ],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2026-02-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-13",
+      "bron_organisatie": "Sociaal Fonds 200",
+      "bron_type": "sector",
+      "bron_titel": "Tussenkomst van de werkgever in de vervoerskosten van het gemeenschappelijk openbaar vervoer, met uitzondering van het treinvervoer",
+      "bron_url": "https://www.sfonds200.be/media/m3kb5npz/nl-gecombineerd-2026.pdf",
+      "bron_publicatiedatum": "2026-02-01",
+      "bron_vindplaats": "Forfaitaire bedragen volgens cao 19/9",
+      "bron_fragment": "Wanneer de prijs afstandsgebonden is: de werkgever betaalt een tussenkomst op basis van een forfaitaire tabel met een maximum van 75% van de werkelijke prijs.",
+      "betrouwbaarheid": "Tier 1",
+      "extractie_methode": "tabel_extractie",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "Tabelwaarden worden in src/lib/woonwerkVerkeer.ts als gestructureerde km-intervallen gebruikt.",
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": []
+    },
+    {
+      "id": "pc200_woonwerk_privevervoer_tabel_2026",
+      "categorie": "premies_en_voordelen",
+      "subcategorie": "woon_werkverkeer_privevervoer_tabel",
+      "type": "cao",
+      "pc": "200",
+      "omschrijving": "PC 200 tabel werkgeverstussenkomst privévervoer vanaf 1/2/2026",
+      "waarde_bron": "50% van maandtreinkaart: 3 km €23,75, 10 km €37, 15 km €46, 146-150 km €204,50",
+      "waarde_genormaliseerd": null,
+      "eenheid": "EUR",
+      "valuta": "EUR",
+      "frequentie": "maandelijks",
+      "berekeningsbasis": "50% van prijs maandtreinkaart 2e klasse voor vergelijkbare afstand",
+      "toepassingsgebied": [
+        "bedienden PC 200 met eigen auto vanaf 3 km en onder loonplafond"
+      ],
+      "voorwaarden": [
+        "jaarloon ≤ loonplafond privévervoer",
+        "afstand minstens 3 km"
+      ],
+      "uitsluitingen": [
+        "niet combineerbaar met fietsvergoeding of openbaar vervoer"
+      ],
+      "geldig_vanaf": "2026-02-01",
+      "geldig_tot": null,
+      "laatst_bevestigd_op": "2026-05-13",
+      "bron_organisatie": "Sociaal Fonds 200",
+      "bron_type": "sector",
+      "bron_titel": "Tussenkomst van de werkgever in de prijs van het privévervoer",
+      "bron_url": "https://www.sfonds200.be/media/hnzjamml/nl-priv%C3%A9-26.pdf",
+      "bron_publicatiedatum": "2026-02-01",
+      "bron_vindplaats": "Tabel privévervoer",
+      "bron_fragment": "Toe te passen voor bedienden van wie de jaarlijkse bruto bezoldiging niet hoger ligt dan 36.688 euro.",
+      "betrouwbaarheid": "Tier 1",
+      "extractie_methode": "tabel_extractie",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "De module gebruikt dezelfde maandtreinkaarttabel en halveert het bedrag per PC200-regel.",
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": []
+    },
+    {
       "id": "pc200_woonwerk_loonplafond_prive_2026",
       "categorie": "premies_en_voordelen",
       "subcategorie": "loonplafond_prive_vervoer",
@@ -3325,6 +3419,50 @@
       ]
     },
     {
+      "id": "pc200_fietsvergoeding_2026_pre_oktober",
+      "categorie": "premies_en_voordelen",
+      "subcategorie": "fietsvergoeding",
+      "type": "cao",
+      "pc": "200",
+      "omschrijving": "Sectorale fietsvergoeding PC 200 tot en met 30/09/2026",
+      "waarde_bron": "€ 0,27 / km, max € 10,80 per arbeidsdag, max 40 km heen-terug per dag",
+      "waarde_genormaliseerd": 0.27,
+      "maximum_dagbedrag_genormaliseerd": 10.8,
+      "maximum_km_per_dag": 40,
+      "eenheid": "EUR",
+      "valuta": "EUR",
+      "frequentie": "per_prestatie",
+      "berekeningsbasis": "effectief gereden afstand woon-werk per fiets in kilometer",
+      "toepassingsgebied": [
+        "bedienden PC 200 met regelmatig woon-werkverkeer per fiets"
+      ],
+      "voorwaarden": [
+        "werknemer bevestigt het fietsgebruik via een ondertekende verklaring"
+      ],
+      "uitsluitingen": [
+        "niet combineerbaar met andere vervoersvergoedingen behalve openbaar vervoer"
+      ],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": "2026-09-30",
+      "laatst_bevestigd_op": "2026-05-15",
+      "bron_organisatie": "Sociaal Fonds 200",
+      "bron_type": "sector",
+      "bron_titel": "De sectorale regeling voor de verschillende vervoerswijzen",
+      "bron_url": "https://live.sfonds200.be/nl/sectorinformatie/vervoerskosten/regeling-vervoerskosten/",
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": "Fietsvergoeding",
+      "bron_fragment": "Vergoeding €0,27/km per dag, max €10,8 per dag en max 40 km heen-terug per dag.",
+      "betrouwbaarheid": "Tier 1",
+      "extractie_methode": "letterlijk",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": "EUR-bedragen genormaliseerd; maximum dagbedrag en maximum kilometers zijn afzonderlijke constraints.",
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Vanaf 01/10/2026 geldt pc200_fietsvergoeding_2026."
+      ]
+    },
+    {
       "id": "pc200_fietsvergoeding_2026",
       "categorie": "premies_en_voordelen",
       "subcategorie": "fietsvergoeding",
@@ -3333,6 +3471,8 @@
       "omschrijving": "Sectorale fietsvergoeding PC 200 vanaf 1/10/2026",
       "waarde_bron": "€ 0,32 / km, max € 12,80 per arbeidsdag",
       "waarde_genormaliseerd": 0.32,
+      "maximum_dagbedrag_genormaliseerd": 12.8,
+      "maximum_km_per_dag": 40,
       "eenheid": "EUR",
       "valuta": "EUR",
       "frequentie": "per_prestatie",
@@ -3344,23 +3484,23 @@
       "uitsluitingen": [],
       "geldig_vanaf": "2026-10-01",
       "geldig_tot": null,
-      "laatst_bevestigd_op": "2026-05-08",
-      "bron_organisatie": "ACVBIE",
-      "bron_type": "vakbond",
-      "bron_titel": "Aanvullend Bedienden | PC 200 | Januari 2026 – Mobiliteit",
-      "bron_url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-indexering-lonen-sectorakkoord-012026-lr.pdf",
-      "bron_publicatiedatum": "2026-01-01",
-      "bron_vindplaats": "Sectie 'Mobiliteit'",
-      "bron_fragment": "De fietsvergoeding wordt vanaf 1 oktober 2026 opgetrokken van €0,27/km tot €0.32/km, met een maximum van €12,80 per arbeidsdag",
-      "betrouwbaarheid": "Tier 3",
+      "laatst_bevestigd_op": "2026-05-15",
+      "bron_organisatie": "Sociaal Fonds 200",
+      "bron_type": "sector",
+      "bron_titel": "De sectorale regeling voor de verschillende vervoerswijzen",
+      "bron_url": "https://live.sfonds200.be/nl/sectorinformatie/vervoerskosten/regeling-vervoerskosten/",
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": "Fietsvergoeding",
+      "bron_fragment": "Vanaf 1 oktober 2026 zal die vergoeding opgetrokken worden tot € 0,32 per dag met een maximum van € 12,8 per dag.",
+      "betrouwbaarheid": "Tier 1",
       "extractie_methode": "letterlijk",
       "normalisatie_toegepast": true,
       "normalisatie_opmerking": "EUR-bedragen genormaliseerd; maximum dagbedrag (12,80) is afzonderlijk constraint",
       "status": "actief",
       "conflict_opmerking": null,
       "opmerkingen": [
-        "Tot 30/09/2026 geldt nog € 0,27/km",
-        "Bevestigd door sfonds200.be (Tier 1) als onderdeel sectorakkoord 15/01/2026"
+        "Tot 30/09/2026 geldt pc200_fietsvergoeding_2026_pre_oktober.",
+        "De Sfonds200-pagina formuleert de verhoging als € 0,32 per dag, maar in context van de voorgaande zin en het dagmaximum gaat het om €/km."
       ]
     },
     {
@@ -3646,7 +3786,6 @@
       "betrouwbaarheid": "Tier 1",
       "relevante_categorieen": [
         "lonen",
-        "indexatie",
         "premies_en_voordelen",
         "arbeidsvoorwaarden"
       ],
@@ -3703,7 +3842,7 @@
       ]
     },
     {
-      "bron_id": "src_fod_fin_indexatie_aj2026",
+      "bron_id": "src_fod_fin_geindexeerde_bedragen_aj2026",
       "organisatie": "FOD Financiën – Algemene Administratie voor Beleidsexpertise- en ondersteuning",
       "type": "overheid",
       "titel": "Bericht in verband met de automatische indexering inzake inkomstenbelastingen – Aanslagjaar 2026",
@@ -3745,7 +3884,6 @@
       "betrouwbaarheid": "Tier 3",
       "relevante_categorieen": [
         "lonen",
-        "indexatie",
         "premies_en_voordelen",
         "arbeidsvoorwaarden"
       ],
@@ -3818,36 +3956,6 @@
       ]
     },
     {
-      "bron_id": "src_securex_pc200_index_2026",
-      "organisatie": "Securex",
-      "type": "sociaal_secretariaat",
-      "titel": "De index voor PC 200 is gekend",
-      "url": "https://www.securex.be/nl/lex4you/werkgever/nieuws/index-2026-in-paritair-comite-200-gekend",
-      "publicatiedatum": "2025-12-23",
-      "geraadpleegd_op": "2026-05-08",
-      "betrouwbaarheid": "Tier 2",
-      "relevante_categorieen": [
-        "indexatie"
-      ],
-      "opmerkingen": [
-        "Bevat berekeningsformule en resultaat 2,21%"
-      ]
-    },
-    {
-      "bron_id": "src_agoria_pc200",
-      "organisatie": "Agoria (werkgeversorganisatie)",
-      "type": "werkgeversorganisatie",
-      "titel": "PC 200: salarisindexering van 2,21% op 1 januari 2026",
-      "url": "https://www.agoria.be/nl/diensten/expertise/hr-legal-social-dialogue/sectoraal-overleg-en-paritaire-comites/pc-200/pc-200-salarisindexering-van-221-op-1-januari-2026",
-      "publicatiedatum": "2025-12-22",
-      "geraadpleegd_op": "2026-05-08",
-      "betrouwbaarheid": "Tier 2",
-      "relevante_categorieen": [
-        "indexatie"
-      ],
-      "opmerkingen": []
-    },
-    {
       "bron_id": "src_securex_pc200_twa_2025_2026",
       "organisatie": "Securex",
       "type": "sociaal_secretariaat",
@@ -3858,7 +3966,6 @@
       "betrouwbaarheid": "Tier 2",
       "relevante_categorieen": [
         "lonen",
-        "indexatie",
         "premies_en_voordelen",
         "arbeidsvoorwaarden"
       ],

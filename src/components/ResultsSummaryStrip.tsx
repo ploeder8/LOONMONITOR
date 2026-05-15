@@ -33,11 +33,11 @@ export function ResultsSummaryStrip({
         flexDirection: "column",
         gap: 8,
         padding: "10px 12px",
-        borderRadius: 12,
+        borderRadius: "var(--radius-lg)",
         background: "rgba(255,255,255,0.96)",
         backdropFilter: "blur(6px)",
-        border: "1px solid #e2ddd5",
-        boxShadow: "0 4px 14px rgba(60,60,59,0.06)",
+        border: "1px solid var(--color-border)",
+        boxShadow: "var(--shadow-md)",
       }}
     >
       <div
@@ -57,50 +57,50 @@ export function ResultsSummaryStrip({
           alignItems: "center",
           justifyContent: "space-between",
           gap: 10,
-          borderTop: "1px dashed #e8dfcf",
+          borderTop: "1px dashed var(--color-navy-100)",
           paddingTop: 8,
           fontSize: 12,
-          color: "#5a5a59",
+          color: "var(--color-navy-500)",
           fontFamily: "var(--font-body)",
           flexWrap: "wrap",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 4, flexWrap: "wrap" }}>
-          <span style={{ color: "#9a8b7a", marginRight: 4 }}>Springen:</span>
+          <span style={{ color: "var(--color-text-muted)", marginRight: 4 }}>Springen:</span>
           {anchors.map((a, i) => (
             <span key={a.id} style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
               <a
                 href={`#${a.id}`}
                 onClick={(e) => smoothScrollTo(e, a.id)}
                 style={{
-                  color: "#7b6a58",
+                  color: "var(--color-primary)",
                   textDecoration: "none",
                   fontWeight: 600,
                   padding: "1px 4px",
-                  borderRadius: 4,
+                  borderRadius: "var(--radius-sm)",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = "#f5f0e8")}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "var(--color-primary-soft)")}
                 onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
               >
                 {a.label}
               </a>
-              {i < anchors.length - 1 && <span style={{ color: "#cbbba0" }}>·</span>}
+              {i < anchors.length - 1 && <span style={{ color: "var(--color-navy-300)" }}>·</span>}
             </span>
           ))}
         </div>
         <button
           onClick={onToggleAudit}
           style={{
-            border: "1px solid #cbbba0",
-            background: auditForce === "all" ? "#cbbba0" : "#ffffff",
-            color: auditForce === "all" ? "#3c3c3b" : "#7b6a58",
-            borderRadius: 6,
+            border: "1px solid var(--color-primary-border)",
+            background: auditForce === "all" ? "var(--color-primary)" : "var(--color-surface)",
+            color: auditForce === "all" ? "#ffffff" : "var(--color-primary)",
+            borderRadius: "var(--radius-md)",
             fontSize: 11,
             fontWeight: 600,
             padding: "3px 9px",
             cursor: "pointer",
             fontFamily: "var(--font-body)",
-            letterSpacing: "0.01em",
+            letterSpacing: 0,
             transition: "background 0.15s",
           }}
         >
@@ -132,9 +132,9 @@ function SummaryCard({ cell }: { cell: SummaryCell }) {
         flexDirection: "column",
         gap: 2,
         padding: "6px 10px",
-        borderRadius: 8,
-        background: cell.highlight ? "#f5f0e8" : "#faf8f4",
-        border: cell.highlight ? "1px solid #cbbba0" : "1px solid #e8dfcf",
+        borderRadius: "var(--radius-md)",
+        background: cell.highlight ? "var(--color-primary-soft)" : "var(--color-navy-50)",
+        border: cell.highlight ? "1px solid var(--color-primary-border)" : "1px solid var(--color-navy-100)",
         minWidth: 0,
       }}
     >
@@ -143,8 +143,8 @@ function SummaryCard({ cell }: { cell: SummaryCell }) {
           fontSize: 10,
           fontWeight: 600,
           textTransform: "uppercase",
-          letterSpacing: "0.06em",
-          color: "#9a8b7a",
+          letterSpacing: "0.04em",
+          color: "var(--color-text-muted)",
           fontFamily: "var(--font-body)",
         }}
       >
@@ -155,7 +155,7 @@ function SummaryCard({ cell }: { cell: SummaryCell }) {
           fontSize: cell.highlight ? 17 : 15,
           fontFamily: "var(--font-mono)",
           fontWeight: cell.highlight ? 700 : 600,
-          color: cell.highlight ? "#7b6a58" : "#3c3c3b",
+          color: cell.highlight ? "var(--color-primary)" : "var(--color-text)",
           fontVariantNumeric: "tabular-nums",
           whiteSpace: "nowrap",
           overflow: "hidden",

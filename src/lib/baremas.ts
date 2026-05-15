@@ -1,10 +1,13 @@
 import type { Datapunt } from "@/types/dataset";
-import { getDatapunt } from "@/lib/dataset";
+import { allDatapunten } from "@/lib/dataset";
+import { safeGetValue } from "@/lib/periode";
 import { BaremaBuitenSchaalError, DatapuntOnbekend } from "@/lib/errors";
 
 export type Schaal = "I" | "II";
 export type BaremaCat = "A" | "B" | "C" | "D";
 export type StudentenCat = "A" | "B" | "C" | "D";
+
+const DEFAULT_REF_DATUM = "2026-06-01";
 
 export interface BaremaLookupResult {
   datapunt: Datapunt;
@@ -17,10 +20,14 @@ export function lookupBarema(
   schaal: Schaal,
   categorie: BaremaCat,
   ervaringJaren: number,
+  refDatum: string = DEFAULT_REF_DATUM,
 ): BaremaLookupResult {
-  const targetId = `lonen_pc200_schaal${schaal}_cat${categorie}_01012026`;
-  const dp = getDatapunt(targetId);
-  if (!dp) throw new DatapuntOnbekend(targetId);
+  const dp = selectBaremaDatapunt({
+    idPattern: new RegExp(`^lonen_pc200_schaal${schaal}_cat${categorie}_\\d{8}$`),
+    refDatum,
+    omschrijving: `Schaal ${schaal} Cat ${categorie}`,
+  });
+  const targetId = dp.id;
   const tabel = dp.tabel_per_ervaring;
   if (!tabel || tabel.length === 0) {
     throw new BaremaBuitenSchaalError(
@@ -66,10 +73,14 @@ export interface StudentenLookupResult {
 export function lookupStudentenbarema(
   categorie: StudentenCat,
   leeftijdJaren: number,
+  refDatum: string = DEFAULT_REF_DATUM,
 ): StudentenLookupResult {
-  const targetId = `lonen_pc200_studenten_cat${categorie}_01012026`;
-  const dp = getDatapunt(targetId);
-  if (!dp) throw new DatapuntOnbekend(targetId);
+  const dp = selectBaremaDatapunt({
+    idPattern: new RegExp(`^lonen_pc200_studenten_cat${categorie}_\\d{8}$`),
+    refDatum,
+    omschrijving: `Studentenbarema Cat ${categorie}`,
+  });
+  const targetId = dp.id;
   const tabel = dp.tabel_per_leeftijd;
   if (!tabel || tabel.length === 0) {
     throw new BaremaBuitenSchaalError(
@@ -94,9 +105,11 @@ export function lookupStudentenbarema(
 export interface BrutolocheckResult {
   ok: boolean;
   sectoraalMinimum: number;
+  effectieveErvaring: number;
   opgegevenBruto: number;
   verschil: number;
   datapuntId: string;
+  datapunt: Datapunt;
   geclampt: boolean;
 }
 
@@ -105,15 +118,51 @@ export function brutolocheck(
   categorie: BaremaCat,
   ervaringJaren: number,
   opgegevenBruto: number,
+  refDatum: string = DEFAULT_REF_DATUM,
 ): BrutolocheckResult {
-  const r = lookupBarema(schaal, categorie, ervaringJaren);
+  const r = lookupBarema(schaal, categorie, ervaringJaren, refDatum);
   const minimum = r.maandloonEUR;
   return {
     ok: opgegevenBruto >= minimum,
     sectoraalMinimum: minimum,
+    effectieveErvaring: r.effectieveErvaring,
     opgegevenBruto,
     verschil: Math.round((opgegevenBruto - minimum) * 100) / 100,
     datapuntId: r.datapunt.id,
+    datapunt: r.datapunt,
     geclampt: r.geclampt,
   };
+}
+
+function selectBaremaDatapunt({
+  idPattern,
+  refDatum,
+  omschrijving,
+}: {
+  idPattern: RegExp;
+  refDatum: string;
+  omschrijving: string;
+}): Datapunt {
+  const candidates = allDatapunten()
+    .filter((dp) => dp.categorie === "lonen" && dp.type === "barema" && idPattern.test(dp.id))
+    .sort((a, b) => datumVoorSort(b.geldig_vanaf).localeCompare(datumVoorSort(a.geldig_vanaf)));
+
+  if (candidates.length === 0) {
+    throw new DatapuntOnbekend(`${omschrijving} (${idPattern.source})`);
+  }
+
+  let firstError: unknown = null;
+  for (const candidate of candidates) {
+    try {
+      return safeGetValue(candidate.id, { refDatum }).datapunt;
+    } catch (error) {
+      firstError ??= error;
+    }
+  }
+
+  throw firstError;
+}
+
+function datumVoorSort(datum: string | null | undefined): string {
+  return datum ?? "0000-00-00";
 }

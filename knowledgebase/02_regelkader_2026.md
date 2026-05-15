@@ -230,7 +230,7 @@ Bedrijfswagen-formule: **cataloguswaarde × 6/7 × CO2-percentage**. CO2-percent
 | Eindejaarspremie | 1 maandloon (pro-rata, anciënniteit zelf-ontslag verlaagd 5→3 jaar vanaf 1/1/2026) | PC 200 sectorakkoord 18/12/2025 ([sfonds200.be](https://www.sfonds200.be/), [Liantis](https://www.liantis.be/), [Securex](https://www.securex.be/)) |
 | Jaarlijkse premie sfonds200 | €330,84 | [sfonds200.be](https://www.sfonds200.be/) (Tier 1) |
 | Ecocheques | max €250/jaar (vrijstelling RSZ + BV mits CAO en lijst-conform) | [Securex ecocheques](https://www.securex.be/), [Acerta](https://www.acerta.be/) |
-| Maaltijdcheques (PC 200) | **GEEN sectorale verplichting** — toekenning op ondernemingsniveau (max €6,91 wg + min €1,09 wn vandaag) | [Liantis sectorakkoord PC 200](https://www.liantis.be/), [Securex maaltijdcheques](https://www.securex.be/) |
+| Maaltijdcheques (PC 200) | **GEEN sectorale verplichting** — toekenning op ondernemingsniveau (max €8,91 wg + min €1,09 wn vanaf 01/01/2026) | [Liantis sectorakkoord PC 200](https://www.liantis.be/), [Securex maaltijdcheques](https://www.securex.be/) |
 | Maaltijdcheque-marge €2 (bovenop loonnorm 0%) | mogelijk via sectorale of ondernemings-CAO sinds Wet 19/11/2025, BS 15/12/2025 | [Sociare](https://www.sociare.be/) |
 | Woon-werk trein-vergoeding | 100 % NMBS-abonnement (KB 28/7/1962 + sectorale aanvulling PC 200) | PC 200 dataset |
 | Fietsvergoeding | KB-plafond € 0,36/km (2026 indexering) | [FOD WASO](https://werk.belgie.be/) |
@@ -290,7 +290,7 @@ Jaarloonkost = X                                       (brutomaandloon × 12)
   OPTIONEEL (indien van toepassing per cliëntdossier):
             + hospitalisatieverzekering                (≈ €30–€90/maand per persoon)
             + groepsverzekering                        (3–8 % van X, werkgeverdeel)
-            + maaltijdcheques                          (werkgeverdeel max €6,91/dag)
+            + maaltijdcheques                          (werkgeverdeel max €8,91/dag vanaf 01/01/2026)
             + ecocheques                               (tot €250/jaar)
             + leasewagen / TCO bedrijfswagen           (apart luik — leasing + brandstof
                                                         + CO2-solidariteitsbijdrage)

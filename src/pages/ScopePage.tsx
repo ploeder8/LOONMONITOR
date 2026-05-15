@@ -27,48 +27,51 @@ const POC_LIMITATIONS: { titel: string; tekst: string }[] = [
       "Geen sectorale verplichting in PC 200. Bedrijfseigen toekenning is buiten POC-scope.",
   },
   {
-    titel: "4. Centenindex niet toegepast",
+    titel: "4. Fietsvergoeding vóór 1/10/2026",
     tekst:
-      "De aangekondigde beperking van indexering boven € 4 000 was op peildatum nog niet reglementair gefinaliseerd. We passen de volledige sectorindex 1,0221 toe (zoals door sociale partners bevestigd voor 1/1/2026).",
+      "Voor maanden vóór oktober 2026 rekent de tool met het sectorale tarief van € 0,27/km en maximum € 10,80 per dag. Vanaf oktober 2026 geldt € 0,32/km met maximum € 12,80 per dag.",
   },
   {
-    titel: "5. Fietsvergoeding vóór 1/10/2026",
-    tekst:
-      "Pad A — historische tarief € 0,27/km wordt niet berekend. Voor refDatum < 2026-10-01 toont de UI enkel een banner; voor refDatum ≥ 2026-10-01 rekenen we met het CAO 164-tarief van € 0,32/km.",
-  },
-  {
-    titel: "6. Bouw-subset opt-in",
+    titel: "5. Bouw-subset opt-in",
     tekst:
       "De extra werkgeversbijdrage van 1,80 % aanvullend pensioen voor de PC 200-bouwsubset is een vinkje op het profiel. Schakel uit als de werknemer niet onder die subset valt.",
   },
   {
-    titel: "7. Studentenmodus = barema-only",
+    titel: "6. Studentenstatuut = barema-only",
     tekst:
       "Voor studenten toont de monitor enkel het maandloon volgens leeftijd/categorie. RSZ-Solidariteitsbijdrage (2,71 % wkn / 5,42 % wgr) en jaarpremies/eindejaar zijn niet berekend in de POC.",
   },
   {
-    titel: "8. Eén dataset-versie tegelijk",
+    titel: "7. Eén dataset-versie tegelijk",
     tekst:
       "Geen historie of multi-jaar selector. De dataset 2026 is bundled; bij wissel naar een ander jaar moet de bundel worden vervangen.",
   },
   {
-    titel: "9. Browser-only, geen back-end",
+    titel: "8. Browser-only, geen back-end",
     tekst:
       "Geen authenticatie, geen DB, geen logging. Alles draait client-side en de dataset wordt bij build-tijd ingebakken.",
   },
   {
-    titel: "10. Audit, geen advies",
+    titel: "9. Audit, geen advies",
     tekst:
       "Elk getal komt met datapunt-id, status, betrouwbaarheids-tier en primaire bron. De monitor maakt geen juridisch oordeel — bij twijfel altijd de primaire bron raadplegen.",
   },
 ];
+
+const panelStyle: React.CSSProperties = {
+  borderRadius: "var(--radius-lg)",
+  border: "1px solid var(--color-border)",
+  background: "var(--color-surface)",
+  padding: "1rem",
+  boxShadow: "var(--shadow-sm)",
+};
 
 export function ScopePage() {
   return (
     <div className="flex flex-col gap-8">
       <header>
         <h2 className="text-xl font-semibold">Scope &amp; bekend manco</h2>
-        <p className="mt-1 text-sm text-zinc-600">
+        <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)" }}>
           Wat wel en wat niet in deze POC zit. Bij elke berekening staat ook
           per-datapunt een audit-paneel met status, betrouwbaarheid en bron.
         </p>
@@ -76,7 +79,7 @@ export function ScopePage() {
 
       <section>
         <h3 className="mb-3 text-base font-semibold">Dataset-meta</h3>
-        <div className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm">
+        <div style={panelStyle}>
           <dl className="grid grid-cols-1 gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
             <DefRow label="Dataset" value={ds.meta.dataset} />
             <DefRow label="Paritair Comité" value={`${ds.meta.pc} — ${ds.meta.pc_naam}`} />
@@ -94,10 +97,10 @@ export function ScopePage() {
           {POC_LIMITATIONS.map((l) => (
             <li
               key={l.titel}
-              className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm"
+              style={panelStyle}
             >
-              <div className="text-sm font-semibold text-zinc-900">{l.titel}</div>
-              <div className="mt-1 text-xs text-zinc-600">{l.tekst}</div>
+              <div className="text-sm font-semibold" style={{ color: "var(--color-text)" }}>{l.titel}</div>
+              <div className="mt-1 text-xs" style={{ color: "var(--color-text-muted)" }}>{l.tekst}</div>
             </li>
           ))}
         </ul>
@@ -105,8 +108,8 @@ export function ScopePage() {
 
       <section>
         <h3 className="mb-3 text-base font-semibold">Niet gevonden in dataset</h3>
-        <div className="rounded-lg border border-amber-300 bg-amber-50 p-4">
-          <ul className="list-disc space-y-1 pl-5 text-sm text-amber-900">
+        <div style={{ ...panelStyle, background: "var(--color-warning-soft)", border: "1px solid rgba(245,158,11,0.35)" }}>
+          <ul className="list-disc space-y-1 pl-5 text-sm" style={{ color: "#92400e" }}>
             {nietGevonden.map((n, i) => (
               <li key={i}>{formatNietGevonden(n)}</li>
             ))}
@@ -117,10 +120,10 @@ export function ScopePage() {
       <section>
         <h3 className="mb-3 text-base font-semibold">Bron-conflicten</h3>
         {conflicten.length === 0 ? (
-          <p className="text-sm text-zinc-500">Geen conflicten geregistreerd.</p>
+          <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>Geen conflicten geregistreerd.</p>
         ) : (
-          <div className="rounded-lg border border-rose-300 bg-rose-50 p-4">
-            <ul className="list-disc space-y-1 pl-5 text-sm text-rose-900">
+          <div style={{ ...panelStyle, background: "var(--color-error-soft)", border: "1px solid rgba(225,29,72,0.28)" }}>
+            <ul className="list-disc space-y-1 pl-5 text-sm" style={{ color: "#991b1b" }}>
               {conflicten.map((c, i) => (
                 <li key={i}>{formatConflict(c)}</li>
               ))}
@@ -131,8 +134,8 @@ export function ScopePage() {
 
       <section>
         <h3 className="mb-3 text-base font-semibold">Algemene opmerkingen</h3>
-        <div className="rounded-lg border border-blue-300 bg-blue-50 p-4">
-          <ul className="list-disc space-y-1 pl-5 text-sm text-blue-900">
+        <div style={{ ...panelStyle, background: "var(--color-info-soft)", border: "1px solid rgba(37,99,235,0.25)" }}>
+          <ul className="list-disc space-y-1 pl-5 text-sm" style={{ color: "var(--color-navy-700)" }}>
             {opmerkingen.map((o, i) => (
               <li key={i}>{o}</li>
             ))}
@@ -146,8 +149,8 @@ export function ScopePage() {
 function DefRow({ label, value }: { label: string; value: string }) {
   return (
     <>
-      <dt className="text-zinc-500">{label}</dt>
-      <dd className="font-medium text-zinc-900">{value}</dd>
+      <dt style={{ color: "var(--color-text-muted)" }}>{label}</dt>
+      <dd className="font-medium" style={{ color: "var(--color-text)" }}>{value}</dd>
     </>
   );
 }

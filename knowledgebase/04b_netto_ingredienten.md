@@ -20,7 +20,7 @@
 > **Key Finding 3:** Patronale RSZ PC 200 = ~25% (basis 24,92% + loonmatiging 7,48%, met structurele vermindering); RSZ-loonplafond patronaal vanaf 1/1/2026 = **€86.700/kwartaal** (KB 6 oktober 2025, BS 10 oktober 2025; basis: Programmawet 18/7/2025).
 > **Confidence:** HIGH (Tier-1 RSZ + BS).
 
-> **Key Finding 4:** PC 200 sectoraal akkoord 18 december 2025 bevat **GEEN** verhoging van het maaltijdcheque-werkgeveraandeel. Loonnormwet 19/11/2025 (BS 15/12/2025) creëert wel een **€2-marge** voor sectoren die ervoor kiezen, maar in PC 200 blijft het werkgeveraandeel maximaal **€6,91** (werknemersaandeel min €1,09) per peildatum.
+> **Key Finding 4:** PC 200 sectoraal akkoord 18 december 2025 bevat **GEEN sectorale verplichting** voor maaltijdcheques. Vanaf 01/01/2026 bedraagt het maximale werkgeveraandeel **€8,91** per cheque (werknemersaandeel min €1,09); toekenning blijft ondernemingsspecifiek.
 > **Confidence:** MODERATE (Tier-2 sociaal-secretariaten bevestigen unaniem; geen tegengestelde Tier-1 bron gevonden).
 
 > **Key Finding 5:** Geen volwassen open-source npm/PyPI-bibliotheek voor Belgische payroll bestaat. De enige Belgische repo (`sysnrt/expat-salary-calculators`) bevat enkel specificaties, geen runnable code.
@@ -136,14 +136,14 @@ Voor leningen > €0 met rentevoet < marktreferentierentevoet:
 
 | Parameter | Bedrag 2026 |
 |---|---|
-| Maximum nominale waarde per cheque | **€8,00** |
-| Maximum werkgeveraandeel | **€6,91** |
+| Maximum nominale waarde per cheque | **€10,00 vanaf 01/01/2026** |
+| Maximum werkgeveraandeel | **€8,91 vanaf 01/01/2026** |
 | Minimum werknemersaandeel | **€1,09** |
 | Maximum 1 cheque per | effectief gewerkte dag |
 
 **Vrijstelling RSZ (art. 19bis §2 KB 28/11/1969) en BV (art. 38 §1, 25° WIB 92):** indien ALLE cumulatieve voorwaarden voldaan zijn:
 1. Schriftelijk vastgelegd in CAO of individuele schriftelijke overeenkomst;
-2. Werkgeveraandeel ≤ €6,91 per cheque;
+2. Werkgeveraandeel ≤ €8,91 per cheque vanaf 01/01/2026;
 3. Werknemersaandeel ≥ €1,09 per cheque;
 4. Aantal cheques ≤ aantal effectief gewerkte dagen;
 5. Toekenning via erkende cheque-uitgever (Edenred, Pluxee, Monizze);
@@ -153,7 +153,7 @@ Indien één voorwaarde niet voldaan → **gehele werkgeverbijdrage** is RSZ- en
 
 ### De Wever-akkoord verhoging (status 2026-05-08)
 
-- Federaal regeerakkoord De Wever (jan 2025) kondigde een verhoging van het maximumbedrag aan met **€2** (van €8 naar €10 per cheque, of werkgeveraandeel van €6,91 naar **€8,91**).
+- Federaal regeerakkoord De Wever (jan 2025) kondigde een verhoging van het maximumbedrag aan met **€2** (van €8 naar €10 per cheque, of werkgeveraandeel van €6,91 naar **€8,91**). De loonmotor past voor 2026 het verhoogde werkgevermaximum toe.
 - **Implementatiestatus 2026-05-08:** vereist federaal KB EN sectorale CAO-implementatie.
 - **PC 200:** sectoraal akkoord 18 december 2025 bevat **GEEN** afspraak over maaltijdcheque-verhoging. Werkgevers in PC 200 kunnen via ondernemings-CAO de marge benutten, maar niet sectoraal.
 - **Loonnorm 2025-2026** (Wet 19 november 2025, BS 15 december 2025): legt 0% reële loonstijging vast met **expliciete €2 maaltijdcheque-uitzondering** = juridisch vehikel om verhoging mogelijk te maken zonder loonnorm-overschrijding.
@@ -544,7 +544,7 @@ Voor één maand bruto = €3.500:
 
 ## Pre-mortem: waarom dit rapport over 6 maanden onjuist kan zijn
 
-1. **De Wever-akkoord uitvoering**: indien een KB voor maaltijdcheque-verhoging tussen mei en november 2026 verschijnt en sectorale CAO's volgen, is **sectie 3 verouderd**. Mitigatie: rapport maakt expliciet duidelijk dat €6,91/€1,09 de stand op 2026-05-08 is.
+1. **Maaltijdcheques**: sectie 3 is aangepast naar het verhoogde werkgevermaximum van €8,91 vanaf 01/01/2026. PC 200 blijft zonder sectorale verplichting; toekenning blijft ondernemingsspecifiek.
 2. **Spilindex-overschrijding zomer 2026**: Sociare en het Federaal Planbureau voorspellen spilindex-overschrijding juli 2026 → centenindex toepassing september 2026. PC 200-loonbarema's moeten dan herijkt worden; werkbonus-grenzen zullen herberekenen drie maanden na de overschrijding. Mitigatie: rapport gebruikt 1/4/2026 werkbonus-cijfers expliciet.
 3. **BBSZ-hervorming 2028**: aangekondigd voor 2028, maar dit kan vooruit getrokken worden. Mitigatie: huidige BBSZ-banden tot 2027 zijn stabiel volgens Liantis.
 4. **Bedrijfsvoorheffing KB Bijlage III 2026**: parallel onderzoek; eventuele afwijkingen daar beïnvloeden Stap 4 van sectie 7.
@@ -575,7 +575,7 @@ Voor één maand bruto = €3.500:
 13. **`netto.werkbonus.luik_B.bedienden.helling`** = 0,2699 (HIGH)
 14. **`netto.bbsz.banden_kwartaal_2026`** = tabel sectie 7.2 (MODERATE; bedragen statisch tot 2028)
 15. **`netto.bv.kb_bijlage_iii_2026`** = sleutelformule (HIGH-pending; gedelegeerd onderzoek)
-16. **`netto.maaltijdcheque.werkgever_max_2026`** = €6,91 (HIGH-conditional; status mei 2026)
+16. **`netto.maaltijdcheque.werkgever_max_2026`** = €8,91 vanaf 01/01/2026
 17. **`netto.maaltijdcheque.werknemer_min_2026`** = €1,09 (HIGH)
 18. **`netto.ecocheque.max_jaar_2026`** = €250 (HIGH)
 19. **`netto.indexatie_KI_aj2027`** = 2,3000 (HIGH)

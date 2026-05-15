@@ -1,4 +1,4 @@
-# Project Scope — PC 200 Loonmotor
+# Project Scope — Jaakie
 
 **Versie:** 2026-05-11
 **Peildatum dataset:** 2026-05-08 (inkomstenjaar 2026 / aanslagjaar 2027)
@@ -7,7 +7,7 @@
 
 ## 1. Doel
 
-De **PC 200 Loonmotor** stelt payroll-experts bij Van Havermaet in staat om voor één werknemer onder **Paritair Comité 200** (Aanvullend Paritair Comité voor de Bedienden, APCB) **bruto → netto** en **bruto → totale werkgeverskost** te berekenen, met **klikbare bronlinks per waarde** en een volledige audit-trail.
+**Jaakie** stelt payroll-experts in staat om voor één werknemer onder **Paritair Comité 200** (Aanvullend Paritair Comité voor de Bedienden, APCB) **bruto → netto** en **bruto → totale werkgeverskost** te berekenen, met **klikbare bronlinks per waarde** en een volledige audit-trail.
 
 > Geen vervanging voor sociaal secretariaat — wel een audit-traceerbare berekening tegen een Tier-1/2-gevalideerde dataset.
 
@@ -19,7 +19,6 @@ De **PC 200 Loonmotor** stelt payroll-experts bij Van Havermaet in staat om voor
 - Sectorale baremas Schaal I + II × Cat A/B/C/D × ervaring 0–26 jaar
 - Studentenbaremas Cat A/B/C/D × leeftijd 14–20
 - Brutoloon-check tegen sectoraal minimum
-- Indexatie ondernemingsloon op peildatum (× 1,0221 op 1/1/2026)
 
 ### RSZ
 - Werknemer 13,07 %

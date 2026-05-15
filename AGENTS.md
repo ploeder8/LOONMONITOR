@@ -38,6 +38,17 @@ Path alias `@` maps to `src/` (configured in both `vite.config.ts` and `tsconfig
 
 Browser-only SPA — geen backend, geen auth, geen database. React 19 + Vite 8 + Tailwind v4, routed via `HashRouter`.
 
+### Branding
+
+De interne toolnaam en actieve brand is **Jaakie**. Houd branding centraal:
+
+- `src/branding/brand.ts` bevat toolnaam, productlabel, logo-pad, alt-tekst, footer-copy en document title.
+- `src/branding/brand.css` bevat kleuren, fonts, radii, shadows en compatibele CSS variables.
+- `public/jaakie-designsysteem.md` is de leidende design guideline.
+- `public/jaakie-demo-pagina-updated.html` is de visuele referentie voor samenhang en toepassing.
+
+Wijzig toekomstige branding eerst in `src/branding/*` en pas componenten alleen aan wanneer ze nieuwe semantische tokens nodig hebben. Introduceer geen oude VH-assets, VH-kleuren of VH-fonts opnieuw. `PC 200` blijft alleen een inhoudelijke payrollscope, niet de toolnaam of brand.
+
 ### Startup gate
 
 `src/main.tsx` valideert de bundled JSON dataset tegen JSON Schema Draft-07 vóór mount. Bij failure: rood error-scherm, app start niet. **Niet omzeilen.**
@@ -63,15 +74,15 @@ Elke berekende waarde MOET een bron-`Datapunt` meedragen. De `AuditPanel`-compon
 De rechter resultatenkolom volgt een vast schema:
 
 1. **`ResultsSummaryStrip`** (sticky, top: 73px) — 4 kerncijfers (Bruto · Netto · Werkgeverskost · Loonwig) + quick-jump-anchors + audit-toggle. Studentenmodus toont alleen "Bruto (student)".
-2. **`ResultBand` × 4** — `band-loonkost` (Netto + Werkgeverskost side-by-side op `xl:`), `band-loonbasis` (sectoraal minimum + bruto-check), `band-voordelen` (RSZ, eindejaars, eco, jaarpremie), `band-mobiliteit` (trein, fiets, indexatie).
+2. **`ResultBand` × 4** — `band-loonkost` (Netto + Werkgeverskost side-by-side op `xl:`), `band-loonbasis` (sectoraal minimum + bruto-check), `band-voordelen` (RSZ, eindejaars, eco, jaarpremie), `band-mobiliteit` (trein, fiets).
 
 `bouwResultaten()` retourneert `{ summary, bands }`. `computeSummary()` draait dezelfde calls als de Loonkost-band maar in een eigen try/catch zodat de strip onafhankelijk faalt van de detail-rendering. Beide calls naar `werkgeverskost()` — in `bouwResultaten` én in `computeSummary` — moeten identiek geparametriseerd zijn (inclusief extralegale voordelen en `extraEcocheques: ecoResult.bedrag / 12`), anders divergeren de summary-strip-cijfers van de detailpanelen.
 
 Form-sidebar `FormSection` accepteert `defaultOpen` (default `false`); alleen "Netto berekening" staat default open.
 
 Secties in de sidebar (bediende-modus):
-- **Werkgeversbijdragen** — arbeidsongevallenPct (% ↔ decimal via × /100), patronale groepsverzekering, maaltijdcheques werkgeversaandeel, hospitalisatieverzekering. Uitsluitend getoond in bediende-modus.
-- Eindejaarspremie, Ecocheques, Fietsvergoeding, Woon-werk trein, Indexatie, Netto berekening.
+- **Werkgeversbijdragen** — arbeidsongevallenPct (% ↔ decimal via × /100), patronale groepsverzekering, maaltijdcheques werkgeversaandeel per dag, hospitalisatieverzekering. Uitsluitend getoond in bediende-modus.
+- Eindejaarspremie, Ecocheques, Fietsvergoeding, Woon-werk trein, Netto berekening.
 
 ### Error hierarchy (`src/lib/errors.ts`)
 
@@ -97,7 +108,7 @@ Elke module verwijst naar zijn specificatie in `knowledgebase/`:
 | `bvBijzonder.ts` | `knowledgebase/04_calculator_netto.md §5.4b` |
 | `netto.ts` | `knowledgebase/04_calculator_netto.md §4` |
 | `werkgeverskost.ts` | `knowledgebase/05_calculator_werkgeverskost.md` |
-| `eindejaarspremie.ts`, `jaarpremie.ts`, `ecocheques.ts`, `woonwerkTrein.ts`, `fietsvergoeding.ts`, `indexatie.ts` | `knowledgebase/02_regelkader_2026.md §7-9` |
+| `eindejaarspremie.ts`, `jaarpremie.ts`, `ecocheques.ts`, `woonwerkTrein.ts`, `fietsvergoeding.ts` | `knowledgebase/02_regelkader_2026.md §7-9` |
 
 ### Dataset access pattern
 
@@ -115,7 +126,7 @@ De `Profiel` interface (`src/pages/HomePage.tsx`) bevat alle user-inputs. Releva
 |---|---|---|---|
 | `arbeidsongevallenPct` | `number` | `0.003` | AO-verzekering tarief (decimal). UI toont en accepteert %. |
 | `extraGroepsverzekering` | `number` | `0` | Patronale groepsverzekering €/maand. |
-| `extraMaaltijdcheques` | `number` | `0` | Werkgeversaandeel maaltijdcheques €/maand. |
+| `maaltijdchequeWerkgeversaandeelPerDag` | `number` | `8.91` | Werkgeversaandeel maaltijdcheques €/dag; maandkost = dit bedrag × `arbeidsdagenPerMaand`, begrensd op €8,91/dag vanaf 01/01/2026. |
 | `extraHospitalisatie` | `number` | `0` | Hospitalisatieverzekering €/maand. |
 
 `extraEcocheques` wordt **automatisch afgeleid** uit `ecocheques({ tewerkstellingsbreuk, refDatum }).bedrag / 12` — geen apart veld in `Profiel`.

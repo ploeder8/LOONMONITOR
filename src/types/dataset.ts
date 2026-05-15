@@ -4,7 +4,6 @@
 
 export type Categorie =
   | "lonen"
-  | "indexatie"
   | "rsz"
   | "fiscaliteit"
   | "premies_en_voordelen"
@@ -79,6 +78,8 @@ export interface Datapunt {
 
   waarde_bron?: string | null;
   waarde_genormaliseerd?: number | null;
+  maximum_dagbedrag_genormaliseerd?: number | null;
+  maximum_km_per_dag?: number | null;
 
   tabel_per_ervaring?: BaremaErvaringRij[];
   tabel_per_leeftijd?: BaremaLeeftijdRij[];
@@ -174,7 +175,6 @@ export interface Validatie {
 export interface Dataset {
   meta: Meta;
   lonen: Datapunt[];
-  indexatie: Datapunt[];
   rsz: Datapunt[];
   fiscaliteit: Datapunt[];
   premies_en_voordelen: Datapunt[];

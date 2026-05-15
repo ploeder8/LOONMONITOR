@@ -7,7 +7,6 @@ import { ecocheques } from "@/lib/ecocheques";
 import { fietsvergoeding } from "@/lib/fietsvergoeding";
 import { woonwerkTrein } from "@/lib/woonwerkTrein";
 import { jaarlijksePremie2026 } from "@/lib/jaarpremie";
-import { indexeerLoon } from "@/lib/indexatie";
 import { formatEUR } from "@/lib/money";
 
 interface TC {
@@ -57,23 +56,23 @@ const TESTCASES: TC[] = [
     render: () => {
       const r = rszBijdragen({ brutoloon: 3000, refDatum: "2026-06-01", bouwVlag: true });
       return (
-        <div className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm">
-          <div className="mb-2 text-sm font-medium text-zinc-700">
+        <div style={{ borderRadius: "var(--radius-lg)", border: "1px solid var(--color-border)", background: "var(--color-surface)", padding: "1rem", boxShadow: "var(--shadow-sm)" }}>
+          <div className="mb-2 text-sm font-medium" style={{ color: "var(--color-navy-700)" }}>
             RSZ — bouw-subset, brutoloon € 3 000
           </div>
           <table className="w-full border-collapse text-sm">
             <tbody>
               {r.bronnen.map((b) => (
-                <tr key={b.datapunt.id} className="border-b border-zinc-100 last:border-0">
-                  <td className="py-2 pr-2 text-zinc-700">{b.label}</td>
+                <tr key={b.datapunt.id} style={{ borderBottom: "1px solid var(--color-navy-100)" }}>
+                  <td className="py-2 pr-2" style={{ color: "var(--color-navy-500)" }}>{b.label}</td>
                   <td className="py-2 pr-2 text-right tabular-nums font-semibold">
                     {formatEUR(b.bedrag)}
                   </td>
                 </tr>
               ))}
-              <tr className="border-t-2 border-zinc-300 font-semibold">
+              <tr className="font-semibold" style={{ borderTop: "2px solid var(--color-border)" }}>
                 <td className="py-2 pr-2">Totaal werkgever</td>
-                <td className="py-2 pr-2 text-right tabular-nums text-blue-800">
+                <td className="py-2 pr-2 text-right tabular-nums" style={{ color: "var(--color-primary)" }}>
                   {formatEUR(r.totaalWerkgever)}
                 </td>
               </tr>
@@ -168,19 +167,13 @@ const TESTCASES: TC[] = [
     id: "TC-15",
     titel: "Fietsvergoeding — vóór en na 1/10/2026",
     toelichting:
-      "Pad A: pre-overgang levert geen berekening (banner). Post-overgang rekent met € 0,32/km.",
+      "Pre-overgang rekent met € 0,27/km en vanaf oktober met € 0,32/km.",
     render: () => {
-      let pre: React.ReactNode;
-      try {
-        fietsvergoeding({ kmPerDag: 8, arbeidsdagen: 22, refDatum: "2026-06-01" });
-        pre = <Banner kind="error" title="Onverwacht">Geen exception?</Banner>;
-      } catch (e) {
-        pre = (
-          <Banner kind="info" title="Pre-1/10/2026">
-            {(e as Error).message}
-          </Banner>
-        );
-      }
+      const pre = fietsvergoeding({
+        kmPerDag: 8,
+        arbeidsdagen: 22,
+        refDatum: "2026-06-01",
+      });
       const post = fietsvergoeding({
         kmPerDag: 8,
         arbeidsdagen: 22,
@@ -188,7 +181,11 @@ const TESTCASES: TC[] = [
       });
       return (
         <div className="flex flex-col gap-3">
-          {pre}
+          <ResultCard
+            label={`Fietsvergoeding 1/6/2026 — € ${pre.tariefPerKm.toFixed(2)}/km × 8 km × 22 dgn`}
+            amountEUR={pre.vergoeding}
+            datapunten={[pre.datapunt]}
+          />
           <ResultCard
             label={`Fietsvergoeding 1/11/2026 — € ${post.tariefPerKm.toFixed(2)}/km × 8 km × 22 dgn`}
             amountEUR={post.vergoeding}
@@ -218,22 +215,6 @@ const TESTCASES: TC[] = [
     },
   },
   {
-    id: "TC-17",
-    titel: "Indexatie ondernemingsloon × 1,0221",
-    toelichting: "Oud loon € 3 500 op 31/12/2025 → nieuw loon vanaf 1/1/2026.",
-    render: () => {
-      const r = indexeerLoon({ oudLoon: 3500, refDatum: "2026-06-01" });
-      return (
-        <ResultCard
-          label={`Indexatie × ${r.coefficient}`}
-          amountEUR={r.nieuwLoon}
-          helper={`€ 3 500 × ${r.coefficient}`}
-          datapunten={[r.datapunt]}
-        />
-      );
-    },
-  },
-  {
     id: "TC-07",
     titel: "Brutoloon onder sectoraal minimum (faalpad)",
     toelichting:
@@ -256,21 +237,21 @@ export function TestcasesPage() {
     <div className="flex flex-col gap-6">
       <header>
         <h2 className="text-xl font-semibold">Testcases (live reproduceerbaar)</h2>
-        <p className="mt-1 text-sm text-zinc-600">
+        <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)" }}>
           Twaalf van de twintig golden testcases, herberekend in de browser
           tegen de bundled dataset. De volledige set draait via{" "}
-          <code className="rounded bg-zinc-100 px-1 py-0.5 text-xs">bun test</code>.
+          <code className="rounded px-1 py-0.5 text-xs" style={{ background: "var(--color-navy-50)", color: "var(--color-navy-700)" }}>bun test</code>.
         </p>
       </header>
       <div className="flex flex-col gap-6">
         {TESTCASES.map((tc) => (
           <div key={tc.id} className="flex flex-col gap-2">
             <div>
-              <span className="font-mono text-xs text-zinc-500">{tc.id}</span>
-              <span className="ml-2 text-sm font-semibold text-zinc-900">
+              <span className="font-mono text-xs" style={{ color: "var(--color-text-muted)" }}>{tc.id}</span>
+              <span className="ml-2 text-sm font-semibold" style={{ color: "var(--color-text)" }}>
                 {tc.titel}
               </span>
-              <p className="text-xs text-zinc-600">{tc.toelichting}</p>
+              <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>{tc.toelichting}</p>
             </div>
             <div>{tc.render()}</div>
           </div>

@@ -1,8 +1,9 @@
-# PC 200 Loonmotor
+# Jaakie
 
-Single-page tool voor payroll-experts bij Van Havermaet om lonen en kosten te verifiëren onder
-**Paritair Comité 200** (Aanvullend Paritair Comité voor de Bedienden).
+Single-page tool voor payroll-experts om lonen en kosten te verifiëren onder **Paritair Comité 200**
+(Aanvullend Paritair Comité voor de Bedienden).
 
+- **Ontwikkeld voor en beheerd door:** Jaak Roggen
 - **Stack:** TypeScript + React 19 + Vite 8 + Tailwind v4
 - **Runtime:** browser-only — geen back-end, geen database, geen authenticatie
 - **Data:** bundled JSON dataset (`src/data/pc200_payroll_dataset_2026.json`),
@@ -45,7 +46,6 @@ Single-page tool voor payroll-experts bij Van Havermaet om lonen en kosten te ve
 - Jaarlijkse premie 2026 (€330,84)
 - Woon-werk trein (100 % CAO 19/9)
 - Fietsvergoeding (€0,32/km — CAO 164, vanaf 1/10/2026)
-- Indexatie ondernemingsloon (× 1,0221 op 1/1/2026)
 
 ¹ *AJ 2027 = inkomstenjaar 2026 (huidig kalenderjaar). Parameters: belastingvrije som €11.180, forfait max €6.070, schijven €16.720/€29.510/€51.070. Geverifieerd via Wet diverse bepalingen 18/12/2025 (BS 30/12/2025) + FOD Financiën. BV gebruikt lokaal de Bijlage III-sleutelformule met pending FOD Tax-Calc-validatie; voor finale cijfers blijft [FOD Tax-Calc](https://eservices.minfin.fgov.be/taxcalc/) leidend.*
 
@@ -63,7 +63,7 @@ pnpm dev          # http://localhost:5173
 
 ### Tests
 ```bash
-bun test          # 25 TC-cases + 15 NTC-cases (40 golden tests + schema smoke tests)
+bun test          # logical TC/NTC cases + schema smoke tests
 ```
 
 ### Type-check & build
@@ -76,12 +76,12 @@ pnpm preview
 ## Pagina's
 
 - **`/`** — Profiel + Resultaten.
-  - **Links (sidebar):** profiel-velden (modus, schaal, categorie, ervaring, brutoloon, referentiedatum) en accordion-secties voor eindejaarspremie, ecocheques, fietsvergoeding, woon-werk trein, indexatie en netto-berekening. Geavanceerde secties staan standaard ingeklapt — alleen "Netto berekening" is bij het laden open.
+  - **Links (sidebar):** profiel-velden (modus, schaal, categorie, ervaring, brutoloon, referentiedatum) en accordion-secties voor eindejaarspremie, ecocheques, fietsvergoeding, woon-werk trein en netto-berekening. Geavanceerde secties staan standaard ingeklapt — alleen "Netto berekening" is bij het laden open.
   - **Rechts (resultaten):** sticky **summary-strip** bovenaan met de vier kerncijfers (Bruto · Netto · Werkgeverskost · Loonwig %) + quick-jump-anchors + globale "Toon alle bronnen"-toggle. Daaronder vier logische bands:
     1. *Loonkost & netto* — netto- en werkgeverskost-panelen, side-by-side op viewport ≥ 1280px
     2. *Loonbasis* — sectoraal minimum + brutoloon-check
     3. *Periodieke voordelen* — RSZ-bijdragen, eindejaarspremie, ecocheques, jaarlijkse premie
-    4. *Mobiliteit & indexatie* — woon-werk trein, fietsvergoeding, indexatie
+    4. *Mobiliteit* — woon-werk trein, fietsvergoeding
   - Elke waarde heeft een audit-paneel met datapunt-id, status, tier en primaire bron.
 - **`/testcases`** — Representatieve testcases live herrekend tegen de bundled dataset.
 - **`/scope`** — Dataset-meta, beperkingen, niet-gevonden datapunten, bronconflicten en opmerkingen.
@@ -93,10 +93,17 @@ pnpm preview
 - Schema-validatie bij start: faalt de validatie → app start niet (zie `src/main.tsx`)
 - Strikte mappenstructuur: `src/data/` (read-only JSON), `src/lib/` (calc, geen UI), `src/components/` (UI, geen calc), `src/pages/` (compositie)
 
+## Branding
+
+Jaakie is de actieve toolnaam en brand. Brand-copy, logo-referenties en centrale UI-labels staan in
+`src/branding/brand.ts`; kleuren, fonts, radii en shadows staan in `src/branding/brand.css`.
+Gebruik `public/jaakie-designsysteem.md` als guideline en `public/jaakie-demo-pagina-updated.html`
+als visuele referentie.
+
 ## Project-layout
 
 ```
-pc200-loonmotor/
+jaakie/
 ├── index.html
 ├── knowledgebase/                  # Single Source of Truth — start hier voor inhoudelijke vragen
 │   ├── README.md                   # Index + leesvolgorde
@@ -116,10 +123,13 @@ pc200-loonmotor/
 │   └── tools/                      # Python referentie-implementatie
 ├── src/
 │   ├── main.tsx                    # schema-validation gate
-│   ├── App.tsx                     # HashRouter + nav + VH header
-│   ├── index.css                   # VH design tokens + Tailwind v4
+│   ├── App.tsx                     # HashRouter + nav + Jaakie shell
+│   ├── index.css                   # global CSS + brand-token import
+│   ├── branding/
+│   │   ├── brand.ts                # centrale toolnaam, logo, copy en title
+│   │   └── brand.css               # centrale Jaakie design tokens
 │   ├── data/
-│   │   ├── pc200_payroll_dataset_2026.json   # 60 datapunten
+│   │   ├── pc200_payroll_dataset_2026.json   # 63 datapunten
 │   │   └── pc200_payroll_dataset.schema.json
 │   ├── types/dataset.ts
 │   ├── lib/
@@ -140,15 +150,16 @@ pc200-loonmotor/
 │   │   ├── fietsvergoeding.ts
 │   │   ├── woonwerkTrein.ts
 │   │   ├── jaarpremie.ts           # incl. optionele bijzondere BV
-│   │   ├── indexatie.ts
 │   │   └── __tests__/
-│   │       ├── golden.test.ts      # TC-01..TC-25 + NTC-01..NTC-15
+│   │       ├── golden.test.ts      # TC-01..TC-16, TC-18..TC-25 + NTC-01..NTC-15
 │   │       └── schemaValidate.smoke.test.ts
 │   ├── components/                 # AuditPanel (+ AuditOpenProvider/Context), Banner, BronLink,
 │   │                               #   Field, ResultBand, ResultCard, ResultsSummaryStrip, StatusBadge
 │   └── pages/                      # HomePage, TestcasesPage, ScopePage
 ├── public/
-│   └── vh-logo.svg
+│   ├── Jaakie Logo.png
+│   ├── jaakie-designsysteem.md
+│   └── jaakie-demo-pagina-updated.html
 ├── package.json
 ├── tsconfig.json
 ├── tsconfig.app.json
