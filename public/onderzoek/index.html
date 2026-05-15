@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="nl-BE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loonmotor BE — Onderzoeksdossier</title>
+<style>
+:root {
+  --bg: #fafbfc;
+  --surface: #ffffff;
+  --border: #e4e7eb;
+  --text: #1a2332;
+  --text-muted: #5a6779;
+  --accent: #0b5394;
+  --accent-light: #e8f0f9;
+  --code-bg: #f5f7fa;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+}
+header.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow);
+}
+.topbar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.brand {
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--accent);
+  text-decoration: none;
+  white-space: nowrap;
+}
+nav.topnav {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+nav.topnav a {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+nav.topnav a:hover { background: var(--accent-light); color: var(--accent); }
+nav.topnav a.active { background: var(--accent); color: white; }
+
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+}
+h1 { font-size: 30px; margin: 0 0 8px; color: var(--text); font-weight: 700; }
+h2 { font-size: 22px; margin: 32px 0 12px; color: var(--text); font-weight: 600; padding-bottom: 6px; border-bottom: 2px solid var(--accent-light); }
+h3 { font-size: 17px; margin: 24px 0 8px; color: var(--text); font-weight: 600; }
+h4 { font-size: 15px; margin: 16px 0 6px; color: var(--accent); font-weight: 600; }
+p { margin: 8px 0 12px; }
+ul, ol { padding-left: 22px; }
+li { margin: 4px 0; }
+a { color: var(--accent); }
+a:hover { text-decoration: underline; }
+code { font-family: "SF Mono", Monaco, Consolas, monospace; background: var(--code-bg); padding: 1px 5px; border-radius: 3px; font-size: 13px; }
+pre { background: var(--code-bg); padding: 14px 18px; border-radius: 6px; overflow-x: auto; font-size: 13px; border: 1px solid var(--border); }
+pre code { background: none; padding: 0; }
+
+.subtitle { color: var(--text-muted); font-size: 16px; margin: 0 0 24px; }
+.meta {
+  font-size: 13px;
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 24px;
+}
+
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin: 16px 0 32px; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 20px;
+  text-decoration: none;
+  color: var(--text);
+  display: block;
+  box-shadow: var(--shadow);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-decoration: none; }
+.card h3 { margin: 0 0 6px; color: var(--accent); font-size: 16px; }
+.card p { margin: 0; font-size: 13px; color: var(--text-muted); }
+.card .card-num { font-size: 11px; color: var(--text-muted); letter-spacing: 0.5px; text-transform: uppercase; }
+
+.section-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 18px 22px;
+  margin: 16px 0;
+  box-shadow: var(--shadow);
+}
+.callout {
+  border-left: 4px solid var(--accent);
+  background: var(--accent-light);
+  padding: 12px 16px;
+  margin: 14px 0;
+  border-radius: 0 4px 4px 0;
+}
+.callout.warn { border-color: #d97706; background: #fef3c7; }
+.callout.danger { border-color: #dc2626; background: #fee2e2; }
+.callout.ok { border-color: #059669; background: #d1fae5; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 20px;
+  font-size: 14px;
+  background: var(--surface);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+th, td { padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { background: var(--accent-light); font-weight: 600; color: var(--text); font-size: 13px; }
+tr:last-child td { border-bottom: none; }
+tr:hover { background: #f8fafc; }
+table.compact th, table.compact td { padding: 6px 10px; font-size: 13px; }
+
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin: 0 3px 2px 0;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.badge.feit { background: #d1fae5; color: #065f46; }
+.badge.aanname { background: #fef3c7; color: #92400e; }
+.badge.hypothese { background: #e0e7ff; color: #3730a3; }
+.badge.onzekerheid { background: #fed7aa; color: #9a3412; }
+.badge.openvraag { background: #fde68a; color: #78350f; }
+.badge.mvp { background: #c7f0d3; color: #14532d; }
+.badge.later { background: #ddd6fe; color: #5b21b6; }
+.badge.enterprise { background: #fce7f3; color: #831843; }
+.badge.risk-h { background: #fee2e2; color: #991b1b; }
+.badge.risk-m { background: #fef3c7; color: #854d0e; }
+.badge.risk-l { background: #d1fae5; color: #065f46; }
+
+.tag {
+  display: inline-block;
+  background: var(--accent-light);
+  color: var(--accent);
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.scope-in{background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+.scope-out{background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+footer {
+  border-top: 1px solid var(--border);
+  margin-top: 48px;
+  padding: 24px;
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 16px 0; }
+.kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 14px; text-align: center; }
+.kpi-value { font-size: 24px; font-weight: 700; color: var(--accent); display: block; }
+.kpi-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+dl.def { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 16px 20px; }
+dl.def dt { font-weight: 600; color: var(--accent); margin-top: 8px; }
+dl.def dd { margin: 4px 0 8px 0; color: var(--text-muted); font-size: 14px; }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">Loonmotor BE</a>
+    <nav class="topnav">
+      <a href="index.html" class="active">Overzicht</a>
+      <a href="marktonderzoek.html">Markt</a>
+      <a href="concurrentiematrix.html">Concurrenten</a>
+      <a href="werking-loonmotor.html">Werking</a>
+      <a href="wetgevend-kader.html">Wetgeving</a>
+      <a href="requirements.html">Requirements</a>
+      <a href="datamodel.html">Datamodel</a>
+      <a href="technische-architectuur.html">Architectuur</a>
+      <a href="juridische-checklist.html">Juridisch</a>
+      <a href="mvp-roadmap.html">Roadmap</a>
+      <a href="risicoregister.html">Risico's</a>
+      <a href="jaakie-specificatie.html">Jaakie</a>
+      <a href="testcorpus.html">Testcorpus</a>
+      <a href="referentie-tools.html">Referenties</a>
+      <a href="bronnen.html">Bronnen</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1>Loonmotor België — Onderzoeksdossier</h1>
+  <p class="subtitle">Diepgaand onderzoeksdossier voor de bouw van een eigen Belgische loonmotor (payroll engine), met marktanalyse, wetgevend kader, datamodel, architectuur en MVP-roadmap.</p>
+
+  <div class="meta">
+    <strong>Versie:</strong> 1.1 · <strong>Peildatum cijfers:</strong> 2026-05-08 · <strong>Taal:</strong> Nederlands (België) · <strong>Bereik:</strong> uitsluitend Belgisch loon- en arbeidsrecht
+  </div>
+
+  <h2>Executive summary</h2>
+  <p>De Belgische payrollmarkt wordt gedomineerd door vier erkende sociale secretariaten (SD Worx, Acerta, Partena Professional, Liantis), aangevuld met Securex, Group S, Attentia, Easypay en HR-tech challengers zoals Officient en Payflip. Samen bedienen zij naar schatting <span class="tag">circa 95% van de KMO-werkgevers</span>. <span class="badge feit">Feit</span></p>
+
+  <p>De wettelijke complexiteit is hoog: ~164 paritaire comités, ~80+ wettelijke loonparameters die jaarlijks of per kwartaal wijzigen, plus EU-druk (loontransparantierichtlijn 2023/970 met deadline juni 2026) en de fiscaal-sociale hervormingen van de regering-De Wever (Arizona-cap RSZ, BBIB-versoepeling, beslagschijven 2026). <span class="badge feit">Feit</span></p>
+
+  <div class="kpi-grid">
+    <div class="kpi"><span class="kpi-value">~164</span><span class="kpi-label">Paritaire comités</span></div>
+    <div class="kpi"><span class="kpi-value">13.07%</span><span class="kpi-label">RSZ-werknemer</span></div>
+    <div class="kpi"><span class="kpi-value">€86.700</span><span class="kpi-label">Arizona RSZ-cap/kw (2026)</span></div>
+    <div class="kpi"><span class="kpi-value">€2.189,81</span><span class="kpi-label">GGMMI vanaf 1/4/2026</span></div>
+    <div class="kpi"><span class="kpi-value">€11.180</span><span class="kpi-label">Belastingvrije som AJ 2027</span></div>
+    <div class="kpi"><span class="kpi-value">€8,91</span><span class="kpi-label">Maaltijdcheque max wg (2026)</span></div>
+    <div class="kpi"><span class="kpi-value">+2,21%</span><span class="kpi-label">PC 200 indexatie 1/1/2026</span></div>
+  </div>
+
+  <h2>Doel van dit dossier</h2>
+  <p>Dit dossier dient als beslissings- en bouwbasis. Het beantwoordt drie kernvragen:</p>
+  <ol>
+    <li><strong>Marktpositionering:</strong> Welke spelers zijn er, hoe verdienen ze geld, waar zit een onderscheidende opportunity?</li>
+    <li><strong>Werking en wetgeving:</strong> Wat moet een loonmotor concreet kunnen doen om compliant te zijn aan Belgisch recht?</li>
+    <li><strong>Bouwbaarheid:</strong> Wat is het realistische pad (architectuur, fasering, risico's) om dit zelf te bouwen vs. te kopen?</li>
+  </ol>
+
+  <h2>Leeswijzer — 15 secties</h2>
+  <div class="card-grid">
+    <a class="card" href="marktonderzoek.html"><span class="card-num">01</span><h3>Marktonderzoek</h3><p>Top 4 sociale secretariaten, challengers, EU 2023/970, M&amp;A, marktopportuniteit.</p></a>
+    <a class="card" href="concurrentiematrix.html"><span class="card-num">02</span><h3>Concurrentiematrix</h3><p>13+ spelers vergeleken op service, doelgroep, prijs, sterktes, zwaktes.</p></a>
+    <a class="card" href="werking-loonmotor.html"><span class="card-num">03</span><h3>Werking loonmotor</h3><p>22-stappen end-to-end proces, looncomponenten, bruto-netto, edge cases, integraties.</p></a>
+    <a class="card" href="wetgevend-kader.html"><span class="card-num">04</span><h3>Wetgevend kader</h3><p>RSZ, BV, arbeidsrecht, PC's, voordelen, GDPR, loonbeslag, De Wever-wijzigingen.</p></a>
+    <a class="card" href="requirements.html"><span class="card-num">05</span><h3>Requirements</h3><p>Functioneel, niet-functioneel, compliance — wat de motor moet kunnen.</p></a>
+    <a class="card" href="datamodel.html"><span class="card-num">06</span><h3>Datamodel</h3><p>Entiteiten, SQL DDL, bitemporeel patroon, audit ketenhash, RBAC.</p></a>
+    <a class="card" href="technische-architectuur.html"><span class="card-num">07</span><h3>Technische architectuur</h3><p>Modular monolith, Kotlin/Spring Boot, decision tables, CQRS, eventual consistency.</p></a>
+    <a class="card" href="juridische-checklist.html"><span class="card-num">08</span><h3>Juridische checklist</h3><p>Erkenning sociaal secretariaat, GDPR DPIA, bewaartermijnen, loonbrief-vermeldingen.</p></a>
+    <a class="card" href="mvp-roadmap.html"><span class="card-num">09</span><h3>MVP-roadmap</h3><p>Zes fases (0–5): verkenning, PoC, simulator, aangiften, productie, sociaal secretariaat.</p></a>
+    <a class="card" href="risicoregister.html"><span class="card-num">10</span><h3>Risicoregister</h3><p>30 risico's met I×W-scoring, eigenaar, mitigatie, restrisico.</p></a>
+    <a class="card" href="bronnen.html"><span class="card-num">11</span><h3>Bronnen</h3><p>Alle 50+ officiële bronnen (RSZ, FOD Fin, FOD WASO, BS, NAR, KSZ, Sigedis).</p></a>
+    <a class="card" href="jaakie-specificatie.html"><span class="card-num">12</span><h3>Jaakie-specificatie</h3><p>Technische specificatie van de browser-only PC 200 calculator: scope, modules, audit-trail, tier-1/2/3.</p></a>
+    <a class="card" href="testcorpus.html"><span class="card-num">13</span><h3>Testcorpus</h3><p>30 bruto-netto profielen + 15 netto-testcases + golden tests + FOD Tax-Calc validatieregels.</p></a>
+    <a class="card" href="referentie-tools.html"><span class="card-num">14</span><h3>Referentietools</h3><p>Group S Salary Sim vergelijking, tier-1/2/3 bronhiërarchie, triangulatieregels, onderhoudscyclus.</p></a>
+    <a class="card" href="#legenda"><span class="card-num">15</span><h3>Legenda</h3><p>Betekenis van alle labels (Feit, Aanname, Hypothese, MVP, Later, Enterprise…).</p></a>
+  </div>
+
+  <h2 id="legenda">Legenda — claim-labels</h2>
+  <p>Elke uitspraak in dit dossier krijgt een label dat de status van de claim aangeeft. Dit dwingt expliciete onderscheiding tussen wat <em>vaststaat</em> en wat een <em>aanname</em> is.</p>
+  <table>
+    <thead><tr><th style="width:140px">Label</th><th>Betekenis</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge feit">Feit</span></td><td>Geverifieerd via een officiële bron (wet, KB, RSZ-instructie, FOD-publicatie) en gedateerd / met versie.</td></tr>
+      <tr><td><span class="badge aanname">Aanname</span></td><td>Plausibel maar niet rechtstreeks gestaafd; gebruikt om door te kunnen redeneren. Moet bij detail-ontwerp gevalideerd worden.</td></tr>
+      <tr><td><span class="badge hypothese">Hypothese</span></td><td>Werkhypothese voor strategie of architectuur (bv. "modular monolith is de juiste keuze voor fase 1–3"). Falsifieerbaar.</td></tr>
+      <tr><td><span class="badge onzekerheid">Onzekerheid</span></td><td>De juiste waarde of regel is bekend, maar de exacte parameter (bedrag, datum) is in flux of niet in publieke bron expliciet bevestigd.</td></tr>
+      <tr><td><span class="badge openvraag">Open vraag</span></td><td>Open punt dat met de business / jurist beslecht moet worden voordat het in code gegoten wordt.</td></tr>
+      <tr><td><span class="badge mvp">MVP</span></td><td>In scope van de eerste werkbare versie.</td></tr>
+      <tr><td><span class="badge later">Later</span></td><td>Bewust uitgesteld naar een latere fase.</td></tr>
+      <tr><td><span class="badge enterprise">Enterprise</span></td><td>Pas relevant bij schaal > 1.000 werknemers of bij ambitie om zelf erkend sociaal secretariaat te worden.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Belangrijke afbakeningen</h2>
+  <ul>
+    <li><strong>Scope:</strong> uitsluitend Belgisch loon- en arbeidsrecht. Grensoverschrijdende tewerkstelling (Vo. 883/2004, A1, Limosa) wordt benoemd als integratiepunt maar niet uitgewerkt. <span class="badge mvp">MVP</span></li>
+    <li><strong>Bronvoorwaarde:</strong> elke wettelijke claim verwijst naar een Belgische officiële bron (Belgisch Staatsblad, FOD, RSZ, NAR, KSZ, Sigedis, NBB, Statbel). Marktcijfers komen uit publiek toegankelijke rapporten of corporate communicatie.</li>
+    <li><strong>Niet-doelen:</strong> dit dossier is geen vervanging voor juridisch advies, geen ESS-erkenning op zich, en geen vendor-keuze definitief.</li>
+  </ul>
+
+  <h2>Hoofdconclusies</h2>
+  <ol>
+    <li><strong>De markt is verzadigd aan de bovenkant maar fragiel aan de onderkant.</strong> KMO's onder 50 werknemers krijgen vaak een verouderde UI en lage prioriteit bij de top 4. Daar zit ruimte voor een moderne SaaS-loonmotor. <span class="badge hypothese">Hypothese</span></li>
+    <li><strong>De wetgevende compliance-laag is de echte moat.</strong> Niet de berekening — die is open kennis — maar het up-to-date houden van 80+ parameters, het juridisch laten reviewen van elke regelwijziging, en het kunnen aansluiten op Dimona, DmfA, Belcotax, Finprof, e-Box, Sigedis. <span class="badge feit">Feit</span></li>
+    <li><strong>Zelf bouwen is realistisch voor "eigen gebruik + simulator + aangiften", niet voor "concurrent van SD Worx".</strong> Een fase 4-product (productieklaar voor 50–500 werknemers van eigen of partnerklanten) is haalbaar in 18–30 maanden met 4–6 voltijdse equivalenten. <span class="badge hypothese">Hypothese</span></li>
+    <li><strong>Erkenning als sociaal secretariaat is een aparte beslissing.</strong> KB 28/11/1969 + KB 20/02/2017 (kwaliteitsbarometer) leggen strenge vereisten op (waarborgen, governance, accountantscontrole, IT-audit). Niet in MVP. <span class="badge enterprise">Enterprise</span></li>
+  </ol>
+
+  <h2>Gebruiksaanwijzing</h2>
+  <p>Lees dit dossier in deze volgorde voor een eerste doorloop:</p>
+  <ol>
+    <li><a href="marktonderzoek.html">Marktonderzoek</a> → context</li>
+    <li><a href="werking-loonmotor.html">Werking</a> → wat doet zo'n motor eigenlijk</li>
+    <li><a href="wetgevend-kader.html">Wetgevend kader</a> → de echte complexiteit</li>
+    <li><a href="mvp-roadmap.html">MVP-roadmap</a> → bouwpad</li>
+    <li><a href="risicoregister.html">Risico's</a> → ogen open</li>
+  </ol>
+  <p>Voor technisch diepteleeswerk: <a href="datamodel.html">Datamodel</a> en <a href="technische-architectuur.html">Architectuur</a>. Voor de Jaakie-implementatie: <a href="jaakie-specificatie.html">Jaakie-specificatie</a>, <a href="testcorpus.html">Testcorpus</a> en <a href="referentie-tools.html">Referenties</a>. Voor de jurist: <a href="juridische-checklist.html">Juridische checklist</a> en <a href="bronnen.html">Bronnen</a>.</p>
+</main>
+
+<footer>
+  Loonmotor BE — Onderzoeksdossier · Interne werkdocumenten · Versie 1.0 (2026)
+</footer>
+</body>
+</html>

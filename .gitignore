@@ -4,5 +4,6 @@ dist/
 .env.local
 .claude/settings.local.json
 feedback expert.txt
+FeedbackExpert.md
 docs/branding/van-havermaet-branding-snapshot.md
 00_Van Havermaet components/

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="nl-BE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Referentietools — Loonmotor BE</title>
+<style>
+:root{--bg:#fafbfc;--surface:#fff;--border:#e4e7eb;--text:#1a2332;--text-muted:#5a6779;--accent:#0b5394;--accent-light:#e8f0f9;--code-bg:#f5f7fa;--shadow:0 1px 3px rgba(0,0,0,.06)}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.6;color:var(--text);background:var(--bg)}
+header.topbar{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.topbar-inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-weight:700;font-size:17px;color:var(--accent);text-decoration:none}
+nav.topnav{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+nav.topnav a{font-size:13px;color:var(--text-muted);text-decoration:none;padding:6px 10px;border-radius:4px}
+nav.topnav a:hover{background:var(--accent-light);color:var(--accent)}
+nav.topnav a.active{background:var(--accent);color:#fff}
+main{max-width:1200px;margin:0 auto;padding:32px 24px 64px}
+h1{font-size:30px;margin:0 0 8px;font-weight:700}h2{font-size:22px;margin:32px 0 12px;font-weight:600;padding-bottom:6px;border-bottom:2px solid var(--accent-light)}
+h3{font-size:17px;margin:24px 0 8px;font-weight:600}h4{font-size:15px;margin:16px 0 6px;color:var(--accent);font-weight:600}
+p{margin:8px 0 12px}ul,ol{padding-left:22px}li{margin:4px 0}a{color:var(--accent)}a:hover{text-decoration:underline}
+code{font-family:"SF Mono",Monaco,Consolas,monospace;background:var(--code-bg);padding:1px 5px;border-radius:3px;font-size:13px}
+pre{background:var(--code-bg);padding:14px 18px;border-radius:6px;overflow-x:auto;font-size:13px;border:1px solid var(--border)}
+.subtitle{color:var(--text-muted);font-size:16px;margin:0 0 24px}
+.meta{font-size:13px;color:var(--text-muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;margin-bottom:24px}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:14px;background:var(--surface);border-radius:6px;overflow:hidden;box-shadow:var(--shadow)}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:var(--accent-light);font-weight:600;font-size:13px}
+tr:last-child td{border-bottom:none}tr:hover{background:#f8fafc}
+table.compact th,table.compact td{padding:6px 10px;font-size:13px}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;margin:0 3px 2px 0;letter-spacing:.3px;text-transform:uppercase}
+.badge.feit{background:#d1fae5;color:#065f46}.badge.aanname{background:#fef3c7;color:#92400e}
+.badge.hypothese{background:#e0e7ff;color:#3730a3}.badge.onzekerheid{background:#fed7aa;color:#9a3412}
+.badge.openvraag{background:#fde68a;color:#78350f}.badge.mvp{background:#c7f0d3;color:#14532d}
+.badge.later{background:#ddd6fe;color:#5b21b6}.badge.enterprise{background:#fce7f3;color:#831843}
+.callout{border-left:4px solid var(--accent);background:var(--accent-light);padding:12px 16px;margin:14px 0;border-radius:0 4px 4px 0}
+.callout.warn{border-color:#d97706;background:#fef3c7}
+.callout.ok{border-color:#059669;background:#d1fae5}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size:13px;color:var(--text-muted);text-align:center}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+<a href="index.html" class="brand">Loonmotor BE</a>
+<nav class="topnav">
+<a href="index.html">Overzicht</a>
+<a href="marktonderzoek.html">Markt</a>
+<a href="concurrentiematrix.html">Concurrenten</a>
+<a href="werking-loonmotor.html">Werking</a>
+<a href="wetgevend-kader.html">Wetgeving</a>
+<a href="requirements.html">Requirements</a>
+<a href="datamodel.html">Datamodel</a>
+<a href="technische-architectuur.html">Architectuur</a>
+<a href="juridische-checklist.html">Juridisch</a>
+<a href="mvp-roadmap.html">Roadmap</a>
+<a href="risicoregister.html">Risico's</a>
+<a href="jaakie-specificatie.html">Jaakie</a>
+<a href="testcorpus.html">Testcorpus</a>
+<a href="referentie-tools.html" class="active">Referenties</a>
+<a href="bronnen.html">Bronnen</a>
+</nav></div></header>
+
+<main>
+<h1>Referentietools &amp; bronverificatie</h1>
+<p class="subtitle">Tier-1/2/3 bronnenhiërarchie, triangulatieregels, en geverifieerde cross-checks tegen publieke calculators.</p>
+
+<div class="meta">
+<strong>Versie:</strong> 2026-05-12 · <strong>Leading bron:</strong> <code>knowledgebase/10_bronnen_guideline.md</code> · <strong>Peildatum:</strong> 2026-05-08
+</div>
+
+<h2>1. 3-tier bronnenhiërarchie</h2>
+<table>
+<thead><tr><th>Tier</th><th>Wie</th><th>Alleenstaand bruikbaar?</th><th>Triangulatie verplicht?</th></tr></thead>
+<tbody>
+<tr><td><strong>Tier 1</strong></td><td>RSZ, FOD Financiën, FOD WASO, sfonds200.be, Belgisch Staatsblad / Justel, NAR (CAO)</td><td>✅ Ja</td><td>n.v.t.</td></tr>
+<tr><td><strong>Tier 2</strong></td><td>SSN, Securex, Partena, SD Worx, Acerta, Liantis, Attentia, CLB Group, Group S, Wolters Kluwer, Practicali, BDO, Tiberghien, KPMG, Deloitte, EY, PwC</td><td>✅ Ja, mits geen Tier-1-tegenstrijdigheid</td><td>Bij conflict tussen 2 Tier-2</td></tr>
+<tr><td><strong>Tier 3</strong></td><td>Vakbonden (ACV, ACLVB, ABVV), Loonberekening.be, NettoCalc.be, Jobat, Wikipedia</td><td>❌ Nooit</td><td>Verplicht ≥1 Tier-1 of ≥2 Tier-2</td></tr>
+</tbody>
+</table>
+
+<div class="callout ok">
+<strong>Regel:</strong> Een Tier-3 datapunt zonder geldige <code>triangulatie_bronnen[]</code> mag in CI als <strong>rood</strong> worden gemarkeerd. Elke berekende waarde in de UI moet via het audit-paneel naar een primaire (of getrianguleerde) bron leiden.
+</div>
+
+<h2>2. Bronnen per netto-bouwsteen</h2>
+<table class="compact">
+<thead><tr><th>Bouwsteen</th><th>Tier 1</th><th>Tier 2 fallback</th><th>Confidence</th></tr></thead>
+<tbody>
+<tr><td>Bedrijfsvoorheffing (BV)</td><td>KB 11/12/2025 (BS 29/12/2025); FOD Fin Tax-Calc</td><td>Securex, CLB Group, Partena</td><td><span class="badge feit">HIGH</span></td></tr>
+<tr><td>BV-verminderingen</td><td>FOD Financiën (exclusief)</td><td>—</td><td><span class="badge feit">HIGH</span></td></tr>
+<tr><td>RSZ-werknemer</td><td>RSZ basisbijdragevoeten (13,07%)</td><td>—</td><td><span class="badge feit">HIGH</span></td></tr>
+<tr><td>Sociale werkbonus</td><td>Programmawet 18/7/2025; KB 6/10/2025</td><td>Liantis, Daenens, Securex, Attentia (viervoudig)</td><td><span class="badge feit">HIGH</span></td></tr>
+<tr><td>Fiscale werkbonus</td><td>—</td><td>Partena, Liantis</td><td><span class="badge aanname">SUPPORTED</span></td></tr>
+<tr><td>BBSZ</td><td>RSZ instructies Q1/2026 (pending)</td><td>SSN (alleenstaand — WEAK)</td><td><span class="badge onzekerheid">WEAK</span></td></tr>
+<tr><td>Belastingvrije som AJ 2027</td><td>KB 11/12/2025</td><td>—</td><td><span class="badge feit">HIGH</span></td></tr>
+<tr><td>Forfaitaire beroepskosten</td><td>KB 11/12/2025</td><td>—</td><td><span class="badge feit">HIGH</span></td></tr>
+<tr><td>Structurele vermindering</td><td>KB 2/7/2025 (BS 15/7/2025)</td><td>—</td><td><span class="badge feit">HIGH</span></td></tr>
+</tbody>
+</table>
+
+<h2>3. Geverifieerde referentietool: Group S Salary Sim</h2>
+<table class="compact">
+<thead><tr><th>Eigenschap</th><th>Waarde</th></tr></thead>
+<tbody>
+<tr><td>Naam</td><td>Group S Salary Sim</td></tr>
+<tr><td>Uitgever</td><td>Group S (sociaal secretariaat)</td></tr>
+<tr><td>Bronnenhiërarchie</td><td><strong>Tier 2</strong></td></tr>
+<tr><td>URL</td><td><a href="https://online.groups.be/salarysim/?lg=nl" target="_blank" rel="noopener">online.groups.be/salarysim</a></td></tr>
+<tr><td>Talen</td><td>NL / FR / EN</td></tr>
+<tr><td>Scope</td><td>Alle ±200 PC's</td></tr>
+<tr><td>Beschikbaarheid</td><td>Publiek, gratis, geen login</td></tr>
+</tbody>
+</table>
+
+<h3>3.1 Vergelijking Group S vs. Jaakie</h3>
+<table class="compact">
+<thead><tr><th>Feature</th><th>Group S</th><th>Jaakie</th></tr></thead>
+<tbody>
+<tr><td>Scope PC's</td><td>Alle ±200</td><td>PC 200 only (bewust gespecialiseerd)</td></tr>
+<tr><td>Bruto→Netto</td><td>✅</td><td>✅</td></tr>
+<tr><td>Netto→Bruto</td><td>✅ (vereenvoudigd) / ❌ (geavanceerd)</td><td>❌</td></tr>
+<tr><td>Deeltijds</td><td>✅</td><td>❌</td></tr>
+<tr><td>Barema-lookup</td><td>❌</td><td>✅ PC 200 Schaal I/II × Cat A–D</td></tr>
+<tr><td>Audit-trail</td><td>❌ Black box</td><td>✅ <strong>Uniek: klikbare bronlinks + tier hiërarchie</strong></td></tr>
+<tr><td>Ecocheques / jaarpremie / fiets</td><td>❌ Geen aparte velden</td><td>✅ Sectorale PC 200 voordelen</td></tr>
+<tr><td>Export</td><td>✅ PDF/print</td><td>❌</td></tr>
+</tbody>
+</table>
+
+<h3>3.2 Validatieresultaat</h3>
+<div class="callout ok">
+<p><strong>Testcase:</strong> PC 200, Bediende, €2.276,51 bruto, ongehuwd, geen kinderen, Vlaanderen, mei 2026.</p>
+<table class="compact">
+<thead><tr><th>Component</th><th>Group S</th><th>Jaakie (verwacht)</th></tr></thead>
+<tbody>
+<tr><td>Netto RSZ (na werkbonus)</td><td>€9,55</td><td>≈ €9,55</td></tr>
+<tr><td>BV gewone bezoldiging</td><td>€154,22</td><td>≈ vergelijkbaar</td></tr>
+<tr><td>BBSZ</td><td>€11,28</td><td>≈ vergelijkbaar</td></tr>
+<tr><td><strong>Nettoloon</strong></td><td><strong>€2.101,46</strong></td><td><strong>binnen ±€5</strong></td></tr>
+</tbody>
+</table>
+<p><span class="badge feit">Feit</span> Geverifieerd via Playwright, geavanceerde modus, mei 2026.</p>
+</div>
+
+<h2>4. Triangulatieregels</h2>
+<table class="compact">
+<thead><tr><th>Situatie</th><th>Regel</th></tr></thead>
+<tbody>
+<tr><td>Tier 1 beschikbaar</td><td>Gebruik Tier 1. Geen triangulatie nodig.</td></tr>
+<tr><td>Geen Tier 1, 1 Tier 2</td><td>Gebruik Tier 2 als enige beschikbare bron. Markeer als <code>mogelijk_verouderd</code> bij twijfel.</td></tr>
+<tr><td>2+ Tier 2 met conflict</td><td>Triangulatie verplicht. Onderzoek verschil; markeer als <code>conflict</code> tot opgelost.</td></tr>
+<tr><td>Tier 3 als enige bron</td><td><strong>Verboden</strong> zonder ≥1 Tier-1 of ≥2 Tier-2 triangulatie. CI moet rood markeren.</td></tr>
+<tr><td>Tier 3 met triangulatie</td><td>Toegestaan. Documenteer <code>triangulatie_bronnen[]</code> met URL's en overeenstemming.</td></tr>
+</tbody>
+</table>
+
+<h2>5. Andere publieke calculators (indicatief)</h2>
+<table class="compact">
+<thead><tr><th>Tool</th><th>Tier</th><th>Scope</th><th>Opmerking</th></tr></thead>
+<tbody>
+<tr><td><a href="https://eservices.minfin.fgov.be/taxcalc/" target="_blank" rel="noopener">FOD Fin Tax-Calc</a></td><td><strong>Tier 1</strong></td><td>Alle werknemers</td><td>Officiële BV-simulator; XLSX-download; referentie voor alle BV-tests</td></tr>
+<tr><td><a href="https://www.socialsecurity.be/citizen/nl/static/applics/findmybonus/" target="_blank" rel="noopener">RSZ Find My Bonus</a></td><td><strong>Tier 1</strong></td><td>Werkbonus</td><td>Officiële werkbonus-rekenmodule RSZ</td></tr>
+<tr><td><a href="https://online.groups.be/salarysim/?lg=nl" target="_blank" rel="noopener">Group S Salary Sim</a></td><td>Tier 2</td><td>Alle PC's</td><td>Primaire tier-2 triangulatieanker voor Jaakie</td></tr>
+<tr><td>Securex / Partena / Liantis loonwijzers</td><td>Tier 2</td><td>Eigen klanten + publiek</td><td>Goed voor parameter-validatie; geen open API</td></tr>
+<tr><td>Loonberekening.be / NettoCalc.be</td><td>Tier 3</td><td>Generiek</td><td>Indicatief; niet voor exacte validatie</td></tr>
+</tbody>
+</table>
+
+<h2>6. Onderhoudscyclus</h2>
+<table class="compact">
+<thead><tr><th>Cyclus</th><th>Wat</th></tr></thead>
+<tbody>
+<tr><td>Maandelijks</td><td>BS-scan voor nieuwe KB's met fiscale of sociale impact</td></tr>
+<tr><td>Per kwartaal</td><td>Tier-2-nieuwsalerts (Liantis / Securex / Partena / Acerta)</td></tr>
+<tr><td>2× per jaar (1/4 + 1/1)</td><td>GGMMI- en werkbonus-actualisatie</td></tr>
+<tr><td>Jaarlijks januari</td><td>PB-schijven, belastingvrije som, kostenforfait, VAA-bedragen</td></tr>
+<tr><td>Per PC 200-akkoord</td><td>CAO-tekst lezen en parameter-deltas verwerken</td></tr>
+</tbody>
+</table>
+
+<h2>7. Gemarkeerde gaps &amp; pending bronnen</h2>
+<ul>
+<li><strong>BBSZ exacte tabel:</strong> Status <code>mogelijk_verouderd</code> — info-band €0–€60,94 tot RSZ-instructie 2026 bevestigd. <span class="badge onzekerheid">Onzekerheid</span></li>
+<li><strong>FOD Tax-Calc BV-validatie:</strong> 30 cases moeten extern worden gevalideerd. Status <code>pending_taxcalc</code>. <span class="badge onzekerheid">Onzekerheid</span></li>
+<li><strong>Arizona hervormingen:</strong> Wetsontwerp — fiscale werkbonus 35%/63%, belastingvrije som €11.550. Alleen feature-flag tot in werking. <span class="badge hypothese">Hypothese</span></li>
+<li><strong>VAA auto-berekening:</strong> Niet geïmplementeerd. Bedrijfswagen CO₂-formule, woonst, verwarming. <span class="badge later">Later</span></li>
+<li><strong>Netto → Bruto:</strong> Ontbreekt. Roadmap-prioriteit. <span class="badge later">Later</span></li>
+</ul>
+
+<p>Zie <a href="jaakie-specificatie.html">Jaakie-specificatie</a> voor de POC-scope, <a href="testcorpus.html">testcorpus</a> voor de validatie-cases, en <a href="wetgevend-kader.html">wetgevend kader</a> voor de juridische basis.</p>
+</main>
+
+<footer>Loonmotor BE — Onderzoeksdossier · <a href="index.html">Terug naar overzicht</a></footer>
+</body>
+</html>

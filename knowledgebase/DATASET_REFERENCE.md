@@ -73,6 +73,10 @@
 | `pc200_klein_verlet_rouwverlof_2026` | actief | Tier 3 | Uitbreiding rouwverlof PC 200 vanaf 1/1/2026 (sectorakkoord 15/01/2026) |
 | `pc200_arbeidsduur` | niet_gevonden | Tier 2 | Sectorale arbeidsduur PC 200 |
 | `pc200_overuren_toeslagen` | niet_gevonden | ? | Sectorale toeslagen overuren PC 200 |
+| `vaa_pc_laptop_forfait_2026` | actief | Tier 1 | VAA pc, laptop en randapparatuur — forfait jaarbedrag |
+| `vaa_gsm_smartphone_forfait_2026` | actief | Tier 1 | VAA mobiele telefoon, smartphone of tablet — forfait jaarbedrag |
+| `vaa_internet_forfait_2026` | actief | Tier 1 | VAA internetaansluiting — forfait jaarbedrag |
+| `vaa_telefoonabonnement_forfait_2026` | actief | Tier 1 | VAA vast of mobiel telefoonabonnement — forfait jaarbedrag |
 
 ---
 

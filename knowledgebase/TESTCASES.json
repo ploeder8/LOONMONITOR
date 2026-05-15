@@ -601,9 +601,10 @@
   },
   {
     "id": "TC-014",
-    "profiel": "Bediende €3.500, gehuwd, 2 kinderen waarvan 1 jonger dan 3",
+    "profiel": "Bediende €3.500, gehuwd, 2 kinderen waarvan 1 jonger dan 3 (documentair/pending; kind-<3 niet actief in calculator)",
+    "calculator_status": "documentair_pending_kind_onder_3_niet_actief",
     "test_focus": [
-      "extra €760 voor kind <3 jaar"
+      "historische kind-<3 corpuscase; niet gebruiken als actieve regressieverwachting"
     ],
     "input": {
       "bruto_maand": 3500.0,
@@ -1314,9 +1315,10 @@
   },
   {
     "id": "TC-029",
-    "profiel": "Bediende €2.189,81 (GGMMI), alleenstaande ouder met 1 kind <3",
+    "profiel": "Bediende €2.189,81 (GGMMI), alleenstaande ouder met 1 kind <3 (documentair/pending; kind-<3 niet actief in calculator)",
+    "calculator_status": "documentair_pending_kind_onder_3_niet_actief",
     "test_focus": [
-      "combinatie GGMMI + kind <3 + alleenstaande ouder"
+      "historische combinatie GGMMI + kind <3 + alleenstaande ouder; niet gebruiken als actieve regressieverwachting"
     ],
     "input": {
       "bruto_maand": 2189.81,
@@ -1364,9 +1366,10 @@
   },
   {
     "id": "TC-030",
-    "profiel": "Bediende €4.500, gehuwd, 5 kinderen waarvan 1 <3",
+    "profiel": "Bediende €4.500, gehuwd, 5 kinderen waarvan 1 <3 (documentair/pending; kind-<3 niet actief in calculator)",
+    "calculator_status": "documentair_pending_kind_onder_3_niet_actief",
     "test_focus": [
-      "> 4 kinderen extra-toeslag formule"
+      "> 4 kinderen extra-toeslag formule; kind-<3 input niet gebruiken als actieve regressieverwachting"
     ],
     "input": {
       "bruto_maand": 4500.0,

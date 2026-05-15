@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="nl-BE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Datamodel — Loonmotor BE</title>
+<style>
+:root{--bg:#fafbfc;--surface:#fff;--border:#e4e7eb;--text:#1a2332;--text-muted:#5a6779;--accent:#0b5394;--accent-light:#e8f0f9;--code-bg:#f5f7fa;--shadow:0 1px 3px rgba(0,0,0,.06)}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.6;color:var(--text);background:var(--bg)}
+header.topbar{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.topbar-inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-weight:700;font-size:17px;color:var(--accent);text-decoration:none}
+nav.topnav{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+nav.topnav a{font-size:13px;color:var(--text-muted);text-decoration:none;padding:6px 10px;border-radius:4px}
+nav.topnav a:hover{background:var(--accent-light);color:var(--accent)}
+nav.topnav a.active{background:var(--accent);color:#fff}
+main{max-width:1200px;margin:0 auto;padding:32px 24px 64px}
+h1{font-size:30px;margin:0 0 8px;font-weight:700}h2{font-size:22px;margin:32px 0 12px;font-weight:600;padding-bottom:6px;border-bottom:2px solid var(--accent-light)}
+h3{font-size:17px;margin:24px 0 8px;font-weight:600}h4{font-size:15px;margin:16px 0 6px;color:var(--accent);font-weight:600}
+p{margin:8px 0 12px}ul,ol{padding-left:22px}li{margin:4px 0}a{color:var(--accent)}a:hover{text-decoration:underline}
+code{font-family:"SF Mono",Monaco,Consolas,monospace;background:var(--code-bg);padding:1px 5px;border-radius:3px;font-size:13px}
+pre{background:#1a2332;color:#e8eef5;padding:14px 18px;border-radius:6px;overflow-x:auto;font-size:12.5px;border:1px solid #2a3548;line-height:1.5}
+pre code{background:none;padding:0;color:inherit}
+.subtitle{color:var(--text-muted);font-size:16px;margin:0 0 24px}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:14px;background:var(--surface);border-radius:6px;overflow:hidden;box-shadow:var(--shadow)}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:var(--accent-light);font-weight:600;font-size:13px}
+tr:last-child td{border-bottom:none}tr:hover{background:#f8fafc}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;margin:0 3px 2px 0;letter-spacing:.3px;text-transform:uppercase}
+.badge.feit{background:#d1fae5;color:#065f46}.badge.mvp{background:#c7f0d3;color:#14532d}
+.badge.later{background:#ddd6fe;color:#5b21b6}.badge.aanname{background:#fef3c7;color:#92400e}
+.callout{border-left:4px solid var(--accent);background:var(--accent-light);padding:12px 16px;margin:14px 0;border-radius:0 4px 4px 0}
+.callout.warn{border-color:#d97706;background:#fef3c7}
+.entity{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px 22px;margin:16px 0;box-shadow:var(--shadow)}
+.entity h4{margin-top:0;font-size:16px;color:var(--accent)}
+.scope-in{background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+.scope-out{background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size:13px;color:var(--text-muted);text-align:center}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+<a href="index.html" class="brand">Loonmotor BE</a>
+<nav class="topnav">
+<a href="index.html">Overzicht</a><a href="marktonderzoek.html">Markt</a>
+<a href="concurrentiematrix.html">Concurrenten</a><a href="werking-loonmotor.html">Werking</a>
+<a href="wetgevend-kader.html">Wetgeving</a><a href="requirements.html">Requirements</a>
+<a href="datamodel.html" class="active">Datamodel</a><a href="technische-architectuur.html">Architectuur</a>
+<a href="juridische-checklist.html">Juridisch</a><a href="mvp-roadmap.html">Roadmap</a>
+<a href="risicoregister.html">Risico's</a><a href="jaakie-specificatie.html">Jaakie</a>
+<a href="testcorpus.html">Testcorpus</a><a href="referentie-tools.html">Referenties</a>
+<a href="bronnen.html">Bronnen</a>
+</nav></div></header>
+
+<main>
+<h1>Datamodel</h1>
+<p class="subtitle">PostgreSQL 16+ datamodel met bitemporeel patroon, encryptie van persoonsgegevens, idempotente runs en append-only audit-trail.</p>
+
+<div class="callout warn">
+<strong>Scope:</strong> dit datamodel is voor de <strong>volledige loonmotor</strong> (productie-database). De <strong>Jaakie</strong> POC gebruikt een statische JSON-dataset in de browser (<code>src/data/pc200_payroll_dataset_2026.json</code>) — zie <a href="jaakie-specificatie.html">Jaakie-specificatie</a> §5.
+</div>
+
+<h2>1. Ontwerpprincipes</h2>
+<ul>
+<li><strong>Bitemporeel</strong> — twee tijdassen: <code>valid_period</code> (geldigheid bedrijfsmatig) + <code>system_period</code> (database-versie). Maakt retroactieve correcties mogelijk zonder geschiedenis te verliezen. <span class="badge mvp">MVP</span></li>
+<li><strong>Multi-tenant</strong> — elke tabel met persoonsgegevens heeft <code>tenant_id</code>. Row-Level Security (RLS) filtert per tenant in elke query.</li>
+<li><strong>Monetair</strong> — <code>numeric(18,4)</code>, BigDecimal in Kotlin, afronding HALF_UP op laatste 2 decimalen bij output.</li>
+<li><strong>Encryptie</strong> — RRN, IBAN en gevoelige PII versleuteld at-rest met kolom-niveau encryptie (pgcrypto + KMS-managed sleutels).</li>
+<li><strong>Idempotency</strong> — elke PayrollRun heeft <code>canonical_input_hash</code> en <code>rule_set_version</code>. Zelfde input + zelfde regels → zelfde output.</li>
+<li><strong>Audit-trail</strong> — append-only tabel met SHA-256 ketenhash. Niet uit te wissen.</li>
+</ul>
+
+<h2>2. Entiteitenoverzicht</h2>
+<table>
+<thead><tr><th>Cluster</th><th>Entiteiten</th></tr></thead>
+<tbody>
+<tr><td>Tenancy &amp; partijen</td><td>tenant, werkgever, vestigingseenheid, sociaal_secretariaat</td></tr>
+<tr><td>Werknemer</td><td>werknemer, werknemer_gezinssituatie, contract, tewerkstelling</td></tr>
+<tr><td>Run-context</td><td>loonperiode, payrollrun, prestatie, afwezigheid</td></tr>
+<tr><td>Componenten</td><td>looncomponent_definitie, looncomponent_toepassing, voordeel_alle_aard</td></tr>
+<tr><td>Resultaat</td><td>berekeningsresultaat, loonbrief_document, betaling, aangifte</td></tr>
+<tr><td>Boekhouding</td><td>boekhoudregel</td></tr>
+<tr><td>Regelmotor</td><td>regelversie, paritair_comite, barema</td></tr>
+<tr><td>Auditing</td><td>audit_log</td></tr>
+<tr><td>Toegang</td><td>gebruiker, rol, gebruiker_rol, sessie</td></tr>
+</tbody>
+</table>
+
+<h2>3. SQL DDL — kernentiteiten</h2>
+
+<div class="entity">
+<h4>tenant</h4>
+<pre><code>CREATE TABLE tenant (
+  id              uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  naam            text NOT NULL,
+  kbo_nummer      varchar(10),
+  status          text NOT NULL CHECK (status IN ('actief','opgeschort','beëindigd')),
+  created_at      timestamptz NOT NULL DEFAULT now(),
+  system_period   tstzrange NOT NULL DEFAULT tstzrange(now(), null, '[)')
+);</code></pre>
+</div>
+
+<div class="entity">
+<h4>werknemer (met encryptie RRN)</h4>
+<pre><code>CREATE TABLE werknemer (
+  id               uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id        uuid NOT NULL REFERENCES tenant(id),
+  werkgever_id     uuid NOT NULL,
+  rrn_encrypted    bytea NOT NULL,      -- pgcrypto / KMS
+  rrn_hash         bytea NOT NULL,      -- HMAC voor unique-check zonder decrypt
+  voornaam         text NOT NULL,
+  achternaam       text NOT NULL,
+  geboortedatum    date NOT NULL,
+  geslacht         text CHECK (geslacht IN ('M','V','X')),
+  nationaliteit    text,
+  adres            jsonb,
+  iban_encrypted   bytea,
+  created_at       timestamptz NOT NULL DEFAULT now(),
+  UNIQUE (tenant_id, rrn_hash)
+);
+CREATE INDEX werknemer_werkgever_idx ON werknemer (tenant_id, werkgever_id);</code></pre>
+</div>
+
+<div class="entity">
+<h4>werknemer_gezinssituatie (bitemporeel)</h4>
+<pre><code>CREATE TABLE werknemer_gezinssituatie (
+  id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  werknemer_id      uuid NOT NULL REFERENCES werknemer(id),
+  burgerlijke_staat text NOT NULL,
+  partner_inkomen   text CHECK (partner_inkomen IN ('geen','laag','hoog','nvt')),
+  kinderen_ten_laste smallint NOT NULL DEFAULT 0,
+  andere_ten_laste  smallint NOT NULL DEFAULT 0,
+  handicap_eigen    boolean NOT NULL DEFAULT false,
+  handicap_partner  boolean NOT NULL DEFAULT false,
+  valid_period      daterange NOT NULL,
+  system_period     tstzrange NOT NULL DEFAULT tstzrange(now(), null, '[)'),
+  EXCLUDE USING gist (werknemer_id WITH =, valid_period WITH &amp;&amp;,
+                      system_period WITH &amp;&amp;)
+);</code></pre>
+<p>De <code>EXCLUDE</code> constraint voorkomt overlappende geldigheidsperiodes binnen dezelfde systeemversie.</p>
+</div>
+
+<div class="entity">
+<h4>contract</h4>
+<pre><code>CREATE TABLE contract (
+  id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id         uuid NOT NULL REFERENCES tenant(id),
+  werknemer_id      uuid NOT NULL REFERENCES werknemer(id),
+  werkgever_id      uuid NOT NULL,
+  type              text NOT NULL CHECK (type IN
+                       ('OBD','BD','vervanging','student','flexi','leerling','andere')),
+  statuut           text NOT NULL CHECK (statuut IN ('bediende','arbeider','andere')),
+  start_datum       date NOT NULL,
+  einde_datum       date,
+  opzeg_einde       date,
+  paritair_comite   varchar(10) NOT NULL,
+  arbeidsregime_uren_per_week numeric(5,2) NOT NULL,
+  bruto_maandloon   numeric(12,2),
+  uurloon           numeric(12,4),
+  barema_code       text,
+  functie           text,
+  anciënniteitsdatum date,
+  created_at        timestamptz NOT NULL DEFAULT now()
+);</code></pre>
+</div>
+
+<div class="entity">
+<h4>loonperiode &amp; payrollrun (idempotent)</h4>
+<pre><code>CREATE TABLE loonperiode (
+  id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id     uuid NOT NULL REFERENCES tenant(id),
+  werkgever_id  uuid NOT NULL,
+  periode       daterange NOT NULL,
+  status        text NOT NULL CHECK (status IN ('open','berekend','goedgekeurd','afgesloten')),
+  UNIQUE (werkgever_id, periode)
+);
+
+CREATE TABLE payrollrun (
+  id                    uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id             uuid NOT NULL REFERENCES tenant(id),
+  loonperiode_id        uuid NOT NULL REFERENCES loonperiode(id),
+  rule_set_version      text NOT NULL,
+  canonical_input_hash  bytea NOT NULL,    -- SHA-256 over canonical_json(input)
+  triggered_by          uuid NOT NULL,
+  triggered_at          timestamptz NOT NULL DEFAULT now(),
+  status                text NOT NULL CHECK (status IN ('running','success','failed','superseded')),
+  UNIQUE (loonperiode_id, canonical_input_hash, rule_set_version)
+);</code></pre>
+<p>De UNIQUE constraint maakt herberekening met dezelfde input een no-op — krachtige idempotency op het runlevel.</p>
+</div>
+
+<div class="entity">
+<h4>berekeningsresultaat (met explain)</h4>
+<pre><code>CREATE TABLE berekeningsresultaat (
+  id              uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id       uuid NOT NULL REFERENCES tenant(id),
+  payrollrun_id   uuid NOT NULL REFERENCES payrollrun(id),
+  werknemer_id    uuid NOT NULL REFERENCES werknemer(id),
+  bruto           numeric(18,4) NOT NULL,
+  rsz_werknemer   numeric(18,4) NOT NULL,
+  belastbaar      numeric(18,4) NOT NULL,
+  bv              numeric(18,4) NOT NULL,
+  bbsz            numeric(18,4) NOT NULL,
+  inhoudingen     numeric(18,4) NOT NULL,
+  beslag          numeric(18,4) NOT NULL,
+  netto           numeric(18,4) NOT NULL,
+  rsz_werkgever   numeric(18,4) NOT NULL,
+  totale_wg_kost  numeric(18,4) NOT NULL,
+  explain         jsonb NOT NULL,             -- "audit trail" per regel
+  UNIQUE (payrollrun_id, werknemer_id)
+);</code></pre>
+</div>
+
+<div class="entity">
+<h4>looncomponent_definitie (regelmotor-data)</h4>
+<pre><code>CREATE TABLE looncomponent_definitie (
+  code              text PRIMARY KEY,
+  omschrijving      text NOT NULL,
+  rsz_plichtig      boolean NOT NULL,
+  bv_plichtig       boolean NOT NULL,
+  belastbaar        boolean NOT NULL,
+  basis_voor_vakantiegeld boolean NOT NULL DEFAULT false,
+  basis_voor_eindejaarspremie boolean NOT NULL DEFAULT false,
+  exceptionele_bezoldiging boolean NOT NULL DEFAULT false,
+  valid_period      daterange NOT NULL,
+  bron_juridisch    text,                     -- bv. 'KB 27/9/1966'
+  rule_set_version  text NOT NULL
+);</code></pre>
+</div>
+
+<div class="entity">
+<h4>regelversie (parameter-pakket)</h4>
+<pre><code>CREATE TABLE regelversie (
+  versie         text PRIMARY KEY,
+  publicatie     date NOT NULL,
+  bron           text NOT NULL,                  -- bv. KB 11/12/2025
+  changelog      text,
+  payload        jsonb NOT NULL                  -- decision tables, schaaltabellen
+);</code></pre>
+<p>Elke <code>payrollrun</code> verwijst naar exact één <code>regelversie</code>. Een correctie van een lopende periode draait altijd met de regelversie die toen geldig was.</p>
+</div>
+
+<div class="entity">
+<h4>audit_log (tamper-evident)</h4>
+<pre><code>CREATE TABLE audit_log (
+  id            bigserial PRIMARY KEY,
+  tenant_id     uuid,
+  actor_id      uuid,
+  action        text NOT NULL,
+  entity_type   text NOT NULL,
+  entity_id     uuid,
+  payload       jsonb,
+  occurred_at   timestamptz NOT NULL DEFAULT now(),
+  prev_hash     bytea,                     -- vorige rij's hash
+  hash          bytea NOT NULL             -- SHA256(prev_hash || id || canonical_json(rij))
+);
+-- append-only enforcement via revoke UPDATE/DELETE en triggers</code></pre>
+</div>
+
+<div class="entity">
+<h4>aangifte (Dimona / DmfA / Belcotax / Finprof)</h4>
+<pre><code>CREATE TABLE aangifte (
+  id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id     uuid NOT NULL REFERENCES tenant(id),
+  werkgever_id  uuid NOT NULL,
+  type          text NOT NULL CHECK (type IN ('dimona','dmfa','belcotax_281_10','belcotax_281_20','belcotax_281_25','belcotax_281_50','finprof')),
+  periode       daterange,
+  status        text NOT NULL CHECK (status IN ('voorbereid','verzonden','aanvaard','geweigerd','rectificatie')),
+  payload       jsonb NOT NULL,            -- raw XML/JSON gemarshalled
+  ticket_id     text,                       -- referentie aangeleverd door RSZ/FOD
+  ingediend_op  timestamptz,
+  response      jsonb
+);</code></pre>
+</div>
+
+<div class="entity">
+<h4>betaling (SEPA)</h4>
+<pre><code>CREATE TABLE betaling (
+  id              uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id       uuid NOT NULL REFERENCES tenant(id),
+  payrollrun_id   uuid REFERENCES payrollrun(id),
+  begunstigde     text NOT NULL,
+  iban_encrypted  bytea NOT NULL,
+  bedrag          numeric(18,2) NOT NULL,
+  munt            char(3) NOT NULL DEFAULT 'EUR',
+  uitvoeringsdatum date NOT NULL,
+  end_to_end_id   text UNIQUE NOT NULL,    -- voor reconciliatie
+  pain001_batch_id uuid,
+  status          text NOT NULL
+);</code></pre>
+</div>
+
+<h2>4. Row-Level Security (multi-tenancy)</h2>
+<pre><code>ALTER TABLE werknemer ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation ON werknemer
+  USING (tenant_id = current_setting('app.current_tenant')::uuid);
+-- toegepast op elke tabel met tenant_id; verbind app-sessie:
+--   SET LOCAL app.current_tenant = '...';</code></pre>
+
+<h2>5. Index- en performance-strategie</h2>
+<table>
+<thead><tr><th>Tabel</th><th>Indices</th></tr></thead>
+<tbody>
+<tr><td>werknemer</td><td><code>(tenant_id, werkgever_id)</code>, unique <code>(tenant_id, rrn_hash)</code></td></tr>
+<tr><td>contract</td><td><code>(tenant_id, werknemer_id, start_datum)</code></td></tr>
+<tr><td>payrollrun</td><td>unique <code>(loonperiode_id, canonical_input_hash, rule_set_version)</code></td></tr>
+<tr><td>berekeningsresultaat</td><td>BRIN <code>payrollrun_id</code> + B-tree <code>(werknemer_id, payrollrun_id)</code></td></tr>
+<tr><td>audit_log</td><td>BRIN op <code>occurred_at</code>; partial op <code>tenant_id</code></td></tr>
+<tr><td>aangifte</td><td><code>(werkgever_id, type, periode)</code></td></tr>
+</tbody>
+</table>
+
+<h2>6. Bewaartermijnen — partitionering &amp; archivering</h2>
+<table>
+<thead><tr><th>Entiteit</th><th>Bewaartermijn</th><th>Strategie</th></tr></thead>
+<tbody>
+<tr><td>loonbrief_document</td><td>5 jaar (KB 8/8/1980)</td><td>Per-jaar partitie + cold storage na 5 jaar</td></tr>
+<tr><td>aangifte</td><td>7 jaar fiscaal</td><td>Idem</td></tr>
+<tr><td>berekeningsresultaat</td><td>10 jaar</td><td>Partitie per maand</td></tr>
+<tr><td>audit_log</td><td>10 jaar</td><td>Append-only, cold archive na 3 jaar</td></tr>
+<tr><td>werknemer (na uitdienst)</td><td>RRN gewist na fiscale termijn; basis behouden voor pensioenopbouw</td><td>Pseudonimisatie i.p.v. delete</td></tr>
+</tbody>
+</table>
+
+<div class="callout">
+Voor de toepassing van dit datamodel in de berekeningspijplijn: zie <a href="technische-architectuur.html">technische architectuur</a>.
+</div>
+</main>
+
+<footer>Loonmotor BE — Onderzoeksdossier · <a href="index.html">Terug naar overzicht</a></footer>
+</body>
+</html>

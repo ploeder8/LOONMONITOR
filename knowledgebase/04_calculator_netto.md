@@ -53,7 +53,7 @@ Aanvullingen op het huidige POC-input-formulier:
 
 | Veld | Type | Verplicht | Validatie | Default |
 |---|---|---|---|---|
-| `gezinscategorie` | enum: `alleenstaande`, `gehuwd_partner_inkomen`, `gehuwd_partner_zonder_inkomen` | ✓ | bepaalt BV-schaal I/II | `alleenstaande` |
+| `gezinscategorie` | enum: `alleenstaande`, `gehuwd_partner_inkomen`, `gehuwd_partner_zonder_inkomen` | ✓ | bepaalt BV-schaal I/II; UI-label: partner zonder of beperkt beroepsinkomen. Dit verlaagt de bedrijfsvoorheffing via Schaal II/huwelijksquotiënt en is geen "partner ten laste" | `alleenstaande` |
 | `niet_inwoner` | boolean | nee | true → BV-schaal III | false |
 | `kinderen_ten_laste` | integer 0–12 | nee | — | 0 |
 | `kinderen_gehandicapt` | integer 0–12 | nee | ≤ `kinderen_ten_laste` (telt dubbel) | 0 |

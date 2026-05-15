@@ -29,7 +29,8 @@
 ### Netto-laag (uitgebreid)
 - **Sociale werkbonus** (RSZ-vermindering) — Luik A + B, vanaf 1/4/2026
 - **Bedrijfsvoorheffing** (BV) — lokale Bijlage III-sleutelformule 2026 met pending FOD Tax-Calc-validatie
-- **BV-verminderingen** via maandtabel: kinderen ten laste, kind <3 jaar, fiscaal alleenstaande met kind, groepsverzekering
+- **BV-verminderingen** via maandtabel: kinderen ten laste, fiscaal alleenstaande met kind, groepsverzekering
+- **Tijdelijk niet actief:** kind <3 jaar is uit de calculatorlogica gehaald tot de BV-impact officieel gevalideerd is.
 - **Fiscale werkbonus** (belastingkrediet 33,14 % × Luik A + 52,54 % × Luik B)
 - **Bijzondere BV-schaal** voor variabel loon (eindejaarspremie, jaarpremie, dubbel vakantiegeld)
 - BBSZ (info-band, geen exacte inhouding zolang RSZ-instructie 2026 niet als tabel publiek is)

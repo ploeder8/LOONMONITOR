@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="nl-BE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Risicoregister — Loonmotor BE</title>
+<style>
+:root{--bg:#fafbfc;--surface:#fff;--border:#e4e7eb;--text:#1a2332;--text-muted:#5a6779;--accent:#0b5394;--accent-light:#e8f0f9;--code-bg:#f5f7fa;--shadow:0 1px 3px rgba(0,0,0,.06)}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.6;color:var(--text);background:var(--bg)}
+header.topbar{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.topbar-inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-weight:700;font-size:17px;color:var(--accent);text-decoration:none}
+nav.topnav{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+nav.topnav a{font-size:13px;color:var(--text-muted);text-decoration:none;padding:6px 10px;border-radius:4px}
+nav.topnav a:hover{background:var(--accent-light);color:var(--accent)}
+nav.topnav a.active{background:var(--accent);color:#fff}
+main{max-width:1200px;margin:0 auto;padding:32px 24px 64px}
+h1{font-size:30px;margin:0 0 8px;font-weight:700}h2{font-size:22px;margin:32px 0 12px;font-weight:600;padding-bottom:6px;border-bottom:2px solid var(--accent-light)}
+h3{font-size:17px;margin:24px 0 8px;font-weight:600}
+p{margin:8px 0 12px}ul,ol{padding-left:22px}li{margin:4px 0}a{color:var(--accent)}a:hover{text-decoration:underline}
+code{font-family:"SF Mono",Monaco,Consolas,monospace;background:var(--code-bg);padding:1px 5px;border-radius:3px;font-size:13px}
+.subtitle{color:var(--text-muted);font-size:16px;margin:0 0 24px}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13.5px;background:var(--surface);border-radius:6px;overflow:hidden;box-shadow:var(--shadow)}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:var(--accent-light);font-weight:600;font-size:12.5px}
+tr:last-child td{border-bottom:none}tr:hover{background:#f8fafc}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;margin:0 3px 2px 0;letter-spacing:.3px;text-transform:uppercase}
+.badge.feit{background:#d1fae5;color:#065f46}.badge.aanname{background:#fef3c7;color:#92400e}
+.badge.hypothese{background:#e0e7ff;color:#3730a3}.badge.openvraag{background:#fde68a;color:#78350f}
+.badge.mvp{background:#c7f0d3;color:#14532d}.badge.later{background:#ddd6fe;color:#5b21b6}
+.badge.enterprise{background:#fce7f3;color:#831843}
+.callout{border-left:4px solid var(--accent);background:var(--accent-light);padding:12px 16px;margin:14px 0;border-radius:0 4px 4px 0}
+.callout.warn{border-color:#d97706;background:#fef3c7}.callout.danger{border-color:#dc2626;background:#fee2e2}
+.score{display:inline-block;min-width:28px;text-align:center;padding:2px 6px;border-radius:4px;font-weight:700;font-size:12px}
+.score.high{background:#fee2e2;color:#991b1b}.score.med{background:#fef3c7;color:#92400e}.score.low{background:#d1fae5;color:#065f46}
+.cat{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;background:#e0e7ff;color:#3730a3;text-transform:uppercase;letter-spacing:.3px}
+.cat.tech{background:#dbeafe;color:#1e40af}.cat.jur{background:#fce7f3;color:#831843}
+.cat.com{background:#fed7aa;color:#9a3412}.cat.op{background:#d1fae5;color:#065f46}
+.cat.fin{background:#ede9fe;color:#5b21b6}
+.heatmap{display:grid;grid-template-columns:60px repeat(5,1fr);gap:2px;margin:14px 0;font-size:12px}
+.heatmap .hcell{padding:10px;background:var(--surface);border:1px solid var(--border);text-align:center;font-weight:600}
+.heatmap .hlabel{background:transparent;border:none;font-weight:600;color:var(--text-muted)}
+.heatmap .h-low{background:#d1fae5}.heatmap .h-med{background:#fef3c7}
+.heatmap .h-high{background:#fed7aa}.heatmap .h-crit{background:#fee2e2}
+.scope-in{background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+.scope-out{background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size:13px;color:var(--text-muted);text-align:center}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+<a href="index.html" class="brand">Loonmotor BE</a>
+<nav class="topnav">
+<a href="index.html">Overzicht</a><a href="marktonderzoek.html">Markt</a>
+<a href="concurrentiematrix.html">Concurrenten</a><a href="werking-loonmotor.html">Werking</a>
+<a href="wetgevend-kader.html">Wetgeving</a><a href="requirements.html">Requirements</a>
+<a href="datamodel.html">Datamodel</a><a href="technische-architectuur.html">Architectuur</a>
+<a href="juridische-checklist.html">Juridisch</a><a href="mvp-roadmap.html">Roadmap</a>
+<a href="risicoregister.html" class="active">Risico's</a><a href="jaakie-specificatie.html">Jaakie</a>
+<a href="testcorpus.html">Testcorpus</a><a href="referentie-tools.html">Referenties</a>
+<a href="bronnen.html">Bronnen</a>
+</nav></div></header>
+
+<main>
+<h1>Risicoregister</h1>
+<p class="subtitle">Dertig risico's gescoord op Impact × Waarschijnlijkheid (1–5 schaal), met categorie, eigenaar, mitigatie en restrisico. Top-tien wordt maandelijks geherijkt.</p>
+
+<div class="callout">
+<strong>Scoring:</strong> I = Impact (1=verwaarloosbaar, 5=existentieel) · W = Waarschijnlijkheid (1=onwaarschijnlijk, 5=zo goed als zeker). Score = I × W. Grenswaarden: 1–5 laag, 6–11 medium, 12–19 hoog, 20–25 kritiek.
+</div>
+
+<h2>Heat-map (I × W)</h2>
+<div class="heatmap">
+<div class="hcell hlabel"></div><div class="hcell hlabel">W=1</div><div class="hcell hlabel">W=2</div><div class="hcell hlabel">W=3</div><div class="hcell hlabel">W=4</div><div class="hcell hlabel">W=5</div>
+<div class="hcell hlabel">I=5</div><div class="hcell h-med">5</div><div class="hcell h-high">10</div><div class="hcell h-high">15</div><div class="hcell h-crit">20</div><div class="hcell h-crit">25</div>
+<div class="hcell hlabel">I=4</div><div class="hcell h-low">4</div><div class="hcell h-med">8</div><div class="hcell h-high">12</div><div class="hcell h-crit">16</div><div class="hcell h-crit">20</div>
+<div class="hcell hlabel">I=3</div><div class="hcell h-low">3</div><div class="hcell h-med">6</div><div class="hcell h-med">9</div><div class="hcell h-high">12</div><div class="hcell h-high">15</div>
+<div class="hcell hlabel">I=2</div><div class="hcell h-low">2</div><div class="hcell h-low">4</div><div class="hcell h-med">6</div><div class="hcell h-med">8</div><div class="hcell h-high">10</div>
+<div class="hcell hlabel">I=1</div><div class="hcell h-low">1</div><div class="hcell h-low">2</div><div class="hcell h-low">3</div><div class="hcell h-low">4</div><div class="hcell h-med">5</div>
+</div>
+
+<h2>Top-10 risico's</h2>
+<table>
+<thead><tr><th style="width:50px">ID</th><th>Risico</th><th>Cat.</th><th style="width:36px">I</th><th style="width:36px">W</th><th style="width:50px">I×W</th></tr></thead>
+<tbody>
+<tr><td>R-01</td><td>Tekort aan diepe BE-payroll domeinexpertise in team — fouten in BV/RSZ-formules bij eerste klant</td><td><span class="cat com">Com</span></td><td>5</td><td>4</td><td><span class="score high">20</span></td></tr>
+<tr><td>R-02</td><td>Top 4 ESS (SD Worx, Acerta, Partena, Liantis) overschaduwen propositie — onvoldoende differentiatie</td><td><span class="cat com">Com</span></td><td>4</td><td>4</td><td><span class="score high">16</span></td></tr>
+<tr><td>R-03</td><td>DmfA-/Dimona-rejection bij eerste productie-kwartaal door schema-fout</td><td><span class="cat tech">Tech</span></td><td>5</td><td>3</td><td><span class="score high">15</span></td></tr>
+<tr><td>R-04</td><td>BV-schalen / KB-publicatie december niet binnen 2 weken verwerkt — januari-loon foutief</td><td><span class="cat jur">Jur</span></td><td>5</td><td>3</td><td><span class="score high">15</span></td></tr>
+<tr><td>R-05</td><td>Datalek met RRN / PII — GBA-boete + reputatieschade + klantverlies</td><td><span class="cat tech">Tech</span></td><td>5</td><td>3</td><td><span class="score high">15</span></td></tr>
+<tr><td>R-06</td><td>Cloud-misconfiguratie (open storage, S3-equivalent, RLS uit) → datalek</td><td><span class="cat tech">Tech</span></td><td>5</td><td>3</td><td><span class="score high">15</span></td></tr>
+<tr><td>R-07</td><td>ESS-erkenningskost en doorlooptijd onderschat — geen toegang enterprise-segment</td><td><span class="cat jur">Jur</span></td><td>4</td><td>3</td><td><span class="score high">12</span></td></tr>
+<tr><td>R-08</td><td>Klant kan niet eenvoudig migreren (data-exit) → juridisch geschil + slechte naam</td><td><span class="cat op">Op</span></td><td>4</td><td>3</td><td><span class="score high">12</span></td></tr>
+<tr><td>R-09</td><td>Cap-overschrijding ontwikkelteam — fase 3 effort &gt; 70 mm i.p.v. 50 mm — cash-out</td><td><span class="cat fin">Fin</span></td><td>4</td><td>3</td><td><span class="score high">12</span></td></tr>
+<tr><td>R-10</td><td>Aansprakelijkheid bij berekenfout — schadeclaim van werkgever-klant of werknemer</td><td><span class="cat jur">Jur</span></td><td>4</td><td>3</td><td><span class="score high">12</span></td></tr>
+</tbody>
+</table>
+
+<h2>Volledig register</h2>
+
+<h3>Juridisch &amp; compliance</h3>
+<table>
+<thead><tr><th style="width:55px">ID</th><th>Risico</th><th style="width:36px">I</th><th style="width:36px">W</th><th style="width:50px">I×W</th><th>Eigenaar</th><th>Mitigatie</th><th>Restrisico</th></tr></thead>
+<tbody>
+<tr><td>R-04</td><td>BV-schalen KB-publicatie niet tijdig verwerkt — januari-loon fout</td><td>5</td><td>3</td><td><span class="score high">15</span></td><td>Sociaal-rechtjurist + dev lead</td><td>Wekelijkse BS-monitoring; december-sprint reserveren; geautomatiseerde XSD-validatie; golden-master extend per release</td><td>Medium</td></tr>
+<tr><td>R-05</td><td>Datalek RRN/PII (AVG art. 33–34)</td><td>5</td><td>3</td><td><span class="score high">15</span></td><td>DPO + SRE</td><td>Encryptie kolom-niveau + KMS; RLS PostgreSQL; pentest L2/L3; datalek-procedure 72 u; cyber-verzekering</td><td>Laag</td></tr>
+<tr><td>R-07</td><td>ESS-erkenningstraject &gt; 24 mnd / hoge waarborg-storting</td><td>4</td><td>3</td><td><span class="score high">12</span></td><td>CEO + jurist</td><td>Fase 4 zonder ESS opzetten; partner-ESS voor enterprise; budget-reserve waarborg</td><td>Medium</td></tr>
+<tr><td>R-10</td><td>Aansprakelijkheid berekenfout — schadeclaim</td><td>4</td><td>3</td><td><span class="score high">12</span></td><td>Jurist + CEO</td><td>Aansprakelijkheidscap in contract (jaarvergoeding × multiple); BA + beroeps-verzekering; parallel-run 3 maanden</td><td>Medium</td></tr>
+<tr><td>R-11</td><td>Sectorale CAO-wijziging niet tijdig geïmplementeerd (PC 200 index 1/1 mist)</td><td>4</td><td>3</td><td><span class="score high">12</span></td><td>Payroll-consultant</td><td>NAR/CAO-monitoring abonnement; index-trigger jobs; klantcommunicatie 2 weken vooraf</td><td>Medium</td></tr>
+<tr><td>R-12</td><td>NIS2 / DORA-classificatie loonmotor als kritieke ICT-leverancier</td><td>3</td><td>3</td><td><span class="score med">9</span></td><td>Compliance officer</td><td>NIS2 self-assessment Q3-2026; ISO 27001 voorbereiding</td><td>Medium</td></tr>
+<tr><td>R-13</td><td>Loonbeslag-fout (volgorde schuldeisers, kind-correctie) → solidaire aansprakelijkheid</td><td>4</td><td>2</td><td><span class="score med">8</span></td><td>Jurist</td><td>CBB-koppeling; tweede paar ogen op beslagbericht; jaarlijkse KB-update tabel</td><td>Laag</td></tr>
+<tr><td>R-14</td><td>GBA-controle / boete door zwakke DPIA of verwerkingsregister</td><td>4</td><td>2</td><td><span class="score med">8</span></td><td>DPO</td><td>DPIA jaarlijks herzien; verwerkingsregister synchroon met datamodel; DPO-sign-off voor release</td><td>Laag</td></tr>
+</tbody>
+</table>
+
+<h3>Technisch &amp; security</h3>
+<table>
+<thead><tr><th style="width:55px">ID</th><th>Risico</th><th style="width:36px">I</th><th style="width:36px">W</th><th style="width:50px">I×W</th><th>Eigenaar</th><th>Mitigatie</th><th>Restrisico</th></tr></thead>
+<tbody>
+<tr><td>R-03</td><td>DmfA / Dimona / Belcotax aangifte-rejection bij productie</td><td>5</td><td>3</td><td><span class="score high">15</span></td><td>Tech lead</td><td>XSD-validatie in CI; testkanaal RSZ vóór live; dry-run laatste kwartaal vóór go-live</td><td>Medium</td></tr>
+<tr><td>R-06</td><td>Cloud-misconfiguratie / RLS-uit → cross-tenant data-lek</td><td>5</td><td>3</td><td><span class="score high">15</span></td><td>SRE</td><td>IaC met policy-checks (Checkov/tfsec); RLS-unit-tests in CI; pentest L2/L3; tenant-isolation chaos test</td><td>Laag</td></tr>
+<tr><td>R-15</td><td>Floating-point gebruik in plaats van BigDecimal → afrondingsfouten cents</td><td>4</td><td>2</td><td><span class="score med">8</span></td><td>Tech lead</td><td>Architectuur-rule: alle bedragen BigDecimal/numeric(18,4) HALF_UP; lint-regel; code review</td><td>Laag</td></tr>
+<tr><td>R-16</td><td>Bitemporeel datamodel niet correct geïmplementeerd → retroactieve fouten</td><td>5</td><td>2</td><td><span class="score med">10</span></td><td>Tech lead</td><td>EXCLUDE constraints + GiST indexes; property-based tests; review met DB-expert</td><td>Medium</td></tr>
+<tr><td>R-17</td><td>Golden-master regressie wordt over het hoofd gezien → fout loonbericht in productie</td><td>5</td><td>2</td><td><span class="score med">10</span></td><td>QA lead</td><td>CI blokkeert PR bij elke afwijking; golden-master &gt; 300 scenario's; mutation testing</td><td>Laag</td></tr>
+<tr><td>R-18</td><td>Performance-degradatie batch 1.000 wn &gt; 10 min na uitbreiding PC's</td><td>3</td><td>3</td><td><span class="score med">9</span></td><td>SRE</td><td>JMH micro-benchmark in CI; Gatling load test maandelijks; horizontale schaal via advisory locks</td><td>Laag</td></tr>
+<tr><td>R-19</td><td>Vendor lock-in single-cloud Azure → margin-druk of uitval</td><td>3</td><td>2</td><td><span class="score low">6</span></td><td>Architect</td><td>Cloud-agnostische deployables (OCI + K8s); managed Postgres-portable; DR-regio</td><td>Laag</td></tr>
+<tr><td>R-20</td><td>Open-source dependency vulnerability (log4shell-class)</td><td>4</td><td>3</td><td><span class="score high">12</span></td><td>SRE + sec</td><td>Dependabot/Renovate; SBOM publicatie; weekly CVE-scan; mTLS + WAF</td><td>Medium</td></tr>
+<tr><td>R-21</td><td>Idempotency-keys ontbreken → dubbele betaling SEPA-bestand</td><td>5</td><td>1</td><td><span class="score med">5</span></td><td>Tech lead</td><td>Idempotency-key verplicht op alle write-API's; outbox-pattern; vier-ogen-approval voor pain.001</td><td>Laag</td></tr>
+</tbody>
+</table>
+
+<h3>Commercieel &amp; markt</h3>
+<table>
+<thead><tr><th style="width:55px">ID</th><th>Risico</th><th style="width:36px">I</th><th style="width:36px">W</th><th style="width:50px">I×W</th><th>Eigenaar</th><th>Mitigatie</th><th>Restrisico</th></tr></thead>
+<tbody>
+<tr><td>R-01</td><td>Tekort BE-payroll domeinexpertise — fouten bij eerste klant</td><td>5</td><td>4</td><td><span class="score high">20</span></td><td>CEO</td><td>Vroeg aanwerven senior payroll-consultant; advisor-board met ex-ESS; externe sociaal-rechtjurist op retainer; Fase 1-gate</td><td>Medium</td></tr>
+<tr><td>R-02</td><td>Top 4 ESS overschaduwt — onvoldoende differentiatie</td><td>4</td><td>4</td><td><span class="score high">16</span></td><td>CEO + PO</td><td>Niche-positionering scale-ups + KMO 10–100 wn; API-first; transparante prijszetting; data-exit garantie</td><td>Hoog</td></tr>
+<tr><td>R-22</td><td>HR-tech challenger (Officient, Payflip) wint dezelfde markt — race-to-bottom</td><td>3</td><td>3</td><td><span class="score med">9</span></td><td>PO</td><td>Partner-model met HR-tech ipv concurrent; integratie-aanpak; eigen sterk USP definiëren</td><td>Medium</td></tr>
+<tr><td>R-23</td><td>Pilot-klant haakt af in Fase 2 — geen referentie voor Fase 3</td><td>4</td><td>2</td><td><span class="score med">8</span></td><td>Customer success</td><td>2 pilot-klanten parallel (single point of failure vermijden); NDA + service-level pilot; gratis pilot-periode</td><td>Medium</td></tr>
+<tr><td>R-24</td><td>De Wever-hervormingen worden teruggedraaid bij regeringswissel</td><td>3</td><td>2</td><td><span class="score low">6</span></td><td>Jurist</td><td>Parameter-engine maakt rollbacks goedkoop; versioned rule-sets; klantcommunicatie</td><td>Laag</td></tr>
+</tbody>
+</table>
+
+<h3>Operationeel</h3>
+<table>
+<thead><tr><th style="width:55px">ID</th><th>Risico</th><th style="width:36px">I</th><th style="width:36px">W</th><th style="width:50px">I×W</th><th>Eigenaar</th><th>Mitigatie</th><th>Restrisico</th></tr></thead>
+<tbody>
+<tr><td>R-08</td><td>Klant-data-exit moeilijk → juridisch geschil + slechte naam</td><td>4</td><td>3</td><td><span class="score high">12</span></td><td>PO + jurist</td><td>Data-exit clausule in alle contracten; export-API in machineleesbaar formaat; transitie-handover binnen 30 dagen</td><td>Laag</td></tr>
+<tr><td>R-25</td><td>SLA-deadline gemist (Dimona zelfde dag, DmfA laatste maand kwartaal+1) door bug of outage</td><td>4</td><td>3</td><td><span class="score high">12</span></td><td>SRE on-call</td><td>SLA-monitor met alerts 7 / 3 / 1 dag voor deadline; runbook per aangifte; backup-procedure papier</td><td>Medium</td></tr>
+<tr><td>R-26</td><td>Sleutelpersoon vertrekt — kennis loonkern niet redundant</td><td>4</td><td>3</td><td><span class="score high">12</span></td><td>HR + tech lead</td><td>Geen single-owner per module; ADR's + runbooks gedocumenteerd; pair-programming sleuteldelen; retention-bonus</td><td>Medium</td></tr>
+<tr><td>R-27</td><td>Support-volume overstijgt capaciteit Fase 4 — SLA-breaches</td><td>3</td><td>3</td><td><span class="score med">9</span></td><td>Customer success</td><td>Self-service docs + knowledge base; tier-1 outsourcing; FAQ-bot; klant-onboarding-checklist</td><td>Medium</td></tr>
+<tr><td>R-28</td><td>RSZ/FOD-portaal-uitval blokkeert aangifte op deadline</td><td>3</td><td>2</td><td><span class="score low">6</span></td><td>SRE</td><td>Vroeg-indienen (niet last-minute); retry-strategie; communicatie met klant; opslag bewijsstuk poging</td><td>Laag</td></tr>
+</tbody>
+</table>
+
+<h3>Financieel</h3>
+<table>
+<thead><tr><th style="width:55px">ID</th><th>Risico</th><th style="width:36px">I</th><th style="width:36px">W</th><th style="width:50px">I×W</th><th>Eigenaar</th><th>Mitigatie</th><th>Restrisico</th></tr></thead>
+<tbody>
+<tr><td>R-09</td><td>Fase 3 effort &gt; 70 mm → cash-out vóór klant-revenue</td><td>4</td><td>3</td><td><span class="score high">12</span></td><td>CFO + CEO</td><td>Go/No-Go gates per fase; scope kan worden afgeroomd (geen Sigedis Fase 3); fundraising-runway 18 mnd</td><td>Medium</td></tr>
+<tr><td>R-29</td><td>Klant LTV &lt; CAC × 3 → commercieel niet houdbaar</td><td>4</td><td>2</td><td><span class="score med">8</span></td><td>CEO + CS</td><td>Pricing rev-share + per-werknemer; retention monitoring vanaf maand 1; upsell-modules (rapportage, ESG)</td><td>Medium</td></tr>
+<tr><td>R-30</td><td>Onverwachte audit-/certificatie-kost (ISAE 3402, SOC 2) — €100–300k</td><td>3</td><td>3</td><td><span class="score med">9</span></td><td>CFO + compliance</td><td>Budgetreservering vanaf Fase 3; gradueel optillen (ASVS L2 → L3 → SOC 2); leveranciers-tender</td><td>Laag</td></tr>
+</tbody>
+</table>
+
+<h2>Risico-management ritmes</h2>
+<table>
+<thead><tr><th>Ritme</th><th>Inhoud</th><th>Frequentie</th><th>Eigenaar</th></tr></thead>
+<tbody>
+<tr><td>Wettelijke parameter-monitoring</td><td>BS-publicaties RSZ/BV/CAO/PC scannen; impact-analyse; ticket aanmaken</td><td>Wekelijks</td><td>Sociaal-rechtjurist</td></tr>
+<tr><td>Golden-master CI-blokkering</td><td>Pull-request slaagt enkel als 100% scenario's groen blijven</td><td>Per commit</td><td>QA lead</td></tr>
+<tr><td>Pentest + ASVS</td><td>Externe pentest; bevindingen high/critical = release-blocker</td><td>Jaarlijks (Fase 2+); per release (Fase 4+)</td><td>Security lead</td></tr>
+<tr><td>Risico-review-meeting</td><td>Top-10 herijken; nieuwe risico's; mitigatie-status</td><td>Maandelijks</td><td>CEO + risico-eigenaars</td></tr>
+<tr><td>DR-test (RTO 4 u / RPO 5 min)</td><td>Failover naar DR-regio; data-restore test</td><td>Kwartaal</td><td>SRE</td></tr>
+<tr><td>DPIA-review</td><td>DPIA bijwerken bij scope-uitbreiding; verwerkingsregister synchroniseren</td><td>Halfjaarlijks of bij feature-launch</td><td>DPO</td></tr>
+<tr><td>Klantfeedback-cyclus</td><td>NPS + interviews; productroadmap-impact</td><td>Maandelijks</td><td>PO + CS</td></tr>
+</tbody>
+</table>
+
+<div class="callout warn">
+Dit register is een levend document. Score en eigenaar worden in elke maandelijkse risico-review herijkt; <a href="mvp-roadmap.html">go/no-go gates</a> per fase gebruiken deze top-10 als gespreksbasis.
+</div>
+
+<div class="callout">
+Voor de juridische context per risico: <a href="juridische-checklist.html">juridische checklist</a>. Voor de architecturele mitigaties: <a href="technische-architectuur.html">architectuur</a>. Voor bronnen achter de wettelijke risico's: <a href="bronnen.html">bronnen</a>.
+</div>
+</main>
+
+<footer>Loonmotor BE — Onderzoeksdossier · <a href="index.html">Terug naar overzicht</a></footer>
+</body>
+</html>

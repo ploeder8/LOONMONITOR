@@ -16,6 +16,7 @@ import { fietsvergoeding } from "@/lib/fietsvergoeding";
 import { woonwerkTrein } from "@/lib/woonwerkTrein";
 import { berekenWoonwerkVerkeer } from "@/lib/woonwerkVerkeer";
 import { vaaBedrijfswagen } from "@/lib/vaaBedrijfswagen";
+import { vaaForfaitsWerkmiddelen } from "@/lib/vaaForfaits";
 import { jaarlijksePremie2026 } from "@/lib/jaarpremie";
 import { getDatapunt } from "@/lib/dataset";
 import { safeGetValue } from "@/lib/periode";
@@ -531,6 +532,7 @@ describe("TC-23 — BV: alleenstaand, 0 kinderen (AJ 2027)", () => {
     expect(r.schaal).toBe("I");
     expect(r.bvPerMaand).toBeGreaterThan(155.75);
     expect(r.bvNaVerminderingen).toBe(r.bvPerMaand); // geen verminderingen
+    expect("verminderingKindOnder3" in r).toBe(false);
     expect(r.isApproximatie).toBe(false);
     expect(r.validatieStatus).toBe("pending_taxcalc");
     expect(r.datapunten.length).toBeGreaterThanOrEqual(2);
@@ -563,6 +565,25 @@ describe("TC-24 — BV: gehuwd zonder inkomen, 2 kinderen (AJ 2027 maandtabel)",
     expect(r.pbNetto).toBeGreaterThanOrEqual(0);
     expect(r.bvPerMaand).toBeGreaterThanOrEqual(0);
     expect(r.bvNaVerminderingen).toBeLessThanOrEqual(r.bvPerMaand);
+  });
+
+  it("partner zonder of beperkt beroepsinkomen verlaagt de bedrijfsvoorheffing via Schaal II", () => {
+    const tweeverdiener = berekenBV({
+      belastbaarMaandloon: 3000,
+      gezinstype: "gehuwd_met_inkomen",
+      kinderenTenLaste: 0,
+    });
+    const partnerZonderOfBeperktInkomen = berekenBV({
+      belastbaarMaandloon: 3000,
+      gezinstype: "gehuwd_zonder_inkomen",
+      kinderenTenLaste: 0,
+    });
+
+    expect(tweeverdiener.schaal).toBe("I");
+    expect(partnerZonderOfBeperktInkomen.schaal).toBe("II");
+    expect(partnerZonderOfBeperktInkomen.bvNaVerminderingen).toBeLessThan(
+      tweeverdiener.bvNaVerminderingen,
+    );
   });
 });
 
@@ -696,6 +717,51 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
     expect(metVaa.belastbaarMaandloonVoorBV).toBe(basis.belastbaarMaandloon + 180);
     expect(metVaa.bv.bvNaVerminderingen).toBeGreaterThan(basis.bv.bvNaVerminderingen);
     expect(metVaa.nettoloon).toBeLessThan(basis.nettoloon);
+  });
+
+  it("berekent forfaitaire VAA voor werkmiddelen op maandbasis", () => {
+    const r = vaaForfaitsWerkmiddelen({
+      pcLaptopAantal: 1,
+      gsmSmartphoneAantal: 1,
+      internetActief: true,
+      telefoonAbonnementAantal: 1,
+      refDatum: REF_2026,
+    });
+
+    expect(r.pcLaptopPerMaand).toBe(6);
+    expect(r.gsmSmartphonePerMaand).toBe(3);
+    expect(r.internetPerMaand).toBe(5);
+    expect(r.telefoonAbonnementPerMaand).toBe(4);
+    expect(r.totaalPerMaand).toBe(18);
+    expect(r.datapunten.map((dp) => dp.id)).toEqual([
+      "vaa_pc_laptop_forfait_2026",
+      "vaa_gsm_smartphone_forfait_2026",
+      "vaa_internet_forfait_2026",
+      "vaa_telefoonabonnement_forfait_2026",
+    ]);
+  });
+
+  it("telt RSZ-plichtige VAA mee voor RSZ en BV maar neemt die cash terug", () => {
+    const basis = berekenNetto({
+      brutoloon: 4000,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+    });
+    const metWerkmiddelen = berekenNetto({
+      brutoloon: 4000,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+      vaaRszPlichtigPerMaand: 18,
+    });
+
+    expect(metWerkmiddelen.brutoRszBasis).toBe(4018);
+    expect(metWerkmiddelen.vaaRszPlichtigPerMaand).toBe(18);
+    expect(metWerkmiddelen.rsz.werknemerBijdrage).toBeGreaterThan(basis.rsz.werknemerBijdrage);
+    expect(metWerkmiddelen.belastbaarMaandloon).toBeGreaterThan(basis.belastbaarMaandloon);
+    expect(metWerkmiddelen.bv.bvNaVerminderingen).toBeGreaterThan(basis.bv.bvNaVerminderingen);
+    expect(metWerkmiddelen.nettoloon).toBeLessThan(basis.nettoloon);
   });
 });
 

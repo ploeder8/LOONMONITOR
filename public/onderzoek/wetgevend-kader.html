@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="nl-BE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wetgevend kader — Loonmotor BE</title>
+<style>
+:root{--bg:#fafbfc;--surface:#fff;--border:#e4e7eb;--text:#1a2332;--text-muted:#5a6779;--accent:#0b5394;--accent-light:#e8f0f9;--code-bg:#f5f7fa;--shadow:0 1px 3px rgba(0,0,0,.06)}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.6;color:var(--text);background:var(--bg)}
+header.topbar{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.topbar-inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-weight:700;font-size:17px;color:var(--accent);text-decoration:none}
+nav.topnav{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+nav.topnav a{font-size:13px;color:var(--text-muted);text-decoration:none;padding:6px 10px;border-radius:4px}
+nav.topnav a:hover{background:var(--accent-light);color:var(--accent)}
+nav.topnav a.active{background:var(--accent);color:#fff}
+main{max-width:1200px;margin:0 auto;padding:32px 24px 64px}
+h1{font-size:30px;margin:0 0 8px;font-weight:700}h2{font-size:22px;margin:32px 0 12px;font-weight:600;padding-bottom:6px;border-bottom:2px solid var(--accent-light)}
+h3{font-size:17px;margin:24px 0 8px;font-weight:600}h4{font-size:15px;margin:16px 0 6px;color:var(--accent);font-weight:600}
+p{margin:8px 0 12px}ul,ol{padding-left:22px}li{margin:4px 0}a{color:var(--accent)}a:hover{text-decoration:underline}
+code{font-family:"SF Mono",Monaco,Consolas,monospace;background:var(--code-bg);padding:1px 5px;border-radius:3px;font-size:13px}
+.subtitle{color:var(--text-muted);font-size:16px;margin:0 0 24px}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:14px;background:var(--surface);border-radius:6px;overflow:hidden;box-shadow:var(--shadow)}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:var(--accent-light);font-weight:600;font-size:13px}
+tr:last-child td{border-bottom:none}tr:hover{background:#f8fafc}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;margin:0 3px 2px 0;letter-spacing:.3px;text-transform:uppercase}
+.badge.feit{background:#d1fae5;color:#065f46}.badge.aanname{background:#fef3c7;color:#92400e}
+.badge.hypothese{background:#e0e7ff;color:#3730a3}.badge.onzekerheid{background:#fed7aa;color:#9a3412}
+.badge.openvraag{background:#fde68a;color:#78350f}.badge.mvp{background:#c7f0d3;color:#14532d}
+.badge.later{background:#ddd6fe;color:#5b21b6}.badge.enterprise{background:#fce7f3;color:#831843}
+.callout{border-left:4px solid var(--accent);background:var(--accent-light);padding:12px 16px;margin:14px 0;border-radius:0 4px 4px 0}
+.callout.warn{border-color:#d97706;background:#fef3c7}.callout.danger{border-color:#dc2626;background:#fee2e2}
+.section-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:18px 22px;margin:16px 0;box-shadow:var(--shadow)}
+.topic{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px 22px;margin:18px 0;box-shadow:var(--shadow)}
+.topic h3{margin-top:0}
+.topic .meta-row{font-size:12px;color:var(--text-muted);margin-top:8px}
+.scope-in{background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+.scope-out{background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size:13px;color:var(--text-muted);text-align:center}
+.toc{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px 22px;margin:14px 0;box-shadow:var(--shadow)}
+.toc ol{margin:6px 0}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+<a href="index.html" class="brand">Loonmotor BE</a>
+<nav class="topnav">
+<a href="index.html">Overzicht</a><a href="marktonderzoek.html">Markt</a>
+<a href="concurrentiematrix.html">Concurrenten</a><a href="werking-loonmotor.html">Werking</a>
+<a href="wetgevend-kader.html" class="active">Wetgeving</a><a href="requirements.html">Requirements</a>
+<a href="datamodel.html">Datamodel</a><a href="technische-architectuur.html">Architectuur</a>
+<a href="juridische-checklist.html">Juridisch</a><a href="mvp-roadmap.html">Roadmap</a>
+<a href="risicoregister.html">Risico's</a><a href="jaakie-specificatie.html">Jaakie</a>
+<a href="testcorpus.html">Testcorpus</a><a href="referentie-tools.html">Referenties</a>
+<a href="bronnen.html">Bronnen</a>
+</nav></div></header>
+
+<main>
+<h1>Wetgevend kader</h1>
+<p class="subtitle">Negen kerndomeinen die elke Belgische loonmotor moet ondersteunen, met juridische basis, werkingsmechanisme, praktische impact en risico's per topic.</p>
+
+<div class="toc">
+<strong>Topics</strong>
+<ol>
+<li><a href="#a">Sociale zekerheid — RSZ-stelsel werknemers</a></li>
+<li><a href="#b">Bedrijfsvoorheffing &amp; personenbelasting</a></li>
+<li><a href="#c">Arbeidsrecht — arbeidsovereenkomst, ontslag, loon</a></li>
+<li><a href="#d">Sectoraal — paritaire comités &amp; CAO's</a></li>
+<li><a href="#e">Specifieke regimes — student, flexi, gepensioneerde, jongere</a></li>
+<li><a href="#f">Voordelen — maaltijd, eco, mobiliteit, IPT</a></li>
+<li><a href="#g">GDPR / AVG &amp; verwerking persoonsgegevens</a></li>
+<li><a href="#h">Loonbeslag &amp; loonoverdracht</a></li>
+<li><a href="#i">De Wever-hervormingen 2025–2026</a></li>
+</ol>
+</div>
+
+<div class="topic" id="a">
+<h3>A. Sociale zekerheid — RSZ-stelsel werknemers <span class="scope-in">In Jaakie</span></h3>
+<p><strong>Juridische basis:</strong> <a href="https://www.ejustice.just.fgov.be/eli/wet/1969/06/27/1969062701/justel" target="_blank" rel="noopener">Wet 27 juni 1969 (RSZ-wet)</a>, KB 28/11/1969, jaarlijkse RSZ-instructies (kwartaal-publicatie).</p>
+<p><strong>Werkingsmechanisme:</strong> Werknemer 13,07% op brutoloon (bedienden) of brutoloon × 108% (arbeiders, vakantiegeld-aanpassing). Werkgever circa 25%, met sectorvariaties en doelgroepkortingen. Aangifte per kwartaal via DmfA. <span class="badge feit">Feit</span></p>
+<p><strong>Praktische impact loonmotor:</strong></p>
+<ul>
+<li>Brutoloon × 108% voor arbeiders vereist statuut-driven berekening.</li>
+<li>Werkbonus (KB 17/1/2000): vermindering RSZ-werknemer voor lage lonen. <strong>Vanaf 1/4/2026 (bedienden):</strong> Luik A max €125,04 (S₀ = €2.880,32, helling 0,2738); Luik B max €168,62 (S₀ = €2.255,50, helling 0,2699). GGMMI = €2.189,81. <span class="badge feit">Feit</span></li>
+<li>Doelgroepvermindering werkgevers: eerste aanwervingen (federale RSZ-vermindering, onafhankelijk van PC) — regime wijzigt vanaf 1/4/2026. <span class="badge onzekerheid">Onzekerheid</span> over exacte kwartaaltabel.</li>
+<li>Structurele vermindering laagloon: hellingscoëfficiënt <strong>0,1600</strong> vanaf 1/4/2026 (was 0,1500). Relevant voor lonen rond GGMMI. <span class="badge feit">Feit</span></li>
+<li>Arizona-cap: <code>€86.700/kwartaal</code> RSZ-plafond werkgever per werknemer vanaf 1/1/2026.</li>
+</ul>
+<p><strong>Edge cases:</strong> 6e dag arbeider, kwartaalpremies, eindejaarspremie 8% i.p.v. 13,07%, internationale tewerkstelling (Vo. 883/2004), studenten-solidariteit 8,13%, flexi-jobs (apart regime).</p>
+<p class="meta-row"><strong>Updatefrequentie:</strong> kwartaal · <strong>Complexiteit:</strong> hoog · <strong>Risico:</strong> hoog — direct RSZ-rechtzetting bij fouten.</p>
+</div>
+
+<div class="topic" id="b">
+<h3>B. Bedrijfsvoorheffing &amp; personenbelasting <span class="scope-in">In Jaakie</span></h3>
+<p><strong>Juridische basis:</strong> <a href="https://eservices.minfin.fgov.be" target="_blank" rel="noopener">WIB 92</a>, <strong>Bijlage III KB/WIB 92</strong> (schalen BV), jaarlijks KB december-publicatie (voor 2026: KB 11/12/2025, BS 29/12/2025).</p>
+<p><strong>Werkingsmechanisme:</strong> Bedrijfsvoorheffing is een voorheffing op de personenbelasting. Sinds inkomstenjaar 2023 berekend via een <strong>sleutelformule</strong> (glijdende schaal, KB 11/12/2025, BS 29/12/2025) — geen vaste schijftarieven meer. Drie schalen (I/II/III) op basis van gezinssituatie; verminderingen voor kinderen ten laste, andere personen ten laste, eigen handicap, partner zonder/lage inkomsten. De vroegere schijven 26,75%/42,80%/48,15%/53,50% zijn vervangen. <span class="badge feit">Feit</span></p>
+<p><strong>Praktische impact loonmotor:</strong></p>
+<ul>
+<li>Hardcode Bijlage III mag niet — schaaltabel als data, jaarlijks ververst en versioneerd.</li>
+<li>BV-tarieven verschillen voor exceptionele bezoldigingen (eindejaarspremie, bonus, vakantiegeld), opzeggingsvergoedingen, achterstallen, voordelen alle aard.</li>
+<li>Belastingvrije som AJ 2027: <strong>€11.180</strong> (basisbedrag PB-aangifte) — vermindering 2 kinderen <strong>€138/maand</strong>.</li>
+<li>Fiscale werkbonus (belastingkrediet): <strong>33,14% × Luik A + 52,54% × Luik B</strong> (huidig regime). Arizona-voorstel 35%/63% is wetsontwerp, nog niet in BS. <span class="badge onzekerheid">Onzekerheid</span></li>
+<li>Forfaitaire beroepskosten werknemer: 30% met plafond <strong>€6.070</strong> (AJ 2027).</li>
+</ul>
+<p><strong>Edge cases:</strong> non-resident werknemers, sportbeoefenaars, podiumkunstenaars, occasioneel werk, auteursrechten (gehervormd 2023), buitenlandse kaderleden (oud 11/91 art. + nieuw expatregime sinds 2022).</p>
+<p class="meta-row"><strong>Updatefrequentie:</strong> jaarlijks (per 1/1) · <strong>Complexiteit:</strong> hoog · <strong>Risico:</strong> medium — correctie via fiche 281.x mogelijk.</p>
+</div>
+
+<div class="topic" id="c">
+<h3>C. Arbeidsrecht — arbeidsovereenkomst, ontslag, loon <span class="scope-out">Niet in Jaakie</span></h3>
+<p><strong>Juridische basis:</strong></p>
+<ul>
+<li><a href="https://www.ejustice.just.fgov.be/eli/wet/1978/07/03/1978070303/justel" target="_blank" rel="noopener">Wet 3 juli 1978 betreffende de arbeidsovereenkomsten</a></li>
+<li><a href="https://www.ejustice.just.fgov.be/eli/wet/1965/04/12/1965041209/justel" target="_blank" rel="noopener">Wet 12 april 1965 betreffende de bescherming van het loon der werknemers</a> + KB 27/9/1966</li>
+<li><a href="https://www.ejustice.just.fgov.be/eli/wet/2002/06/26/2002009629/justel" target="_blank" rel="noopener">Wet 26 juni 2002 betreffende de sluiting van ondernemingen / loonbescherming</a></li>
+<li><a href="https://www.ejustice.just.fgov.be/eli/wet/2013/12/26/2013012289/justel" target="_blank" rel="noopener">Wet 26 december 2013 betreffende het eenheidsstatuut</a></li>
+</ul>
+<p><strong>Werkingsmechanisme:</strong> Bepaalt rechten en plichten contract, opzeggingstermijnen, ontslagvergoeding, gewaarborgd loon ziekte, loonbeschermingsregels (uitbetaling, valuta, voorschotten).</p>
+<p><strong>Praktische impact loonmotor:</strong></p>
+<ul>
+<li>Opzeggingstermijnen via Claeys-formule (eenheidsstatuut sinds 2014) — wettelijke schalen.</li>
+<li>Gewaarborgd loon: bedienden 30 dagen 100% / arbeiders eerste 7 dagen 100% + dag 8–14 85,88% / 25,88% afhankelijk van leeftijd-anciënniteit.</li>
+<li>Loonbescherming: contante uitbetaling beperkt, betaling uiterlijk 4e werkdag na loonperiode.</li>
+<li>Loonbrief verplicht art. 15 Wet 12/4/1965 + KB 27/9/1966 (zie <a href="werking-loonmotor.html">werking</a>).</li>
+</ul>
+<p class="meta-row"><strong>Updatefrequentie:</strong> laag (jurisprudentie) · <strong>Complexiteit:</strong> hoog · <strong>Risico:</strong> hoog — arbeidsrechtbank.</p>
+</div>
+
+<div class="topic" id="d">
+<h3>D. Sectoraal — paritaire comités &amp; CAO's <span class="scope-out">Niet in Jaakie</span></h3>
+<p><strong>Juridische basis:</strong> <a href="https://www.ejustice.just.fgov.be/eli/wet/1968/12/05/1968120503/justel" target="_blank" rel="noopener">Wet 5 december 1968 betreffende de collectieve arbeidsovereenkomsten en paritaire comités</a> + ~164 sectorale CAO's.</p>
+<p><strong>Werkingsmechanisme:</strong> Elke werknemer valt onder een paritair comité (PC). Het PC bepaalt minimumlonen, premies, sectoreigen voordelen (anciënniteit, eindejaar, syndicale premie, sector-pensioenfonds).</p>
+<p><strong>Kritieke PC's voor MVP:</strong></p>
+<table>
+<thead><tr><th>PC</th><th>Sector</th><th>Werknemers (BE)</th><th>Bijzonderheden</th></tr></thead>
+<tbody>
+<tr><td>200</td><td>Algemeen aanv. PC bedienden</td><td>~510.000</td><td>Index +2,21% per 1/1/2026; jaarpremie €330,84. <span class="badge feit">Feit</span></td></tr>
+<tr><td>124</td><td>Bouw</td><td>~190.000</td><td>Uurloon-systeem; weersverlet; legitimatiekaart. €18,231–€21,940 (peil 2025-Q4 indicatief).</td></tr>
+<tr><td>100</td><td>Aanv. PC werklieden</td><td>—</td><td>Catch-all arbeiders.</td></tr>
+<tr><td>111</td><td>Metaal arbeiders</td><td>—</td><td>Sectorpensioen.</td></tr>
+<tr><td>220</td><td>Voedingsbedienden</td><td>—</td><td>Sterke CAO-cyclus.</td></tr>
+<tr><td>226</td><td>Internationale handel</td><td>—</td><td>Onafhankelijke barema-cyclus.</td></tr>
+<tr><td>302</td><td>Horeca</td><td>—</td><td>Indexering 1/4 en 1/10; flexi-job-hot.</td></tr>
+<tr><td>318</td><td>Diensten gezinszorg</td><td>—</td><td>Subsidiering Vlaanderen.</td></tr>
+<tr><td>319</td><td>Opvoedings- &amp; huisvestingsinrichtingen</td><td>—</td><td>Non-profit.</td></tr>
+<tr><td>330</td><td>Gezondheidsinrichtingen</td><td>—</td><td>IFIC-loonsysteem.</td></tr>
+</tbody>
+</table>
+<p><strong>Praktische impact loonmotor:</strong> Per PC: barema's per leeftijd/anciënniteit, premies, indexatiemechanisme (vast tijdstip vs glijdend), syndicale premie, eindejaarsregeling. <span class="badge mvp">MVP</span> voor PC 200; <span class="badge later">Later</span> uitbreiding andere PC's.</p>
+<p class="meta-row"><strong>Updatefrequentie:</strong> per CAO-cyclus (1–2 jr) + indexatie · <strong>Complexiteit:</strong> zeer hoog · <strong>Risico:</strong> medium — sectoraal.</p>
+</div>
+
+<div class="topic" id="e">
+<h3>E. Specifieke regimes <span class="scope-out">Niet in Jaakie</span></h3>
+<p><strong>Studenten</strong> — Titel VII Wet 3/7/1978; <a href="https://www.ejustice.just.fgov.be" target="_blank" rel="noopener">Wet 21/3/2025</a> verhoogt contingent naar <code>650 u/jaar</code>. Solidariteitsbijdrage 8,13%; vrijgesteld BV; meetelling voor kinderbijslag/personenbelasting boven drempel.</p>
+<p><strong>Flexi-jobs</strong> — Wet 16/11/2015 + Programmawet 26/12/2022 + uitbreiding sectoren 2024. Werkgeversbijdrage 25%, flexi-loon vrij van RSZ-wn en BV binnen plafond. Sector-uitbreiding sterk gewijzigd. <span class="badge feit">Feit</span></p>
+<p><strong>Gepensioneerden</strong> — Gerechtigde + aanvullend loon; verschillende regels per type pensioen (rust/overlevingspensioen, AOW); plafonds toegelaten beroepsactiviteit. <span class="badge later">Later</span></p>
+<p><strong>Jongerenwerk</strong> — leerovereenkomst (Vlaanderen Syntra, FWB IFAPME), startbaanovereenkomst (Rosetta-plan), beroepsinschakelingsovereenkomst.</p>
+<p class="meta-row"><strong>Updatefrequentie:</strong> medium · <strong>Complexiteit:</strong> hoog · <strong>Risico:</strong> medium — RSZ-controle bij herkwalificatie.</p>
+</div>
+
+<div class="topic" id="f">
+<h3>F. Voordelen — maaltijd, eco, mobiliteit, IPT <span class="scope-in">Deels in Jaakie</span></h3>
+<p><strong>Maaltijdcheques</strong> — <a href="https://www.ejustice.just.fgov.be" target="_blank" rel="noopener">KB 10/11/2025</a>: max €10 vanaf 2026 (was €8). Werkgeversbijdrage max €8,91; werknemersbijdrage min €1,09. Geen RSZ, geen BV. <span class="badge feit">Feit</span></p>
+<p><strong>Ecocheques</strong> — €250/jaar voltijds. Vrij RSZ + BV mits CAO of individuele overeenkomst.</p>
+<p><strong>Fietsvergoeding</strong> — CAO 164 NAR €0,32/km vanaf 1/10/2026 (PC 200); fiscaal KB-plafond €0,36/km, plafond €3.700/jaar 2026. <span class="badge feit">Feit</span></p>
+<p><strong>Telewerkforfait</strong> — bureauvergoeding €160,99/maand vanaf 1/3/2026 (KB-ind 2026). Vrij RSZ + BV bij structureel telewerk.</p>
+<p><strong>Mobiliteitsbudget</strong> — Wet 17/3/2019; 3 pijlers (milieuvriendelijke wagen / duurzame mobiliteit / cash) — apart fiscaal-sociaal regime per pijler. Plafond €3.000–€16.000/jaar.</p>
+<p><strong>Bedrijfswagen-VAA</strong> — art. 36 §2 WIB 92; cataloguswaarde × 6/7 × CO2-coëfficiënt × ouderdomscoëfficient. Min VAA €1.690/jaar (2026). Referentie 70 g/km benzine / 58 g/km diesel. Solidariteitsbijdrage werkgever (CO2 × indexcoëfficiënt 1,6291). <span class="badge feit">Feit</span></p>
+<p><strong>IPT / groepsverzekering</strong> — 80%-regel art. 59 WIB 92 voor aftrekbaarheid wg-premies. RSZ-bijdrage werkgever 8,86% op storting. Pensioenopbouw via DB2P (Sigedis).</p>
+<p class="meta-row"><strong>Updatefrequentie:</strong> jaarlijks · <strong>Complexiteit:</strong> medium · <strong>Risico:</strong> medium — herkwalificatie bij controle.</p>
+</div>
+
+<div class="topic" id="g">
+<h3>G. GDPR / AVG &amp; verwerking persoonsgegevens <span class="scope-out">Niet in Jaakie</span></h3>
+<p><strong>Juridische basis:</strong></p>
+<ul>
+<li><a href="https://eur-lex.europa.eu/legal-content/NL/TXT/?uri=CELEX%3A32016R0679" target="_blank" rel="noopener">Verordening (EU) 2016/679 (AVG/GDPR)</a></li>
+<li><a href="https://www.ejustice.just.fgov.be/eli/wet/2018/07/30/2018040581/justel" target="_blank" rel="noopener">Wet 30 juli 2018 betreffende de bescherming van natuurlijke personen met betrekking tot de verwerking van persoonsgegevens</a></li>
+<li>CAO 81 NAR (controle elektronische communicatie)</li>
+</ul>
+<p><strong>Werkingsmechanisme bij payroll:</strong> Werkgever én sociaal secretariaat zijn verwerkers / verwerkingsverantwoordelijken (gelaagd). Rechtsgrond: wettelijke verplichting (art. 6(1)(c) AVG) + arbeidsovereenkomst. Gevoelige gegevens (gezondheid, vakbondslidmaatschap) extra grondslag art. 9 AVG.</p>
+<p><strong>Praktische impact loonmotor:</strong></p>
+<ul>
+<li>Verwerkersovereenkomst (DPA) werkgever ↔ leverancier loonmotor.</li>
+<li>RRN/INSZ encryptie at-rest (KB 22/4/2019).</li>
+<li>Bewaartermijnen gedifferentieerd: loonbrieven 5 jaar (arbeidsbescherming), sociale documenten 5 jaar (KB 8/8/1980), DmfA 7+ jaar fiscaal, DB2P pensioen levenslang.</li>
+<li>Rechten betrokkene: inzage, rectificatie, beperking — recht op vergetelheid beperkt door bewaarverplichtingen.</li>
+<li>Data-export bij switch sociaal secretariaat (data portability + handover-protocol).</li>
+</ul>
+<p class="meta-row"><strong>Updatefrequentie:</strong> laag (richtlijnen GBA, EDPB) · <strong>Complexiteit:</strong> medium · <strong>Risico:</strong> hoog — boetes tot 4% omzet of €20M.</p>
+</div>
+
+<div class="topic" id="h">
+<h3>H. Loonbeslag &amp; loonoverdracht <span class="scope-out">Niet in Jaakie</span></h3>
+<p><strong>Juridische basis:</strong> art. 1409 e.v. Gerechtelijk Wetboek; jaarlijks KB met aangepaste schijven (voor 2026: <a href="https://www.ejustice.just.fgov.be" target="_blank" rel="noopener">KB 3/12/2025</a>).</p>
+<p><strong>Werkingsmechanisme:</strong> schijven netto-loon met opklimmend beslagpercentage. Schijven 2026 (geïndexeerd): tot €1.418 niet vatbaar, €1.418–€1.523 → 20%, €1.523–€1.681 → 30%, €1.681–€1.838 → 40%, &gt; €1.838 → 100% (boven dat plafond). +€88 onbeslagbaar per kind ten laste. <span class="badge feit">Feit</span></p>
+<p><strong>Praktische impact loonmotor:</strong></p>
+<ul>
+<li>Volgorde van schuldeisers: onderhoudsgeld absoluut voor; daarna chronologisch (executie titel datum).</li>
+<li>Vereenvoudigd derdenbeslag (V8) versus klassiek beslag.</li>
+<li>Loonoverdracht (Wet Consumentenkrediet) volgt eigen formaliteiten.</li>
+<li>Centraal Bestand Beslagberichten (CBB) raadplegen: <a href="https://justitie.belgium.be" target="_blank" rel="noopener">justitie.belgium.be</a></li>
+</ul>
+<p class="meta-row"><strong>Updatefrequentie:</strong> jaarlijks · <strong>Complexiteit:</strong> medium · <strong>Risico:</strong> hoog — solidaire aansprakelijkheid werkgever bij niet-uitvoering.</p>
+</div>
+
+<div class="topic" id="i">
+<h3>I. De Wever-hervormingen 2025–2026 <span class="scope-in">Deels in Jaakie</span></h3>
+<p><strong>Juridische basis:</strong> Wetten 27/12/2025 en 18/12/2025 (Programmawet + diverse bepalingen), uitgevoerd door KB's december 2025 (BS publicaties 29/12/2025–30/12/2025). <span class="badge feit">Feit</span></p>
+<p><strong>Belangrijke wijzigingen:</strong></p>
+<ul>
+<li><strong>Arizona RSZ-cap</strong> — werkgeversbijdrage geplafonneerd op €86.700/kwartaal/werknemer (1/1/2026). <span class="badge onzekerheid">Onzekerheid</span> over interactie met variabel loon-piekken.</li>
+<li><strong>BBIB versoepeling</strong> — bijzondere bijdrage (op uitkering kapitaal pensioen): drempel verlaagd €75k → €70k; KEW-percentage 30% → 35%; plafond afgeschaft.</li>
+<li><strong>Loonbeslag 2026</strong> — nieuwe schijven (KB 3/12/2025). Zie topic H.</li>
+<li><strong>Werkbonus aangepast 1/4/2026</strong> — Luik A €125,04 / Luik B €168,62 (bedienden). GGMMI €2.189,81. <span class="badge feit">Feit</span></li>
+<li><strong>BV-sleutelformule 2026</strong> — KB 11/12/2025 (BS 29/12/2025); geen vaste schijven meer. Belastingvrije som €11.180; forfaitaire beroepskosten €6.070.</li>
+<li><strong>Structurele vermindering 0,1600</strong> — vanaf 1/4/2026 (KB 2/7/2025, BS 15/7/2025).</li>
+<li><strong>Maaltijdcheques €10</strong> — KB 10/11/2025; werknemersbijdrage min €1,09; werkgever max €8,91.</li>
+<li><strong>Telewerkforfait €160,99</strong> — indexatie circulaire 1/3/2026.</li>
+<li><strong>Verhoogde flexi-cap + uitbreiding sectoren</strong> — programmawet 26/12/2022 verder doorgetrokken.</li>
+</ul>
+<p class="meta-row"><strong>Updatefrequentie:</strong> wetgevende cyclus 2025–2026 · <strong>Complexiteit:</strong> zeer hoog · <strong>Risico:</strong> hoog — eerste implementaties dragen onzekerheid.</p>
+</div>
+
+<h2>Cross-cutting principes</h2>
+<ul>
+<li><strong>Versiebeheer parameters</strong> — elke wettelijke parameter heeft een geldigheidsperiode (<code>valid_from</code>, <code>valid_to</code>). Berekeningen kiezen de versie geldig op de loondatum.</li>
+<li><strong>Audit-trail</strong> — voor elke berekening: welke parameters, welke regelversie, welke input, met immuteerbare hash.</li>
+<li><strong>Retrocompatibiliteit</strong> — een correctie over 6 maanden moet de regels van toen toepassen, niet de huidige.</li>
+<li><strong>Beroep mogelijkheid</strong> — voor RSZ binnen 5 jaar, BV via fiscale procedure (bezwaar/beroep), arbeidsrechtbank 1 jaar (vorderingen loonbrief).</li>
+</ul>
+
+<p>Voor de structuur van die parameters: <a href="datamodel.html">datamodel</a>. Voor de bronnen: <a href="bronnen.html">bronnen</a>.</p>
+</main>
+
+<footer>Loonmotor BE — Onderzoeksdossier · <a href="index.html">Terug naar overzicht</a></footer>
+</body>
+</html>

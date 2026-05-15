@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="nl-BE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Juridische checklist — Loonmotor BE</title>
+<style>
+:root{--bg:#fafbfc;--surface:#fff;--border:#e4e7eb;--text:#1a2332;--text-muted:#5a6779;--accent:#0b5394;--accent-light:#e8f0f9;--code-bg:#f5f7fa;--shadow:0 1px 3px rgba(0,0,0,.06)}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.6;color:var(--text);background:var(--bg)}
+header.topbar{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.topbar-inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-weight:700;font-size:17px;color:var(--accent);text-decoration:none}
+nav.topnav{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+nav.topnav a{font-size:13px;color:var(--text-muted);text-decoration:none;padding:6px 10px;border-radius:4px}
+nav.topnav a:hover{background:var(--accent-light);color:var(--accent)}
+nav.topnav a.active{background:var(--accent);color:#fff}
+main{max-width:1200px;margin:0 auto;padding:32px 24px 64px}
+h1{font-size:30px;margin:0 0 8px;font-weight:700}h2{font-size:22px;margin:32px 0 12px;font-weight:600;padding-bottom:6px;border-bottom:2px solid var(--accent-light)}
+h3{font-size:17px;margin:24px 0 8px;font-weight:600}h4{font-size:15px;margin:16px 0 6px;color:var(--accent);font-weight:600}
+p{margin:8px 0 12px}ul,ol{padding-left:22px}li{margin:4px 0}a{color:var(--accent)}a:hover{text-decoration:underline}
+code{font-family:"SF Mono",Monaco,Consolas,monospace;background:var(--code-bg);padding:1px 5px;border-radius:3px;font-size:13px}
+.subtitle{color:var(--text-muted);font-size:16px;margin:0 0 24px}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:14px;background:var(--surface);border-radius:6px;overflow:hidden;box-shadow:var(--shadow)}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:var(--accent-light);font-weight:600;font-size:13px}
+tr:last-child td{border-bottom:none}tr:hover{background:#f8fafc}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;margin:0 3px 2px 0;letter-spacing:.3px;text-transform:uppercase}
+.badge.feit{background:#d1fae5;color:#065f46}.badge.aanname{background:#fef3c7;color:#92400e}
+.badge.mvp{background:#c7f0d3;color:#14532d}.badge.later{background:#ddd6fe;color:#5b21b6}
+.badge.enterprise{background:#fce7f3;color:#831843}.badge.openvraag{background:#fde68a;color:#78350f}
+.callout{border-left:4px solid var(--accent);background:var(--accent-light);padding:12px 16px;margin:14px 0;border-radius:0 4px 4px 0}
+.callout.warn{border-color:#d97706;background:#fef3c7}.callout.danger{border-color:#dc2626;background:#fee2e2}
+.section-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px 22px;margin:16px 0;box-shadow:var(--shadow)}
+.check{font-family:"SF Mono",Monaco,Consolas,monospace;color:var(--accent);font-weight:600;margin-right:8px}
+.scope-in{background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+.scope-out{background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size:13px;color:var(--text-muted);text-align:center}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+<a href="index.html" class="brand">Loonmotor BE</a>
+<nav class="topnav">
+<a href="index.html">Overzicht</a><a href="marktonderzoek.html">Markt</a>
+<a href="concurrentiematrix.html">Concurrenten</a><a href="werking-loonmotor.html">Werking</a>
+<a href="wetgevend-kader.html">Wetgeving</a><a href="requirements.html">Requirements</a>
+<a href="datamodel.html">Datamodel</a><a href="technische-architectuur.html">Architectuur</a>
+<a href="juridische-checklist.html" class="active">Juridisch</a><a href="mvp-roadmap.html">Roadmap</a>
+<a href="risicoregister.html">Risico's</a><a href="jaakie-specificatie.html">Jaakie</a>
+<a href="testcorpus.html">Testcorpus</a><a href="referentie-tools.html">Referenties</a>
+<a href="bronnen.html">Bronnen</a>
+</nav></div></header>
+
+<main>
+<h1>Juridische checklist</h1>
+<p class="subtitle">Concreet uitvoerbare checklist per juridisch domein: GDPR, loonbrief, bewaartermijnen, contracten met klanten, erkenning sociaal secretariaat.</p>
+
+<div class="callout warn">
+Deze checklist is geen juridisch advies. Voor productie-uitrol moet elke rubriek door een gespecialiseerde sociaal-rechtjurist en een DPO worden gevalideerd. <span class="badge openvraag">Open vraag</span>
+</div>
+
+<h2>1. GDPR / AVG-checklist</h2>
+<table>
+<thead><tr><th style="width:42px">#</th><th>Te doen</th><th>Bron</th><th>Fase</th></tr></thead>
+<tbody>
+<tr><td class="check">1.1</td><td>Verwerkingsregister opstellen (art. 30 AVG): doel, categorieën betrokkenen, gegevenscategorieën, ontvangers, bewaartermijnen, beveiligingsmaatregelen.</td><td><a href="https://eur-lex.europa.eu/legal-content/NL/TXT/?uri=CELEX%3A32016R0679" target="_blank" rel="noopener">Vo. 2016/679</a></td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="check">1.2</td><td>DPIA uitvoeren (art. 35 AVG): grootschalige verwerking persoonsgegevens werknemers, automatische beslissingen, gevoelige data (gezondheid via ziekte-codes).</td><td>Art. 35 AVG; GBA-lijst DPIA-verplichte verwerkingen</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="check">1.3</td><td>Aanstellen DPO (verplicht voor grootschalige verwerking gevoelige data — art. 37 AVG).</td><td>Art. 37–39 AVG</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="check">1.4</td><td>Verwerkersovereenkomst (DPA, art. 28 AVG) tussen werkgever (verwerkingsverantwoordelijke) en loonmotor-aanbieder (verwerker).</td><td>Art. 28 AVG</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="check">1.5</td><td>Rechtsgrond per verwerking documenteren: wettelijke verplichting (art. 6(1)(c)) voor loon, RSZ, BV; gerechtvaardigd belang voor performance-rapporten; toestemming voor optionele HR-tools.</td><td>Art. 6 AVG</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="check">1.6</td><td>Speciale categorieën (art. 9 AVG): vakbondslidmaatschap, gezondheidsdata bij ziekte/AO/handicap — eigen rechtsgrond, encryptie verplicht.</td><td>Art. 9 AVG</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="check">1.7</td><td>Informatieplicht (art. 13 AVG): privacyverklaring naar werknemers, leesbaar, met intrekkingsrechten.</td><td>Art. 13–14 AVG</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="check">1.8</td><td>Rechten betrokkene-procedure: inzage, rectificatie, beperking, portabiliteit. Recht op vergetelheid <em>beperkt</em> door wettelijke bewaartermijnen (5–10 j).</td><td>Art. 15–22 AVG</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="check">1.9</td><td>RRN-verwerking conform <a href="https://www.ejustice.just.fgov.be" target="_blank" rel="noopener">Wet 8/8/1983 Rijksregister</a>: doel beperkt tot loonadministratie + sociale zekerheid; encryptie at-rest.</td><td>Wet 8/8/1983 + KB 22/4/2019</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="check">1.10</td><td>Datalek-procedure (art. 33–34 AVG): GBA-melding binnen 72 u; betrokkene binnen redelijke termijn bij hoog risico.</td><td>Art. 33–34 AVG</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="check">1.11</td><td>Internationale doorgifte: hosting in EU (België of EU-27). Bij subverwerker buiten EU: SCC's + TIA.</td><td>Hfd. V AVG</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="check">1.12</td><td>CAO 81 NAR (controle elektronische communicatie) toepassen indien loonmotor toegang heeft tot werknemer-e-mail of activity-logs.</td><td>CAO 81 NAR</td><td><span class="badge later">Later</span></td></tr>
+</tbody>
+</table>
+
+<h2>2. Loonbrief — verplichte vermeldingen</h2>
+<div class="callout">
+<strong>Juridische basis:</strong> art. 15 <a href="https://www.ejustice.just.fgov.be/eli/wet/1965/04/12/1965041209/justel" target="_blank" rel="noopener">Wet 12 april 1965 betreffende de bescherming van het loon der werknemers</a> + <a href="https://www.ejustice.just.fgov.be/eli/besluit/1966/09/27/1966092702/justel" target="_blank" rel="noopener">KB 27 september 1966 (BS 11/10/1966)</a>. <span class="badge feit">Feit (gecorrigeerd t.o.v. eerste verkenning)</span>
+</div>
+<table>
+<thead><tr><th style="width:42px">#</th><th>Vermelding</th></tr></thead>
+<tbody>
+<tr><td class="check">2.1</td><td>Naam, voornamen, woonplaats werkgever; KBO-nummer.</td></tr>
+<tr><td class="check">2.2</td><td>Naam, voornamen, identificatie werknemer (RRN of INSZ).</td></tr>
+<tr><td class="check">2.3</td><td>Functie, paritair comité, statuut (arbeider / bediende).</td></tr>
+<tr><td class="check">2.4</td><td>Loonperiode — begin- en einddatum.</td></tr>
+<tr><td class="check">2.5</td><td>Bruto bezoldiging, gedetailleerd per bestanddeel (basisloon, premies, voordelen alle aard).</td></tr>
+<tr><td class="check">2.6</td><td>Aantal gepresteerde + gelijkgestelde dagen/uren.</td></tr>
+<tr><td class="check">2.7</td><td>Inhoudingen: werknemers-RSZ (13,07% of 13,07% × 108%), bedrijfsvoorheffing, BBSZ, werknemersbijdrage maaltijdcheques, eventueel loonbeslag/overdracht.</td></tr>
+<tr><td class="check">2.8</td><td>Werkgeversbijdragen (informatief): RSZ-werkgever, sectorpremies, vakantiegeld-provisie.</td></tr>
+<tr><td class="check">2.9</td><td>Voordelen alle aard met fiscaal-sociale waardering (bedrijfswagen, smartphone, IPT).</td></tr>
+<tr><td class="check">2.10</td><td>Netto te betalen bedrag.</td></tr>
+<tr><td class="check">2.11</td><td>Datum en wijze van betaling, rekeningnummer.</td></tr>
+<tr><td class="check">2.12</td><td>Cumulatieven jaar-tot-datum (YTD): bruto, inhoudingen, netto.</td></tr>
+<tr><td class="check">2.13</td><td>Loonbrief uiterlijk bij betaling (art. 11 Wet 12/4/1965 — betaling uiterlijk 4e werkdag na loonperiode).</td></tr>
+<tr><td class="check">2.14</td><td>Bewaartermijn loonbrief: 5 jaar (KB 8/8/1980 sociale documenten).</td></tr>
+<tr><td class="check">2.15</td><td>Vormvereisten: schriftelijk (papier of elektronisch met bewijsbare ontvangst); leesbaar in officiële taal werknemer (NL/FR/DE).</td></tr>
+</tbody>
+</table>
+
+<h2>3. Bewaartermijnen — overzichtstabel</h2>
+<table>
+<thead><tr><th>Document / data</th><th>Termijn</th><th>Bron</th></tr></thead>
+<tbody>
+<tr><td>Loonbrief (sociale documenten)</td><td>5 jaar</td><td>KB 8/8/1980 art. 25</td></tr>
+<tr><td>Individuele rekening werknemer</td><td>5 jaar</td><td>KB 8/8/1980</td></tr>
+<tr><td>Personeelsregister</td><td>5 jaar na uitdienst</td><td>KB 8/8/1980</td></tr>
+<tr><td>Arbeidsovereenkomst</td><td>5 jaar na einde</td><td>Wet 3/7/1978</td></tr>
+<tr><td>DmfA-data + onderliggende stukken</td><td>7 jaar (fiscaal)</td><td>WIB 92 art. 315</td></tr>
+<tr><td>Belcotax 281.x fiches</td><td>7 jaar</td><td>WIB 92</td></tr>
+<tr><td>Boekhoudkundige stukken</td><td>7 jaar</td><td>W.Venn / WVV; KB 12/9/1983</td></tr>
+<tr><td>Pensioenopbouw 2e pijler (DB2P)</td><td>Levenslang (Sigedis)</td><td>Wet 28/4/2003 + KB 25/4/2007</td></tr>
+<tr><td>Aanvullend pensioen-aangiften</td><td>Tot pensioendatum + 5 j</td><td>Sigedis</td></tr>
+<tr><td>RSZ-geschillen / -rechtzettingen</td><td>5 jaar (verjaring)</td><td>Art. 42 RSZ-wet 27/6/1969</td></tr>
+<tr><td>BV-bezwaar / geschillen</td><td>5 jaar</td><td>WIB 92 art. 354</td></tr>
+<tr><td>Vakantiegeld arbeiders (RJV)</td><td>10 jaar</td><td>Vakantieboekje / RJV</td></tr>
+<tr><td>Audit-log loonmotor</td><td>10 jaar (intern)</td><td>Bewijslast bij geschil</td></tr>
+</tbody>
+</table>
+
+<h2>4. Erkenning sociaal secretariaat (ESS)</h2>
+<div class="callout warn">
+<strong>Niet vereist voor MVP.</strong> Een loonmotor mag berekenen, loonbrieven genereren en aangiften voorbereiden zonder ESS-erkenning. Erkenning is pas nodig wanneer je <em>als mandataris</em> aangiften in eigen naam wil indienen en RSZ-/BV-rekeningen wil beheren voor klant-werkgevers. <span class="badge enterprise">Enterprise</span>
+</div>
+<table>
+<thead><tr><th style="width:42px">#</th><th>Vereiste</th><th>Bron</th></tr></thead>
+<tbody>
+<tr><td class="check">4.1</td><td>Rechtsvorm: erkende beroepsvereniging of vzw (art. 27 RSZ-wet).</td><td>Wet 27/6/1969 + KB 28/11/1969</td></tr>
+<tr><td class="check">4.2</td><td>Waarborg: solidaire borg bij RSZ-Globaal Beheer (bedrag is publicatie-gevoelig; afstemmen met RSZ).</td><td>KB 28/11/1969</td></tr>
+<tr><td class="check">4.3</td><td>Bestuur en samenstelling: vertegenwoordiging werkgeversorganisaties; onafhankelijke commissaris.</td><td>KB 28/11/1969</td></tr>
+<tr><td class="check">4.4</td><td>Kwaliteitsbarometer: jaarlijkse audit IT, processen, juistheid aangiften.</td><td><a href="https://www.ejustice.just.fgov.be" target="_blank" rel="noopener">KB 20/2/2017</a></td></tr>
+<tr><td class="check">4.5</td><td>Bedrijfsrevisor + IT-audit jaarlijks.</td><td>KB 20/2/2017</td></tr>
+<tr><td class="check">4.6</td><td>Permanente vorming personeel; KSZ-aansluiting.</td><td>RSZ-richtlijnen</td></tr>
+<tr><td class="check">4.7</td><td>Continuïteitsplan + tweede datacenter / backup-locatie.</td><td>KB 20/2/2017</td></tr>
+<tr><td class="check">4.8</td><td>Klacht- en geschillenprocedure formeel.</td><td>KB 20/2/2017</td></tr>
+</tbody>
+</table>
+
+<h2>5. Contracten met klant-werkgevers</h2>
+<table>
+<thead><tr><th style="width:42px">#</th><th>Clausule</th></tr></thead>
+<tbody>
+<tr><td class="check">5.1</td><td><strong>Aansprakelijkheidsbeperking</strong> per soort fout (berekening, aangifte, betalingsuitvoering). Cap op jaarlijkse vergoeding × multiple. Verzekering BA-uitbating + cyberrisico verplicht.</td></tr>
+<tr><td class="check">5.2</td><td><strong>Vrijwaringsclausule</strong> bij wettelijke wijziging: leverancier voert update door binnen X dagen na officiële publicatie; vrijwaring tegen retroactieve correcties indien klant data te laat aanleverde.</td></tr>
+<tr><td class="check">5.3</td><td><strong>DPA</strong> als bijlage met categorieën persoonsgegevens, sub-verwerkers, beveiligingsmaatregelen (TOM-bijlage).</td></tr>
+<tr><td class="check">5.4</td><td><strong>Data-exit clausule</strong> bij switch ESS: export volledige historiek in machineleesbaar formaat binnen 30 dagen, gratis. Cruciaal voor portability.</td></tr>
+<tr><td class="check">5.5</td><td><strong>SLA</strong>: uptime, response-time support, RPO/RTO; boete-clausule bij niet-halen.</td></tr>
+<tr><td class="check">5.6</td><td><strong>Audit-recht</strong> klant: jaarlijkse SOC 2 type II of ISAE 3402 rapport.</td></tr>
+<tr><td class="check">5.7</td><td><strong>Wijziging tariefstructuur</strong>: minstens 3 maanden vooropzeg; recht klant tot stopzetting zonder boete bij tariefverhoging &gt; X%.</td></tr>
+<tr><td class="check">5.8</td><td><strong>IP &amp; data-eigendom</strong>: werkgever blijft eigenaar werknemer-data; leverancier eigenaar software/configuratie.</td></tr>
+<tr><td class="check">5.9</td><td><strong>Vertrouwelijkheid</strong> met overlap art. 17 Wet 3/7/1978 indien medewerkers van leverancier ter plaatse werken bij klant.</td></tr>
+<tr><td class="check">5.10</td><td><strong>Toepasselijk recht</strong>: Belgisch recht, ondernemingsrechtbank van de zetel van de leverancier.</td></tr>
+</tbody>
+</table>
+
+<h2>6. Belastingplicht &amp; sociale documenten</h2>
+<table>
+<thead><tr><th style="width:42px">#</th><th>Te bezorgen / op te stellen</th><th>Termijn</th></tr></thead>
+<tbody>
+<tr><td class="check">6.1</td><td>Individuele rekening per werknemer (jaarlijks)</td><td>Binnen 2 mnd na jaareinde</td></tr>
+<tr><td class="check">6.2</td><td>Fiscale fiche 281.10 — bezoldigingen werknemers</td><td>Uiterlijk 1 maart van jaar Y+1; via Belcotax-on-web</td></tr>
+<tr><td class="check">6.3</td><td>Fiscale fiche 281.20 — bestuurders</td><td>Uiterlijk 1 maart Y+1</td></tr>
+<tr><td class="check">6.4</td><td>Fiscale fiche 281.25 — auteursrechten</td><td>Uiterlijk 1 maart Y+1</td></tr>
+<tr><td class="check">6.5</td><td>Fiscale fiche 281.50 — commissies</td><td>Uiterlijk 1 maart Y+1</td></tr>
+<tr><td class="check">6.6</td><td>DmfA kwartaalaangifte</td><td>Uiterlijk laatste dag van de maand na kwartaaleinde</td></tr>
+<tr><td class="check">6.7</td><td>Dimona in/uit dienst</td><td>Vóór begin tewerkstelling / dezelfde dag bij uitdienst</td></tr>
+<tr><td class="check">6.8</td><td>BV-doorstorting Finprof</td><td>Maand (groot werkgever) of kwartaal (klein), uiterlijk 15e van volgende maand</td></tr>
+<tr><td class="check">6.9</td><td>Sociale balans (KB 12/9/1983 art. 100/91)</td><td>Bij jaarrekening neerlegging NBB</td></tr>
+<tr><td class="check">6.10</td><td>Aangifte Sigedis/DB2P 2e pijler</td><td>Volgens KB 25/4/2007 — eind eerste kwartaal Y+1</td></tr>
+</tbody>
+</table>
+
+<h2>7. EU loontransparantie (Richtlijn 2023/970)</h2>
+<table>
+<thead><tr><th style="width:42px">#</th><th>Verplichting</th><th>Deadline</th></tr></thead>
+<tbody>
+<tr><td class="check">7.1</td><td>Loonniveau-banding en mediane loongegevens beschikbaar voor werknemers.</td><td>7 juni 2026 omzetting</td></tr>
+<tr><td class="check">7.2</td><td>Werknemer-recht op informatie over loonniveau gelijkwaardige functies (genderpaygap).</td><td>Vanaf omzetting</td></tr>
+<tr><td class="check">7.3</td><td>Rapportering loonkloof (gender pay gap rapport): ≥250 wn jaarlijks; 150–250 wn driejaarlijks; 100–150 wn driejaarlijks (vanaf 2031).</td><td>Eerste rapport binnen 12 mnd na omzetting voor categorie ≥250 wn</td></tr>
+<tr><td class="check">7.4</td><td>Transparantie bij aanwerving: salarisvork in vacature of bij eerste gesprek.</td><td>Vanaf omzetting</td></tr>
+<tr><td class="check">7.5</td><td>Geen verbod op werknemers om over loon te communiceren.</td><td>Vanaf omzetting</td></tr>
+<tr><td class="check">7.6</td><td>Procedure gezamenlijke loonbeoordeling bij vastgestelde kloof &gt; 5%.</td><td>Vanaf eerste rapport</td></tr>
+</tbody>
+</table>
+<p>Implicatie loonmotor: rapportagemodule met genderbanding, mediaan/gemiddelde per band, beslissingsgrondslag. <span class="badge mvp">MVP</span> als rapport, <span class="badge later">Later</span> als embed-tool voor klant-HR.</p>
+
+<h2>8. Sectoraal — paritair comité-administratie</h2>
+<ul>
+<li>Aansluiting bij paritair comité conform <a href="https://www.werk.belgie.be" target="_blank" rel="noopener">NACE-code activiteit</a>.</li>
+<li>CAO-naleving: minimumlonen, premies, eindejaarsregeling, syndicale premie. Verplichting tot betaling sectorale eindejaarspremie binnen termijn (vaak december Y).</li>
+<li>Sectorfonds-bijdrage (fonds voor bestaanszekerheid, opleidingen) berekenen + storten — afhankelijk van PC.</li>
+<li>Anciënniteitsdatum bijhouden voor barema-verhogingen.</li>
+</ul>
+
+<h2>9. Loonbeslag &amp; loonoverdracht — procedureel</h2>
+<ul>
+<li>Bij ontvangst beslagbericht: kennisgeving werknemer binnen 8 dagen.</li>
+<li>Centraal Bestand Beslagberichten (CBB) consulteren: <a href="https://justitie.belgium.be" target="_blank" rel="noopener">justitie.belgium.be</a> — verplicht voor de uitvoerende werkgever.</li>
+<li>Schijven 2026 (KB 3/12/2025) toepassen op netto-loon; +€88 onbeslagbaar per kind ten laste.</li>
+<li>Volgorde: onderhoudsgeld absoluut voor; daarna chronologisch executietitel.</li>
+<li>Solidaire aansprakelijkheid werkgever indien niet correct ingehouden of doorgestort.</li>
+</ul>
+
+<h2>10. Pre-launch juridische sign-off — minimaal</h2>
+<ol>
+<li>Externe sociaal-rechtjurist review parameter-versie + decision tables.</li>
+<li>DPO sign-off DPIA + verwerkingsregister.</li>
+<li>Boekhouder/revisor sign-off mapping looncomponent → boekhoudrekening.</li>
+<li>Aangifte-bestanden gevalideerd tegen officiële XSD (DmfA, Dimona, Belcotax).</li>
+<li>Klant-DPA's getekend.</li>
+<li>Verzekering BA-uitbating + cyber + beroepsaansprakelijkheid sluiten.</li>
+<li>Privacyverklaring en gebruikersvoorwaarden gepubliceerd, NL/FR/DE.</li>
+<li>Datalek-procedure en escalatiematrix gedocumenteerd.</li>
+</ol>
+
+<div class="callout">
+Voor de wettelijke achtergrond: <a href="wetgevend-kader.html">wetgevend kader</a>. Voor het bouwpad: <a href="mvp-roadmap.html">MVP-roadmap</a>.
+</div>
+</main>
+
+<footer>Loonmotor BE — Onderzoeksdossier · <a href="index.html">Terug naar overzicht</a></footer>
+</body>
+</html>

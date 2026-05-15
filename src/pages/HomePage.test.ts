@@ -76,8 +76,18 @@ describe("Profiel formulier", () => {
 
     expect(html.indexOf("Gezinstype (voor BV)")).toBeGreaterThanOrEqual(0);
     expect(html.indexOf("Kinderen ten laste")).toBeGreaterThanOrEqual(0);
+    expect(html).not.toContain("Kinderen < 3 jaar");
+    expect(html).not.toContain("Extra BV-vermindering");
     expect(html.indexOf("Gezinstype (voor BV)")).toBeLessThan(html.indexOf("Statuut"));
     expect(html.indexOf("Kinderen ten laste")).toBeLessThan(html.indexOf("Statuut"));
+  });
+
+  it("benoemt partner zonder of beperkt beroepsinkomen als lagere BV, niet als ten laste", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+
+    expect(html).toContain("Gehuwd/wettelijk samenwonend - partner zonder of beperkt beroepsinkomen");
+    expect(html).toContain("Een partner is fiscaal niet ten laste.");
+    expect(html).toContain("wat de bedrijfsvoorheffing verlaagt en het geraamde nettoloon verhoogt");
   });
 
   it("plaatst de eigen bijdrage groepsverzekering onder bijkomende looncomponenten", () => {
@@ -94,5 +104,37 @@ describe("Profiel formulier", () => {
 
     expect(html.indexOf("Woon-werk verkeer")).toBeGreaterThanOrEqual(0);
     expect(html.indexOf("Werkgeversbijdragen")).toBeGreaterThan(html.indexOf("Woon-werk verkeer"));
+  });
+});
+
+describe("Netto-overzicht", () => {
+  it("toont de loonfiche-labels in de verwachte volgorde", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+
+    const labels = [
+      "Totaal bruto",
+      "Belastbaar loon",
+      "Bedrijfsvoorheffing",
+      "Onkostenvergoedingen en inhoudingen",
+      "Terugname VAA",
+      "Nettoloon",
+    ];
+    const positions = labels.map((label) => html.indexOf(label));
+
+    for (const position of positions) {
+      expect(position).toBeGreaterThanOrEqual(0);
+    }
+
+    expect(positions).toEqual([...positions].sort((a, b) => a - b));
+  });
+
+  it("toont de VAA-werkmiddelen als bijkomende looncomponenten", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+
+    expect(html).toContain("VAA werkmiddelen");
+    expect(html).toContain("Laptop / pc");
+    expect(html).toContain("GSM / smartphone");
+    expect(html).toContain("Internet");
+    expect(html).toContain("Telefoonabonnement");
   });
 });

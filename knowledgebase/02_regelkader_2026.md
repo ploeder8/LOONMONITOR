@@ -44,7 +44,7 @@ Geen runtime-arithmetic op `waarde_bron` van het PC 200-dataset blijft van toepa
 | Schaal | Doelgroep | Belastingvrije som AJ2027 |
 |--------|-----------|---------------------------|
 | **I** | Alleenstaande zonder kinderen ten laste; gehuwde/wettelijk samenwonende waar **beide** partners beroepsinkomsten hebben | €11.180 (volledig toegekend in I) |
-| **II** | Gehuwde/wettelijk samenwonende waar de partner **geen of beperkte** beroepsinkomsten heeft (split-toepassing — huwelijksquotiënt) | Hogere effectieve vrijstelling via splitsing |
+| **II** | Gehuwde/wettelijk samenwonende waar de partner **geen of beperkte** beroepsinkomsten heeft (split-toepassing — huwelijksquotiënt). Dit is geen "partner ten laste"; het effect in de loonmotor is een lagere bedrijfsvoorheffing en dus een hoger geraamd nettoloon. | Hogere effectieve vrijstelling via splitsing |
 | **III** | Niet-inwoners (zonder Belgische fiscale woonplaats) | Geen vrije som tenzij ≥ 75 % van wereldwijde beroepsinkomsten in BE |
 
 Bron: [FOD Financiën — Berekening BV](https://financien.belgium.be/nl/ondernemingen/personeel_en_loon/bedrijfsvoorheffing/berekening) (Tier 1; enig geautoriseerde bron voor BV-cijfers).

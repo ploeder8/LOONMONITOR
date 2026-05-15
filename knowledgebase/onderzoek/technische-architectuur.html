@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="nl-BE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Technische architectuur — Loonmotor BE</title>
+<style>
+:root{--bg:#fafbfc;--surface:#fff;--border:#e4e7eb;--text:#1a2332;--text-muted:#5a6779;--accent:#0b5394;--accent-light:#e8f0f9;--code-bg:#f5f7fa;--shadow:0 1px 3px rgba(0,0,0,.06)}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.6;color:var(--text);background:var(--bg)}
+header.topbar{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.topbar-inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-weight:700;font-size:17px;color:var(--accent);text-decoration:none}
+nav.topnav{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+nav.topnav a{font-size:13px;color:var(--text-muted);text-decoration:none;padding:6px 10px;border-radius:4px}
+nav.topnav a:hover{background:var(--accent-light);color:var(--accent)}
+nav.topnav a.active{background:var(--accent);color:#fff}
+main{max-width:1200px;margin:0 auto;padding:32px 24px 64px}
+h1{font-size:30px;margin:0 0 8px;font-weight:700}h2{font-size:22px;margin:32px 0 12px;font-weight:600;padding-bottom:6px;border-bottom:2px solid var(--accent-light)}
+h3{font-size:17px;margin:24px 0 8px;font-weight:600}h4{font-size:15px;margin:16px 0 6px;color:var(--accent);font-weight:600}
+p{margin:8px 0 12px}ul,ol{padding-left:22px}li{margin:4px 0}a{color:var(--accent)}a:hover{text-decoration:underline}
+code{font-family:"SF Mono",Monaco,Consolas,monospace;background:var(--code-bg);padding:1px 5px;border-radius:3px;font-size:13px}
+pre{background:#1a2332;color:#e8eef5;padding:14px 18px;border-radius:6px;overflow-x:auto;font-size:12.5px;border:1px solid #2a3548;line-height:1.5}
+pre code{background:none;padding:0;color:inherit}
+.subtitle{color:var(--text-muted);font-size:16px;margin:0 0 24px}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:14px;background:var(--surface);border-radius:6px;overflow:hidden;box-shadow:var(--shadow)}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:var(--accent-light);font-weight:600;font-size:13px}
+tr:last-child td{border-bottom:none}tr:hover{background:#f8fafc}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;margin:0 3px 2px 0;letter-spacing:.3px;text-transform:uppercase}
+.badge.feit{background:#d1fae5;color:#065f46}.badge.mvp{background:#c7f0d3;color:#14532d}
+.badge.later{background:#ddd6fe;color:#5b21b6}.badge.hypothese{background:#e0e7ff;color:#3730a3}
+.badge.aanname{background:#fef3c7;color:#92400e}.badge.enterprise{background:#fce7f3;color:#831843}
+.callout{border-left:4px solid var(--accent);background:var(--accent-light);padding:12px 16px;margin:14px 0;border-radius:0 4px 4px 0}
+.callout.warn{border-color:#d97706;background:#fef3c7}
+.section-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px 22px;margin:16px 0;box-shadow:var(--shadow)}
+.scope-in{background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+.scope-out{background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size:13px;color:var(--text-muted);text-align:center}
+.ascii{background:#1a2332;color:#e8eef5;padding:14px 18px;border-radius:6px;overflow-x:auto;font-family:"SF Mono",Monaco,Consolas,monospace;font-size:12px;white-space:pre;line-height:1.4;border:1px solid #2a3548}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+<a href="index.html" class="brand">Loonmotor BE</a>
+<nav class="topnav">
+<a href="index.html">Overzicht</a><a href="marktonderzoek.html">Markt</a>
+<a href="concurrentiematrix.html">Concurrenten</a><a href="werking-loonmotor.html">Werking</a>
+<a href="wetgevend-kader.html">Wetgeving</a><a href="requirements.html">Requirements</a>
+<a href="datamodel.html">Datamodel</a><a href="technische-architectuur.html" class="active">Architectuur</a>
+<a href="juridische-checklist.html">Juridisch</a><a href="mvp-roadmap.html">Roadmap</a>
+<a href="risicoregister.html">Risico's</a><a href="jaakie-specificatie.html">Jaakie</a>
+<a href="testcorpus.html">Testcorpus</a><a href="referentie-tools.html">Referenties</a>
+<a href="bronnen.html">Bronnen</a>
+</nav></div></header>
+
+<main>
+<h1>Technische architectuur</h1>
+<p class="subtitle">Modular monolith op Kotlin/Spring Boot 3, met decision tables, selectief event sourcing op de PayrollRun, en CQRS voor aangifte/loonbrief/boekhouding.</p>
+
+<div class="callout warn">
+<strong>Scope:</strong> deze architectuur beschrijft de <strong>volledige loonmotor</strong> (backend + database + aangiften). De <strong>Jaakie</strong> POC is een browser-only TypeScript/React/Vite SPA zonder backend — zie <a href="jaakie-specificatie.html">Jaakie-specificatie</a> voor de actuele POC-architectuur.
+</div>
+
+<h2>1. Architectuurprincipes</h2>
+<ol>
+<li><strong>Modular monolith</strong> over microservices voor fase 1–4: één deployable, duidelijke modulegrenzen, geen netwerk-overhead op de berekening. Splitsen pas bij &gt; 50 dev's of duidelijke schaalgrens. <span class="badge hypothese">Hypothese</span></li>
+<li><strong>Decision tables als data</strong> — BV-schalen, RSZ-tarieven, werkbonus-grenzen, PC-barema's, beslagschijven leven in PostgreSQL JSONB met geldigheidsperiode. Geen Drools-runtime. <span class="badge mvp">MVP</span></li>
+<li><strong>Selectief event sourcing</strong> — alleen op de aggregate <code>PayrollRun</code> (input-events + result-event). Audit-quality zonder de hele applicatie te belasten.</li>
+<li><strong>CQRS</strong> tussen berekening (write) en aangifte/loonbrief/boekhouding (read-models, eventual consistency).</li>
+<li><strong>Pure functions</strong> in de berekenkern — geen I/O, deterministisch, eenvoudig te testen tegen golden master.</li>
+<li><strong>OpenAPI 3.1 first</strong> — contract-driven, gegenereerde clients, versionering via URL (<code>/v1/</code>) + media-type.</li>
+<li><strong>GDPR by design</strong> — RRN/INSZ encryptie kolom-niveau, pseudonimisatie na uitdienst-termijn, RLS multi-tenancy.</li>
+<li><strong>Idempotent &amp; deterministisch</strong> — zelfde input + zelfde regelversie → bit-identieke output. Validator in CI.</li>
+</ol>
+
+<h2>2. Bounded contexts (modulegrenzen)</h2>
+<div class="ascii">
+┌─────────────────────────────────────────────────────────────────────┐
+│                       Loonmotor (single deploy)                     │
+├──────────────┬──────────────┬──────────────┬───────────────────────-┤
+│  Identity    │  Master      │  Run-context │   Calculation         │
+│  &amp; Tenancy   │  Data        │  (Periode,   │   (pure functions     │
+│              │  (Werkgever, │   Prestatie, │    BV/RSZ/Beslag)     │
+│              │   Werknemer, │   Afwezig-   │                       │
+│              │   Contract)  │   heid)      │                       │
+├──────────────┼──────────────┼──────────────┼───────────────────────-┤
+│  Rule        │  Reporting   │  Filing      │   Accounting          │
+│  Engine      │  (Loonbrief, │  (Dimona,    │   (Journaal 62x/45x)  │
+│  (decision   │   simulator) │   DmfA,      │                       │
+│   tables)    │              │   Belcotax,  │                       │
+│              │              │   Finprof)   │                       │
+├──────────────┴──────────────┴──────────────┴───────────────────────-┤
+│           Cross-cutting: Audit · Observability · Security           │
+└─────────────────────────────────────────────────────────────────────┘
+</div>
+<p>Elke module heeft een eigen public package en API; cross-module communicatie loopt via interfaces (geen directe DB-toegang). <a href="https://spring.io/projects/spring-modulith" target="_blank" rel="noopener">Spring Modulith</a> dwingt deze grenzen af in tests.</p>
+
+<h2>3. Technologie-stack</h2>
+<table>
+<thead><tr><th>Laag</th><th>Keuze</th><th>Motivatie</th></tr></thead>
+<tbody>
+<tr><td>Runtime</td><td>JDK 21 LTS</td><td>Records, pattern matching, virtual threads voor I/O fan-out.</td></tr>
+<tr><td>Taal</td><td>Kotlin 2.x</td><td>Null-safety, data classes, sealed hierarchies voor decision-table modellering.</td></tr>
+<tr><td>Framework</td><td>Spring Boot 3 + Spring Modulith</td><td>Volwassen ecosysteem, modulegrens-controles in tests.</td></tr>
+<tr><td>Persistentie</td><td>jOOQ óf Spring Data JDBC</td><td>Type-safe SQL; vermijdt JPA-magie op bitemporele tabellen.</td></tr>
+<tr><td>Database</td><td>PostgreSQL 16+</td><td><code>daterange</code>, <code>tstzrange</code>, <code>gist</code> EXCLUDE constraints, JSONB, RLS, pgcrypto.</td></tr>
+<tr><td>Migratie</td><td>Liquibase of Flyway</td><td>Gecontroleerde rollback, versie-gebonden DDL.</td></tr>
+<tr><td>API</td><td>OpenAPI 3.1 + springdoc</td><td>Contract-first, gegenereerde TS/Python clients.</td></tr>
+<tr><td>PDF</td><td>iText 8 of Apache PDFBox</td><td>PDF/A-3 conformiteit voor loonbrief en fiches.</td></tr>
+<tr><td>XML</td><td>JAXB / Jakarta XML Binding</td><td>DmfA, Dimona, Belcotax XML-schema's gegenereerd uit XSD.</td></tr>
+<tr><td>Auth</td><td>Keycloak (OIDC, PKCE)</td><td>RBAC, MFA, tenant-scoping, audit-events.</td></tr>
+<tr><td>Frontend</td><td>Next.js + React + shadcn/ui</td><td>SSR voor loonbrief-pagina's, TanStack Query voor data fetching.</td></tr>
+<tr><td>Observability</td><td>OpenTelemetry → Grafana / Loki / Tempo</td><td>Distributed tracing, structured logs, metrics.</td></tr>
+<tr><td>Cloud</td><td>Azure Belgium Central <span class="badge aanname">Aanname</span></td><td>Data-residency België; alternatief OVH Roubaix / Combell BE.</td></tr>
+<tr><td>Container</td><td>OCI image + Kubernetes (managed)</td><td>HPA, pod-disruption-budget, rolling deploy.</td></tr>
+<tr><td>Secrets</td><td>Azure Key Vault / HashiCorp Vault</td><td>KMS-managed encryptie-sleutels voor RRN/IBAN.</td></tr>
+</tbody>
+</table>
+
+<h2>4. Berekenings-pijplijn</h2>
+<pre><code>// Pseudocode — pure function per PayrollRun
+fun calculate(input: PayrollInput, rules: RuleSet): PayrollResult {
+  val canonical   = canonicalize(input)              // stable JSON
+  val inputHash   = sha256(canonical)
+  val brutoLines  = composeBruto(input, rules)       // basis + premies + VAA
+  val rszBase     = if (input.statuut == ARBEIDER) bruto * 1.08 else bruto
+  val rszWn       = rules.rsz.calculate(rszBase, input.context)
+  val werkbonus   = rules.werkbonus.calculate(bruto, statuut, voltijds)
+  val belastbaar  = bruto - rszWn + werkbonus
+  val bv          = rules.bv.lookup(scale, belastbaar, gezinsCoef, kinderen)
+  val bbsz        = rules.bbsz.calculate(belastbaar)
+  val beslag      = rules.beslag.calculate(netto, kinderenTL, rules.schijven2026)
+  val netto       = belastbaar - bv - bbsz - inhoudingen - beslag + nettoVoordelen
+  val wgKost      = bruto + rsz_wg + provisieVakantie + provisieEindejaar
+  return PayrollResult(
+    inputHash, rules.version, bruto, rszWn, belastbaar, bv, bbsz, beslag,
+    netto, rsz_wg, wgKost,
+    explain = buildExplainTrace()                    // per regel: id, versie, input, output
+  )
+}</code></pre>
+<p>De kern is een <strong>pure function</strong> zonder I/O. Database-writes, event-publicatie en PDF-generatie zitten buiten de berekening — testbaar in milliseconden, deterministisch tegen golden master.</p>
+
+<h2>5. Rule engine — hybride aanpak</h2>
+<div class="section-box">
+<h4>Niveau 1 — Decision tables in JSONB</h4>
+<p>Eenvoudige lookups (BV-schalen, beslagschijven, werkbonus-grenzen, RSZ-tarieven) staan in <code>regelversie.payload</code>:</p>
+<pre><code>{
+  "version": "2026-Q1",
+  "publicatie": "2025-12-29",
+  "bron": "KB 11/12/2025 BS 29/12/2025",
+  "tabellen": {
+    "bv_schaal_2_voltijds": [
+      {"from": 0,     "to": 1500,  "tarief": 0.0,    "vermindering": 0},
+      {"from": 1500,  "to": 2200,  "tarief": 0.2675, "vermindering": 401.25},
+      {"from": 2200,  "to": 3500,  "tarief": 0.4280, "vermindering": 754.35},
+      {"from": 3500,  "to": 6000,  "tarief": 0.4815, "vermindering": 941.60},
+      {"from": 6000,  "to": null,  "tarief": 0.5350, "vermindering": 1262.90}
+    ],
+    "kind_ten_laste_vermindering": [
+      {"kinderen": 1, "bedrag": 50},
+      {"kinderen": 2, "bedrag": 134},
+      {"kinderen": 3, "bedrag": 354}
+    ]
+  }
+}</code></pre>
+</div>
+<div class="section-box">
+<h4>Niveau 2 — Strategy-pattern in Kotlin</h4>
+<p>Sectorspecifieke premies, exotische voordelen en complexe edge cases (mobiliteitsbudget pijlers, retroactieve indexatie) als <code>sealed interface</code> implementaties. Eén regel = één klasse = één test.</p>
+<pre><code>sealed interface PremieRegel { fun apply(c: Context): LoonComponent? }
+
+class JaarpremiePc200 : PremieRegel {
+  override fun apply(c: Context): LoonComponent? {
+    if (c.pc != "200" || c.maand != Month.JUNE) return null
+    return LoonComponent("JAARPREMIE_PC200",
+      bedrag = BigDecimal("330.84"),
+      rszPlichtig = true, bvPlichtig = true, exceptioneel = true)
+  }
+}</code></pre>
+</div>
+<p class="callout warn"><strong>Waarom geen Drools?</strong> Drools voegt complexiteit toe (DRL-syntax, runtime-engine, debugbaarheid) zonder echte winst zolang regels deterministisch en lineair zijn. Code-driven regels zijn beter testbaar en debugbaar — Drools eventueel terug op tafel bij &gt; 500 actieve regels. <span class="badge hypothese">Hypothese</span></p>
+
+<h2>6. Event sourcing &amp; CQRS — selectief</h2>
+<p>Event sourcing alleen op de aggregate <code>PayrollRun</code> — niet over de hele applicatie. Events:</p>
+<ul>
+<li><code>PayrollRunRequested</code> — periode + werkgever + werknemers + rule_set_version</li>
+<li><code>PayrollLineComputed</code> — per werknemer (idempotent)</li>
+<li><code>PayrollRunCompleted</code> — totaalcheck (sum bruto, sum RSZ, sum BV)</li>
+<li><code>PayrollRunSuperseded</code> — bij correctie / herberekening</li>
+</ul>
+<p>Read-models worden async opgebouwd via outbox-pattern:</p>
+<table>
+<thead><tr><th>Read-model</th><th>Bron</th><th>Consistency</th></tr></thead>
+<tbody>
+<tr><td>Loonbrief PDF</td><td><code>PayrollLineComputed</code></td><td>Eventual (seconden)</td></tr>
+<tr><td>DmfA-input</td><td><code>PayrollRunCompleted</code> + aggregatie kwartaal</td><td>Eventual (uren)</td></tr>
+<tr><td>Belcotax 281.10</td><td>Jaar-aggregatie alle runs</td><td>Eventual (dagen)</td></tr>
+<tr><td>SEPA pain.001</td><td><code>PayrollRunCompleted</code> + goedkeuring</td><td>Eventual (minuten, na approval)</td></tr>
+<tr><td>Boekhoudjournaal</td><td><code>PayrollRunCompleted</code></td><td>Eventual (minuten)</td></tr>
+</tbody>
+</table>
+
+<h2>7. API-laag — OpenAPI 3.1</h2>
+<table>
+<thead><tr><th>Endpoint</th><th>Doel</th></tr></thead>
+<tbody>
+<tr><td><code>POST /v1/simulator/bruto-netto</code></td><td>Anonieme what-if berekening (geen persist).</td></tr>
+<tr><td><code>POST /v1/payroll-runs</code></td><td>Productie-run starten (idempotent via <code>Idempotency-Key</code> header).</td></tr>
+<tr><td><code>GET  /v1/payroll-runs/{id}</code></td><td>Status + result.</td></tr>
+<tr><td><code>GET  /v1/payroll-runs/{id}/explain</code></td><td>Audit-trail per regel.</td></tr>
+<tr><td><code>POST /v1/payroll-runs/{id}/approve</code></td><td>Vier-ogen-goedkeuring → triggert betaalbestand + aangifte.</td></tr>
+<tr><td><code>GET  /v1/loonbrieven/{id}.pdf</code></td><td>PDF/A-3 loonbrief.</td></tr>
+<tr><td><code>POST /v1/aangiften/dimona</code></td><td>In/uit dienst aangifte.</td></tr>
+<tr><td><code>GET  /v1/aangiften/dmfa/{kwartaal}</code></td><td>DmfA-XML (kwartaal).</td></tr>
+<tr><td><code>POST /v1/sepa/pain001</code></td><td>Betaalbestand genereren.</td></tr>
+</tbody>
+</table>
+<p>Authenticatie: OIDC + PKCE; service-to-service: mTLS + machine token. Rate-limit per tenant via gateway.</p>
+
+<h2>8. Performance &amp; schaalbaarheid</h2>
+<table>
+<thead><tr><th>Doelstelling</th><th>Strategie</th></tr></thead>
+<tbody>
+<tr><td>P95 &lt; 200 ms per werknemer-maand</td><td>Pure functies; rule-cache per <code>rule_set_version</code>; geen N+1 op contracten.</td></tr>
+<tr><td>Batch 1.000 werknemers &lt; 10 min</td><td>Parallel virtual threads, partitioneren per werkgever, async PDF-generatie.</td></tr>
+<tr><td>10.000 werknemers (fase 4)</td><td>Horizontaal: meerdere workers + advisory locks per <code>loonperiode_id</code>.</td></tr>
+<tr><td>Cold-start na deploy</td><td>Spring AOT compilation (optioneel GraalVM native voor batch-jobs).</td></tr>
+<tr><td>Hot data vs. archief</td><td>Loonbrieven jaar-partitie; cold-tier blob storage na 1 jaar.</td></tr>
+</tbody>
+</table>
+
+<h2>9. Security &amp; compliance</h2>
+<ul>
+<li><strong>Encryptie at-rest</strong> — TDE op disk + kolom-niveau pgcrypto voor RRN/IBAN met KMS-key (Azure Key Vault / HashiCorp Vault). Key-rotation jaarlijks. <span class="badge mvp">MVP</span></li>
+<li><strong>Encryptie in-transit</strong> — TLS 1.3 publiek; mTLS service-to-service met certificate pinning.</li>
+<li><strong>RBAC + tenant-scoping</strong> — JWT met tenant-claim → <code>SET LOCAL app.current_tenant</code> → RLS filtert elke query.</li>
+<li><strong>MFA verplicht</strong> — admin, HR-rol, betalingen approver. WebAuthn als sterke factor.</li>
+<li><strong>Audit-log</strong> — append-only met SHA-256 ketenhash; <code>REVOKE UPDATE, DELETE</code> + trigger-enforcement.</li>
+<li><strong>Pentest</strong> — jaarlijks fase 1; per release fase 4. Bug bounty fase 5. <span class="badge later">Later</span></li>
+<li><strong>OWASP ASVS L2</strong> als gate voor MVP, <strong>L3</strong> voor productie fase 4.</li>
+<li><strong>Backup</strong> — PITR PostgreSQL (5 min RPO); off-site copy versleuteld, getest restore-procedure (kwartaal).</li>
+<li><strong>DR</strong> — actief/passief regio (Belgium Central → West-Europe), RTO 4 u. <span class="badge mvp">MVP</span></li>
+</ul>
+
+<h2>10. Testing strategie</h2>
+<table>
+<thead><tr><th>Test-laag</th><th>Tools</th><th>Doel</th></tr></thead>
+<tbody>
+<tr><td>Unit (pure functions)</td><td>JUnit 5, Kotest, Striker mutation</td><td>BV-formules, beslagschijven, werkbonus-luiken.</td></tr>
+<tr><td>Property-based</td><td>jqwik / Kotest property</td><td>"Bruto stijgt → netto stijgt monotoon" invarianten.</td></tr>
+<tr><td>Golden master</td><td>100–500 scenario's JSON</td><td>CI-blokkering bij wijziging — kerngewicht. <span class="badge mvp">MVP</span></td></tr>
+<tr><td>Integration</td><td>Testcontainers (PostgreSQL, Keycloak)</td><td>Migraties, RLS, idempotency-keys.</td></tr>
+<tr><td>Contract</td><td>Spring Cloud Contract / Pact</td><td>API-versies, breaking-change detectie.</td></tr>
+<tr><td>End-to-end</td><td>Playwright</td><td>Simulator + run-approval flow.</td></tr>
+<tr><td>Performance</td><td>JMH micro + Gatling batch</td><td>P95 &lt; 200 ms target.</td></tr>
+<tr><td>XSD-validatie</td><td>JAXB validator</td><td>DmfA / Dimona / Belcotax conform schema.</td></tr>
+<tr><td>Parallel-run</td><td>Schaduw vs sociaal secretariaat</td><td>Vergelijk eigen output met ESS-output ≥3 maanden. <span class="badge mvp">MVP</span></td></tr>
+</tbody>
+</table>
+
+<h2>11. Deployment &amp; operations</h2>
+<ul>
+<li><strong>CI/CD</strong> — GitHub Actions / GitLab CI; trunk-based; PR-pipeline blokkeert merge bij golden-master regressie.</li>
+<li><strong>Environments</strong> — local → ephemeral PR-preview → staging (geanonimiseerde data) → prod. Feature flags per tenant. <span class="badge later">Later</span></li>
+<li><strong>Migraties</strong> — Liquibase expand-and-contract; nooit rename-in-place; alle DDL is rollback-baar.</li>
+<li><strong>Observability</strong> — OpenTelemetry tracing met correlatie-id (header <code>X-Request-Id</code>) en tenant-id in elke span. Metrics: P50/P95/P99 per pipeline-stap, error-rate per aangifte-type.</li>
+<li><strong>Alerts</strong> — SLA-deadlines (Dimona 1e dag in/uit, DmfA laatste maand kwartaal+1, BV-doorstort 15e maand+1). PagerDuty / OpsGenie.</li>
+<li><strong>On-call</strong> — runbook per aangifte-type met rollback-procedure en RSZ/FOD contactlijst.</li>
+</ul>
+
+<h2>12. Build vs Buy &mdash; componentbeslissing</h2>
+<table>
+<thead><tr><th>Component</th><th>Build / Buy</th><th>Motivatie</th></tr></thead>
+<tbody>
+<tr><td>Berekenkern</td><td>Build</td><td>De kennis is het product. Geen plug-in oplossing voor BE-payroll.</td></tr>
+<tr><td>BV/RSZ parameter-feed</td><td>Build + abonnement op bronnen</td><td>Geen commerciële feed beschikbaar; eigen monitoring BS-publicaties.</td></tr>
+<tr><td>Dimona/DmfA/Belcotax XML</td><td>Build (XSD → JAXB)</td><td>Officiële schema's zijn publiek; commerciële SDK's bestaan niet voor alles.</td></tr>
+<tr><td>SEPA pain.001</td><td>Build (ISO 20022 lib)</td><td>Standaard library volstaat.</td></tr>
+<tr><td>PDF/A-3 loonbrief</td><td>Buy (iText commercial óf PDFBox)</td><td>iText AGPL/commercial; PDFBox Apache 2.0 → kostenoverweging.</td></tr>
+<tr><td>Authenticatie</td><td>Buy (Keycloak / Auth0)</td><td>Standaard OIDC; geen eigen IdP bouwen.</td></tr>
+<tr><td>Tijdsregistratie-input</td><td>Integrate (Protime, BCC, Officient API's)</td><td>Niet ons probleem; standaardiseer CSV + REST.</td></tr>
+<tr><td>HR-master data</td><td>Integrate (BambooHR, Officient, eigen UI)</td><td>Idem.</td></tr>
+<tr><td>Boekhouding-export</td><td>Build (CSV + UBL-invoice variant)</td><td>Mappen naar 62x/45x rekeningen; partner-specifiek.</td></tr>
+</tbody>
+</table>
+
+<h2>13. Architectuur-evolutie per fase</h2>
+<table>
+<thead><tr><th>Fase</th><th>Architectuur</th><th>Schaal</th></tr></thead>
+<tbody>
+<tr><td>1 — PoC</td><td>Monolith, single tenant, geen UI</td><td>10 wn</td></tr>
+<tr><td>2 — Simulator</td><td>Monolith, multi-tenant, web-UI, geen aangiften</td><td>100 wn</td></tr>
+<tr><td>3 — Aangiften</td><td>Modular monolith, async outbox naar XML-aangiften</td><td>500 wn</td></tr>
+<tr><td>4 — Productie</td><td>Modular monolith met HA, DR-regio, ASVS L3</td><td>5.000 wn</td></tr>
+<tr><td>5 — ESS-grade</td><td>Eventuele extractie van filing/PDF naar aparte services; SLA 99,9%</td><td>50.000+ wn <span class="badge enterprise">Enterprise</span></td></tr>
+</tbody>
+</table>
+
+<div class="callout">
+Voor het bouwpad in tijd en mensen: <a href="mvp-roadmap.html">MVP-roadmap</a>. Voor de juridische randvoorwaarden: <a href="juridische-checklist.html">juridische checklist</a>.
+</div>
+</main>
+
+<footer>Loonmotor BE — Onderzoeksdossier · <a href="index.html">Terug naar overzicht</a></footer>
+</body>
+</html>

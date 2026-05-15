@@ -72,7 +72,6 @@ TOESLAG_KINDEREN = {
     # > 4: + €7.240 per extra kind
 }
 TOESLAG_KIND_EXTRA = 7240.00
-TOESLAG_KIND_JONGER_DAN_3 = 760.00
 
 # BV-vermindering voor kinderen ten laste — vereenvoudigde maandtabel
 # (Bijlage III KB 11/12/2025 sectie "verminderingen voor gezinslasten")
@@ -152,8 +151,7 @@ def belasting_progressief(belastbaar: float, schijven=PB_SCHIJVEN_AJ2027) -> flo
     return round(belasting, 2)
 
 
-def belastingvrije_som_jaar(kinderen: int, kinderen_jonger_3: int = 0,
-                             alleenstaand_met_kinderen: bool = False) -> float:
+def belastingvrije_som_jaar(kinderen: int, alleenstaand_met_kinderen: bool = False) -> float:
     """Totale belastingvrije som incl. toeslagen kinderen."""
     som = BELASTINGVRIJE_SOM_AJ2027
     if kinderen == 0:
@@ -162,7 +160,6 @@ def belastingvrije_som_jaar(kinderen: int, kinderen_jonger_3: int = 0,
         som += TOESLAG_KINDEREN[kinderen]
     else:
         som += TOESLAG_KINDEREN[4] + (kinderen - 4) * TOESLAG_KIND_EXTRA
-    som += kinderen_jonger_3 * TOESLAG_KIND_JONGER_DAN_3
     if alleenstaand_met_kinderen:
         som += 2030.00  # huidig basisbedrag AJ 2027
     return som
@@ -190,7 +187,7 @@ class LoonInput:
     bruto_maand: float
     burgerlijke_staat: str = "alleenstaand"  # alleenstaand | gehuwd_alleen | gehuwd_dubbel
     kinderen_ten_laste: int = 0
-    kinderen_jonger_dan_3: int = 0
+    kinderen_jonger_dan_3: int = 0  # documentair/pending; niet gebruikt in actieve calculatorlogica
     alleenstaand_met_kinderen: bool = False
     voltijds: bool = True
     vaa_bedrijfswagen: float = 0.0
@@ -247,7 +244,6 @@ def bereken_netto(li: LoonInput) -> LoonResultaat:
 
     vrije_som = belastingvrije_som_jaar(
         li.kinderen_ten_laste,
-        li.kinderen_jonger_dan_3,
         li.alleenstaand_met_kinderen,
     )
     vermind_jaar = belastingvermindering_op_vrije_som(vrije_som)

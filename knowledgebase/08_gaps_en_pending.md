@@ -38,7 +38,7 @@
 | Belastingvrije som AJ 2027 | €11.180 | ✅ Tier 2 Practicali + Wet Diverse Bepalingen 18/12/2025 | BS 30/12/2025 | OK |
 | Forfaitaire beroepskosten max | €6.070 (30%) | ✅ Tier 2 Practicali | practicali.be | OK |
 | Toeslag belastingvrije som per kind | €2.030 / €5.230 / €11.720 / €18.970 | ⚠️ Tier 2 | Practicali | **Verificatie via FOD Fin nuttig** — exacte indexatie 2026 |
-| Toeslag kind <3 jaar | €760 | ⚠️ Tier 2 | Practicali | idem |
+| Toeslag kind <3 jaar | niet actief in calculatorlogica | ⚠️ Pending officiële BV-validatie | FOD Fin / Bijlage III te herbevestigen | Bewust verwijderd uit runtime op 2026-05-15; later herintroduceren met officiële BV-validatie en tests |
 | Extra alleenstaande ouder | €2.030 | ⚠️ Tier 2 | Practicali | idem |
 | BV-vermindering kinderen — maandtabel | €56 / €154 / €414 / €715 / ... | ⚠️ Tier 2-snapshot | Bijlage III KB | **Verificatie tegen exacte tabel KB 11/12/2025** — huidige waarden zijn benadering |
 

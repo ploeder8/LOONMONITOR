@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="nl-BE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Testcorpus — Loonmotor BE</title>
+<style>
+:root{--bg:#fafbfc;--surface:#fff;--border:#e4e7eb;--text:#1a2332;--text-muted:#5a6779;--accent:#0b5394;--accent-light:#e8f0f9;--code-bg:#f5f7fa;--shadow:0 1px 3px rgba(0,0,0,.06)}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.6;color:var(--text);background:var(--bg)}
+header.topbar{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.topbar-inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-weight:700;font-size:17px;color:var(--accent);text-decoration:none}
+nav.topnav{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+nav.topnav a{font-size:13px;color:var(--text-muted);text-decoration:none;padding:6px 10px;border-radius:4px}
+nav.topnav a:hover{background:var(--accent-light);color:var(--accent)}
+nav.topnav a.active{background:var(--accent);color:#fff}
+main{max-width:1200px;margin:0 auto;padding:32px 24px 64px}
+h1{font-size:30px;margin:0 0 8px;font-weight:700}h2{font-size:22px;margin:32px 0 12px;font-weight:600;padding-bottom:6px;border-bottom:2px solid var(--accent-light)}
+h3{font-size:17px;margin:24px 0 8px;font-weight:600}h4{font-size:15px;margin:16px 0 6px;color:var(--accent);font-weight:600}
+p{margin:8px 0 12px}ul,ol{padding-left:22px}li{margin:4px 0}a{color:var(--accent)}a:hover{text-decoration:underline}
+code{font-family:"SF Mono",Monaco,Consolas,monospace;background:var(--code-bg);padding:1px 5px;border-radius:3px;font-size:13px}
+pre{background:var(--code-bg);padding:14px 18px;border-radius:6px;overflow-x:auto;font-size:13px;border:1px solid var(--border)}
+.subtitle{color:var(--text-muted);font-size:16px;margin:0 0 24px}
+.meta{font-size:13px;color:var(--text-muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;margin-bottom:24px}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:14px;background:var(--surface);border-radius:6px;overflow:hidden;box-shadow:var(--shadow)}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:var(--accent-light);font-weight:600;font-size:13px}
+tr:last-child td{border-bottom:none}tr:hover{background:#f8fafc}
+table.compact th,table.compact td{padding:6px 10px;font-size:13px}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;margin:0 3px 2px 0;letter-spacing:.3px;text-transform:uppercase}
+.badge.feit{background:#d1fae5;color:#065f46}.badge.aanname{background:#fef3c7;color:#92400e}
+.badge.hypothese{background:#e0e7ff;color:#3730a3}.badge.onzekerheid{background:#fed7aa;color:#9a3412}
+.badge.openvraag{background:#fde68a;color:#78350f}.badge.mvp{background:#c7f0d3;color:#14532d}
+.badge.later{background:#ddd6fe;color:#5b21b6}.badge.enterprise{background:#fce7f3;color:#831843}
+.callout{border-left:4px solid var(--accent);background:var(--accent-light);padding:12px 16px;margin:14px 0;border-radius:0 4px 4px 0}
+.callout.warn{border-color:#d97706;background:#fef3c7}
+.callout.ok{border-color:#059669;background:#d1fae5}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size:13px;color:var(--text-muted);text-align:center}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+<a href="index.html" class="brand">Loonmotor BE</a>
+<nav class="topnav">
+<a href="index.html">Overzicht</a>
+<a href="marktonderzoek.html">Markt</a>
+<a href="concurrentiematrix.html">Concurrenten</a>
+<a href="werking-loonmotor.html">Werking</a>
+<a href="wetgevend-kader.html">Wetgeving</a>
+<a href="requirements.html">Requirements</a>
+<a href="datamodel.html">Datamodel</a>
+<a href="technische-architectuur.html">Architectuur</a>
+<a href="juridische-checklist.html">Juridisch</a>
+<a href="mvp-roadmap.html">Roadmap</a>
+<a href="risicoregister.html">Risico's</a>
+<a href="jaakie-specificatie.html">Jaakie</a>
+<a href="testcorpus.html" class="active">Testcorpus</a>
+<a href="referentie-tools.html">Referenties</a>
+<a href="bronnen.html">Bronnen</a>
+</nav></div></header>
+
+<main>
+<h1>Testcorpus</h1>
+<p class="subtitle">Drie lagen van golden tests voor de PC 200 netto-calculator: geïmplementeerde cases, pending FOD-validatie, en triangulatie-ankers.</p>
+
+<div class="meta">
+<strong>Versie:</strong> 2026-05-11 · <strong>Peildatum formules:</strong> 9 mei 2026 · <strong>Testbestand:</strong> <code>src/lib/__tests__/golden.test.ts</code> · <strong>Python referentie:</strong> <code>tools/calc_brutonetto_2026.py</code>
+</div>
+
+<h2>1. Drie testlagen</h2>
+<table>
+<thead><tr><th>Laag</th><th>Naam</th><th>Aantal</th><th>Bestand</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td><strong>1</strong></td><td>TC-01..TC-25 — bestaande golden tests</td><td>24+</td><td><code>src/lib/__tests__/golden.test.ts</code></td><td><span class="badge feit">✅ Allemaal groen</span></td></tr>
+<tr><td><strong>2</strong></td><td>NTC-01..NTC-15 — netto-spec testcases</td><td>15</td><td><code>src/lib/__tests__/golden.test.ts</code></td><td><span class="badge onzekerheid">⚠️ Pending FOD Tax-Calc</span></td></tr>
+<tr><td><strong>3</strong></td><td>BNTC-001..BNTC-030 — bruto-netto profielen</td><td>30</td><td><code>tools/TESTCASES.json</code></td><td><span class="badge onzekerheid">⚠️ Pending FOD Tax-Calc</span></td></tr>
+</tbody>
+</table>
+<p>De drie lagen vullen elkaar aan: laag 1 valideert barema/RSZ/sectorpremie logica, laag 2 valideert netto-orchestratie inclusief bijzondere BV, laag 3 valideert de berekening over een brede salarisrange voor FOD-cross-check.</p>
+
+<h2>2. Laag 1 — TC-01..TC-25 (geïmplementeerd)</h2>
+<p>Deze cases zijn gekoppeld aan specifieke datapunt-id's en exacte EUR-bedragen. Precisie matters — <code>expect(...).toBe(...)</code> (geen tolerantie). Dekking:</p>
+<ul>
+<li><strong>TC-01..TC-08:</strong> Schaal I/II baremas + RSZ + OCR-correcties + bouw-vlag</li>
+<li><strong>TC-09..TC-10:</strong> Studentenbaremas + faalpaden</li>
+<li><strong>TC-11..TC-16:</strong> Premies + ecocheques + woon-werk</li>
+<li><strong>TC-18..TC-20:</strong> Niet-gevonden datapunten + <code>mogelijk_verouderd</code> + audit-trail</li>
+<li><strong>TC-21..TC-25:</strong> Netto-module (werkbonus, BBSZ, BV, netto end-to-end)</li>
+</ul>
+
+<h2>3. Laag 2 — NTC-01..NTC-15 (pending FOD-validatie)</h2>
+<p>Tolerantie: <code>expect(...).toBeCloseTo(..., 0)</code> (precisie ~€0,50). Markeer in code met commentaar <code>// PENDING: validate against FOD Fin Tax-Calc</code>.</p>
+<table class="compact">
+<thead><tr><th>#</th><th>Profiel</th><th>Bruto</th><th>Verwacht netto</th></tr></thead>
+<tbody>
+<tr><td>NTC-01</td><td>Schaal I Cat A 5j, alleenstaand, 0 kind, geen VAA</td><td>€2.276,51</td><td>≈ €1.890</td></tr>
+<tr><td>NTC-02</td><td>Schaal I Cat C 10j, alleenstaand, 1 kind</td><td>€2.800,00</td><td>≈ €2.220</td></tr>
+<tr><td>NTC-03</td><td>Schaal II Cat B 8j, eenverdiener, 2 kind</td><td>€3.000,00</td><td>≈ €2.460</td></tr>
+<tr><td>NTC-04</td><td>GGMMI €2.189,81, alleenstaand (hoge werkbonus)</td><td>€2.189,81</td><td>≈ €1.870</td></tr>
+<tr><td>NTC-05</td><td>Schaal I Cat B 5j, alleenstaand, +VAA min €1.690</td><td>€2.500,00</td><td>≈ €1.880</td></tr>
+<tr><td>NTC-06</td><td>Schaal I Cat D 15j, eenverdiener, 3 kind</td><td>€3.800,00</td><td>≈ €3.060</td></tr>
+<tr><td>NTC-07</td><td>Schaal II Cat A 3j, eenverdiener, 0 kind</td><td>€2.450,00</td><td>≈ €2.020</td></tr>
+<tr><td>NTC-08</td><td>Niet-inwoner, Schaal III, Cat C, 10j</td><td>€3.200,00</td><td>≈ €2.480</td></tr>
+<tr><td>NTC-09</td><td>Schaal I Cat A 5j, alleenstaande ouder met 1 kind</td><td>€2.500,00</td><td>≈ €2.080 (+€52 extra)</td></tr>
+<tr><td>NTC-10</td><td>Schaal I Cat C 12j, alleenstaand, +groepsverz €100/m</td><td>€3.100,00</td><td>≈ €2.510</td></tr>
+<tr><td>NTC-11</td><td>Werkbonus-edge: bruto €2.255,50 (Luik B grens)</td><td>€2.255,50</td><td>werkbonus = max A+B</td></tr>
+<tr><td>NTC-12</td><td>Werkbonus-edge: bruto €3.336,98 (Luik A wegval)</td><td>€3.336,98</td><td>werkbonus = €0</td></tr>
+<tr><td>NTC-13</td><td>Werkbonus-edge: bruto €2.880,32 (Luik A grens, B nul)</td><td>€2.880,32</td><td>A = €125,04, B = 0</td></tr>
+<tr><td>NTC-14</td><td>Eindejaarspremie 1 maandloon — bijzondere BV</td><td>€3.000 (premie)</td><td>≈ €2.310 (na ~23% BV)</td></tr>
+<tr><td>NTC-15</td><td>Dubbel vakantiegeld 92% maandloon — bijzondere BV</td><td>€2.760</td><td>≈ €2.110</td></tr>
+</tbody>
+</table>
+
+<div class="callout ok">
+<strong>Acceptatiecriteria laag 2:</strong>
+<ul>
+<li>Alle 15 NTC-cases groen in <code>bun test</code></li>
+<li>BV-uitkomsten binnen <strong>±€2</strong> van FOD Fin Tax-Calc voor minstens <strong>12/15</strong> cases</li>
+<li>Afwijking > €2: documenteren met root-cause in <code>08_gaps_en_pending.md</code></li>
+</ul>
+</div>
+
+<h2>4. Laag 3 — BNTC-001..BNTC-030 (bruto-netto profielen)</h2>
+<p>Het volledige 30-cases bruto-netto corpus, gegenereerd door <code>tools/calc_brutonetto_2026.py</code> en gesynchroniseerd met <code>TESTCASES.json</code>. <strong>Belangrijk:</strong> de <code>Netto/m</code>-kolom is een referentie-benadering — niet de officiële FOD Tax-Calc-output. Status blijft <code>pending_taxcalc</code> tot de XLSX-validatie is ingevoerd.</p>
+
+<table class="compact">
+<thead><tr><th>ID</th><th>Profiel</th><th>Bruto/m</th><th>RSZ-wn</th><th>Werkbonus</th><th>BV netto</th><th>BBSZ</th><th>Netto/m</th></tr></thead>
+<tbody>
+<tr><td>TC-001</td><td>GGMMI €2.189,81, alleenstaand, 0 kind</td><td>€2.189,81</td><td>€0,00</td><td>€293,66</td><td>€101,64</td><td>€10,31</td><td><strong>€2.077,86</strong></td></tr>
+<tr><td>TC-002</td><td>€2.300, alleenstaand — werkbonus volledig</td><td>€2.300,00</td><td>€18,96</td><td>€281,65</td><td>€144,45</td><td>€11,54</td><td><strong>€2.125,05</strong></td></tr>
+<tr><td>TC-003</td><td>€2.500, alleenstaand — A volledig, B in afbouw</td><td>€2.500,00</td><td>€99,08</td><td>€227,67</td><td>€220,76</td><td>€13,74</td><td><strong>€2.166,42</strong></td></tr>
+<tr><td>TC-004</td><td>€2.800, alleenstaand — A volledig, B nul</td><td>€2.800,00</td><td>€219,26</td><td>€146,70</td><td>€335,23</td><td>€17,04</td><td><strong>€2.228,47</strong></td></tr>
+<tr><td>TC-005</td><td>€3.000, alleenstaand — A in afbouw, B nul</td><td>€3.000,00</td><td>€299,83</td><td>€92,27</td><td>€405,24</td><td>€19,24</td><td><strong>€2.275,69</strong></td></tr>
+<tr><td>TC-006</td><td>€3.336,98 (cutoff luik A), werkbonus net 0</td><td>€3.336,98</td><td>€436,13</td><td>€0,01</td><td>€516,09</td><td>€22,94</td><td><strong>€2.361,82</strong></td></tr>
+<tr><td>TC-007</td><td>Modale bediende €3.500, alleenstaand, 0 kind</td><td>€3.500,00</td><td>€457,45</td><td>€0,00</td><td>€576,65</td><td>€24,74</td><td><strong>€2.441,16</strong></td></tr>
+<tr><td>TC-008</td><td>€4.000, alleenstaand</td><td>€4.000,00</td><td>€522,80</td><td>€0,00</td><td>€772,24</td><td>€36,24</td><td><strong>€2.668,72</strong></td></tr>
+<tr><td>TC-009</td><td>€4.500, alleenstaand</td><td>€4.500,00</td><td>€588,15</td><td>€0,00</td><td>€967,83</td><td>€44,01</td><td><strong>€2.900,01</strong></td></tr>
+<tr><td>TC-010</td><td>€5.000, alleenstaand</td><td>€5.000,00</td><td>€653,50</td><td>€0,00</td><td>€1.163,42</td><td>€49,51</td><td><strong>€3.133,57</strong></td></tr>
+<tr><td>TC-011</td><td>€5.500, alleenstaand</td><td>€5.500,00</td><td>€718,85</td><td>€0,00</td><td>€1.359,99</td><td>€55,01</td><td><strong>€3.366,15</strong></td></tr>
+<tr><td>TC-012</td><td>€2.500, gehuwd, 1 kind ten laste</td><td>€2.500,00</td><td>€99,08</td><td>€227,67</td><td>€116,38</td><td>€13,74</td><td><strong>€2.270,80</strong></td></tr>
+<tr><td>TC-013</td><td>€3.000, gehuwd, 2 kinderen</td><td>€3.000,00</td><td>€299,83</td><td>€92,27</td><td>€122,86</td><td>€19,24</td><td><strong>€2.558,07</strong></td></tr>
+<tr><td>TC-014</td><td>€3.500, gehuwd, 2 kinderen (1 &lt;3) — documentair/pending</td><td>€3.500,00</td><td>€457,45</td><td>€0,00</td><td>€271,52</td><td>€24,74</td><td>€2.746,29</td></tr>
+<tr><td>TC-015</td><td>€4.000, gehuwd, 3 kinderen</td><td>€4.000,00</td><td>€522,80</td><td>€0,00</td><td>€16,11</td><td>€36,24</td><td><strong>€3.424,85</strong></td></tr>
+<tr><td>TC-016</td><td>€4.500, gehuwd, 4 kinderen</td><td>€4.500,00</td><td>€588,15</td><td>€0,00</td><td>€0,00</td><td>€44,01</td><td><strong>€3.867,84</strong></td></tr>
+<tr><td>TC-017</td><td>€3.500, alleenstaande ouder met 2 kinderen</td><td>€3.500,00</td><td>€457,45</td><td>€0,00</td><td>€229,19</td><td>€24,74</td><td><strong>€2.788,62</strong></td></tr>
+<tr><td>TC-018</td><td>Senior €6.000, alleenstaand</td><td>€6.000,00</td><td>€784,20</td><td>€0,00</td><td>€1.577,32</td><td>€60,51</td><td><strong>€3.577,97</strong></td></tr>
+<tr><td>TC-019</td><td>Senior €6.500, gehuwd</td><td>€6.500,00</td><td>€849,55</td><td>€0,00</td><td>€1.794,64</td><td>€60,94</td><td><strong>€3.794,87</strong></td></tr>
+<tr><td>TC-020</td><td>Kaderlid €7.000, alleenstaand</td><td>€7.000,00</td><td>€914,90</td><td>€0,00</td><td>€2.011,97</td><td>€60,94</td><td><strong>€4.012,19</strong></td></tr>
+<tr><td>TC-021</td><td>Kaderlid €7.500, alleenstaand, 0 kind</td><td>€7.500,00</td><td>€980,25</td><td>€0,00</td><td>€2.229,29</td><td>€60,94</td><td><strong>€4.229,52</strong></td></tr>
+<tr><td>TC-022</td><td>Kaderlid €8.500, gehuwd, 2 kinderen</td><td>€8.500,00</td><td>€1.110,95</td><td>€0,00</td><td>€2.381,57</td><td>€60,94</td><td><strong>€4.946,54</strong></td></tr>
+<tr><td>TC-023</td><td>€4.000 + bedrijfswagen VAA €180/m, alleenstaand</td><td>€4.000,00</td><td>€522,80</td><td>€0,00</td><td>€853,24</td><td>€36,24</td><td><strong>€2.587,72</strong></td></tr>
+<tr><td>TC-024</td><td>€5.000 + minimum-VAA bedrijfswagen €140/m</td><td>€5.000,00</td><td>€653,50</td><td>€0,00</td><td>€1.122,42</td><td>€49,51</td><td><strong>€3.174,57</strong></td></tr>
+<tr><td>TC-025</td><td>€7.000 + bedrijfswagen VAA €350/m + andere VAA €50/m</td><td>€7.000,00</td><td>€914,90</td><td>€0,00</td><td>€2.211,97</td><td>€60,94</td><td><strong>€3.812,19</strong></td></tr>
+<tr><td>TC-026</td><td>€3.500 + groepsverzekering werknemersbijdrage €40/m</td><td>€3.500,00</td><td>€457,45</td><td>€0,00</td><td>€594,65</td><td>€24,74</td><td><strong>€2.423,16</strong></td></tr>
+<tr><td>TC-027</td><td>€10.000, alleenstaand — top-tarief</td><td>€10.000,00</td><td>€1.307,00</td><td>€0,00</td><td>€3.315,92</td><td>€60,94</td><td><strong>€5.316,14</strong></td></tr>
+<tr><td>TC-028</td><td>€15.000, alleenstaand — extreem hoog (sanity check)</td><td>€15.000,00</td><td>€1.960,50</td><td>€0,00</td><td>€5.489,17</td><td>€60,94</td><td><strong>€7.489,39</strong></td></tr>
+<tr><td>TC-029</td><td>GGMMI €2.189,81, alleenstaande ouder met 1 kind &lt;3</td><td>€2.189,81</td><td>€0,00</td><td>€293,66</td><td>€0,00</td><td>€10,31</td><td><strong>€2.179,50</strong></td></tr>
+<tr><td>TC-030</td><td>€4.500, gehuwd, 5 kinderen (1 &lt;3)</td><td>€4.500,00</td><td>€588,15</td><td>€0,00</td><td>€0,00</td><td>€44,01</td><td><strong>€3.867,84</strong></td></tr>
+</tbody>
+</table>
+
+<h2>5. Validatieregels &amp; acceptatiecriteria</h2>
+<table class="compact">
+<thead><tr><th>Laag</th><th>Testtype</th><th>Tolerantie</th><th>Drempel</th></tr></thead>
+<tbody>
+<tr><td>Laag 1 (TC)</td><td>Exacte EUR-golden tests</td><td><code>expect(...).toBe(...)</code></td><td>Nul tolerantie</td></tr>
+<tr><td>Laag 2 (NTC)</td><td>BV end-to-end</td><td><code>toBeCloseTo(..., 0)</code></td><td>~€0,50 tolerantie</td></tr>
+<tr><td>Laag 3 (BNTC)</td><td>FOD Tax-Calc cross-check</td><td>±€2/maand</td><td>≥12/15 cases OK; >€15 = "grote_afwijking"</td></tr>
+<tr><td>Audit</td><td>Bron-URL validiteit</td><td>truthy <code>bron_url</code></td><td>100% van resultaten</td></tr>
+<tr><td>Schema</td><td>Dataset valideert tegen schema</td><td>0 fouten</td><td>Startup gate blokkeert bij falen</td></tr>
+</tbody>
+</table>
+
+<h2>6. Triangulatie-ankers</h2>
+<table class="compact">
+<thead><tr><th>Anker</th><th>Tier-2 tool</th><th>Case</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>Group S Salary Sim</td><td>https://online.groups.be/salarysim</td><td>Schaal I Cat A 5j → BV ≈ €154,22</td><td><span class="badge feit">✅ Geverifieerd</span></td></tr>
+<tr><td>Group S Salary Sim</td><td>—</td><td>Extra ankers (min. 5 vereist)</td><td><span class="badge onzekerheid">⚠️ 1/5 geïmplementeerd</span></td></tr>
+</tbody>
+</table>
+
+<div class="callout warn">
+<strong>Nota 2026-05-15:</strong> Cases met <code>kinderen_jonger_dan_3</code> (TC-014, TC-029, TC-030) zijn documentair/pending. De kind-&lt;3 BV-impact is tijdelijk uit de actieve calculatorlogica gehaald tot officiële BV-validatie beschikbaar is.
+</div>
+
+<p>Zie <a href="jaakie-specificatie.html">Jaakie-specificatie</a> voor de module-mapping en <a href="referentie-tools.html">referentietools</a> voor de tier-1/2/3 bronhiërarchie.</p>
+</main>
+
+<footer>Loonmotor BE — Onderzoeksdossier · <a href="index.html">Terug naar overzicht</a></footer>
+</body>
+</html>

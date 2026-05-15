@@ -60,6 +60,8 @@ Uit `04_calculator_netto.md §9`. Tolerantie: `expect(...).toBeCloseTo(..., 0)` 
 
 Het volledige 30-cases bruto-netto corpus, **gegenereerd door `tools/calc_brutonetto_2026.py`** en gesynchroniseerd met `TESTCASES.json`.
 
+> Nota 2026-05-15: cases met `kinderen_jonger_dan_3` zijn documentair/pending. De kind-<3 BV-impact is tijdelijk uit de actieve calculatorlogica gehaald tot officiële BV-validatie beschikbaar is.
+
 Originele kop van het corpus:
 
 ---
@@ -94,7 +96,7 @@ Originele kop van het corpus:
 | TC-011 | Bediende €5.500, alleenstaand | 5500.00 | 718.85 | 0.00 | 0.00 | 1359.99 | 55.01 | **3366.15** |
 | TC-012 | Bediende €2.500, gehuwd, 1 kind ten laste | 2500.00 | 99.08 | 227.67 | 95.36 | 116.38 | 13.74 | **2270.80** |
 | TC-013 | Bediende €3.000, gehuwd, 2 kinderen | 3000.00 | 299.83 | 92.27 | 30.58 | 122.86 | 19.24 | **2558.07** |
-| TC-014 | Bediende €3.500, gehuwd, 2 kinderen waarvan 1 jonger dan 3 | 3500.00 | 457.45 | 0.00 | 0.00 | 271.52 | 24.74 | **2746.29** |
+| TC-014 | Bediende €3.500, gehuwd, 2 kinderen waarvan 1 jonger dan 3 (documentair/pending; kind-<3 niet actief in calculator) | 3500.00 | 457.45 | 0.00 | 0.00 | 271.52 | 24.74 | **2746.29** |
 | TC-015 | Bediende €4.000, gehuwd, 3 kinderen | 4000.00 | 522.80 | 0.00 | 0.00 | 16.11 | 36.24 | **3424.85** |
 | TC-016 | Bediende €4.500, gehuwd, 4 kinderen | 4500.00 | 588.15 | 0.00 | 0.00 | 0.00 | 44.01 | **3867.84** |
 | TC-017 | Bediende €3.500, alleenstaande ouder met 2 kinderen | 3500.00 | 457.45 | 0.00 | 0.00 | 229.19 | 24.74 | **2788.62** |
@@ -740,7 +742,9 @@ Originele kop van het corpus:
 
 ### TC-014 — Bediende €3.500, gehuwd, 2 kinderen waarvan 1 jonger dan 3
 
-**Focus:** extra €760 voor kind <3 jaar
+**Status calculator:** documentair/pending; kind-<3 is tijdelijk niet actief in de calculatorlogica.
+
+**Focus:** historische corpuscase voor kind <3 jaar; niet gebruiken als actieve regressieverwachting.
 
 **Input:**
 ```json
@@ -1482,7 +1486,9 @@ Originele kop van het corpus:
 
 ### TC-029 — Bediende €2.189,81 (GGMMI), alleenstaande ouder met 1 kind <3
 
-**Focus:** combinatie GGMMI + kind <3 + alleenstaande ouder
+**Status calculator:** documentair/pending; kind-<3 is tijdelijk niet actief in de calculatorlogica.
+
+**Focus:** historische corpuscase voor combinatie GGMMI + kind <3 + alleenstaande ouder; niet gebruiken als actieve regressieverwachting.
 
 **Input:**
 ```json
@@ -1535,7 +1541,9 @@ Originele kop van het corpus:
 
 ### TC-030 — Bediende €4.500, gehuwd, 5 kinderen waarvan 1 <3
 
-**Focus:** > 4 kinderen extra-toeslag formule
+**Status calculator:** documentair/pending; kind-<3 is tijdelijk niet actief in de calculatorlogica.
+
+**Focus:** > 4 kinderen extra-toeslag formule; kind-<3 input niet gebruiken als actieve regressieverwachting.
 
 **Input:**
 ```json

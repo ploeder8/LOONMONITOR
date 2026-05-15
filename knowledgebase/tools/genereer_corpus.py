@@ -124,9 +124,10 @@ CASES = [
     },
     {
         "id": "TC-014",
-        "profiel": "Bediende €3.500, gehuwd, 2 kinderen waarvan 1 jonger dan 3",
+        "profiel": "Bediende €3.500, gehuwd, 2 kinderen waarvan 1 jonger dan 3 (documentair/pending; kind-<3 niet actief in calculator)",
         "input": {"bruto_maand": 3500.00, "burgerlijke_staat": "gehuwd_dubbel", "kinderen_ten_laste": 2, "kinderen_jonger_dan_3": 1},
-        "test_focus": ["extra €760 voor kind <3 jaar"],
+        "calculator_status": "documentair_pending_kind_onder_3_niet_actief",
+        "test_focus": ["historische kind-<3 corpuscase; niet gebruiken als actieve regressieverwachting"],
     },
     {
         "id": "TC-015",
@@ -220,15 +221,17 @@ CASES = [
     },
     {
         "id": "TC-029",
-        "profiel": "Bediende €2.189,81 (GGMMI), alleenstaande ouder met 1 kind <3",
+        "profiel": "Bediende €2.189,81 (GGMMI), alleenstaande ouder met 1 kind <3 (documentair/pending; kind-<3 niet actief in calculator)",
         "input": {"bruto_maand": 2189.81, "kinderen_ten_laste": 1, "kinderen_jonger_dan_3": 1, "alleenstaand_met_kinderen": True},
-        "test_focus": ["combinatie GGMMI + kind <3 + alleenstaande ouder"],
+        "calculator_status": "documentair_pending_kind_onder_3_niet_actief",
+        "test_focus": ["historische combinatie GGMMI + kind <3 + alleenstaande ouder; niet gebruiken als actieve regressieverwachting"],
     },
     {
         "id": "TC-030",
-        "profiel": "Bediende €4.500, gehuwd, 5 kinderen waarvan 1 <3",
+        "profiel": "Bediende €4.500, gehuwd, 5 kinderen waarvan 1 <3 (documentair/pending; kind-<3 niet actief in calculator)",
         "input": {"bruto_maand": 4500.00, "burgerlijke_staat": "gehuwd_dubbel", "kinderen_ten_laste": 5, "kinderen_jonger_dan_3": 1},
-        "test_focus": ["> 4 kinderen extra-toeslag formule"],
+        "calculator_status": "documentair_pending_kind_onder_3_niet_actief",
+        "test_focus": ["> 4 kinderen extra-toeslag formule; kind-<3 input niet gebruiken als actieve regressieverwachting"],
     },
 ]
 
@@ -246,6 +249,7 @@ def bouw_corpus():
         corpus.append({
             "id": case["id"],
             "profiel": case["profiel"],
+            **({"calculator_status": case["calculator_status"]} if "calculator_status" in case else {}),
             "test_focus": case["test_focus"],
             "input": case["input"],
             "berekend": asdict(res),

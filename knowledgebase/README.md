@@ -45,6 +45,7 @@
 - **`bronnen/`** — Volledig bronnenarchief: 57 URLs + 8 PDF-snapshots, gerangschikt per Tier (1/2/3) + categorie
 - **`tools/`** — Python referentie-implementatie: `calc_brutonetto_2026.py`, `genereer_corpus.py`, `validate_corpus.py`
 - **`Referenties/`** — Vergelijkende analyses van externe looncalculatoren (UX, invoervelden, featureset)
+- **`onderzoek/`** — HTML-onderzoeksdossier (15 pagina's): marktonderzoek, concurrentiematrix, wetgevend kader, Jaakie-specificatie, testcorpus, referentietools. Dit dossier is **secundair** ten opzichte van de markdown-kennisbank: alle cijfers, formules en test-golden-masters leven in de `.md`-bestanden hierboven.
 
 ---
 

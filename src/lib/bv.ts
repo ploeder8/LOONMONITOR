@@ -9,6 +9,9 @@ import { round2 } from "@/lib/money";
 import { getDatapunt } from "@/lib/dataset";
 import type { Datapunt } from "@/types/dataset";
 
+// `gehuwd_zonder_inkomen` staat voor gehuwd/wettelijk samenwonend met een
+// partner zonder of beperkt beroepsinkomen. Dit activeert Schaal II en verlaagt
+// de bedrijfsvoorheffing; het is geen aparte "partner ten laste"-vermindering.
 export type GezinsType = "alleenstaand" | "gehuwd_met_inkomen" | "gehuwd_zonder_inkomen";
 export type BvSchaal = "I" | "II";
 export type BvValidatieStatus = "pending_taxcalc" | "taxcalc_ok" | "taxcalc_afwijking";
@@ -17,7 +20,6 @@ export interface BvInput {
   belastbaarMaandloon: number;          // brutoloon − effectieve RSZ (na werkbonus)
   gezinstype: GezinsType;
   kinderenTenLaste: number;
-  kinderenOnder3?: number;              // count kinderen <3 jaar (geen kinderopvang-aftrek)
   fiscaalAlleenstaandeMetKind?: boolean;
   groepsverzekeringEigenBijdrage?: number; // €/maand werknemersbijdrage
   fiscaleWerkbonusKrediet?: number;     // pass-through uit netto.ts (33,14% × Luik A + 52,54% × Luik B)
@@ -36,7 +38,6 @@ export interface BvResultaat {
   bvPerMaand: number;                   // BV vóór gezinsverminderingen
   // Gezinsverminderingen (per maand)
   verminderingKinderen: number;
-  verminderingKindOnder3: number;
   verminderingAlleenstaandeKind: number;
   verminderingGroepsverzekering: number;
   fiscaleWerkbonus: number;             // belastingkrediet, identiek aan input
@@ -62,7 +63,7 @@ const FORFAIT_MAX_AJ2027 = 6070;
 const BVS_BASIS_AJ2027: Record<GezinsType, number> = {
   alleenstaand:          11180,
   gehuwd_met_inkomen:    11180,
-  gehuwd_zonder_inkomen: 22360, // 2 × 11180
+  gehuwd_zonder_inkomen: 22360, // Schaal II: effectieve vrijstelling via huwelijksquotiënt
 };
 
 // BV-vermindering kinderen ten laste — maandtabel (Bijlage III KB 11/12/2025)
@@ -72,7 +73,6 @@ const BV_KINDEREN_MAAND: Record<number, number> = {
 };
 const BV_KINDEREN_EXTRA_PER_KIND = 345; // per kind > 8
 
-const BV_KIND_ONDER_3 = 76;             // €/maand per kind <3 jaar
 const BV_ALLEENSTAANDE_KIND = 52;       // €/maand bovenop kindvermindering
 const BV_GROEPSVERZ_PCT = 0.30;         // % van eigen bijdrage
 
@@ -98,7 +98,6 @@ interface BvBasis {
 
 interface BvVerminderingen {
   verminderingKinderen: number;
-  verminderingKindOnder3: number;
   verminderingAlleenstaandeKind: number;
   verminderingGroepsverzekering: number;
 }
@@ -159,14 +158,12 @@ function berekenBvBasis(belastbaarMaandloon: number, gezinstype: GezinsType, sch
 function berekenBvVerminderingen(input: BvInput): BvVerminderingen {
   const {
     kinderenTenLaste,
-    kinderenOnder3 = 0,
     fiscaalAlleenstaandeMetKind = false,
     groepsverzekeringEigenBijdrage = 0,
   } = input;
 
   return {
     verminderingKinderen: bvKinderen(kinderenTenLaste),
-    verminderingKindOnder3: round2(kinderenOnder3 * BV_KIND_ONDER_3),
     verminderingAlleenstaandeKind:
       fiscaalAlleenstaandeMetKind && kinderenTenLaste > 0 ? BV_ALLEENSTAANDE_KIND : 0,
     verminderingGroepsverzekering: round2(
