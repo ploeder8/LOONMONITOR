@@ -214,7 +214,7 @@ Bron: [Wolters Kluwer (Jef Wellens)](https://www.wolterskluwer.com/), [Practical
 | PC ter beschikking | €72/jaar | KB-vastgesteld forfait |
 | Internet ter beschikking | €60/jaar | idem |
 | Tablet/GSM-toestel | €36/jaar | idem |
-| Telefoonabonnement | €48/jaar | idem |
+| GSM-abonnement | €48/jaar | idem |
 | Huisvesting (niet-bemeubeld) | KI × 100/60 × 2 (× indexcoëfficiënt 2,3000) | [BDO](https://www.bdo.be/), [fibofin.be](https://www.fibofin.be/) |
 
 Bedrijfswagen-formule: **cataloguswaarde × 6/7 × CO2-percentage**. CO2-percentage = 5,5 % + 0,1 % per g/km verschil tussen werkelijke uitstoot en referentie-CO2 (min 4 %, max 18 %).
@@ -252,7 +252,7 @@ Bedrijfswagen-formule: **cataloguswaarde × 6/7 × CO2-percentage**. CO2-percent
      - Tablet: **€3/maand**
      - Internet (privé-gebruik): **€5/maand**
      - GSM-toestel: **€3/maand**
-     - Telefoonabonnement: **€4/maand**
+     - GSM-abonnement: **€4/maand**
    - Andere VAA (verwarming, elektriciteit, huisvesting, etc.): zie §10 voor forfaits; RSZ-behandeling per geval (woning + verwarming/elektriciteit ter beschikking gesteld door werkgever zijn typisch onderworpen aan RSZ).
    Bron: [FOD Financiën — Voordelen alle aard](https://financien.belgium.be/nl/ondernemingen/personeel_en_loon/voordelen_alle_aard).
 4. **− BV (bedrijfsvoorheffing)** via KB Bijlage III sleutelformule + verminderingen kinderen ten laste / fiscale werkbonus / overuren / groepsverzekering — zie §1, §3, §6.

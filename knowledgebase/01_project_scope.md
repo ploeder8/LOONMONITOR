@@ -40,8 +40,8 @@
 - Patronale RSZ (~25 %)
 - Sociaal Fonds 200 (0,23 %)
 - Arbeidsongevallenverzekering (~0,3 %, bureaupersoneel)
-- Provisie eindejaarspremie (1/12 ≈ 8,33 %)
-- Provisie dubbel vakantiegeld (92 %/12 ≈ 6,67 %)
+- Maandelijkse loonkost zonder jaarlijkse componenten
+- Jaaroverzicht met eindejaarspremie, jaarpremie, ecocheques en dubbel vakantiegeld
 - Structurele vermindering laagloon (helling 0,16)
 - **Loonwig %** = (totale loonkost − netto) / totale loonkost
 

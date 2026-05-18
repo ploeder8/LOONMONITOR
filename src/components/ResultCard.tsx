@@ -1,5 +1,5 @@
 import type { Datapunt } from "@/types/dataset";
-import { AuditPanel } from "@/components/AuditPanel";
+import { AuditSourceGroup } from "@/components/AuditPanel";
 import { formatEUR } from "@/lib/money";
 
 export interface ResultCardProps {
@@ -59,11 +59,7 @@ export function ResultCard(props: ResultCardProps) {
         </div>
       )}
       {props.datapunten && props.datapunten.length > 0 && (
-        <div style={{ marginTop: 4, display: "flex", flexDirection: "column", gap: 4 }}>
-          {props.datapunten.map((dp) => (
-            <AuditPanel key={dp.id} datapunt={dp} />
-          ))}
-        </div>
+        <AuditSourceGroup datapunten={props.datapunten} />
       )}
     </div>
   );

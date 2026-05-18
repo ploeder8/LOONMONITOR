@@ -1,10 +1,11 @@
 import { round2 } from "@/lib/money";
 import { rszBijdragen, type RszResultaat } from "@/lib/rsz";
 import { werkbonus, type WerkbonusResultaat } from "@/lib/werkbonus";
-import { bbsz, type BbszResultaat } from "@/lib/bbsz";
+import { bbsz, type BbszResultaat, type BbszScenario } from "@/lib/bbsz";
 import { berekenBV, type BvResultaat, type GezinsType } from "@/lib/bv";
 
 export type { GezinsType };
+export type { BbszScenario };
 
 const FISCALE_WERKBONUS_PCT_LUIK_A = 0.3314;
 const FISCALE_WERKBONUS_PCT_LUIK_B = 0.5254;
@@ -14,6 +15,7 @@ export interface NettoInput {
   refDatum: string;
   bouwVlag?: boolean;
   gezinstype: GezinsType;
+  bbszScenario: BbszScenario;
   kinderenTenLaste: number;
   fiscaalAlleenstaandeMetKind?: boolean;
   groepsverzekeringEigenBijdrage?: number;
@@ -54,6 +56,7 @@ export function berekenNetto(input: NettoInput): NettoResultaat {
     refDatum,
     bouwVlag = false,
     gezinstype,
+    bbszScenario,
     kinderenTenLaste,
     fiscaalAlleenstaandeMetKind = false,
     groepsverzekeringEigenBijdrage = 0,
@@ -70,7 +73,7 @@ export function berekenNetto(input: NettoInput): NettoResultaat {
   const brutoRszBasis = round2(brutoloon + vaaRszPlichtig);
   const rszR = rszBijdragen({ brutoloon: brutoRszBasis, refDatum, bouwVlag });
   const werkbonusR = werkbonus({ brutoloon: brutoRszBasis, refDatum });
-  const bbszR = bbsz({ brutoloon: brutoRszBasis });
+  const bbszR = bbsz({ brutoloon: brutoRszBasis, scenario: bbszScenario });
 
   // Effective RSZ = statutory RSZ minus social bonus (werkbonus), minimum 0
   const effectieveRsz = round2(Math.max(0, rszR.werknemerBijdrage - werkbonusR.totaal));

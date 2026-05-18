@@ -273,16 +273,16 @@
   "id": "bv_bijzondere_schaal_eindejaar_2026",
   "categorie": "fiscaliteit",
   "naam": "Bijzondere BV-schaal eindejaarspremie / dubbel vakantiegeld 2026",
-  "omschrijving": "Bijzondere bedrijfsvoorheffing-schaal toegepast op niet-recurrente bezoldigingen (eindejaarspremie, dubbel vakantiegeld). Tarief tussen 17,16% en 23,22% afhankelijk van het referentieloon.",
-  "waarde_bron": "Glijdende schaal 17,16% – 23,22%",
+  "omschrijving": "Bijzondere bedrijfsvoorheffing-schaal toegepast op niet-recurrente bezoldigingen, met aparte kolommen voor vakantiegeld en andere vergoedingen/toelagen.",
+  "waarde_bron": "Glijdende schaal per refertejaarloon, vakantiegeld 0%–53,50% en andere vergoedingen 0%–53,50%",
   "waarde_genormaliseerd": null,
-  "tarief_min": 0.1716,
-  "tarief_max": 0.2322,
-  "eenheid": "ratio op brutopremie",
+  "tarief_min": 0,
+  "tarief_max": 0.535,
+  "eenheid": "ratio op belastbaar exceptioneel bedrag",
   "wettelijke_basis": "KB Bijlage III KB/WIB 92 2026 — bijzondere schaal niet-recurrente bezoldigingen",
   "bron_organisatie": "FOD Financiën",
   "bron_url": "https://www.ejustice.just.fgov.be/",
-  "bron_fragment": "Voor de eindejaarspremie en het dubbel vakantiegeld wordt een afzonderlijke schaal toegepast met tarieven tussen 17,16% en 23,22%.",
+  "bron_fragment": "Bijlage III bevat aparte percentages voor vakantiegeld en voor andere vergoedingen en toelagen.",
   "geldig_vanaf": "2026-01-01",
   "geldig_tot": "2026-12-31",
   "status": "mogelijk_verouderd",
@@ -292,7 +292,7 @@
     {"organisatie": "SSN", "url": "https://www.ssn.be/", "tier": 2}
   ],
   "laatst_bevestigd_op": "2026-05-08",
-  "opmerkingen": "Volledige tabel per refertejaarloon op te halen uit KB Bijlage III. Werkbasis voor POC: range tonen (17,16% – 23,22%)."
+  "opmerkingen": "Dubbel vakantiegeld gebruikt kolom vakantiegeld; eindejaarspremie en jaarpremie gebruiken kolom andere vergoedingen en toelagen."
 }
 ```
 
@@ -486,7 +486,7 @@
   {
     "id": "vaa_telefoonabo_forfait_2026",
     "categorie": "fiscaliteit",
-    "naam": "VAA telefoonabonnement (privégebruik) — forfait jaarbedrag",
+    "naam": "VAA GSM-abonnement (privégebruik) — forfait jaarbedrag",
     "waarde_genormaliseerd": 48.00,
     "eenheid": "EUR/jaar",
     "wettelijke_basis": "KB 25 november 2017",

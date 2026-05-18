@@ -177,7 +177,7 @@
 | Internet | €60/jaar | KB 25/11/2017 |
 | GSM-toestel | €36/jaar | KB 25/11/2017 |
 | Tablet | €36/jaar | KB 25/11/2017 |
-| Telefoonabonnement | €48/jaar | KB 25/11/2017 |
+| GSM-abonnement | €48/jaar | KB 25/11/2017 |
 | Verwarming bedrijfsleider | €2.560/jaar | jaarlijks KB |
 | Verwarming andere werknemers | €1.150/jaar | idem |
 | Elektriciteit bedrijfsleider | €1.280/jaar | idem |

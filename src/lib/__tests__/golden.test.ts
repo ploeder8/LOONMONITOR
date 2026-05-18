@@ -18,6 +18,7 @@ import { berekenWoonwerkVerkeer } from "@/lib/woonwerkVerkeer";
 import { vaaBedrijfswagen } from "@/lib/vaaBedrijfswagen";
 import { vaaForfaitsWerkmiddelen } from "@/lib/vaaForfaits";
 import { jaarlijksePremie2026 } from "@/lib/jaarpremie";
+import { berekenJaaroverzicht } from "@/lib/jaaroverzicht";
 import { getDatapunt } from "@/lib/dataset";
 import { safeGetValue } from "@/lib/periode";
 import { werkgeverskost } from "@/lib/werkgeverskost";
@@ -493,13 +494,13 @@ describe("TC-21 — Werkbonus: hoog loon buiten bereik (SSOT factoren)", () => {
 
 describe("TC-22 — BBSZ: schijven", () => {
   it("brutoloon € 1.900 (< € 1.945,38) geeft kwartaalbijdrage € 0", () => {
-    const r = bbsz({ brutoloon: 1900 });
+    const r = bbsz({ brutoloon: 1900, scenario: "individuele_aanslag" });
     expect(r.kwartaalbijdrage).toBe(0);
     expect(r.maandelijksBedrag).toBe(0);
   });
 
   it("brutoloon € 2.242,81 (schijf 3) geeft correcte kwartaalbijdrage", () => {
-    const r = bbsz({ brutoloon: 2242.81 });
+    const r = bbsz({ brutoloon: 2242.81, scenario: "individuele_aanslag" });
     // qLoon = 3 × 2242.81 = 6728.43 → schijf 3 (6570.54–11211)
     // kw = 30.99 + 0.011 × (2242.81 − 2190.18) = 30.99 + 0.011 × 52.63 = 30.99 + 0.58 = 31.57
     expect(r.kwartaalbijdrage).toBe(31.57);
@@ -507,9 +508,70 @@ describe("TC-22 — BBSZ: schijven", () => {
   });
 
   it("brutoloon > € 6.038,82 geeft maximum € 182,82 per kwartaal", () => {
-    const r = bbsz({ brutoloon: 7000 });
+    const r = bbsz({ brutoloon: 7000, scenario: "individuele_aanslag" });
     expect(r.kwartaalbijdrage).toBe(182.82);
     expect(r.maandelijksBedrag).toBe(60.94);
+  });
+
+  it("berekent BBSZ voor individuele aanslag rond alle kwartaalschijven", () => {
+    const cases = [
+      [1945.37, 0],
+      [1945.38, 0],
+      [2190.18, 10.33],
+      [3737, 48.01],
+      [4100, 94.32],
+      [6038.82, 140.16],
+      [6038.83, 182.82],
+    ] as const;
+
+    for (const [brutoloon, kwartaalbijdrage] of cases) {
+      expect(
+        bbsz({ brutoloon, scenario: "individuele_aanslag" }).kwartaalbijdrage,
+      ).toBe(kwartaalbijdrage);
+    }
+  });
+
+  it("berekent BBSZ voor gemeenschappelijke aanslag met partner met beroepsinkomsten", () => {
+    const cases = [
+      [1095.09, 0],
+      [1095.10, 15.45],
+      [1945.38, 15.45],
+      [2190.18, 15.45],
+      [3737, 60.34],
+      [6038.82, 85.66],
+      [12000, 151.23],
+      [25000, 154.92],
+    ] as const;
+
+    for (const [brutoloon, kwartaalbijdrage] of cases) {
+      expect(
+        bbsz({
+          brutoloon,
+          scenario: "gemeenschappelijke_aanslag_partner_met_beroepsinkomsten",
+        }).kwartaalbijdrage,
+      ).toBe(kwartaalbijdrage);
+    }
+  });
+
+  it("berekent BBSZ voor gemeenschappelijke aanslag met partner zonder beroepsinkomsten", () => {
+    const cases = [
+      [1945.37, 0],
+      [1945.38, 0],
+      [2190.18, 14.44],
+      [3737, 60.34],
+      [6038.82, 85.66],
+      [12000, 151.23],
+      [25000, 182.82],
+    ] as const;
+
+    for (const [brutoloon, kwartaalbijdrage] of cases) {
+      expect(
+        bbsz({
+          brutoloon,
+          scenario: "gemeenschappelijke_aanslag_partner_zonder_beroepsinkomsten",
+        }).kwartaalbijdrage,
+      ).toBe(kwartaalbijdrage);
+    }
   });
 });
 
@@ -545,6 +607,7 @@ describe("TC-23b — BV: Group S triangulatie-anker", () => {
       brutoloon: 2276.51,
       refDatum: REF_2026,
       gezinstype: "alleenstaand",
+      bbszScenario: "individuele_aanslag",
       kinderenTenLaste: 0,
     });
 
@@ -593,6 +656,7 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
       brutoloon: 2276.51,
       refDatum: "2026-06-01",
       gezinstype: "alleenstaand",
+      bbszScenario: "individuele_aanslag",
       kinderenTenLaste: 0,
     });
     expect(r.nettoloon).toBeGreaterThan(0);
@@ -614,6 +678,7 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
       brutoloon: 2276.51,
       refDatum: "2026-06-01",
       gezinstype: "alleenstaand",
+      bbszScenario: "individuele_aanslag",
       kinderenTenLaste: 0,
     });
     expect(r.werkbonus.datapunt.bron_url).toBeTruthy();
@@ -628,12 +693,14 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
       brutoloon: 2276.51,
       refDatum: "2026-06-01",
       gezinstype: "alleenstaand",
+      bbszScenario: "individuele_aanslag",
       kinderenTenLaste: 0,
     });
     const metMaaltijdcheques = berekenNetto({
       brutoloon: 2276.51,
       refDatum: "2026-06-01",
       gezinstype: "alleenstaand",
+      bbszScenario: "individuele_aanslag",
       kinderenTenLaste: 0,
       maaltijdchequeWerknemersbijdragePerDag: 1.09,
       maaltijdchequeWerkdagen: 20,
@@ -648,6 +715,7 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
       brutoloon: 2276.51,
       refDatum: "2026-06-01",
       gezinstype: "alleenstaand",
+      bbszScenario: "individuele_aanslag",
       kinderenTenLaste: 0,
     });
     expect(r.maaltijdchequeWerknemersbijdrage).toBe(0);
@@ -658,12 +726,14 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
       brutoloon: 3000,
       refDatum: REF_2026,
       gezinstype: "alleenstaand",
+      bbszScenario: "individuele_aanslag",
       kinderenTenLaste: 0,
     });
     const metWoonwerk = berekenNetto({
       brutoloon: 3000,
       refDatum: REF_2026,
       gezinstype: "alleenstaand",
+      bbszScenario: "individuele_aanslag",
       kinderenTenLaste: 0,
       woonwerkVrijgesteldPerMaand: 100,
     });
@@ -679,12 +749,14 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
       brutoloon: 3000,
       refDatum: REF_2026,
       gezinstype: "alleenstaand",
+      bbszScenario: "individuele_aanslag",
       kinderenTenLaste: 0,
     });
     const metComponenten = berekenNetto({
       brutoloon: 3000,
       refDatum: REF_2026,
       gezinstype: "alleenstaand",
+      bbszScenario: "individuele_aanslag",
       kinderenTenLaste: 0,
       hospitalisatieEigenBijdrage: 25,
       onkostenvergoedingPerMaand: 125,
@@ -702,12 +774,14 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
       brutoloon: 4000,
       refDatum: REF_2026,
       gezinstype: "alleenstaand",
+      bbszScenario: "individuele_aanslag",
       kinderenTenLaste: 0,
     });
     const metVaa = berekenNetto({
       brutoloon: 4000,
       refDatum: REF_2026,
       gezinstype: "alleenstaand",
+      bbszScenario: "individuele_aanslag",
       kinderenTenLaste: 0,
       vaaBedrijfswagenPerMaand: 180,
     });
@@ -721,23 +795,23 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
 
   it("berekent forfaitaire VAA voor werkmiddelen op maandbasis", () => {
     const r = vaaForfaitsWerkmiddelen({
-      pcLaptopAantal: 1,
-      gsmSmartphoneAantal: 1,
+      pcLaptopActief: true,
+      gsmSmartphoneActief: true,
       internetActief: true,
-      telefoonAbonnementAantal: 1,
+      gsmAbonnementActief: true,
       refDatum: REF_2026,
     });
 
     expect(r.pcLaptopPerMaand).toBe(6);
     expect(r.gsmSmartphonePerMaand).toBe(3);
     expect(r.internetPerMaand).toBe(5);
-    expect(r.telefoonAbonnementPerMaand).toBe(4);
+    expect(r.gsmAbonnementPerMaand).toBe(4);
     expect(r.totaalPerMaand).toBe(18);
     expect(r.datapunten.map((dp) => dp.id)).toEqual([
       "vaa_pc_laptop_forfait_2026",
       "vaa_gsm_smartphone_forfait_2026",
       "vaa_internet_forfait_2026",
-      "vaa_telefoonabonnement_forfait_2026",
+      "vaa_gsmabonnement_forfait_2026",
     ]);
   });
 
@@ -746,12 +820,14 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
       brutoloon: 4000,
       refDatum: REF_2026,
       gezinstype: "alleenstaand",
+      bbszScenario: "individuele_aanslag",
       kinderenTenLaste: 0,
     });
     const metWerkmiddelen = berekenNetto({
       brutoloon: 4000,
       refDatum: REF_2026,
       gezinstype: "alleenstaand",
+      bbszScenario: "individuele_aanslag",
       kinderenTenLaste: 0,
       vaaRszPlichtigPerMaand: 18,
     });
@@ -778,6 +854,7 @@ describe("NTC-01 — Schaal I Cat A 5j, alleenstaand, 0 kind", () => {
       brutoloon: 2276.51,
       refDatum: REF_2026,
       gezinstype: "alleenstaand",
+      bbszScenario: "individuele_aanslag",
       kinderenTenLaste: 0,
     });
     expect(r.werkbonus.totaal).toBeGreaterThan(0);
@@ -797,6 +874,7 @@ describe("NTC-02 — Schaal I Cat C 10j, alleenstaand, 1 kind", () => {
       brutoloon: 2800,
       refDatum: REF_2026,
       gezinstype: "alleenstaand",
+      bbszScenario: "individuele_aanslag",
       kinderenTenLaste: 1,
     });
     expect(r.bv.verminderingKinderen).toBe(52);
@@ -811,6 +889,7 @@ describe("NTC-03 — Schaal II Cat B 8j, eenverdiener, 2 kinderen", () => {
       brutoloon: 3000,
       refDatum: REF_2026,
       gezinstype: "gehuwd_zonder_inkomen",
+      bbszScenario: "gemeenschappelijke_aanslag_partner_zonder_beroepsinkomsten",
       kinderenTenLaste: 2,
     });
     expect(r.bv.belastingvrijeSom).toBe(22360);
@@ -826,6 +905,7 @@ describe("NTC-04 — GGMMI €2.189,81, alleenstaand (hoge werkbonus)", () => {
       brutoloon: 2189.81,
       refDatum: REF_2026,
       gezinstype: "alleenstaand",
+      bbszScenario: "individuele_aanslag",
       kinderenTenLaste: 0,
     });
     expect(r.werkbonus.luikA).toBe(125.04);
@@ -842,6 +922,7 @@ describe("NTC-09 — Alleenstaande ouder met 1 kind (+€52 extra)", () => {
       brutoloon: 2500,
       refDatum: REF_2026,
       gezinstype: "alleenstaand",
+      bbszScenario: "individuele_aanslag",
       kinderenTenLaste: 1,
       fiscaalAlleenstaandeMetKind: true,
     });
@@ -856,6 +937,7 @@ describe("NTC-10 — Groepsverzekering eigen bijdrage €100/m", () => {
       brutoloon: 3100,
       refDatum: REF_2026,
       gezinstype: "alleenstaand",
+      bbszScenario: "individuele_aanslag",
       kinderenTenLaste: 0,
       groepsverzekeringEigenBijdrage: 100,
     });
@@ -888,7 +970,7 @@ describe("NTC-13 — Werkbonus-edge: bruto €2.880,32 (Luik A grens, B nul)", (
 });
 
 describe("NTC-14 — Eindejaarspremie 1 maandloon — bijzondere BV", () => {
-  it("Bijzondere BV op €3.000 premie (refertejaar €36.000) → tarief 34,33%", () => {
+  it("Bijzondere BV op €3.000 premie gebruikt de kolom andere exceptionele vergoedingen", () => {
     const r = eindejaarspremie({
       brutoloon: 3000,
       ancienniteitMaanden: 36,
@@ -898,27 +980,58 @@ describe("NTC-14 — Eindejaarspremie 1 maandloon — bijzondere BV", () => {
     });
     expect(r.premie).toBe(3000);
     expect(r.bvBijzonder).toBeDefined();
-    // refertejaarloon = 12 × 3000 = 36000 → schijf <36.180: tarief 34,33%
-    // 3000 × 0.3433 = 1029.90
-    expect(r.bvBijzonder?.tarief).toBeCloseTo(0.3433, 4);
-    expect(r.bvBijzonder?.bvBruto).toBeCloseTo(1029.9, 1);
-    expect(r.nettoPremie).toBeCloseTo(3000 - 1029.9, 1);
+    // refertejaarloon = 12 × 3000 = 36000 → schijf 34.640,01–45.860: tarief 46,44%
+    expect(r.bvBijzonder?.tarief).toBeCloseTo(0.4644, 4);
+    expect(r.bvBijzonder?.bvBruto).toBeCloseTo(1211.11, 1);
+    expect(r.nettoPremie).toBeCloseTo(1396.79, 1);
   });
 });
 
 describe("NTC-15 — Dubbel vakantiegeld 92% — bijzondere BV", () => {
-  it("Bijzondere BV op €2.760 premie (92% × €3.000)", () => {
+  it("Bijzondere BV op €2.760 vakantiegeld gebruikt de vakantiegeldkolom", () => {
     const refertejaar = 3000 * 12;
     const premie = 0.92 * 3000;
     const r = berekenBvBijzonder({
       refertejaarloon: refertejaar,
-      exceptioneelBruto: premie,
+      exceptioneelBruto: 2426.71,
       gezinstype: "alleenstaand",
       kinderenTenLaste: 0,
+      soort: "vakantiegeld",
     });
-    expect(r.tarief).toBeCloseTo(0.3433, 4);
-    expect(r.bvBruto).toBeCloseTo(947.51, 1); // 2760 × 0.3433 = 947.508
-    expect(r.nettoBedrag).toBeCloseTo(premie - 947.51, 1);
+    expect(r.tarief).toBeCloseTo(0.4239, 4);
+    expect(r.bvBruto).toBeCloseTo(1028.68, 1);
+    expect(r.nettoBedrag).toBeCloseTo(1398.03, 1);
+  });
+});
+
+describe("Jaaroverzicht — netto en werkgeverskost", () => {
+  it("berekent de jaarcomponenten voor €4.500 bruto volgens het voorbeeld jaaroverzicht", () => {
+    const r = berekenJaaroverzicht({
+      brutoloon: 4500,
+      nettoloonPerMaand: 2500,
+      loonkostWerkgeverPerMaand: 5648.85,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+      ancienniteitMaanden: 36,
+      prestatieMaandenInRefertepériode: 12,
+      tewerkstellingsbreuk: 1,
+    });
+
+    expect(r.netto.dubbelVakantiegeld.bruto).toBe(4140);
+    expect(r.netto.dubbelVakantiegeld.rsz).toBe(499.93);
+    expect(r.netto.dubbelVakantiegeld.belastbaar).toBe(3640.07);
+    expect(r.netto.dubbelVakantiegeld.bv).toBe(1726.85);
+    expect(r.netto.dubbelVakantiegeld.netto).toBe(1913.22);
+    expect(r.netto.eindejaarspremie.bvTarief).toBe(0.5148);
+    expect(r.netto.jaarpremie.bv).toBe(148.06);
+    expect(r.netto.totaalNettoJaarloon).toBe(34200.79);
+
+    expect(r.werkgever.maandbasisX12).toBe(67786.2);
+    expect(r.werkgever.jaarpremiesEnEcocheques).toBe(5080.84);
+    expect(r.werkgever.rszOpEindejaarspremieEnJaarpremie).toBe(1207.71);
+    expect(r.werkgever.dubbelVakantiegeld).toBe(4140);
+    expect(r.werkgever.totaleLoonkostJaar).toBe(78214.75);
   });
 });
 

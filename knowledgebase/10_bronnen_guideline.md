@@ -143,16 +143,16 @@
 ### 3.5 Bijzondere bijdrage sociale zekerheid (BBSZ) 2026
 
 **Tier-1 ankerbron:**
-- [RSZ — administratieve instructies werkgevers, kwartaal 1/2026](https://www.socialsecurity.be/employer/instructions/) — bevat tabel BBSZ-banden zodra gepubliceerd.
+- [RSZ — administratieve instructies werkgevers 2026/1](https://www.socialsecurity.be/employer/instructions/dmfa/nl/latest/instructions/special_contributions/other_specialcontributions/specialsocialsecuritycontribution.html) — officiële BBSZ-schijven per kwartaal en scenario.
 
-**Tier-2 fallback:**
-- [SSN BBSZ 2026 kwartaalbanden](https://www.ssn.be/) — alleenstaand, niet getrianguleerd → **WEAK**.
+**Tier-2 triangulatie:**
+- Partena Professional / Liantis — alleen voor controle en duiding; niet als primaire bron.
 
 **Range 2026:** €0/maand (laagste band) tot ≈ €60,94/maand (plafondband). Per gezinscategorie (alleenstaande / 2 inkomens / 1 inkomen).
 
-**Aanbeveling POC:** in deze fase BBSZ tonen als **info-veld met bandbreedte**, niet als precieze inhouding, tot RSZ-instructie 2026 als gestructureerde tabel beschikbaar is.
+**Aanbeveling productie 2026:** BBSZ exact berekenen als kwartaalinhouding ÷ 3 met expliciete scenario-keuze: individuele aanslag, gemeenschappelijke aanslag met partner met beroepsinkomsten, of gemeenschappelijke aanslag met partner zonder beroepsinkomsten. UI blijft vermelden dat de inhouding een voorschot is en dat de definitieve afrekening via de PB-aangifte gebeurt.
 
-**Confidence:** MODERATE (regime) / WEAK (exacte bedragen).
+**Confidence:** HIGH voor 2026-schijven; 2028-hervorming apart opvolgen en niet toepassen in 2026-runtime.
 
 ---
 
@@ -177,7 +177,7 @@
 | Internet | €60/jaar | KB 25/11/2017 |
 | GSM-toestel | €36/jaar | KB 25/11/2017 |
 | Tablet | €36/jaar | KB 25/11/2017 |
-| Telefoonabonnement | €48/jaar | KB 25/11/2017 |
+| GSM-abonnement | €48/jaar | KB 25/11/2017 |
 | Verwarming bedrijfsleider | €2.560/jaar | jaarlijks KB |
 | Verwarming andere werknemers | €1.150/jaar | idem |
 | Elektriciteit bedrijfsleider | €1.280/jaar | idem |
@@ -235,7 +235,7 @@
 
 | Regime | Tier-1 bron | Tier-2 bron |
 |---|---|---|
-| **Eindejaarspremie / dubbel vakantiegeld BV** (bijzondere schaal 17,16 %–23,22 %) | [KB 11/12/2025 Bijlage III](https://www.ejustice.just.fgov.be/) | [Acerta](https://www.acerta.be/), [SSN](https://www.ssn.be/) |
+| **Eindejaarspremie / dubbel vakantiegeld BV** (Bijlage III: vakantiegeld vs. andere vergoedingen) | [FOD Financiën — bedrijfsvoorheffing 2026](https://finance.belgium.be/en/node/236) | [Securex](https://www.securex.be/) |
 | **Overuren — vermindering BV (130u/180u contingent)** | [KB Bijlage III](https://www.ejustice.just.fgov.be/) | [Partena Professional](https://www.partena-professional.be/) |
 | **Flexi-job 2026** (RSZ wn 0 %, wg 28 %, BV 0 %, plafond €18.440/jaar) | [Wet flexi-jobs](https://www.ejustice.just.fgov.be/) | [Acerta](https://www.acerta.be/), [SSN](https://www.ssn.be/) |
 | **Sportbeoefenaar BV** (16,5 % / 33 % / 18 %) | [FOD Fin Sportclubs](https://financien.belgium.be/nl/ondernemingen/personeel_en_loon/bedrijfsvoorheffing/sportclubs) | [Group S](https://www.groups.be/) |
@@ -297,7 +297,7 @@
 | RSZ-werknemer 13,07 % | ✅ socialsecurity.be | n.v.t. | nee |
 | Sociale werkbonus 2026 | ✅ Programmawet + KB | n.v.t. | nee |
 | Fiscale werkbonus 33,14 % / 52,54 % | ⚠️ KB-tekst | ja, ≥ 2 Tier-2 | ja, voorlopig |
-| BBSZ-banden 2026 | ⚠️ RSZ-instructie kw1/2026 nog te fetchen | nee (alleen SSN) | **ja** — info-veld tot bevestigd |
+| BBSZ-banden 2026 | ✅ RSZ Administratieve instructies 2026/1 | ja, Partena/Liantis als triangulatie | nee |
 | VAA-bedrijfswagen min/CO2 | ⚠️ AAFisc-circulaire 2026 nog te fetchen | nee (alleen fibofin) | **ja** |
 | VAA PC/internet/GSM | ✅ KB 25/11/2017 (statisch) | n.v.t. | nee |
 | Forfaitaire beroepskosten €6.070 | ✅ FOD Fin landingspagina | n.v.t. | nee |
@@ -333,7 +333,7 @@
 
 **Top gaps op peildatum 2026-05-08:**
 
-1. **BBSZ-tabel kw1/2026** — RSZ-instructie nog niet gestructureerd publiek geverifieerd. Tier-2 SSN alleenstaand → markeer `bbsz_2026_q1` als `mogelijk_verouderd` met kruisverwijzing naar [RSZ administratieve instructies werkgevers](https://www.socialsecurity.be/employer/instructions/).
+1. **BBSZ-hervorming 2028** — aangekondigd via DOC 56 1243/001 en Tier-2 duiding; niet toepassen in 2026-runtime zonder inkomstenjaar/regeljaar-schakelaar.
 2. **AAFisc-circulaire VAA 2026** — bedrijfswagen min-VAA (€1.690) en ref-CO2 (58/70 g/km) alleen via fibofin Tier-2. Markeer `vaa_bedrijfswagen_*_2026` als `mogelijk_verouderd`.
 3. **Eigen sleutelformule-implementatie** — divergentierisico met FOD Fin Tax-Calc. Mitigatie: in POC-fase 1 alleen UI-link naar FOD Fin-simulator; eigen implementatie pas in fase 2 met 20+ regressietests.
 4. **Aanvullende gemeentebelasting per gemeente** — geen Tier-1 machine-leesbare lijst. Aanbevolen aanpak: parameter met default 7,3 % + UI-disclaimer. **Niet** als datapunt in de JSON opnemen.

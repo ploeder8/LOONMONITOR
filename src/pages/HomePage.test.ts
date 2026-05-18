@@ -10,6 +10,7 @@ import {
   refDatumVoorMaand,
   tewerkstellingsbreukNaarPercentage,
   HomePage,
+  waardeUitNumeriekeInput,
 } from "@/pages/HomePage";
 
 describe("Maand van berekening", () => {
@@ -70,6 +71,18 @@ describe("Ecocheques percentage-invoer", () => {
   });
 });
 
+describe("Numerieke invoer", () => {
+  it("laat een leeg veld tijdelijk leeg in plaats van meteen 0 te forceren", () => {
+    expect(waardeUitNumeriekeInput("", "float")).toBeNull();
+    expect(waardeUitNumeriekeInput("", "int")).toBeNull();
+  });
+
+  it("parseert geldige numerieke invoer naar een getal", () => {
+    expect(waardeUitNumeriekeInput("123.45", "float")).toBe(123.45);
+    expect(waardeUitNumeriekeInput("12", "int")).toBe(12);
+  });
+});
+
 describe("Profiel formulier", () => {
   it("toont de BV-gezinsvelden boven Statuut", () => {
     const html = renderToStaticMarkup(createElement(HomePage));
@@ -86,8 +99,15 @@ describe("Profiel formulier", () => {
     const html = renderToStaticMarkup(createElement(HomePage));
 
     expect(html).toContain("Gehuwd/wettelijk samenwonend - partner zonder of beperkt beroepsinkomen");
-    expect(html).toContain("Een partner is fiscaal niet ten laste.");
-    expect(html).toContain("wat de bedrijfsvoorheffing verlaagt en het geraamde nettoloon verhoogt");
+  });
+
+  it("toont het BBSZ-scenario bij de fiscale gezinsvelden", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+
+    expect(html).toContain("BBSZ-scenario");
+    expect(html).toContain("Individuele aanslag");
+    expect(html.indexOf("BBSZ-scenario")).toBeGreaterThan(html.indexOf("Gezinstype (voor BV)"));
+    expect(html.indexOf("BBSZ-scenario")).toBeLessThan(html.indexOf("Statuut"));
   });
 
   it("plaatst de eigen bijdrage groepsverzekering onder bijkomende looncomponenten", () => {
@@ -128,13 +148,23 @@ describe("Netto-overzicht", () => {
     expect(positions).toEqual([...positions].sort((a, b) => a - b));
   });
 
+  it("toont aparte maand- en jaaroverzichtskaders voor netto en werkgeverskost", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+
+    expect(html).toContain("Netto berekening (per maand)");
+    expect(html).toContain("Netto jaaroverzicht");
+    expect(html).toContain("Loonkost werkgever (per maand)");
+    expect(html).toContain("Loonkost werkgever (per jaar)");
+    expect(html).toContain("Loonkost werkgever / maand");
+  });
+
   it("toont de VAA-werkmiddelen als bijkomende looncomponenten", () => {
     const html = renderToStaticMarkup(createElement(HomePage));
 
     expect(html).toContain("VAA werkmiddelen");
     expect(html).toContain("Laptop / pc");
-    expect(html).toContain("GSM / smartphone");
+    expect(html).toContain("GSM");
     expect(html).toContain("Internet");
-    expect(html).toContain("Telefoonabonnement");
+    expect(html).toContain("GSM-abonnement");
   });
 });

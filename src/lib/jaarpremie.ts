@@ -4,6 +4,8 @@ import { berekenBvBijzonder, type BvBijzonderResultaat } from "@/lib/bvBijzonder
 import type { Datapunt } from "@/types/dataset";
 import type { GezinsType } from "@/lib/bv";
 
+const RSZ_WERKNEMER_PCT = 0.1307;
+
 export interface JaarpremieInput {
   refDatum: string;
   // Optional: indien meegegeven, wordt de bijzondere BV ook berekend
@@ -32,11 +34,14 @@ export function jaarlijksePremie2026(refDatumOrInput: string | JaarpremieInput):
   };
 
   if (input.brutomaandloon && input.gezinstype && bedrag > 0) {
+    const rsz = round2(bedrag * RSZ_WERKNEMER_PCT);
+    const belastbaar = round2(bedrag - rsz);
     const bv = berekenBvBijzonder({
       refertejaarloon: round2(input.brutomaandloon * 12),
-      exceptioneelBruto: bedrag,
+      exceptioneelBruto: belastbaar,
       gezinstype: input.gezinstype,
       kinderenTenLaste: input.kinderenTenLaste ?? 0,
+      soort: "andere_exceptionele_vergoeding",
     });
     base.bvBijzonder = bv;
     base.nettoBedrag = bv.nettoBedrag;

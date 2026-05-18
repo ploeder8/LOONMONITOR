@@ -1,6 +1,6 @@
 # Netto-Calculator Specificatie — PC 200 Loonmotor (uitbreiding)
 
-**Versie:** 2026-05-08
+**Versie:** 2026-05-17
 **Doel:** concrete spec voor de developer om de bestaande POC uit te breiden van *bruto + RSZ + sectorale premies* naar een **volledige netto-loonberekening** voor een PC 200-bediende (inkomstenjaar 2026 / aanslagjaar 2027).
 **Schema-conform:** sluit aan op `pc200_payroll_dataset_2026.json` en de drie referentiedocumenten `_CORE.md`, `_VERIFICATIE.md`, `_DEVELOPER.md`.
 **Cross-reference:** zie `sources_guideline.md` voor bronnenkeuze per bouwsteen.
@@ -33,10 +33,10 @@
 | **Bedrijfsvoorheffing (BV)** | KB Bijlage III 2026 sleutelformule — Schaal I/II/III |
 | **BV-verminderingen** | kinderen ten laste, andere personen, fiscaal alleenstaande, groepsverzekering |
 | **Fiscale werkbonus** | belastingkrediet op BV (33,14 % Luik A / 52,54 % Luik B) |
-| **BBSZ** | info-veld met bandbreedte (geen exacte inhouding tot Tier-1 bevestiging) |
+| **BBSZ** | exacte 2026-inhouding volgens RSZ-scenario; voorschot op PB-eindafrekening |
 | **VAA** | bedrijfswagen, PC, GSM, internet, huisvesting, verwarming, elektriciteit |
 | **Aanvullende gemeentebelasting** | parameter (default 7,3 %) — info-only |
-| **Eindejaarspremie / dubbel vakantiegeld** | bijzondere BV-schaal 17,16 %–23,22 % |
+| **Eindejaarspremie / dubbel vakantiegeld** | bijzondere BV-schaal met aparte kolommen voor vakantiegeld en andere exceptionele vergoedingen |
 
 ### Niet in scope (bewust)
 
@@ -59,6 +59,7 @@ Aanvullingen op het huidige POC-input-formulier:
 | `kinderen_gehandicapt` | integer 0–12 | nee | ≤ `kinderen_ten_laste` (telt dubbel) | 0 |
 | `andere_personen_ten_laste` | integer 0–10 | nee | — | 0 |
 | `fiscaal_alleenstaande_met_kinderen` | boolean | nee | enkel indien `gezinscategorie = alleenstaande` AND `kinderen_ten_laste > 0` | false |
+| `bbsz_scenario` | enum: `individuele_aanslag`, `gemeenschappelijke_aanslag_partner_met_beroepsinkomsten`, `gemeenschappelijke_aanslag_partner_zonder_beroepsinkomsten` | ✓ | bepaalt de BBSZ-kwartaalschijf; los van BV-schaal gekozen omdat BBSZ een eigen RSZ-regime heeft | `individuele_aanslag` |
 | `groepsverzekering_eigen_bijdrage_eur` | decimaal ≥ 0 | nee | maandbijdrage werknemer | 0 |
 | `gemeentebelasting_pct` | decimaal 0–10 | nee | informatief — buiten BV | 7.3 |
 | `vaa_bedrijfswagen_eur_jaar` | decimaal ≥ 0 | nee | jaarbedrag (UI: aparte sub-form met cataloguswaarde + CO2 + brandstof + leeftijd) | 0 |
@@ -88,8 +89,8 @@ Onder de bestaande resultaatblokken komt een nieuw paneel **"Netto-berekening (i
 | − BV-vermindering groepsverzekering | `bv_vermindering_groepsverzekering_2026` | 30 % × eigen bijdrage |
 | − Fiscale werkbonus (krediet) | `werkbonus_fiscaal_2026` | 33,14 % × Luik A + 52,54 % × Luik B |
 | = Netto BV | (afgeleid) | BV - alle verminderingen (min 0) |
-| − BBSZ (band, info-only) | `bbsz_2026_q1` (status WEAK) | range €0 – €60,94/maand |
-| **= Netto maandloon (indicatief)** | (afgeleid) | bruto − RSZ_wn + werkbonus_sociaal − netto_BV − BBSZ_band_min |
+| − BBSZ | `bv_bbsz_schijven_2026` | scenarioformule kwartaalinhouding ÷ 3 |
+| **= Netto maandloon (indicatief)** | (afgeleid) | bruto − RSZ_wn + werkbonus_sociaal − netto_BV − BBSZ + nettovergoedingen − inhoudingen |
 
 Elke regel toont:
 - waarde (€, 2 decimalen)
@@ -98,7 +99,7 @@ Elke regel toont:
 - uitklapbaar audit-paneel met `bron_fragment`, `betrouwbaarheid`, `triangulatie_bronnen`
 
 **Disclaimer-banner verplicht onder netto-paneel:**
-> *"Netto is een indicatieve raming op maandbasis. BV-bedragen worden berekend volgens de KB Bijlage III 2026 sleutelformule. Voor de exacte BV-inhouding raadpleeg de [FOD Fin BV-simulator](https://eservices.minfin.fgov.be/taxcalc/). BBSZ wordt getoond als band omdat de RSZ-instructie 2026 op peildatum nog niet als gestructureerde tabel is gepubliceerd. Eindafrekening volgt via de personenbelasting-aangifte AJ 2027."*
+> *"Netto is een indicatieve raming op maandbasis. BV-bedragen worden berekend volgens de KB Bijlage III 2026 sleutelformule. BBSZ wordt maandelijks ingehouden als voorschot op basis van het gekozen RSZ-scenario; de definitieve afrekening volgt via de personenbelasting-aangifte AJ 2027."*
 
 ---
 
@@ -121,7 +122,7 @@ Stap 5: − BV-verminderingen (kinderen ten laste, andere persoon,
         − Fiscale werkbonus (belastingkrediet)
           = Netto BV (min 0, geen negatieve BV)
         ↓
-Stap 6: − BBSZ (info-band — niet meegerekend in finaal cijfer; UI toont range)
+Stap 6: − BBSZ (scenario-inhouding; kwartaalbedrag ÷ 3)
         ↓
 Stap 7: + vergoedingen woon-werk / fiets (vrijgesteld tot KB-plafond) — al in POC
         ↓
@@ -129,8 +130,8 @@ Stap 8: = NETTO maandloon (indicatief)
 ```
 
 > **Bijzondere gevallen** (apart UI-paneel, zelfde dataset-pijplijn):
-> - **Eindejaarspremie / dubbel vakantiegeld:** bijzondere BV-schaal (`bv_bijzondere_schaal_eindejaar_2026`) — 17,16 % tot 23,22 % afhankelijk van bedrag
-> - **Dubbel vakantiegeld bedienden:** 92 % × maandloon × bijzondere BV-schaal
+> - **Eindejaarspremie / jaarpremie / dubbel vakantiegeld:** bijzondere BV-schaal (`bv_bijzondere_schaal_eindejaar_2026`) op belastbaar exceptioneel bedrag na RSZ.
+> - **Dubbel vakantiegeld bedienden:** 92 % × maandloon incl. VAA; RSZ = 13,07 % op 85/92 van het dubbel vakantiegeld; BV via de kolom vakantiegeld.
 
 ---
 
@@ -219,34 +220,37 @@ function werkbonusFiscaal(luik_A: number, luik_B: number): number {
 
 **Algoritme:**
 1. `refertejaarloon = brutomaandloon × 12` (normaal terugkerend loon, zonder premies)
-2. Lookup tarief in tabel "bijzondere BV-schaal" (AJ 2027)
-3. `bvBijzonder = exceptioneelBruto × tarief`
-4. Trek toepasselijke verminderingen af (kinderen ten laste — zelfde maandbedragen × 12 of jaartabel)
+2. Trek eerst toepasselijke werknemers-RSZ af om het belastbare bedrag te bepalen.
+3. Lookup tarief in tabel "bijzondere BV-schaal" (AJ 2027), met aparte kolom voor vakantiegeld versus andere exceptionele vergoedingen.
+4. `bvBijzonder = belastbaarExceptioneel × tarief`
+5. Trek toepasselijke verminderingen af (kinderen ten laste — zelfde maandbedragen × 12 of jaartabel)
 
 **Tabel bijzondere BV-schaal 2026 (referte-jaarloon → tarief op exceptioneel inkomen):**
 
-| Refertejaarloon (€) | Tarief |
-|---|---|
-| < 11.165 | 0% |
-| 11.165 – 14.080 | 19,17% |
-| 14.080 – 18.025 | 21,20% |
-| 18.025 – 22.870 | 26,25% |
-| 22.870 – 27.620 | 31,30% |
-| 27.620 – 36.180 | 34,33% |
-| 36.180 – 47.075 | 36,35% |
-| 47.075 – 61.260 | 39,38% |
-| 61.260 – 119.290 | 42,41% |
-| > 119.290 | 47,48% |
+| Refertejaarloon (€) | Vakantiegeld | Andere vergoedingen en toelagen |
+|---|---:|---:|
+| ≤ 10.675 | 0% | 0% |
+| 10.675,01 – 13.660 | 19,17% | 23,22% |
+| 13.660,01 – 17.375 | 21,20% | 25,23% |
+| 17.375,01 – 20.840 | 26,25% | 30,28% |
+| 20.840,01 – 23.580 | 31,30% | 35,33% |
+| 23.580,01 – 26.340 | 34,33% | 38,36% |
+| 26.340,01 – 31.830 | 36,34% | 40,38% |
+| 31.830,01 – 34.640 | 39,37% | 43,41% |
+| 34.640,01 – 45.860 | 42,39% | 46,44% |
+| 45.860,01 – 59.900 | 47,44% | 51,48% |
+| > 59.900 | 53,50% | 53,50% |
 
 ```typescript
 function bvBijzonder(
   refertejaarloon: number,
-  exceptioneelBruto: number,
+  belastbaarExceptioneel: number,
+  soort: 'vakantiegeld' | 'andere_exceptionele_vergoeding',
   gezinstype: GezinsType,
   kinderenTenLaste: number,
 ): { tarief: number; bvBruto: number; vermindering: number; bvNetto: number } {
-  const tarief = lookupBijzondereSchaal(refertejaarloon);
-  const bvBruto = round2(exceptioneelBruto * tarief);
+  const tarief = lookupBijzondereSchaal(refertejaarloon, soort);
+  const bvBruto = round2(belastbaarExceptioneel * tarief);
   // Verminderingen — zelfde maandtabel × 12 (eenmalig op de premie toepassen)
   const vermindering = round2(bvVerminderingKinderenJaar(kinderenTenLaste));
   const bvNetto = Math.max(0, round2(bvBruto - vermindering));
@@ -255,26 +259,31 @@ function bvBijzonder(
 ```
 
 **Toepassing:**
-- `eindejaarspremie.ts` → bereken bruto premie via cao-formule, daarna `bvBijzonder(refertejaar, premie, gezinstype, kinderen)` → toon `nettoPremie`
-- `jaarpremie.ts` → idem
-- Dubbel vakantiegeld → idem (`92% × maandloon × bijzondere BV-schaal`)
+- `eindejaarspremie.ts` → bereken bruto premie via cao-formule, trek 13,07% RSZ af, daarna bijzondere BV met soort `andere_exceptionele_vergoeding`.
+- `jaarpremie.ts` → idem.
+- Dubbel vakantiegeld → bruto = `92% × (maandloon incl. VAA)`, RSZ = `13,07% × (85/92 × dubbel vakantiegeld)`, daarna bijzondere BV met soort `vakantiegeld`.
 - Ad-hoc bonus → UI-input + `bvBijzonder` → netto bonus
 
 **Datapunt:** `bv_bijzondere_schaal_eindejaar_2026` met `tabel_refertejaarloon_naar_tarief`.
 
 **Belangrijk:** voor de **normale maandelijkse BV** (op het reguliere maandloon) gebruikt de tool de **schijven-aanpak van §5.2** (AJ 2027). De **bijzondere BV** wordt **enkel** toegepast op variabel/exceptioneel inkomen.
 
-### 5.5 BBSZ (info-band)
+### 5.5 BBSZ (scenario-inhouding)
 
 ```typescript
-function bbszBand(brutoMaand: number, gezinscat: string, ref: Date): { min: number, max: number } {
-  // Tier-2 SSN tabel — markeer WEAK tot Tier-1 RSZ-instructie 2026
-  // Range 2026: €0 – €60,94/maand
-  return { min: 0, max: 60.94 };
+type BbszScenario =
+  | "individuele_aanslag"
+  | "gemeenschappelijke_aanslag_partner_met_beroepsinkomsten"
+  | "gemeenschappelijke_aanslag_partner_zonder_beroepsinkomsten";
+
+function bbsz(brutoMaand: number, scenario: BbszScenario): { kwartaal: number, maand: number } {
+  // Tier-1 RSZ Administratieve instructies 2026/1.
+  // qLoon = 3 × brutoMaand; kwartaalinhouding wordt gedeeld door 3 voor de maandweergave.
+  return { kwartaal: 0, maand: 0 };
 }
 ```
 
-**Datapunt:** `bbsz_2026_q1` (status `mogelijk_verouderd`). UI toont range, geen geprecíseerd bedrag.
+**Datapunt:** `bv_bbsz_schijven_2026` (status `actief`, Tier 1). UI toont het gekozen scenario en vermeldt dat BBSZ een voorschot is; de definitieve afrekening gebeurt via de PB-aangifte AJ 2027.
 
 ### 5.6 VAA (samenvattend)
 
@@ -328,7 +337,7 @@ Voor élke berekende waarde geldt het bestaande audit-trail-invariant:
 **Speciale gevallen:**
 
 - **BV via FOD-simulator (fase 1):** Datapunt `bv_2026_kb_bijlage_iii` heeft `waarde_genormaliseerd: null` en `status: actief_via_externe_simulator`. UI toont disclaimer-knop "Bereken via FOD Fin Tax-Calc" → opent simulator in nieuw tabblad. Geen lokale BV-cijfer — UI toont alleen "extern berekend, zie simulator".
-- **BBSZ (info-band):** Datapunt `bbsz_2026_q1` met `status: mogelijk_verouderd` en `range_min`/`range_max` velden. UI toont gele waarschuwing.
+- **BBSZ:** Datapunt `bv_bbsz_schijven_2026`; scenario verplicht in runtime. UI toont gekozen scenario en voorschot-disclaimer.
 
 ---
 
@@ -351,7 +360,7 @@ Voor élke berekende waarde geldt het bestaande audit-trail-invariant:
 │ − Fiscale werkbonus (33,14 % × € 0)                    − €   0,00│  [audit ▾]
 │ = Netto BV                                             − € 1.107,00│
 ├──────────────────────────────────────────────────────────────────┤
-│ BBSZ (info-band)                                       € 0 – 61  │  ⚠️ niet meegerekend
+│ − BBSZ (gekozen scenario, kwartaal ÷ 3)              − €    0–61│  [audit ▾]
 ├──────────────────────────────────────────────────────────────────┤
 │ NETTO MAANDLOON (indicatief)                           € 1.935,55│
 │ Aanvullende gemeentebelasting (7,3 % default)        — informatief│
@@ -374,7 +383,7 @@ Voor élke berekende waarde geldt het bestaande audit-trail-invariant:
 | `kinderen_gehandicapt > kinderen_ten_laste` | Hard error met UI-validatie |
 | `vaa_bedrijfswagen_eur_jaar < 1690` | Auto-correctie naar 1690 + info-icoon "Minimum VAA 2026 = €1.690" |
 | Netto < 0 | UI toont "Netto onder 0 — controleer input + VAA-bedragen" rode banner |
-| BBSZ datapunt `mogelijk_verouderd` | Gele icoon + "Officiële RSZ-instructie 2026 nog te bevestigen" |
+| BBSZ-scenario niet gekozen | Default `individuele_aanslag` in UI; runtime-input blijft expliciet |
 
 ---
 
@@ -398,7 +407,7 @@ Voor élke berekende waarde geldt het bestaande audit-trail-invariant:
 | **NTC-12** | Werkbonus-test: bruto €3.336,98 (Luik A wegval) | € 3.336,98 | werkbonus = €0 | idem |
 | **NTC-13** | Werkbonus-test: bruto €2.880,32 (Luik A grens, Luik B wegval) | € 2.880,32 | werkbonus_A = €125,04, _B = €0 | idem |
 | **NTC-14** | Eindejaarspremie 1 maandloon — bijzondere BV-schaal | € 3.000 (premie) | ≈ € 2.310 (na 23 % BV) | Acerta tool |
-| **NTC-15** | Dubbel vakantiegeld 92 % maandloon — bijzondere BV-schaal | € 2.760 (= 92 % × 3000) | ≈ € 2.110 | Acerta tool |
+| **NTC-15** | Dubbel vakantiegeld 92 % maandloon — RSZ 85/92 + bijzondere BV-schaal | € 2.760 (= 92 % × 3000) | ≈ € 1.398 | Acerta tool |
 
 **Acceptatiecriteria:**
 - Alle 15 NTC-cases groen in `bun test`
@@ -438,7 +447,7 @@ bv_bijzondere_schaal_eindejaar_2026
 werkbonus_sociaal_luik_A_2026              → R + S₀ + helling
 werkbonus_sociaal_luik_B_2026
 werkbonus_fiscaal_2026                     → 33,14 % / 52,54 %
-bbsz_2026_q1                               → range, status WEAK
+bv_bbsz_schijven_2026                      → scenario-inhouding, status actief Tier 1
 vaa_bedrijfswagen_min_2026                 → €1.690
 vaa_bedrijfswagen_co2_diesel_2026          → 58 g/km
 vaa_bedrijfswagen_co2_benzine_2026         → 70 g/km

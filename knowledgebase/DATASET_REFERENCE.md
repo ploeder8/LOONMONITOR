@@ -3,7 +3,7 @@
 **Bron:** 
 `src/data/pc200_payroll_dataset_2026.json`
 
-**Peildatum:** 2026-05-08
+**Peildatum:** 2026-05-17
 **Doeljaar:** 2026
 
 ---
@@ -46,7 +46,7 @@
 | `fiscaal_overuren_contingent_2026` | mogelijk_verouderd | Tier 2 | Algemeen contingent fiscaalvriendelijke overuren 2026 (BV-vermindering werkne... |
 | `fiscaal_studentenarbeid_650u_2026` | actief | Tier 2 | Geen bedrijfsvoorheffing op eerste 650 uren studentenarbeid per kalenderjaar |
 | `bv_werkbonus_bedienden_2026` | actief | Tier 2 | Sociale werkbonus (RSZ-vermindering) voor bedienden â€“ drie perioden 2026. L... |
-| `bv_bbsz_schijven_2026` | actief | Tier 2 | Bijzondere Bijdrage Sociale Zekerheid (BBSZ) 2026 â€“ kwartaalschijven catego... |
+| `bv_bbsz_schijven_2026` | actief | Tier 1 | Bijzondere Bijdrage Sociale Zekerheid (BBSZ) 2026 - kwartaalschijven voor individuele en gemeenschappelijke aanslag |
 
 ## `premies_en_voordelen` (13 datapunten)
 
@@ -64,7 +64,7 @@
 | `pc200_maaltijdcheques_sectoraal` | niet_gevonden | ? | Sectorale verplichting maaltijdcheques in PC 200 |
 | `pc200_thuiswerkvergoeding_sectoraal` | niet_gevonden | ? | Sectorale thuiswerkvergoeding in PC 200 |
 | `pc200_landingsbaan_sectorvergoeding_2026` | actief | Tier 3 | Bijkomende sectorale vergoeding bij 1/5e landingsbaan PC 200 vanaf 1/6/2026 |
-| `pc200_vakantiegeld_bedienden` | niet_gevonden | ? | Vakantiegeld voor bedienden PC 200 (enkel + dubbel vakantiegeld) â€“ wettelij... |
+| `pc200_vakantiegeld_bedienden` | actief | Tier 1 | Vakantiegeld voor bedienden PC 200 (enkel + dubbel vakantiegeld) en RSZ-basis 85/92 |
 
 ## `arbeidsvoorwaarden` (3 datapunten)
 
@@ -76,7 +76,7 @@
 | `vaa_pc_laptop_forfait_2026` | actief | Tier 1 | VAA pc, laptop en randapparatuur — forfait jaarbedrag |
 | `vaa_gsm_smartphone_forfait_2026` | actief | Tier 1 | VAA mobiele telefoon, smartphone of tablet — forfait jaarbedrag |
 | `vaa_internet_forfait_2026` | actief | Tier 1 | VAA internetaansluiting — forfait jaarbedrag |
-| `vaa_telefoonabonnement_forfait_2026` | actief | Tier 1 | VAA vast of mobiel telefoonabonnement — forfait jaarbedrag |
+| `vaa_GSM-abonnement_forfait_2026` | actief | Tier 1 | VAA vast of mobiel GSM-abonnement — forfait jaarbedrag |
 
 ---
 

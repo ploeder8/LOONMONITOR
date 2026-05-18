@@ -33,7 +33,7 @@
 | Sociale werkbonus hellingen | 0,2738 / 0,2699 | ✅ Tier 2 Securex | lex4you.be | OK |
 | Werkbonus cutoff loongrenzen | €2.880,32 / €3.336,98 | ⚠️ Tier 2-bevestiging | partena | **Triangulatie nodig** met SD Worx |
 | Fiscale werkbonus % luik A/B | 33,14% / 52,54% | ⚠️ Pending Arizona | KB-publicatie | Beide scenario's modelleren (zie P-01) |
-| BBSZ-banden | 4,22% / 1,1% / 3,38% / 1,10% / cap €60,94 | ⚠️ Tier 2 Liantis | liantis.be | **Triangulatie nodig** met Groups + RSZ-instructies 2026 |
+| BBSZ-banden 2026 | 4,22% / 1,1% / 3,38% / 1,10% / cap €60,94 + gemeenschappelijke aanslag-scenario's | ✅ Tier 1 RSZ 2026/1 | socialsecurity.be | OK — scenario's expliciet in runtime; Partena/Liantis alleen triangulatie |
 | PB-schijven AJ 2027 | 16.720 / 29.510 / 51.070 | ✅ Tier 2 Practicali + Wolters Kluwer | practicali.be | OK |
 | Belastingvrije som AJ 2027 | €11.180 | ✅ Tier 2 Practicali + Wet Diverse Bepalingen 18/12/2025 | BS 30/12/2025 | OK |
 | Forfaitaire beroepskosten max | €6.070 (30%) | ✅ Tier 2 Practicali | practicali.be | OK |
@@ -50,7 +50,7 @@
 | Jaarlijkse premie 2026 | €330,84 | sfonds200.be | OK — bevestigd |
 | Sociaal Fonds 200 werkgeversbijdrage | 0,23% | sfonds200.be / cao | **Te bevestigen tegen actuele cao** — kan kwartaal-specifiek zijn |
 | Eindejaarspremie | 13e maand (formule herzien per akkoord 18/12/2025 + 15/1/2026) | cao PC 200 | **Cao-tekst rechtstreeks raadplegen** voor exacte formule (anciënniteit 5→3 jaar) |
-| Dubbel vakantiegeld bedienden | 92% × bruto / 12 (benadering) | cao algemeen | OK voor provisioneel, exact bedrag pas in mei-loon |
+| Dubbel vakantiegeld bedienden | 92% × maandloon incl. VAA; RSZ 13,07% op 85/92 | RSZ Administratieve instructies | Geïntegreerd in jaaroverzicht |
 | Fietsvergoeding (verhoogd akkoord 15/1/2026) | nog te kwantificeren | cao PC 200 + fiscale max €0,37/km × 3.700 km | **Triangulatie nodig** zodra cao-tekst beschikbaar |
 | Tussenkomst treinvervoer | aangepast in akkoord 15/1/2026 | cao PC 200 | idem |
 
@@ -77,7 +77,7 @@
 
 ### 3.2 BBSZ — gezinssituatie
 
-Huidige rekenmodule gebruikt **alleen de individuele aanslag** (alleenstaand of één-inkomensgezin). Voor twee inkomens kan de definitieve BBSZ verschillen — pas vastgesteld in PB-aangifte AJ 2027. POC moet dit als info-band tonen; productieversie moet een **`bbsz_scenario`-parameter** bieden (alleenstaand / gehuwd_één_inkomen / gehuwd_twee_inkomens).
+**Opgelost 17/05/2026:** de rekenmodule heeft een expliciete `bbszScenario`-parameter voor individuele aanslag, gemeenschappelijke aanslag met partner met beroepsinkomsten, en gemeenschappelijke aanslag met partner zonder beroepsinkomsten. De UI toont BBSZ als voorschot; de definitieve afrekening blijft via de PB-aangifte AJ 2027 lopen.
 
 ### 3.3 VAA bedrijfswagen — formule niet geïmplementeerd
 
@@ -144,7 +144,7 @@ Allemaal **buiten scope POC**, opnemen in roadmap voor productie.
 | Onderwerp | Divergentie | Aanbeveling |
 |---|---|---|
 | Fiscale werkbonus % | 33,14/52,54 (huidig) vs 35/63 (Arizona pending) | Beide scenario's, default = huidig |
-| BBSZ overgangsregime 2028 | Liantis kondigt 4% en cap €30,47 aan vanaf 2028; nog geen wettekst | Niet in 2026-versie opnemen |
+| BBSZ-hervorming 2028 | Kamerstuk DOC 56 1243/001 en Liantis kondigen individualisering, 4% en cap €30,47 aan vanaf inkomsten 2028 / AJ 2029; wetgeving opvolgen tot definitieve publicatie | Niet in 2026-runtime opnemen; pas implementeren met inkomstenjaar/regeljaar-schakelaar |
 | Eindejaarspremie PC 200 | "Lichte herziening" akkoord 15/1/2026 — exacte formule afhankelijk van anciënniteit (5→3 jaar) | **Cao-tekst rechtstreeks raadplegen** |
 
 ---

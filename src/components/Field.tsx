@@ -6,7 +6,7 @@ export function FormField({
   helper,
   children,
 }: {
-  label: string;
+  label: React.ReactNode;
   htmlFor?: string;
   helper?: string;
   children: React.ReactNode;
