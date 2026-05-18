@@ -73,6 +73,12 @@ bun run build
 pnpm preview
 ```
 
+## Git-conventies
+
+- Broncode, documentatie, JSON-data en configbestanden gebruiken `LF` line endings.
+- Windows Internet Shortcut-bestanden (`*.url`) blijven bewust op `CRLF`.
+- De repository legt dit af via `.gitattributes` en `.editorconfig`, zodat line endings niet afhangen van lokale Git- of editorinstellingen.
+
 ## Pagina's
 
 - **`/`** — Profiel + Resultaten.
