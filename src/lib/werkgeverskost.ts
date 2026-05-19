@@ -21,6 +21,7 @@ export interface WerkgeverskostInput {
   maaltijdchequeWerkdagen?: number;      // aantal werkdagen in de maand
   extraHospitalisatie?: number;          // €/maand
   extraEcocheques?: number;              // €/maand
+  vaaRszPlichtigPerMaand?: number;       // forfaitaire VAA onderworpen aan gewone RSZ
   woonwerkVergoedingPerMaand?: number;   // €/maand vrijgestelde woon-werkvergoeding
   onkostenvergoedingPerMaand?: number;   // €/maand vrijgestelde onkostenvergoeding
 }
@@ -65,13 +66,15 @@ export function werkgeverskost(input: WerkgeverskostInput): WerkgeverskostResult
     extraMaaltijdcheques = 0,
     maaltijdchequeWerkgeversaandeelPerDag,
     maaltijdchequeWerkdagen = 0,
-    extraHospitalisatie = 0,
-    extraEcocheques = 0,
-    woonwerkVergoedingPerMaand = 0,
-    onkostenvergoedingPerMaand = 0,
-  } = input;
+  extraHospitalisatie = 0,
+  extraEcocheques = 0,
+  vaaRszPlichtigPerMaand = 0,
+  woonwerkVergoedingPerMaand = 0,
+  onkostenvergoedingPerMaand = 0,
+} = input;
 
-  const rszR: RszResultaat = rszBijdragen({ brutoloon, refDatum, bouwVlag });
+  const rszBasis = round2(brutoloon + Math.max(vaaRszPlichtigPerMaand, 0));
+  const rszR: RszResultaat = rszBijdragen({ brutoloon: rszBasis, refDatum, bouwVlag });
 
   const ao = round2(brutoloon * arbeidsongevallenPct);
   const provEjp = round2(brutoloon * premieEjpPct);

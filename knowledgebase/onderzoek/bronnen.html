@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="nl-BE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bronnen — Loonmotor BE</title>
+<style>
+:root{--bg:#fafbfc;--surface:#fff;--border:#e4e7eb;--text:#1a2332;--text-muted:#5a6779;--accent:#0b5394;--accent-light:#e8f0f9;--code-bg:#f5f7fa;--shadow:0 1px 3px rgba(0,0,0,.06)}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.6;color:var(--text);background:var(--bg)}
+header.topbar{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.topbar-inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-weight:700;font-size:17px;color:var(--accent);text-decoration:none}
+nav.topnav{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+nav.topnav a{font-size:13px;color:var(--text-muted);text-decoration:none;padding:6px 10px;border-radius:4px}
+nav.topnav a:hover{background:var(--accent-light);color:var(--accent)}
+nav.topnav a.active{background:var(--accent);color:#fff}
+main{max-width:1200px;margin:0 auto;padding:32px 24px 64px}
+h1{font-size:30px;margin:0 0 8px;font-weight:700}h2{font-size:22px;margin:32px 0 12px;font-weight:600;padding-bottom:6px;border-bottom:2px solid var(--accent-light)}
+h3{font-size:17px;margin:24px 0 8px;font-weight:600}
+p{margin:8px 0 12px}ul,ol{padding-left:22px}li{margin:6px 0}a{color:var(--accent);word-break:break-word}a:hover{text-decoration:underline}
+code{font-family:"SF Mono",Monaco,Consolas,monospace;background:var(--code-bg);padding:1px 5px;border-radius:3px;font-size:13px}
+.subtitle{color:var(--text-muted);font-size:16px;margin:0 0 24px}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:14px;background:var(--surface);border-radius:6px;overflow:hidden;box-shadow:var(--shadow)}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:var(--accent-light);font-weight:600;font-size:13px}
+tr:last-child td{border-bottom:none}tr:hover{background:#f8fafc}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;margin:0 3px 2px 0;letter-spacing:.3px;text-transform:uppercase}
+.badge.feit{background:#d1fae5;color:#065f46}.badge.aanname{background:#fef3c7;color:#92400e}
+.badge.officieel{background:#dbeafe;color:#1e40af}.badge.sector{background:#fce7f3;color:#831843}
+.badge.eu{background:#ddd6fe;color:#5b21b6}.badge.uitgever{background:#fed7aa;color:#9a3412}
+.callout{border-left:4px solid var(--accent);background:var(--accent-light);padding:12px 16px;margin:14px 0;border-radius:0 4px 4px 0}
+.callout.warn{border-color:#d97706;background:#fef3c7}
+.source-block{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 20px;margin:14px 0;box-shadow:var(--shadow)}
+.source-block h3{margin-top:0}
+.scope-in{background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+.scope-out{background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size:13px;color:var(--text-muted);text-align:center}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+<a href="index.html" class="brand">Loonmotor BE</a>
+<nav class="topnav">
+<a href="index.html">Overzicht</a><a href="marktonderzoek.html">Markt</a>
+<a href="concurrentiematrix.html">Concurrenten</a><a href="werking-loonmotor.html">Werking</a>
+<a href="wetgevend-kader.html">Wetgeving</a><a href="requirements.html">Requirements</a>
+<a href="datamodel.html">Datamodel</a><a href="technische-architectuur.html">Architectuur</a>
+<a href="juridische-checklist.html">Juridisch</a><a href="mvp-roadmap.html">Roadmap</a>
+<a href="risicoregister.html">Risico's</a><a href="jaakie-specificatie.html">Jaakie</a>
+<a href="testcorpus.html">Testcorpus</a><a href="referentie-tools.html">Referenties</a>
+<a href="bronnen.html" class="active">Bronnen</a>
+</nav></div></header>
+
+<main>
+<h1>Bronnen</h1>
+<p class="subtitle">Officiële Belgische en Europese bronnen die dit dossier ondersteunen. Geprioriteerd: primaire wetgeving &gt; overheidsportalen &gt; sectorale organen &gt; juridische uitgevers. Geconsulteerd: 2026-04 / 2026-05.</p>
+
+<div class="callout warn">
+Voor productie-gebruik moeten parameter-bronnen (RSZ-instructies, BV-schalen, beslagschijven, CAO's) <strong>automatisch gemonitord</strong> worden — RSS / e-mail-abonnementen op de portalen hieronder. Een feed-koppeling naar bsg-publicaties is niet beschikbaar; eigen scraping nodig.
+</div>
+
+<h2>1. Belgisch Staatsblad &amp; primaire wetgeving</h2>
+<div class="source-block">
+<h3>Belgisch Staatsblad / Justel</h3>
+<table>
+<thead><tr><th>Bron</th><th>URL</th><th>Gebruik</th></tr></thead>
+<tbody>
+<tr><td>Belgisch Staatsblad (BS) — alle KB's en wetten</td><td><a href="https://www.ejustice.just.fgov.be/cgi/welcome.pl" target="_blank" rel="noopener">ejustice.just.fgov.be</a></td><td>Brondoc per KB/Wet</td></tr>
+<tr><td>Justel — geconsolideerde wetgeving</td><td><a href="https://www.ejustice.just.fgov.be/loi/loi.htm" target="_blank" rel="noopener">ejustice.just.fgov.be/loi</a></td><td>Geconsolideerde versies</td></tr>
+<tr><td>Wet 27/6/1969 RSZ</td><td><a href="https://www.ejustice.just.fgov.be/eli/wet/1969/06/27/1969062701/justel" target="_blank" rel="noopener">eli/wet/1969/06/27/1969062701</a></td><td>RSZ-stelsel werknemers</td></tr>
+<tr><td>Wet 3/7/1978 arbeidsovereenkomsten</td><td><a href="https://www.ejustice.just.fgov.be/eli/wet/1978/07/03/1978070303/justel" target="_blank" rel="noopener">eli/wet/1978/07/03/1978070303</a></td><td>Arbeidsovereenkomst, opzeg, ontslag</td></tr>
+<tr><td>Wet 12/4/1965 loonbescherming</td><td><a href="https://www.ejustice.just.fgov.be/eli/wet/1965/04/12/1965041209/justel" target="_blank" rel="noopener">eli/wet/1965/04/12/1965041209</a></td><td>Art. 15 loonbrief; uitbetaling</td></tr>
+<tr><td>KB 27/9/1966 (BS 11/10/1966)</td><td><a href="https://www.ejustice.just.fgov.be/eli/besluit/1966/09/27/1966092702/justel" target="_blank" rel="noopener">eli/besluit/1966/09/27/1966092702</a></td><td>Vermeldingen loonbrief</td></tr>
+<tr><td>KB 28/11/1969 erkenning ESS</td><td><a href="https://www.ejustice.just.fgov.be" target="_blank" rel="noopener">ejustice.just.fgov.be</a></td><td>Voorwaarden erkenning sociaal secretariaat</td></tr>
+<tr><td>KB 20/2/2017 kwaliteitsbarometer ESS</td><td><a href="https://www.ejustice.just.fgov.be" target="_blank" rel="noopener">ejustice.just.fgov.be</a></td><td>Jaarlijkse audit-vereiste</td></tr>
+<tr><td>KB 8/8/1980 sociale documenten</td><td><a href="https://www.ejustice.just.fgov.be" target="_blank" rel="noopener">ejustice.just.fgov.be</a></td><td>Bewaartermijn 5 jaar</td></tr>
+<tr><td>Wet 26/12/2013 eenheidsstatuut</td><td><a href="https://www.ejustice.just.fgov.be/eli/wet/2013/12/26/2013012289/justel" target="_blank" rel="noopener">eli/wet/2013/12/26/2013012289</a></td><td>Opzeg arbeider/bediende harmonisatie</td></tr>
+<tr><td>Wet 30/7/2018 AVG-omzetting BE</td><td><a href="https://www.ejustice.just.fgov.be/eli/wet/2018/07/30/2018040581/justel" target="_blank" rel="noopener">eli/wet/2018/07/30/2018040581</a></td><td>Nationale uitvoering AVG</td></tr>
+<tr><td>Art. 1409 e.v. Gerechtelijk Wetboek + KB 3/12/2025 loonbeslag 2026</td><td><a href="https://www.ejustice.just.fgov.be" target="_blank" rel="noopener">ejustice.just.fgov.be</a></td><td>Schijven beslag/overdracht</td></tr>
+<tr><td>KB 11/12/2025 BV-schalen 2026 (BS 29/12/2025)</td><td><a href="https://www.ejustice.just.fgov.be" target="_blank" rel="noopener">ejustice.just.fgov.be</a></td><td>Bijlage III WIB 92</td></tr>
+<tr><td>KB 10/11/2025 maaltijdcheques</td><td><a href="https://www.ejustice.just.fgov.be" target="_blank" rel="noopener">ejustice.just.fgov.be</a></td><td>MC €10 vanaf 2026</td></tr>
+<tr><td>Wet 5/12/1968 CAO &amp; PC</td><td><a href="https://www.ejustice.just.fgov.be/eli/wet/1968/12/05/1968120503/justel" target="_blank" rel="noopener">eli/wet/1968/12/05/1968120503</a></td><td>Paritaire comités-stelsel</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>2. Federale overheidsdiensten — RSZ, FOD Fin, FOD WASO</h2>
+<table>
+<thead><tr><th>Bron</th><th>URL</th><th>Gebruik</th></tr></thead>
+<tbody>
+<tr><td>RSZ (sociale zekerheid werknemers) — instructies, DmfA, Dimona</td><td><a href="https://www.socialsecurity.be" target="_blank" rel="noopener">socialsecurity.be</a></td><td>Kwartaalinstructies; aangiftesystemen <span class="badge officieel">Officieel</span></td></tr>
+<tr><td>Dimona portaal</td><td><a href="https://www.socialsecurity.be/site_nl/employer/applics/dimona/index.htm" target="_blank" rel="noopener">socialsecurity.be/dimona</a></td><td>In/uit dienst aangifte</td></tr>
+<tr><td>DmfA — multifunctionele aangifte</td><td><a href="https://www.socialsecurity.be/site_nl/employer/applics/dmfa/index.htm" target="_blank" rel="noopener">socialsecurity.be/dmfa</a></td><td>Kwartaalaangifte XML</td></tr>
+<tr><td>FOD Financiën — Belcotax-on-web</td><td><a href="https://financien.belgium.be/nl/E-services/Belcotaxonweb" target="_blank" rel="noopener">financien.belgium.be/belcotax</a></td><td>Fiches 281.10/.20/.25/.50</td></tr>
+<tr><td>FOD Financiën — Finprof BV-doorstorting</td><td><a href="https://financien.belgium.be/nl/E-services/Finprof" target="_blank" rel="noopener">financien.belgium.be/finprof</a></td><td>BV-aangifte werkgever</td></tr>
+<tr><td>FOD Financiën — Fisconetplus (commentaren WIB)</td><td><a href="https://eservices.minfin.fgov.be/myminfin-web" target="_blank" rel="noopener">eservices.minfin.fgov.be</a></td><td>Administratieve commentaren</td></tr>
+<tr><td>FOD WASO — werkgelegenheid, arbeid, sociaal overleg</td><td><a href="https://werk.belgie.be" target="_blank" rel="noopener">werk.belgie.be</a></td><td>Arbeidsrecht, PC-overzicht</td></tr>
+<tr><td>FOD WASO — paritaire comités opzoeker</td><td><a href="https://werk.belgie.be/nl/themas/paritaire-comites-en-collectieve-arbeidsovereenkomsten-caos" target="_blank" rel="noopener">werk.belgie.be/paritaire-comites</a></td><td>PC-aansluiting NACE</td></tr>
+<tr><td>KSZ — Kruispuntbank Sociale Zekerheid</td><td><a href="https://www.ksz-bcss.fgov.be" target="_blank" rel="noopener">ksz-bcss.fgov.be</a></td><td>Authentieke bronnen sociaal beleid</td></tr>
+<tr><td>Sigedis / DB2P (aanvullende pensioenen)</td><td><a href="https://www.sigedis.be" target="_blank" rel="noopener">sigedis.be</a></td><td>2e-pijler-aangiften</td></tr>
+<tr><td>KBO — Kruispuntbank Ondernemingen</td><td><a href="https://kbopub.economie.fgov.be" target="_blank" rel="noopener">kbopub.economie.fgov.be</a></td><td>Werkgever-validatie</td></tr>
+<tr><td>e-Box Enterprise (overheidsberichten ondernemingen)</td><td><a href="https://www.socialsecurity.be/site_nl/employer/applics/ebox/index.htm" target="_blank" rel="noopener">socialsecurity.be/ebox</a></td><td>Communicatie RSZ ↔ werkgever</td></tr>
+<tr><td>Sociale balans (NBB)</td><td><a href="https://www.nbb.be" target="_blank" rel="noopener">nbb.be</a></td><td>Jaarrekening neerlegging — sociale balans</td></tr>
+<tr><td>Centraal Bestand Beslagberichten (CBB)</td><td><a href="https://justitie.belgium.be" target="_blank" rel="noopener">justitie.belgium.be</a></td><td>Loonbeslag-consultatie</td></tr>
+<tr><td>Rijksdienst voor Jaarlijkse Vakantie (RJV)</td><td><a href="https://www.rjv.be" target="_blank" rel="noopener">rjv.be</a></td><td>Vakantiegeld arbeiders</td></tr>
+<tr><td>Rijksregister</td><td><a href="https://www.ibz.rrn.fgov.be" target="_blank" rel="noopener">ibz.rrn.fgov.be</a></td><td>RRN-regelgeving (Wet 8/8/1983 + KB 22/4/2019)</td></tr>
+</tbody>
+</table>
+
+<h2>3. Privacy &amp; gegevensbescherming</h2>
+<table>
+<thead><tr><th>Bron</th><th>URL</th><th>Gebruik</th></tr></thead>
+<tbody>
+<tr><td>Gegevensbeschermingsautoriteit (GBA)</td><td><a href="https://www.gegevensbeschermingsautoriteit.be" target="_blank" rel="noopener">gegevensbeschermingsautoriteit.be</a></td><td>DPIA-lijst, richtlijnen, boetes</td></tr>
+<tr><td>European Data Protection Board (EDPB)</td><td><a href="https://edpb.europa.eu" target="_blank" rel="noopener">edpb.europa.eu</a></td><td>EU-richtlijnen AVG</td></tr>
+<tr><td>AVG / GDPR (Vo. 2016/679)</td><td><a href="https://eur-lex.europa.eu/legal-content/NL/TXT/?uri=CELEX%3A32016R0679" target="_blank" rel="noopener">EUR-Lex 32016R0679</a></td><td>Verordening tekst NL</td></tr>
+<tr><td>NAR — CAO 81 (controle elektronische communicatie)</td><td><a href="https://www.cnt-nar.be" target="_blank" rel="noopener">cnt-nar.be</a></td><td>Werkplek-controle regels</td></tr>
+</tbody>
+</table>
+
+<h2>4. Europese wetgeving</h2>
+<table>
+<thead><tr><th>Bron</th><th>URL</th><th>Gebruik</th></tr></thead>
+<tbody>
+<tr><td>EUR-Lex (centrale EU-databank)</td><td><a href="https://eur-lex.europa.eu" target="_blank" rel="noopener">eur-lex.europa.eu</a></td><td>Alle EU-verordeningen / -richtlijnen <span class="badge eu">EU</span></td></tr>
+<tr><td>Richtlijn 2023/970 loontransparantie</td><td><a href="https://eur-lex.europa.eu/legal-content/NL/TXT/?uri=CELEX%3A32023L0970" target="_blank" rel="noopener">EUR-Lex 32023L0970</a></td><td>Deadline omzetting 7/6/2026</td></tr>
+<tr><td>Vo. 883/2004 coördinatie sociale zekerheid</td><td><a href="https://eur-lex.europa.eu/legal-content/NL/TXT/?uri=CELEX%3A32004R0883" target="_blank" rel="noopener">EUR-Lex 32004R0883</a></td><td>Grensoverschrijdende tewerkstelling</td></tr>
+<tr><td>NIS2 Richtlijn 2022/2555</td><td><a href="https://eur-lex.europa.eu/legal-content/NL/TXT/?uri=CELEX%3A32022L2555" target="_blank" rel="noopener">EUR-Lex 32022L2555</a></td><td>Cybersecurity kritieke ICT</td></tr>
+<tr><td>DORA Vo. 2022/2554</td><td><a href="https://eur-lex.europa.eu/legal-content/NL/TXT/?uri=CELEX%3A32022R2554" target="_blank" rel="noopener">EUR-Lex 32022R2554</a></td><td>Digital Operational Resilience (financiële sector)</td></tr>
+</tbody>
+</table>
+
+<h2>5. Sectorale organen — paritaire comités &amp; fondsen</h2>
+<table>
+<thead><tr><th>Bron</th><th>URL</th><th>Gebruik</th></tr></thead>
+<tbody>
+<tr><td>NAR — Nationale Arbeidsraad</td><td><a href="https://www.cnt-nar.be" target="_blank" rel="noopener">cnt-nar.be</a></td><td>Interprofessionele CAO's <span class="badge sector">Sector</span></td></tr>
+<tr><td>Constructiv (PC 124 bouw)</td><td><a href="https://www.constructiv.be" target="_blank" rel="noopener">constructiv.be</a></td><td>Bouwsector fonds</td></tr>
+<tr><td>Sociaal Fonds 200 (PC 200)</td><td><a href="https://www.sf200.be" target="_blank" rel="noopener">sf200.be</a></td><td>Aanv. PC bedienden — premies</td></tr>
+<tr><td>IFIC (PC 330 zorg-loonsysteem)</td><td><a href="https://www.if-ic.org" target="_blank" rel="noopener">if-ic.org</a></td><td>Functieclassificatie zorg</td></tr>
+<tr><td>Horval (PC 220 voeding-bedienden)</td><td><a href="https://www.horval.be" target="_blank" rel="noopener">horval.be</a></td><td>Sectoraal fonds voeding</td></tr>
+<tr><td>FEVIA / Alimento</td><td><a href="https://www.alimento.be" target="_blank" rel="noopener">alimento.be</a></td><td>Voedingsindustrie</td></tr>
+<tr><td>Volta (PC 149.01 elektriciens)</td><td><a href="https://www.volta-org.be" target="_blank" rel="noopener">volta-org.be</a></td><td>Elektrosector fonds</td></tr>
+<tr><td>Cevora (vorming PC 200)</td><td><a href="https://www.cevora.be" target="_blank" rel="noopener">cevora.be</a></td><td>Opleidingen PC 200</td></tr>
+</tbody>
+</table>
+
+<h2>6. Erkende sociale secretariaten — referentie</h2>
+<table>
+<thead><tr><th>Naam</th><th>URL</th><th>Marktrol</th></tr></thead>
+<tbody>
+<tr><td>SD Worx</td><td><a href="https://www.sdworx.be" target="_blank" rel="noopener">sdworx.be</a></td><td>Marktleider; benchmark functionaliteit</td></tr>
+<tr><td>Acerta</td><td><a href="https://www.acerta.be" target="_blank" rel="noopener">acerta.be</a></td><td>Top 4 ESS</td></tr>
+<tr><td>Partena Professional</td><td><a href="https://www.partena-professional.be" target="_blank" rel="noopener">partena-professional.be</a></td><td>Top 4 ESS</td></tr>
+<tr><td>Liantis</td><td><a href="https://www.liantis.be" target="_blank" rel="noopener">liantis.be</a></td><td>Top 4 ESS</td></tr>
+<tr><td>Securex</td><td><a href="https://www.securex.be" target="_blank" rel="noopener">securex.be</a></td><td>Erkend ESS</td></tr>
+<tr><td>Groep S</td><td><a href="https://www.groups.be" target="_blank" rel="noopener">groups.be</a></td><td>Erkend ESS</td></tr>
+<tr><td>Attentia</td><td><a href="https://www.attentia.be" target="_blank" rel="noopener">attentia.be</a></td><td>Erkend ESS</td></tr>
+<tr><td>UCM</td><td><a href="https://www.ucm.be" target="_blank" rel="noopener">ucm.be</a></td><td>FR-talig ESS</td></tr>
+</tbody>
+</table>
+
+<h2>7. HR-tech challengers (Belgisch) — referentie</h2>
+<table>
+<thead><tr><th>Naam</th><th>URL</th><th>Positionering</th></tr></thead>
+<tbody>
+<tr><td>Officient</td><td><a href="https://www.officient.io" target="_blank" rel="noopener">officient.io</a></td><td>HR-platform; payroll via ESS-partner</td></tr>
+<tr><td>Payflip</td><td><a href="https://www.payflip.be" target="_blank" rel="noopener">payflip.be</a></td><td>Flexibele verloning / cafetaria</td></tr>
+<tr><td>Lano</td><td><a href="https://www.lano.io" target="_blank" rel="noopener">lano.io</a></td><td>Global payroll-aggregator</td></tr>
+<tr><td>Workday — payroll BE</td><td><a href="https://www.workday.com/nl-be" target="_blank" rel="noopener">workday.com/nl-be</a></td><td>Enterprise HR-suite</td></tr>
+<tr><td>Protime (tijd &amp; aanwezigheid)</td><td><a href="https://www.protime.eu" target="_blank" rel="noopener">protime.eu</a></td><td>Tijdsregistratie-koppeling</td></tr>
+</tbody>
+</table>
+
+<h2>8. Statistieken &amp; benchmarks</h2>
+<table>
+<thead><tr><th>Bron</th><th>URL</th><th>Gebruik</th></tr></thead>
+<tbody>
+<tr><td>Statbel (algemene statistiek)</td><td><a href="https://statbel.fgov.be" target="_blank" rel="noopener">statbel.fgov.be</a></td><td>Tewerkstelling, sectoren, lonen</td></tr>
+<tr><td>Eurostat</td><td><a href="https://ec.europa.eu/eurostat" target="_blank" rel="noopener">ec.europa.eu/eurostat</a></td><td>EU-vergelijkingen</td></tr>
+<tr><td>Federaal Planbureau</td><td><a href="https://www.plan.be" target="_blank" rel="noopener">plan.be</a></td><td>Indexvooruitzichten, sociale rekeningen</td></tr>
+<tr><td>NBB Belgostat</td><td><a href="https://stat.nbb.be" target="_blank" rel="noopener">stat.nbb.be</a></td><td>Financieel-economische data</td></tr>
+</tbody>
+</table>
+
+<h2>9. Juridische uitgevers &amp; praktijkbronnen</h2>
+<table>
+<thead><tr><th>Bron</th><th>URL</th><th>Type</th></tr></thead>
+<tbody>
+<tr><td>Wolters Kluwer — Jura / Sociale Wegwijzer</td><td><a href="https://www.wolterskluwer.com/nl-be" target="_blank" rel="noopener">wolterskluwer.com/nl-be</a></td><td>Geannoteerde wetgeving <span class="badge uitgever">Uitgever</span></td></tr>
+<tr><td>Larcier-Intersentia</td><td><a href="https://www.larcier-intersentia.com" target="_blank" rel="noopener">larcier-intersentia.com</a></td><td>Sociaal-rechtelijke handboeken</td></tr>
+<tr><td>Lefebvre Sarrut / Indicator</td><td><a href="https://www.indicator.be" target="_blank" rel="noopener">indicator.be</a></td><td>Praktische sociaal-fiscale gidsen</td></tr>
+<tr><td>SocialEye (CCV)</td><td><a href="https://www.socialeye.be" target="_blank" rel="noopener">socialeye.be</a></td><td>Sociale wetgeving online</td></tr>
+<tr><td>De Tijd / L'Echo (financiële pers)</td><td><a href="https://www.tijd.be" target="_blank" rel="noopener">tijd.be</a></td><td>Marktevoluties, hervormingen</td></tr>
+</tbody>
+</table>
+
+<h2>10. Technische normen &amp; standaarden</h2>
+<table>
+<thead><tr><th>Bron</th><th>URL</th><th>Gebruik</th></tr></thead>
+<tbody>
+<tr><td>OWASP ASVS (Application Security Verification Standard)</td><td><a href="https://owasp.org/www-project-application-security-verification-standard/" target="_blank" rel="noopener">owasp.org/ASVS</a></td><td>Security-gates L2/L3</td></tr>
+<tr><td>OWASP Top 10</td><td><a href="https://owasp.org/Top10/" target="_blank" rel="noopener">owasp.org/Top10</a></td><td>Web-applicatie risico's</td></tr>
+<tr><td>ISO 20022 — SEPA pain.001</td><td><a href="https://www.iso20022.org" target="_blank" rel="noopener">iso20022.org</a></td><td>Betaalbestand-schema</td></tr>
+<tr><td>EBA Clearing — SEPA Credit Transfer</td><td><a href="https://www.europeanpaymentscouncil.eu" target="_blank" rel="noopener">europeanpaymentscouncil.eu</a></td><td>SEPA-rulebook</td></tr>
+<tr><td>PDF/A-3 ISO 19005-3</td><td><a href="https://www.iso.org/standard/57229.html" target="_blank" rel="noopener">iso.org/19005-3</a></td><td>Loonbrief-archivering</td></tr>
+<tr><td>ISO 27001 / ISAE 3402 / SOC 2</td><td><a href="https://www.iso.org/standard/27001" target="_blank" rel="noopener">iso.org/27001</a></td><td>Compliance-frameworks Fase 4+</td></tr>
+</tbody>
+</table>
+
+<h2>11. Tools, schema's &amp; technische referenties</h2>
+<table>
+<thead><tr><th>Bron</th><th>URL</th><th>Gebruik</th></tr></thead>
+<tbody>
+<tr><td>RSZ DmfA XSD-schema's</td><td><a href="https://www.socialsecurity.be/site_nl/employer/applics/dmfa/general/documentation.htm" target="_blank" rel="noopener">socialsecurity.be/dmfa/documentation</a></td><td>JAXB-generatie aangifte-XML</td></tr>
+<tr><td>RSZ Dimona-webservice documentatie</td><td><a href="https://www.socialsecurity.be/site_nl/employer/applics/dimona/general/documentation.htm" target="_blank" rel="noopener">socialsecurity.be/dimona/documentation</a></td><td>Webservice-koppeling</td></tr>
+<tr><td>Belcotax-on-web technische documentatie</td><td><a href="https://financien.belgium.be/nl/E-services/Belcotaxonweb" target="_blank" rel="noopener">financien.belgium.be/belcotax</a></td><td>Fiche-XML formaat</td></tr>
+<tr><td>Spring Modulith</td><td><a href="https://spring.io/projects/spring-modulith" target="_blank" rel="noopener">spring.io/spring-modulith</a></td><td>Modulegrens-controles</td></tr>
+<tr><td>PostgreSQL documentatie (range types, RLS)</td><td><a href="https://www.postgresql.org/docs/current/" target="_blank" rel="noopener">postgresql.org/docs</a></td><td>Bitemporeel design</td></tr>
+<tr><td>OpenAPI 3.1 specificatie</td><td><a href="https://spec.openapis.org/oas/v3.1.0" target="_blank" rel="noopener">spec.openapis.org/3.1.0</a></td><td>API-contract</td></tr>
+</tbody>
+</table>
+
+<h2>Methodologische opmerkingen</h2>
+<ol>
+<li><strong>Primaire bron eerst.</strong> Wettelijke citaten verwijzen altijd naar BS / Justel — geen samenvattingen door derden als primaire onderbouwing.</li>
+<li><strong>Versie + publicatiedatum.</strong> KB's / CAO's worden geciteerd met datum + BS-publicatiedatum (bv. "KB 11/12/2025, BS 29/12/2025").</li>
+<li><strong>Parameter-monitoring is een werkstroom, geen one-off.</strong> Wettelijke parameters (BV, RSZ, MC, fiets, telewerk, beslag, ploeg-/nacht-premies) wijzigen jaarlijks tot kwartaal — proces opzetten conform <a href="mvp-roadmap.html">roadmap fase 0</a>.</li>
+<li><strong>Cross-validatie.</strong> Bij parameter-update: minstens twee bronnen kruisen (officiële tekst + commerciële commentaar of ESS-publicatie) vóór code-deploy.</li>
+<li><strong>Geen wetgeving uit informele bronnen.</strong> Wikipedia, ChatGPT-uitvoer of niet-officiële PDF's mogen geen vervanging zijn voor BS-publicatie. Audit-bewijs moet teruggrijpen naar primaire bron.</li>
+</ol>
+
+<div class="callout">
+Voor de inhoud achter deze bronnen: <a href="wetgevend-kader.html">wetgevend kader</a> · <a href="werking-loonmotor.html">werking</a> · <a href="juridische-checklist.html">juridische checklist</a>. Voor de fase-gebonden inzet: <a href="mvp-roadmap.html">MVP-roadmap</a>.
+</div>
+</main>
+
+<footer>Loonmotor BE — Onderzoeksdossier · <a href="index.html">Terug naar overzicht</a></footer>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="nl-BE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Requirements — Loonmotor BE</title>
+<style>
+:root{--bg:#fafbfc;--surface:#fff;--border:#e4e7eb;--text:#1a2332;--text-muted:#5a6779;--accent:#0b5394;--accent-light:#e8f0f9;--code-bg:#f5f7fa;--shadow:0 1px 3px rgba(0,0,0,.06)}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.6;color:var(--text);background:var(--bg)}
+header.topbar{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.topbar-inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-weight:700;font-size:17px;color:var(--accent);text-decoration:none}
+nav.topnav{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+nav.topnav a{font-size:13px;color:var(--text-muted);text-decoration:none;padding:6px 10px;border-radius:4px}
+nav.topnav a:hover{background:var(--accent-light);color:var(--accent)}
+nav.topnav a.active{background:var(--accent);color:#fff}
+main{max-width:1200px;margin:0 auto;padding:32px 24px 64px}
+h1{font-size:30px;margin:0 0 8px;font-weight:700}h2{font-size:22px;margin:32px 0 12px;font-weight:600;padding-bottom:6px;border-bottom:2px solid var(--accent-light)}
+h3{font-size:17px;margin:24px 0 8px;font-weight:600}h4{font-size:15px;margin:16px 0 6px;color:var(--accent);font-weight:600}
+p{margin:8px 0 12px}ul,ol{padding-left:22px}li{margin:4px 0}a{color:var(--accent)}a:hover{text-decoration:underline}
+code{font-family:"SF Mono",Monaco,Consolas,monospace;background:var(--code-bg);padding:1px 5px;border-radius:3px;font-size:13px}
+.subtitle{color:var(--text-muted);font-size:16px;margin:0 0 24px}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:14px;background:var(--surface);border-radius:6px;overflow:hidden;box-shadow:var(--shadow)}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:var(--accent-light);font-weight:600;font-size:13px}
+tr:last-child td{border-bottom:none}tr:hover{background:#f8fafc}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;margin:0 3px 2px 0;letter-spacing:.3px;text-transform:uppercase}
+.badge.feit{background:#d1fae5;color:#065f46}.badge.aanname{background:#fef3c7;color:#92400e}
+.badge.mvp{background:#c7f0d3;color:#14532d}.badge.later{background:#ddd6fe;color:#5b21b6}
+.badge.enterprise{background:#fce7f3;color:#831843}.badge.hypothese{background:#e0e7ff;color:#3730a3}
+.callout{border-left:4px solid var(--accent);background:var(--accent-light);padding:12px 16px;margin:14px 0;border-radius:0 4px 4px 0}
+.scope-in{background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+.scope-out{background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size:13px;color:var(--text-muted);text-align:center}
+.req-id{font-family:"SF Mono",Monaco,Consolas,monospace;color:var(--accent);font-weight:600;font-size:12px}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+<a href="index.html" class="brand">Loonmotor BE</a>
+<nav class="topnav">
+<a href="index.html">Overzicht</a><a href="marktonderzoek.html">Markt</a>
+<a href="concurrentiematrix.html">Concurrenten</a><a href="werking-loonmotor.html">Werking</a>
+<a href="wetgevend-kader.html">Wetgeving</a><a href="requirements.html" class="active">Requirements</a>
+<a href="datamodel.html">Datamodel</a><a href="technische-architectuur.html">Architectuur</a>
+<a href="juridische-checklist.html">Juridisch</a><a href="mvp-roadmap.html">Roadmap</a>
+<a href="risicoregister.html">Risico's</a><a href="jaakie-specificatie.html">Jaakie</a>
+<a href="testcorpus.html">Testcorpus</a><a href="referentie-tools.html">Referenties</a>
+<a href="bronnen.html">Bronnen</a>
+</nav></div></header>
+
+<main>
+<h1>Requirements</h1>
+<p class="subtitle">Wat de loonmotor moet kunnen — gestructureerd in functionele, niet-functionele en compliance-vereisten met fasering per categorie.</p>
+
+<div class="callout">
+<strong>Scope-afbakening:</strong> requirements gemarkeerd met <span class="scope-in">In Jaakie</span> zijn geïmplementeerd in de browser-only POC; <span class="scope-out">Niet in Jaakie</span> betreft de volledige loonmotor (backend, aangiften, ESS). Zie <a href="jaakie-specificatie.html">Jaakie-specificatie</a> §7 voor het volledige in/uit scope-overzicht.
+</div>
+
+<h2>Functionele requirements</h2>
+
+<h3>F1. Master data &amp; partijen</h3>
+<table>
+<thead><tr><th>ID</th><th>Vereiste</th><th>Fase</th></tr></thead>
+<tbody>
+<tr><td class="req-id">F1.01</td><td>Beheer werkgevers (KBO-nummer, vestigingseenheden, sociaal secretariaat-affiliatie).</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F1.02</td><td>Beheer werknemers met RRN, identiteit, gezinssituatie, ten laste, woon-/werk-adres.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F1.03</td><td>Bitemporeel beheer gezinssituatie (huwelijk, scheiding, kind geboren). Berekeningen retroactief correct.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F1.04</td><td>Contracten (onbepaalde / bepaalde duur, vervangingsovereenkomst, leerlingenovereenkomst), tewerkstelling (PC, functie, barema, arbeidsregime).</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F1.05</td><td>Multi-tenant met strikte data-isolatie per werkgever-klant.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F1.06</td><td>Master data-validatie tegen KBO en KSZ (authentieke bron).</td><td><span class="badge later">Later</span></td></tr>
+</tbody>
+</table>
+
+<h3>F2. Prestaties &amp; afwezigheden</h3>
+<table>
+<thead><tr><th>ID</th><th>Vereiste</th><th>Fase</th></tr></thead>
+<tbody>
+<tr><td class="req-id">F2.01</td><td>Input van prestatie-codes (werkdag, overuren, ploeg, nacht, zon-feestdag).</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F2.02</td><td>Afwezigheidscodes (ziekte, AO, BO, vakantie, klein verlet, tijdskrediet, ouderschapsverlof, …) — minstens DmfA-conform.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F2.03</td><td>Import vanuit tijdsregistratie (Protime, BCC, eigen formaat) via CSV en API.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F2.04</td><td>Validatie: arbeidsregime-consistentie, kalender-volledigheid, ontbrekende dagen-detectie.</td><td><span class="badge mvp">MVP</span></td></tr>
+</tbody>
+</table>
+
+<h3>F3. Berekening</h3>
+<table>
+<thead><tr><th>ID</th><th>Vereiste</th><th>Fase</th></tr></thead>
+<tbody>
+<tr><td class="req-id">F3.01</td><td>Bruto → netto berekening conform Wet 27/6/1969, KB/WIB 92 Bijlage III.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F3.02</td><td>Statuut bediende/arbeider met 108% RSZ-basis arbeiders.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F3.03</td><td>Werkbonus Luik A + Luik B met juiste S-schijven.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F3.04</td><td>BV via geversioneerde Bijlage III-data (geen hardcoded tabellen).</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F3.05</td><td>Voordelen alle aard (bedrijfswagen, smartphone, woonst, lening).</td><td><span class="badge mvp">MVP</span> bedrijfswagen / <span class="badge later">Later</span> overige</td></tr>
+<tr><td class="req-id">F3.06</td><td>Exceptionele bezoldigingen (bonus, vakantiegeld, eindejaarspremie) met eigen BV-tarief.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F3.07</td><td>Loonbeslag/loonoverdracht met schijven art. 1409 Ger.W. en CBB-raadpleging.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F3.08</td><td>Werkgeverskosten + provisies vakantiegeld + eindejaarspremie.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F3.09</td><td>Sector-specifieke premies per paritair comité (PC 200 jaarpremie, PC 124 weersverlet, …).</td><td><span class="badge mvp">MVP</span> PC 200 / <span class="badge later">Later</span> overige PC's</td></tr>
+<tr><td class="req-id">F3.10</td><td>Idempotente herberekening (zelfde input → zelfde output) via input-hash.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F3.11</td><td>Retroactieve correctie van vorige loonperiode met regelversie van toen.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F3.12</td><td>"Explain"-uitvoer per berekening: welke parameter, welke regel, welke versie.</td><td><span class="badge mvp">MVP</span></td></tr>
+</tbody>
+</table>
+
+<h3>F4. Output &amp; aangiften</h3>
+<table>
+<thead><tr><th>ID</th><th>Vereiste</th><th>Fase</th></tr></thead>
+<tbody>
+<tr><td class="req-id">F4.01</td><td>Loonbrief PDF/A-3 conform art. 15 Wet 12/4/1965 + KB 27/9/1966.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F4.02</td><td>SEPA pain.001.001.03 batch-betaalbestand.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F4.03</td><td>Dimona-aangifte (in/uit dienst).</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F4.04</td><td>DmfA-kwartaalaangifte XML conform schema RSZ.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F4.05</td><td>Belcotax-on-web fiches 281.10 (jaar), 281.20, 281.25, 281.50.</td><td><span class="badge mvp">MVP</span> 281.10 / <span class="badge later">Later</span> overige</td></tr>
+<tr><td class="req-id">F4.06</td><td>Finprof BV-aangifte + doorstorting.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F4.07</td><td>Boekhoudkundige journaalposten (62x personeel, 45x schulden).</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F4.08</td><td>Sigedis/DB2P aangifte voor IPT/groepsverzekering.</td><td><span class="badge later">Later</span></td></tr>
+<tr><td class="req-id">F4.09</td><td>EU 2023/970 loontransparantie-rapporten (gender pay gap, banding).</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F4.10</td><td>Sociale balans (jaarverslag art. KB 12/9/1983).</td><td><span class="badge later">Later</span></td></tr>
+</tbody>
+</table>
+
+<h3>F5. Beheer &amp; gebruikersinterface</h3>
+<table>
+<thead><tr><th>ID</th><th>Vereiste</th><th>Fase</th></tr></thead>
+<tbody>
+<tr><td class="req-id">F5.01</td><td>Loonberekening simulator (what-if bruto-netto) zonder commitment.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F5.02</td><td>Productiebatch met goedkeuring (vier-ogen-principe).</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F5.03</td><td>Werknemer self-service (loonbrief downloaden, gegevens corrigeren).</td><td><span class="badge later">Later</span></td></tr>
+<tr><td class="req-id">F5.04</td><td>HR-portaal (overzicht, exporten, rapporten).</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F5.05</td><td>API-toegang (REST, OpenAPI 3.1) voor third-party integraties.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">F5.06</td><td>Audit-log voor elke actie (wie wijzigde wat, wanneer).</td><td><span class="badge mvp">MVP</span></td></tr>
+</tbody>
+</table>
+
+<h2>Niet-functionele requirements</h2>
+
+<h3>NF1. Beschikbaarheid &amp; performance</h3>
+<table>
+<thead><tr><th>ID</th><th>Vereiste</th><th>Target</th><th>Fase</th></tr></thead>
+<tbody>
+<tr><td class="req-id">NF1.01</td><td>Uptime productie</td><td>99,5% MVP → 99,9% fase 4</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">NF1.02</td><td>P95 berekening per werknemer per maand</td><td>&lt; 200 ms</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">NF1.03</td><td>Batch run 1.000 werknemers</td><td>&lt; 10 min</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">NF1.04</td><td>API-latency P95 voor lees-operatie</td><td>&lt; 300 ms</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">NF1.05</td><td>DR RPO / RTO</td><td>RPO 5 min / RTO 4 u</td><td><span class="badge mvp">MVP</span></td></tr>
+</tbody>
+</table>
+
+<h3>NF2. Veiligheid</h3>
+<table>
+<thead><tr><th>ID</th><th>Vereiste</th><th>Fase</th></tr></thead>
+<tbody>
+<tr><td class="req-id">NF2.01</td><td>OWASP ASVS L2 voor MVP, L3 voor fase 4.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">NF2.02</td><td>RRN/INSZ encryptie at-rest (kolom-niveau, KMS-managed sleutels).</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">NF2.03</td><td>TLS 1.3 in-transit, mTLS voor service-to-service.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">NF2.04</td><td>RBAC met tenant-scoping; row-level security PostgreSQL.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">NF2.05</td><td>MFA verplicht voor admin / HR-rol.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">NF2.06</td><td>Pentest jaarlijks; bug bounty fase 4+.</td><td><span class="badge later">Later</span></td></tr>
+</tbody>
+</table>
+
+<h3>NF3. Data-integriteit &amp; auditeerbaarheid</h3>
+<table>
+<thead><tr><th>ID</th><th>Vereiste</th><th>Fase</th></tr></thead>
+<tbody>
+<tr><td class="req-id">NF3.01</td><td>Append-only audit log met SHA-256 ketenhash (tamper-evident).</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">NF3.02</td><td>Idempotency key op alle write-API's.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">NF3.03</td><td>BigDecimal-only voor monetair; numeric(18,4) PostgreSQL; HALF_UP afronding.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">NF3.04</td><td>Test-corpus van 100–500 "golden master" scenarios; CI-blokkering bij regressie.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">NF3.05</td><td>Bitemporeel datamodel (valid_period + system_period) op kernentiteiten.</td><td><span class="badge mvp">MVP</span></td></tr>
+</tbody>
+</table>
+
+<h3>NF4. Wijzigbaarheid &amp; onderhoud</h3>
+<table>
+<thead><tr><th>ID</th><th>Vereiste</th><th>Fase</th></tr></thead>
+<tbody>
+<tr><td class="req-id">NF4.01</td><td>Parameter-wijzigingen (BV-schaal, MC-tarief) zonder code-deploy.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">NF4.02</td><td>Decision tables in JSONB met geldigheidsperiode, geen Drools-runtime.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">NF4.03</td><td>Database-migratie via Liquibase / Flyway, gecontroleerde rollback.</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">NF4.04</td><td>Feature flags voor incrementele uitrol (LaunchDarkly of OSS).</td><td><span class="badge later">Later</span></td></tr>
+</tbody>
+</table>
+
+<h3>NF5. Observability</h3>
+<table>
+<thead><tr><th>ID</th><th>Vereiste</th><th>Fase</th></tr></thead>
+<tbody>
+<tr><td class="req-id">NF5.01</td><td>Structured logs (JSON, correlatie-id, tenant-id).</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">NF5.02</td><td>Distributed tracing (OpenTelemetry).</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">NF5.03</td><td>Metrics op berekenings-pijplijn (P50/P95/P99 per stap).</td><td><span class="badge mvp">MVP</span></td></tr>
+<tr><td class="req-id">NF5.04</td><td>SLA-alerts op aangifte-deadlines (Dimona, DmfA, BV).</td><td><span class="badge mvp">MVP</span></td></tr>
+</tbody>
+</table>
+
+<h2>Compliance requirements</h2>
+<table>
+<thead><tr><th>ID</th><th>Vereiste</th><th>Bron</th></tr></thead>
+<tbody>
+<tr><td class="req-id">C.01</td><td>GDPR / AVG-conformiteit volledig.</td><td>Vo. 2016/679; Wet 30/7/2018.</td></tr>
+<tr><td class="req-id">C.02</td><td>DPIA voor verwerking met grootschalige verwerking.</td><td>Art. 35 AVG.</td></tr>
+<tr><td class="req-id">C.03</td><td>Bewaartermijnen: 5 j (soc. doc.) / 7 j (fiscaal) / langer voor pensioenopbouw.</td><td>KB 8/8/1980; WIB 92.</td></tr>
+<tr><td class="req-id">C.04</td><td>Loonbrief verplichte vermeldingen.</td><td>Art. 15 Wet 12/4/1965 + KB 27/9/1966.</td></tr>
+<tr><td class="req-id">C.05</td><td>EU 2023/970 loontransparantie (deadline 7/6/2026).</td><td>Vo. EU 2023/970.</td></tr>
+<tr><td class="req-id">C.06</td><td>RSZ-aangifteverplichtingen (Dimona binnen termijn, DmfA-kwartaal).</td><td>Wet 27/6/1969.</td></tr>
+<tr><td class="req-id">C.07</td><td>BV-doorstortingsverplichtingen Finprof.</td><td>WIB 92 art. 412.</td></tr>
+<tr><td class="req-id">C.08</td><td>Beslagschijven-naleving art. 1409 Ger.W.</td><td>KB 3/12/2025.</td></tr>
+<tr><td class="req-id">C.09</td><td>Indien ESS: erkenning KB 28/11/1969 + kwaliteitsbarometer KB 20/2/2017.</td><td>Enterprise-fase. <span class="badge enterprise">Enterprise</span></td></tr>
+<tr><td class="req-id">C.10</td><td>NIS2 (kritieke infrastructuur ICT) — payroll mogelijk in scope.</td><td>EU 2022/2555. <span class="badge later">Later</span></td></tr>
+</tbody>
+</table>
+
+<h2>Jaakie-specifieke requirements (uitgevoerd in POC)</h2>
+<p>Deze requirements zijn specifiek voor de <strong>Jaakie</strong> browser-only calculator (TypeScript/React/Vite) en vormen een aanvulling op de generieke loonmotor-requirements hierboven.</p>
+
+<h3>J1. Data-integriteit &amp; startup gate</h3>
+<table>
+<thead><tr><th>ID</th><th>Vereiste</th><th>Implementatie</th></tr></thead>
+<tbody>
+<tr><td class="req-id">J1.01</td><td>Schema-validatie van de gebundelde JSON-dataset tegen JSON Schema Draft-07 <strong>vóór</strong> React-root mount. Bij falen: rood error-scherm, app start niet.</td><td><code>src/main.tsx</code> — <span class="badge feit">Feit</span></td></tr>
+<tr><td class="req-id">J1.02</td><td>Dataset-toegang uitsluitend via <code>getDatapunt(id)</code> en <code>safeGetValue(datapuntId, { refDatum })</code> — geen directe JSON-aritmetiek.</td><td><code>src/lib/dataset.ts</code>, <code>src/lib/periode.ts</code> — <span class="badge feit">Feit</span></td></tr>
+<tr><td class="req-id">J1.03</td><td>Status guards op dataset: <code>actief</code>, <code>mogelijk_verouderd</code>, <code>conflict</code>, <code>niet_gevonden</code>, <code>gemarkeerd_voor_review</code>.</td><td><code>src/lib/periode.ts</code> — <span class="badge feit">Feit</span></td></tr>
+</tbody>
+</table>
+
+<h3>J2. Teststrategie</h3>
+<table>
+<thead><tr><th>ID</th><th>Vereiste</th><th>Implementatie</th></tr></thead>
+<tbody>
+<tr><td class="req-id">J2.01</td><td>~900 regels golden tests (TC/NTC) met <code>expect(...).toBe(...)</code> — exacte EUR, nul tolerantie.</td><td><code>src/lib/__tests__/golden.test.ts</code> — <span class="badge feit">Feit</span></td></tr>
+<tr><td class="req-id">J2.02</td><td>BV-uitkomsten volgen FOD Financiën / Bijlage III 2026; &gt;€5 afwijking in het corpus krijgt root-cause analyse.</td><td>Status: <span class="badge feit">ok</span></td></tr>
+<tr><td class="req-id">J2.03</td><td>Tier-2 triangulatie: minstens 5 ankers geregistreerd tegen Group S Salary Sim (bv. TC-23b: Schaal I Cat A 5j → bvNaVerminderingen ≈ €154,22).</td><td>1 anker geïmplementeerd — <span class="badge onzekerheid">Onzekerheid</span></td></tr>
+<tr><td class="req-id">J2.04</td><td>Audit-test: elk resultaat draagt een <code>Datapunt</code> met truthy <code>bron_url</code>.</td><td><code>golden.test.ts</code> — <span class="badge feit">Feit</span></td></tr>
+</tbody>
+</table>
+
+<h3>J3. Bronnenhiërarchie (tier-1/2/3)</h3>
+<table>
+<thead><tr><th>Tier</th><th>Bron</th><th>Voorbeelden</th><th>Gebruik in Jaakie</th></tr></thead>
+<tbody>
+<tr><td><strong>Tier 1</strong></td><td>Wetten, KB's, RSZ-instructies, FOD Fin officiële publicaties</td><td>KB 11/12/2025 (BV-sleutelformule), RSZ-instructie 2026, Wet 27/6/1969</td><td>Primaire bron voor alle parameters; bron-URL in dataset</td></tr>
+<tr><td><strong>Tier 2</strong></td><td>Erkende sociale secretariaten, ESS-tools, consultant-rapporten</td><td>Group S Salary Sim, SD Worx know-how, Partena juridische updates</td><td>Triangulatie en validatie; niet als primaire bron</td></tr>
+<tr><td><strong>Tier 3</strong></td><td>Blogs, nieuwsartikels, HR-platforms, niet-geverifieerde bronnen</td><td>HR-partners, loonwijzer-sites, payroll-forums</td><td>Uitsluitend indicatief; nooit voor berekeningen</td></tr>
+</tbody>
+</table>
+
+<h3>J4. Scope-beperking</h3>
+<table>
+<thead><tr><th>ID</th><th>Vereiste</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td class="req-id">J4.01</td><td>Browser-only — geen backend, geen database, geen authenticatie, geen netwerkverzoeken voor berekeningen.</td><td><span class="badge feit">Feit</span></td></tr>
+<tr><td class="req-id">J4.02</td><td>PC 200 only — geen andere paritaire comités in de POC.</td><td><span class="badge feit">Feit</span></td></tr>
+<tr><td class="req-id">J4.03</td><td>Geen loonbrief-generatie, geen SEPA, geen Dimona/DmfA/Belcotax/Finprof-aangiften in de POC.</td><td><span class="badge feit">Feit</span></td></tr>
+<tr><td class="req-id">J4.04</td><td>HashRouter — geen server-side routing vereist.</td><td><span class="badge feit">Feit</span></td></tr>
+</tbody>
+</table>
+
+<div class="callout">
+Voor de fasering en bouwvolgorde: <a href="mvp-roadmap.html">MVP-roadmap</a>. Voor het juridische uitvoeringsperspectief: <a href="juridische-checklist.html">juridische checklist</a>.
+</div>
+</main>
+
+<footer>Loonmotor BE — Onderzoeksdossier · <a href="index.html">Terug naar overzicht</a></footer>
+</body>
+</html>

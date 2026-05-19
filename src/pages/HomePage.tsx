@@ -1,4 +1,4 @@
-import { useMemo, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type InputHTMLAttributes } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import {
   ChevronDown,
@@ -12,15 +12,15 @@ import {
   Car,
   Wallet,
   Briefcase,
-  Gift,
   Map as MapIcon,
   Building2,
+  HelpCircle,
 } from "lucide-react";
 
 import { Banner } from "@/components/Banner";
 import { ResultCard } from "@/components/ResultCard";
 import { FormField, inputClass, selectClass } from "@/components/Field";
-import { AuditPanel, AuditOpenProvider, type AuditForceState } from "@/components/AuditPanel";
+import { AuditOpenProvider, AuditSourceGroup, type AuditForceState } from "@/components/AuditPanel";
 import { ResultBand } from "@/components/ResultBand";
 import {
   ResultsSummaryStrip,
@@ -29,9 +29,6 @@ import {
 } from "@/components/ResultsSummaryStrip";
 import { brutolocheck, lookupBarema, lookupStudentenbarema } from "@/lib/baremas";
 import type { BaremaCat, Schaal, StudentenCat } from "@/lib/baremas";
-import { rszBijdragen } from "@/lib/rsz";
-import { eindejaarspremie } from "@/lib/eindejaarspremie";
-import { ecocheques } from "@/lib/ecocheques";
 import {
   berekenWoonwerkVerkeer,
   type WoonwerkVerkeerResultaat,
@@ -41,7 +38,15 @@ import {
   type BrandstofBedrijfswagen,
   type VaaBedrijfswagenResultaat,
 } from "@/lib/vaaBedrijfswagen";
-import { jaarlijksePremie2026 } from "@/lib/jaarpremie";
+import {
+  vaaForfaitsWerkmiddelen,
+  type VaaForfaitsWerkmiddelenResultaat,
+} from "@/lib/vaaForfaits";
+import {
+  berekenJaaroverzicht,
+  type JaarcomponentNetto,
+  type JaaroverzichtResultaat,
+} from "@/lib/jaaroverzicht";
 import { berekenNetto } from "@/lib/netto";
 import type { GezinsType, NettoResultaat } from "@/lib/netto";
 import {
@@ -56,10 +61,85 @@ import {
   DatapuntNietGeldigOpDatum,
   PC200DatasetError,
 } from "@/lib/errors";
-import { formatEUR } from "@/lib/money";
+import { formatEUR, round2 } from "@/lib/money";
 
 type Statuut = "bediende" | "student";
+type BeroepskostMethode = "forfaitair" | "reeel";
 type ProfielSetter = <K extends keyof Profiel>(k: K, v: Profiel[K]) => void;
+
+function berekenMaaltijdchequeWaarde({
+  werkgeversaandeelPerDag,
+  werknemersbijdragePerDag,
+  werkdagen,
+}: {
+  werkgeversaandeelPerDag: number;
+  werknemersbijdragePerDag: number;
+  werkdagen: number;
+}) {
+  const werkgeversaandeel = Math.min(
+    werkgeversaandeelPerDag,
+    MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026,
+  );
+  const totaleWaardePerDag = round2(werkgeversaandeel + werknemersbijdragePerDag);
+  const totaleWaarde = round2(totaleWaardePerDag * Math.max(werkdagen, 0));
+
+  return {
+    totaleWaardePerDag,
+    totaleWaarde,
+    werkdagen: Math.max(werkdagen, 0),
+  };
+}
+
+function HelpTooltip({ text }: { text: string }) {
+  const [visible, setVisible] = useState(false);
+  const triggerRef = useRef<HTMLSpanElement>(null);
+  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
+
+  const show = () => {
+    if (triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      setPos({
+        top: rect.bottom + 8,
+        left: rect.left + rect.width / 2,
+      });
+    }
+    setVisible(true);
+  };
+
+  const hide = () => setVisible(false);
+
+  return (
+    <>
+      <span
+        ref={triggerRef}
+        className="inline-flex items-center justify-center ml-1 cursor-help align-middle"
+        onMouseEnter={show}
+        onMouseLeave={hide}
+      >
+        <span
+          className="text-[10px] font-bold text-white rounded-full w-4 h-4 flex items-center justify-center"
+          style={{ backgroundColor: "var(--color-primary)" }}
+        >
+          ?
+        </span>
+      </span>
+      {visible && pos && (
+        <span
+          className="fixed -translate-x-1/2 mt-1 w-64 p-2 text-xs rounded shadow-lg"
+          style={{
+            top: pos.top,
+            left: pos.left,
+            backgroundColor: "#1f2937",
+            color: "white",
+            zIndex: 9999,
+          }}
+        >
+          {text}
+        </span>
+      )}
+    </>
+  );
+}
 
 interface Profiel {
   statuut: Statuut;
@@ -92,9 +172,14 @@ interface Profiel {
   arbeidsdagenPerMaand: number;
   gezinstype: GezinsType;
   kinderenTenLaste: number;
-  kinderenOnder3: number;
   fiscaalAlleenstaandeMetKind: boolean;
   groepsverzekeringEigenBijdrage: number;
+  vaaPcLaptopActief: boolean;
+  vaaGsmSmartphoneActief: boolean;
+  vaaInternetActief: boolean;
+  vaaGsmAbonnementActief: boolean;
+  woonwerkPrivewagenBeroepskostMethode: BeroepskostMethode;
+  woonwerkBedrijfswagenBeroepskostMethode: BeroepskostMethode;
   // Werkgeversbijdragen (extralegale voordelen)
   arbeidsongevallenPct: number;
   extraGroepsverzekering: number;
@@ -136,9 +221,14 @@ const DEFAULTS: Profiel = {
   arbeidsdagenPerMaand: aantalWeekdagenInMaand("2026", "06"),
   gezinstype: "alleenstaand",
   kinderenTenLaste: 0,
-  kinderenOnder3: 0,
   fiscaalAlleenstaandeMetKind: false,
   groepsverzekeringEigenBijdrage: 0,
+  vaaPcLaptopActief: false,
+  vaaGsmSmartphoneActief: false,
+  vaaInternetActief: false,
+  vaaGsmAbonnementActief: false,
+  woonwerkPrivewagenBeroepskostMethode: "forfaitair",
+  woonwerkBedrijfswagenBeroepskostMethode: "forfaitair",
   arbeidsongevallenPct: 0.003,
   extraGroepsverzekering: 0,
   maaltijdchequeWerkgeversaandeelPerDag: MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026,
@@ -181,6 +271,70 @@ export function percentageNaarTewerkstellingsbreuk(percentage: number): number {
   return percentage / 100;
 }
 
+type NumeriekeInputModus = "float" | "int";
+
+export function waardeUitNumeriekeInput(
+  invoer: string,
+  modus: NumeriekeInputModus,
+): number | null {
+  if (invoer.trim() === "") return null;
+  const waarde = modus === "int" ? parseInt(invoer, 10) : parseFloat(invoer);
+  return Number.isFinite(waarde) ? waarde : null;
+}
+
+interface NumeriekeInputProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "value" | "onChange"> {
+  value: number;
+  onValueChange: (value: number) => void;
+  modus?: NumeriekeInputModus;
+  legeWaarde?: number;
+  formatValue?: (value: number) => string;
+}
+
+function NumeriekeInput({
+  value,
+  onValueChange,
+  modus = "float",
+  legeWaarde = 0,
+  formatValue = String,
+  onFocus,
+  onBlur,
+  ...props
+}: NumeriekeInputProps) {
+  const [draft, setDraft] = useState(() => formatValue(value));
+  const [heeftFocus, setHeeftFocus] = useState(false);
+
+  useEffect(() => {
+    if (!heeftFocus) setDraft(formatValue(value));
+  }, [formatValue, heeftFocus, value]);
+
+  return (
+    <input
+      {...props}
+      type="number"
+      value={draft}
+      onFocus={(e) => {
+        setHeeftFocus(true);
+        onFocus?.(e);
+      }}
+      onChange={(e) => {
+        const volgendeDraft = e.target.value;
+        setDraft(volgendeDraft);
+        const volgendeWaarde = waardeUitNumeriekeInput(volgendeDraft, modus);
+        if (volgendeWaarde !== null) onValueChange(volgendeWaarde);
+      }}
+      onBlur={(e) => {
+        setHeeftFocus(false);
+        if (draft.trim() === "") {
+          onValueChange(legeWaarde);
+          setDraft(formatValue(legeWaarde));
+        }
+        onBlur?.(e);
+      }}
+    />
+  );
+}
+
 export function eindejaarspremieMaandenVoorCheckbox(eindejaarspremieAan: boolean): Pick<
   Profiel,
   "ancienniteitMaanden" | "prestatieMaanden"
@@ -210,6 +364,30 @@ function normaliseerProfiel(profiel: Profiel): Profiel {
 interface MobiliteitBerekening {
   woonwerk: WoonwerkVerkeerResultaat;
   vaaBedrijfswagen: VaaBedrijfswagenResultaat | null;
+}
+
+function berekenVaaWerkmiddelenVoorProfiel(
+  p: Profiel,
+  refDatum: string,
+): VaaForfaitsWerkmiddelenResultaat {
+  return vaaForfaitsWerkmiddelen({
+    pcLaptopActief: p.vaaPcLaptopActief,
+    gsmSmartphoneActief: p.vaaGsmSmartphoneActief,
+    internetActief: p.vaaInternetActief,
+    gsmAbonnementActief: p.vaaGsmAbonnementActief,
+    refDatum,
+  });
+}
+
+function berekenWoonwerkVrijgesteld(
+  woonwerk: WoonwerkVerkeerResultaat,
+  privewagenMethode: BeroepskostMethode,
+): number {
+  let vrijgesteld = woonwerk.totaalVergoeding;
+  if (privewagenMethode === "reeel" && woonwerk.componenten.privewagen) {
+    vrijgesteld -= woonwerk.componenten.privewagen.vergoeding;
+  }
+  return round2(Math.max(0, vrijgesteld));
 }
 
 function berekenMobiliteitVoorProfiel(p: Profiel, refDatum: string): MobiliteitBerekening {
@@ -624,16 +802,15 @@ function ProfileForm({
       </div>
 
       <FormField
-        label="Werkdagen in maand"
-        helper="Vooringevuld op basis van weekdagen in de gekozen maand. Aanpasbaar voor feestdagen, verlof of afwijkende prestaties."
+        label={<>Werkdagen in maand <HelpTooltip text="Vooringevuld op basis van weekdagen in de gekozen maand. Aanpasbaar voor feestdagen, verlof of afwijkende prestaties." /></>}
       >
-        <input
+        <NumeriekeInput
           className={inputClass}
-          type="number"
           min={0}
           max={31}
           value={profiel.arbeidsdagenPerMaand}
-          onChange={(e) => set("arbeidsdagenPerMaand", parseInt(e.target.value || "0", 10))}
+          modus="int"
+          onValueChange={(waarde) => set("arbeidsdagenPerMaand", waarde)}
         />
       </FormField>
 
@@ -665,23 +842,22 @@ function ProfileForm({
           </div>
 
           <FormField label="Ervaring (jaren)">
-            <input
+            <NumeriekeInput
               className={inputClass}
-              type="number"
               min={0}
               max={60}
               value={profiel.ervaringJaren}
-              onChange={(e) => set("ervaringJaren", parseInt(e.target.value || "0", 10))}
+              modus="int"
+              onValueChange={(waarde) => set("ervaringJaren", waarde)}
             />
           </FormField>
 
           <FormField label="Brutoloon (€)">
-            <input
+            <NumeriekeInput
               className={inputClass}
-              type="number"
               step="0.01"
               value={profiel.brutoloon}
-              onChange={(e) => set("brutoloon", parseFloat(e.target.value || "0"))}
+              onValueChange={(waarde) => set("brutoloon", waarde)}
             />
           </FormField>
 
@@ -708,45 +884,146 @@ function ProfileForm({
 
           <FormSection label="Bijkomende looncomponenten" icon={<Wallet size={13} />} defaultOpen>
             <FormField label="Groepsverz. eigen bijdrage (€/m)">
-              <input
+              <NumeriekeInput
                 className={inputClass}
-                type="number"
                 step="0.01"
                 min={0}
                 value={profiel.groepsverzekeringEigenBijdrage}
-                onChange={(e) =>
-                  set("groepsverzekeringEigenBijdrage", parseFloat(e.target.value || "0"))
-                }
+                onValueChange={(waarde) => set("groepsverzekeringEigenBijdrage", waarde)}
               />
             </FormField>
-            <FormField
-              label="Eigen bijdrage hospitalisatieverzekering (€/m)"
-              helper="Werknemersbijdrage die rechtstreeks van het cash-nettoloon wordt afgehouden."
+            <div
+              style={{
+                border: "1px solid var(--color-border)",
+                borderRadius: "var(--radius-md)",
+                padding: "10px",
+                display: "grid",
+                gap: 10,
+              }}
             >
-              <input
+              <div style={{ fontSize: 13, fontWeight: 600, color: "var(--color-text)" }}>
+                VAA werkmiddelen
+                <HelpTooltip text="Forfaitaire jaarbedragen vastgelegd per KB: PC/laptop €72/jaar (€6/maand), internet €60/jaar (€5/maand), GSM €36/jaar (€3/maand), GSM-abonnement €48/jaar (€4/maand). Deze bedragen worden bij het brutoloon geteld voor RSZ én BV." />
+              </div>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                <label
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    fontSize: 13,
+                    color: "var(--color-navy-500)",
+                    cursor: "pointer",
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={profiel.vaaPcLaptopActief}
+                    onChange={(e) => set("vaaPcLaptopActief", e.target.checked)}
+                    style={{ accentColor: "var(--color-primary)", width: 15, height: 15 }}
+                  />
+                  Laptop / pc
+                </label>
+                <label
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    fontSize: 13,
+                    color: "var(--color-navy-500)",
+                    cursor: "pointer",
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={profiel.vaaGsmSmartphoneActief}
+                    onChange={(e) => set("vaaGsmSmartphoneActief", e.target.checked)}
+                    style={{ accentColor: "var(--color-primary)", width: 15, height: 15 }}
+                  />
+                  GSM
+                </label>
+                <label
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    fontSize: 13,
+                    color: "var(--color-navy-500)",
+                    cursor: "pointer",
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={profiel.vaaInternetActief}
+                    onChange={(e) => set("vaaInternetActief", e.target.checked)}
+                    style={{ accentColor: "var(--color-primary)", width: 15, height: 15 }}
+                  />
+                  Internet
+                </label>
+                <label
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    fontSize: 13,
+                    color: "var(--color-navy-500)",
+                    cursor: "pointer",
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={profiel.vaaGsmAbonnementActief}
+                    onChange={(e) => set("vaaGsmAbonnementActief", e.target.checked)}
+                    style={{ accentColor: "var(--color-primary)", width: 15, height: 15 }}
+                  />
+                  GSM-abonnement
+                </label>
+              </div>
+
+            </div>
+            <FormField
+              label={<>Eigen bijdrage hospitalisatieverzekering (€/m) <HelpTooltip text="Werknemersbijdrage die rechtstreeks van het cash-nettoloon wordt afgehouden." /></>}
+            >
+              <NumeriekeInput
                 className={inputClass}
-                type="number"
                 step="0.01"
                 min={0}
                 value={profiel.hospitalisatieEigenBijdrage}
-                onChange={(e) =>
-                  set("hospitalisatieEigenBijdrage", parseFloat(e.target.value || "0"))
-                }
+                onValueChange={(waarde) => set("hospitalisatieEigenBijdrage", waarde)}
               />
             </FormField>
             <FormField
-              label="Onkostenvergoedingen (€/m)"
-              helper="Vrijgestelde netto-vergoeding: verhoogt nettoloon en werkgeverskost, zonder RSZ/BV-basis te wijzigen."
+              label={<>Onkostenvergoedingen (€/m) <HelpTooltip text="Vrijgestelde netto-vergoeding: verhoogt nettoloon en werkgeverskost, zonder RSZ/BV-basis te wijzigen." /></>}
             >
-              <input
+              <NumeriekeInput
                 className={inputClass}
-                type="number"
                 step="0.01"
                 min={0}
                 value={profiel.onkostenvergoedingPerMaand}
-                onChange={(e) =>
-                  set("onkostenvergoedingPerMaand", parseFloat(e.target.value || "0"))
-                }
+                onValueChange={(waarde) => set("onkostenvergoedingPerMaand", waarde)}
+              />
+            </FormField>
+            <FormField
+              label={<>Maaltijdcheques — werkgeversaandeel (€/dag) <HelpTooltip text={`Max €${MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026.toFixed(2).replace(".", ",")}/dag × ${profiel.arbeidsdagenPerMaand} werkdagen. Niet verplicht in PC 200.`} /></>}
+            >
+              <NumeriekeInput
+                className={inputClass}
+                step="0.01"
+                min={0}
+                max={MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026}
+                value={profiel.maaltijdchequeWerkgeversaandeelPerDag}
+                onValueChange={(waarde) => set("maaltijdchequeWerkgeversaandeelPerDag", waarde)}
+              />
+            </FormField>
+            <FormField
+              label={<>Maaltijdcheques — werknemersbijdrage (€/dag) <HelpTooltip text={`Min €1,09/dag × ${profiel.arbeidsdagenPerMaand} werkdagen. Mag hoger liggen volgens de werkgeverregeling.`} /></>}
+            >
+              <NumeriekeInput
+                className={inputClass}
+                step="0.01"
+                min={0}
+                value={profiel.maaltijdchequeWerknemersbijdragePerDag}
+                onValueChange={(waarde) => set("maaltijdchequeWerknemersbijdragePerDag", waarde)}
               />
             </FormField>
           </FormSection>
@@ -766,13 +1043,13 @@ function ProfileForm({
             </select>
           </FormField>
           <FormField label="Leeftijd">
-            <input
+            <NumeriekeInput
               className={inputClass}
-              type="number"
               min={14}
               max={30}
               value={profiel.studentLeeftijd}
-              onChange={(e) => set("studentLeeftijd", parseInt(e.target.value || "0", 10))}
+              modus="int"
+              onValueChange={(waarde) => set("studentLeeftijd", waarde)}
             />
           </FormField>
         </div>
@@ -806,18 +1083,14 @@ function ProfileForm({
 
       <FormSection label="Ecocheques" icon={<Leaf size={13} />}>
         <FormField label="Tewerkstelling (%)">
-          <input
+          <NumeriekeInput
             className={inputClass}
-            type="number"
             step="1"
             min={0}
             max={100}
             value={tewerkstellingsbreukNaarPercentage(profiel.tewerkstellingsbreuk)}
-            onChange={(e) =>
-              set(
-                "tewerkstellingsbreuk",
-                percentageNaarTewerkstellingsbreuk(parseFloat(e.target.value || "0")),
-              )
+            onValueChange={(waarde) =>
+              set("tewerkstellingsbreuk", percentageNaarTewerkstellingsbreuk(waarde))
             }
           />
         </FormField>
@@ -850,12 +1123,11 @@ function ProfileForm({
           />
           {profiel.woonwerkFiets && (
             <FormField label="Fiets km per dag">
-              <input
+              <NumeriekeInput
                 className={inputClass}
-                type="number"
                 min={0}
                 value={profiel.kmPerDag}
-                onChange={(e) => set("kmPerDag", parseFloat(e.target.value || "0"))}
+                onValueChange={(waarde) => set("kmPerDag", waarde)}
               />
             </FormField>
           )}
@@ -867,15 +1139,42 @@ function ProfileForm({
             onChange={(checked) => set("woonwerkPrivewagen", checked)}
           />
           {profiel.woonwerkPrivewagen && (
-            <FormField label="Privéwagen afstand km">
-              <input
-                className={inputClass}
-                type="number"
-                min={0}
-                value={profiel.privewagenKm}
-                onChange={(e) => set("privewagenKm", parseFloat(e.target.value || "0"))}
-              />
-            </FormField>
+            <>
+              <FormField label="Privéwagen afstand km">
+                <NumeriekeInput
+                  className={inputClass}
+                  min={0}
+                  value={profiel.privewagenKm}
+                  onValueChange={(waarde) => set("privewagenKm", waarde)}
+                />
+              </FormField>
+              <div className="flex items-center gap-3" style={{ paddingLeft: 4 }}>
+                <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+                  Berekeningsmethode
+                </span>
+                <label className="flex items-center gap-1 text-sm cursor-pointer">
+                  <input
+                    type="radio"
+                    name="privewagen-beroepskost"
+                    value="forfaitair"
+                    checked={profiel.woonwerkPrivewagenBeroepskostMethode === "forfaitair"}
+                    onChange={() => set("woonwerkPrivewagenBeroepskostMethode", "forfaitair")}
+                  />
+                  Forfaitair
+                </label>
+                <label className="flex items-center gap-1 text-sm cursor-pointer">
+                  <input
+                    type="radio"
+                    name="privewagen-beroepskost"
+                    value="reeel"
+                    checked={profiel.woonwerkPrivewagenBeroepskostMethode === "reeel"}
+                    onChange={() => set("woonwerkPrivewagenBeroepskostMethode", "reeel")}
+                  />
+                  Reëel
+                </label>
+                <HelpTooltip text="Forfaitair: de woon-werkvergoeding is vrijgesteld tot €500/jaar (automatisch verrekend). Reëel: geen automatische vrijstelling op het loon — werkelijke kosten worden manueel op de fiscale fiche opgenomen." />
+              </div>
+            </>
           )}
 
           <CheckboxLine
@@ -887,22 +1186,20 @@ function ProfileForm({
           {profiel.woonwerkBusTramMetro && (
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <FormField label="OV afstand km">
-                <input
+                <NumeriekeInput
                   className={inputClass}
-                  type="number"
                   min={0}
                   value={profiel.busTramMetroKm}
-                  onChange={(e) => set("busTramMetroKm", parseFloat(e.target.value || "0"))}
+                  onValueChange={(waarde) => set("busTramMetroKm", waarde)}
                 />
               </FormField>
               <FormField label="OV prijs / maand (€)">
-                <input
+                <NumeriekeInput
                   className={inputClass}
-                  type="number"
                   step="0.01"
                   min={0}
                   value={profiel.busTramMetroPrijs}
-                  onChange={(e) => set("busTramMetroPrijs", parseFloat(e.target.value || "0"))}
+                  onValueChange={(waarde) => set("busTramMetroPrijs", waarde)}
                 />
               </FormField>
             </div>
@@ -916,12 +1213,11 @@ function ProfileForm({
           />
           {profiel.woonwerkTrein && (
             <FormField label="Trein afstand km">
-              <input
+              <NumeriekeInput
                 className={inputClass}
-                type="number"
                 min={0}
                 value={profiel.treinKm}
-                onChange={(e) => set("treinKm", parseFloat(e.target.value || "0"))}
+                onValueChange={(waarde) => set("treinKm", waarde)}
               />
             </FormField>
           )}
@@ -933,50 +1229,76 @@ function ProfileForm({
             onChange={(checked) => set("woonwerkBedrijfswagen", checked)}
           />
           {profiel.woonwerkBedrijfswagen && (
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <FormField label="Cataloguswaarde (€)">
-                <input
-                  className={inputClass}
-                  type="number"
-                  step="0.01"
-                  min={0}
-                  value={profiel.bedrijfswagenCataloguswaarde}
-                  onChange={(e) => set("bedrijfswagenCataloguswaarde", parseFloat(e.target.value || "0"))}
-                />
-              </FormField>
-              <FormField label="Eerste inschrijving">
-                <input
-                  className={inputClass}
-                  type="date"
-                  value={profiel.bedrijfswagenDatumEersteInschrijving}
-                  onChange={(e) => set("bedrijfswagenDatumEersteInschrijving", e.target.value)}
-                />
-              </FormField>
-              <FormField label="Brandstof">
-                <select
-                  className={selectClass}
-                  value={profiel.bedrijfswagenBrandstof}
-                  onChange={(e) =>
-                    set("bedrijfswagenBrandstof", e.target.value as BrandstofBedrijfswagen)
-                  }
-                >
-                  <option value="diesel">Diesel</option>
-                  <option value="benzine">Benzine</option>
-                  <option value="elektriciteit">Elektriciteit</option>
-                </select>
-              </FormField>
-              {profiel.bedrijfswagenBrandstof !== "elektriciteit" && (
-                <FormField label="CO2-waarde">
-                  <input
+            <>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <FormField label="Cataloguswaarde (€)">
+                  <NumeriekeInput
                     className={inputClass}
-                    type="number"
+                    step="0.01"
                     min={0}
-                    value={profiel.bedrijfswagenCo2}
-                    onChange={(e) => set("bedrijfswagenCo2", parseFloat(e.target.value || "0"))}
+                    value={profiel.bedrijfswagenCataloguswaarde}
+                    onValueChange={(waarde) => set("bedrijfswagenCataloguswaarde", waarde)}
                   />
                 </FormField>
-              )}
-            </div>
+                <FormField label="Eerste inschrijving">
+                  <input
+                    className={inputClass}
+                    type="date"
+                    value={profiel.bedrijfswagenDatumEersteInschrijving}
+                    onChange={(e) => set("bedrijfswagenDatumEersteInschrijving", e.target.value)}
+                  />
+                </FormField>
+                <FormField label="Brandstof">
+                  <select
+                    className={selectClass}
+                    value={profiel.bedrijfswagenBrandstof}
+                    onChange={(e) =>
+                      set("bedrijfswagenBrandstof", e.target.value as BrandstofBedrijfswagen)
+                    }
+                  >
+                    <option value="diesel">Diesel</option>
+                    <option value="benzine">Benzine</option>
+                    <option value="elektriciteit">Elektriciteit</option>
+                  </select>
+                </FormField>
+                {profiel.bedrijfswagenBrandstof !== "elektriciteit" && (
+                  <FormField label="CO2-waarde">
+                    <NumeriekeInput
+                      className={inputClass}
+                      min={0}
+                      value={profiel.bedrijfswagenCo2}
+                      onValueChange={(waarde) => set("bedrijfswagenCo2", waarde)}
+                    />
+                  </FormField>
+                )}
+              </div>
+              <div className="flex items-center gap-3" style={{ paddingLeft: 4 }}>
+                <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+                  Berekeningsmethode
+                </span>
+                <label className="flex items-center gap-1 text-sm cursor-pointer">
+                  <input
+                    type="radio"
+                    name="bedrijfswagen-beroepskost"
+                    value="forfaitair"
+                    checked={profiel.woonwerkBedrijfswagenBeroepskostMethode === "forfaitair"}
+                    onChange={() => set("woonwerkBedrijfswagenBeroepskostMethode", "forfaitair")}
+                  />
+                  Forfaitair
+                </label>
+                <label className="flex items-center gap-1 text-sm cursor-pointer">
+                  <input
+                    type="radio"
+                    name="bedrijfswagen-beroepskost"
+                    value="reeel"
+                    checked={profiel.woonwerkBedrijfswagenBeroepskostMethode === "reeel"}
+                    onChange={() => set("woonwerkBedrijfswagenBeroepskostMethode", "reeel")}
+                  />
+                  Reëel
+                </label>
+                <HelpTooltip text="Forfaitair: de VAA bedrijfswagen wordt opgenomen in de belastbare basis volgens de CO₂-formule. Reëel: de VAA blijft van toepassing; werkelijke beroepskosten worden manueel op de fiscale fiche opgenomen." />
+              </div>
+            </>
           )}
         </div>
       </FormSection>
@@ -984,74 +1306,34 @@ function ProfileForm({
       {profiel.statuut !== "student" && (
         <FormSection label="Werkgeversbijdragen" icon={<Building2 size={13} />}>
           <FormField
-            label="Arbeidsongevallen-tarief (%)"
-            helper="Burelen: ~0,3 %. Controleer uw polis."
+            label={<>Arbeidsongevallen-tarief (%) <HelpTooltip text="Burelen: ~0,3 %. Controleer uw polis." /></>}
           >
-            <input
+            <NumeriekeInput
               className={inputClass}
-              type="number"
               step="0.01"
               min={0}
               max={10}
-              value={(profiel.arbeidsongevallenPct * 100).toFixed(2)}
-              onChange={(e) =>
-                set("arbeidsongevallenPct", parseFloat(e.target.value || "0") / 100)
-              }
+              value={profiel.arbeidsongevallenPct * 100}
+              formatValue={(waarde) => waarde.toFixed(2)}
+              onValueChange={(waarde) => set("arbeidsongevallenPct", waarde / 100)}
             />
           </FormField>
           <FormField label="Patronale groepsverzekering (€/m)">
-            <input
+            <NumeriekeInput
               className={inputClass}
-              type="number"
               step="0.01"
               min={0}
               value={profiel.extraGroepsverzekering}
-              onChange={(e) =>
-                set("extraGroepsverzekering", parseFloat(e.target.value || "0"))
-              }
-            />
-          </FormField>
-          <FormField
-            label="Maaltijdcheques — werkgeversaandeel (€/dag)"
-            helper={`Max €${MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026.toFixed(2).replace(".", ",")}/dag × ${profiel.arbeidsdagenPerMaand} werkdagen. Niet verplicht in PC 200.`}
-          >
-            <input
-              className={inputClass}
-              type="number"
-              step="0.01"
-              min={0}
-              max={MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026}
-              value={profiel.maaltijdchequeWerkgeversaandeelPerDag}
-              onChange={(e) =>
-                set("maaltijdchequeWerkgeversaandeelPerDag", parseFloat(e.target.value || "0"))
-              }
-            />
-          </FormField>
-          <FormField
-            label="Maaltijdcheques — werknemersbijdrage (€/dag)"
-            helper={`Min €1,09/dag × ${profiel.arbeidsdagenPerMaand} werkdagen. Mag hoger liggen volgens de werkgeverregeling.`}
-          >
-            <input
-              className={inputClass}
-              type="number"
-              step="0.01"
-              min={0}
-              value={profiel.maaltijdchequeWerknemersbijdragePerDag}
-              onChange={(e) =>
-                set("maaltijdchequeWerknemersbijdragePerDag", parseFloat(e.target.value || "0"))
-              }
+              onValueChange={(waarde) => set("extraGroepsverzekering", waarde)}
             />
           </FormField>
           <FormField label="Hospitalisatieverzekering (€/m)">
-            <input
+            <NumeriekeInput
               className={inputClass}
-              type="number"
               step="0.01"
               min={0}
               value={profiel.extraHospitalisatie}
-              onChange={(e) =>
-                set("extraHospitalisatie", parseFloat(e.target.value || "0"))
-              }
+              onValueChange={(waarde) => set("extraHospitalisatie", waarde)}
             />
           </FormField>
         </FormSection>
@@ -1081,58 +1363,34 @@ function TaxProfileFields({
 
 function GezinstypeField({ profiel, set }: { profiel: Profiel; set: ProfielSetter }) {
   return (
-    <FormField label="Gezinstype (voor BV)">
+    <FormField
+      label={<>Gezinstype (voor BV) <HelpTooltip text="Een partner is fiscaal niet ten laste. Bij geen of beperkt beroepsinkomen past de BV-berekening Schaal II toe, wat de bedrijfsvoorheffing verlaagt en het geraamde nettoloon verhoogt." /></>}
+    >
       <select
         className={selectClass}
         value={profiel.gezinstype}
         onChange={(e) => set("gezinstype", e.target.value as GezinsType)}
       >
         <option value="alleenstaand">Alleenstaand / eenoudergezin</option>
-        <option value="gehuwd_met_inkomen">Gehuwd - partner met inkomen</option>
-        <option value="gehuwd_zonder_inkomen">Gehuwd - partner zonder inkomen</option>
+        <option value="gehuwd_met_inkomen">Gehuwd/wettelijk samenwonend - partner met inkomen</option>
+        <option value="gehuwd_zonder_inkomen">
+          Gehuwd/wettelijk samenwonend - partner zonder of beperkt beroepsinkomen
+        </option>
       </select>
     </FormField>
   );
 }
 
 function KinderenVoorheffingFields({ profiel, set }: { profiel: Profiel; set: ProfielSetter }) {
-  function setKinderenTenLaste(aantal: number) {
-    set("kinderenTenLaste", aantal);
-    set("kinderenOnder3", Math.min(profiel.kinderenOnder3, aantal));
-  }
-
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-      <FormField label="Kinderen ten laste">
-        <input
-          className={inputClass}
-          type="number"
-          min={0}
-          max={12}
-          value={profiel.kinderenTenLaste}
-          onChange={(e) => setKinderenTenLaste(parseInt(e.target.value || "0", 10))}
-        />
-      </FormField>
-      <KinderenOnderDrieField profiel={profiel} set={set} />
-    </div>
-  );
-}
-
-function KinderenOnderDrieField({ profiel, set }: { profiel: Profiel; set: ProfielSetter }) {
-  return (
-    <FormField
-      label="Kinderen < 3 jaar"
-      helper="Extra BV-vermindering: €76/m per kind, als er geen kinderopvangaftrek wordt toegepast."
-    >
-      <input
+    <FormField label="Kinderen ten laste">
+      <NumeriekeInput
         className={inputClass}
-        type="number"
         min={0}
-        max={profiel.kinderenTenLaste}
-        value={profiel.kinderenOnder3}
-        onChange={(e) =>
-          set("kinderenOnder3", Math.min(profiel.kinderenTenLaste, parseInt(e.target.value || "0", 10)))
-        }
+        max={12}
+        value={profiel.kinderenTenLaste}
+        modus="int"
+        onValueChange={(waarde) => set("kinderenTenLaste", waarde)}
       />
     </FormField>
   );
@@ -1192,7 +1450,7 @@ function ResultsPanel({ profiel }: { profiel: Profiel }) {
       ? [
           { label: "Bruto", bedrag: summary.bruto },
           { label: "Netto", bedrag: summary.netto, highlight: true },
-          { label: "Werkgeverskost", bedrag: summary.werkgeverskost, highlight: true },
+          { label: "Loonkost werkgever / maand", bedrag: summary.werkgeverskost, highlight: true },
           { label: "Loonwig", bedrag: summary.loonwig, format: "PCT" },
         ]
       : [{ label: "Bruto (student)", bedrag: summary.bruto, highlight: true }];
@@ -1268,35 +1526,75 @@ function NettoRow({
   label,
   bedrag,
   prefix = "-",
-  highlight = false,
+  variant = "normal",
   dimmed = false,
+  onToggle,
+  open,
 }: {
   label: string;
   bedrag: number;
   prefix?: string;
-  highlight?: boolean;
+  variant?: "normal" | "subtotal" | "total";
   dimmed?: boolean;
+  onToggle?: () => void;
+  open?: boolean;
 }) {
+  const highlight = variant === "subtotal" || variant === "total";
+  const total = variant === "total";
+  const content = (
+    <>
+      {onToggle && (open ? <ChevronUp size={14} /> : <ChevronDown size={14} />)}
+      {label}
+    </>
+  );
+
   return (
-    <tr style={{ borderBottom: "1px solid var(--color-navy-50)" }}>
+    <tr
+      style={{
+        borderBottom: total ? "none" : "1px solid var(--color-navy-50)",
+        borderTop: variant === "subtotal" ? "2px solid var(--color-border)" : total ? "2px solid var(--color-primary)" : undefined,
+      }}
+    >
       <td
         style={{
-          padding: "7px 8px 7px 0",
+          padding: total ? "10px 8px 4px 0" : "7px 8px 7px 0",
           color: dimmed ? "var(--color-text-muted)" : highlight ? "var(--color-text)" : "var(--color-navy-500)",
           fontWeight: highlight ? 700 : 400,
           fontSize: highlight ? 15 : 13,
+          fontFamily: highlight ? "var(--font-display)" : undefined,
         }}
       >
-        {label}
+        {onToggle ? (
+          <button
+            onClick={onToggle}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              background: "transparent",
+              border: "none",
+              padding: 0,
+              cursor: "pointer",
+              color: "inherit",
+              font: "inherit",
+              fontWeight: "inherit",
+              textAlign: "left",
+            }}
+          >
+            {content}
+          </button>
+        ) : (
+          content
+        )}
       </td>
       <td
         style={{
-          padding: "7px 0 7px 8px",
+          padding: total ? "10px 0 4px 8px" : "7px 0 7px 8px",
           textAlign: "right",
           fontFamily: "var(--font-mono)",
           fontWeight: highlight ? 700 : 500,
           color: highlight ? "var(--color-primary)" : dimmed ? "var(--color-text-muted)" : "var(--color-text)",
-          fontSize: highlight ? 15 : 13,
+          fontSize: total ? 22 : highlight ? 15 : 13,
         }}
       >
         {prefix !== "" ? `${prefix} ${formatEUR(bedrag)}` : formatEUR(bedrag)}
@@ -1305,8 +1603,66 @@ function NettoRow({
   );
 }
 
-function NettoPanel({ resultaat: r }: { resultaat: NettoResultaat }) {
+function NettoSectionRow({ label }: { label: string }) {
+  return (
+    <tr>
+      <td
+        colSpan={2}
+        style={{
+          padding: "14px 0 5px",
+          color: "var(--color-text-muted)",
+          fontFamily: "var(--font-display)",
+          fontSize: 11,
+          fontWeight: 800,
+          letterSpacing: "0.04em",
+          textTransform: "uppercase",
+        }}
+      >
+        {label}
+      </td>
+    </tr>
+  );
+}
+
+function NettoDetailRow({ children }: { children: React.ReactNode }) {
+  return (
+    <tr>
+      <td colSpan={2} style={{ padding: "0 0 8px 18px" }}>
+        <div
+          style={{
+            borderLeft: "2px solid var(--color-primary-border)",
+            padding: "8px 0 8px 10px",
+            color: "var(--color-text-muted)",
+            fontSize: 12,
+            lineHeight: 1.45,
+          }}
+        >
+          {children}
+        </div>
+      </td>
+    </tr>
+  );
+}
+
+function NettoPanel({
+  resultaat: r,
+  vaaWerkmiddelen,
+  maaltijdchequeWerkgeversaandeelPerDag,
+}: {
+  resultaat: NettoResultaat;
+  vaaWerkmiddelen?: VaaForfaitsWerkmiddelenResultaat;
+  maaltijdchequeWerkgeversaandeelPerDag: number;
+}) {
   const [bvDetailOpen, setBvDetailOpen] = useState(false);
+  const [vaaDetailOpen, setVaaDetailOpen] = useState(false);
+  const totaalTerugnameVaa = r.vaaBedrijfswagenPerMaand + r.vaaRszPlichtigPerMaand;
+  const gebruiktSchaalII = r.bv.schaal === "II";
+  const maaltijdcheques = berekenMaaltijdchequeWaarde({
+    werkgeversaandeelPerDag: maaltijdchequeWerkgeversaandeelPerDag,
+    werknemersbijdragePerDag: r.maaltijdchequeWerknemersbijdragePerDag,
+    werkdagen: r.maaltijdchequeWerkdagen,
+  });
+  const nettoloonInclusiefMaaltijdcheques = round2(r.nettoloon + maaltijdcheques.totaleWaarde);
 
   return (
     <div
@@ -1344,12 +1700,16 @@ function NettoPanel({ resultaat: r }: { resultaat: NettoResultaat }) {
           lineHeight: 1.5,
         }}
       >
-        <strong>Validatie pending:</strong> BV wordt lokaal berekend met de Bijlage III-sleutelformule 2026 en is geankerd op Group S. Officiële FOD Tax-Calc waarden zijn nog niet ingevoerd; validatiestatus blijft daarom pending. BBSZ = kwartaalbedrag ÷ 3. Gemeentebelasting niet inbegrepen. Eindafrekening via PB-aangifte AJ 2027.
+        <strong>FOD Bijlage III:</strong> BV wordt berekend volgens FOD Financiën / Bijlage III 2026 als primaire payrollbron. Tax-Calc is alleen een latere PB-raming, geen bron voor maandelijkse payroll-BV. BBSZ = kwartaalbedrag ÷ 3. Gemeentebelasting niet inbegrepen. Eindafrekening via PB-aangifte AJ 2027.
       </div>
 
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <tbody>
           <NettoRow label="Brutoloon" bedrag={r.brutoloon} prefix="" />
+          {vaaWerkmiddelen?.lijnen.map((lijn) => (
+            <NettoRow key={lijn.datapunt.id} label={`VAA ${lijn.label}`} bedrag={lijn.bedrag} prefix="+" dimmed />
+          ))}
+          <NettoRow label="Totaal bruto" bedrag={r.brutoRszBasis} prefix="" variant="subtotal" />
           <NettoRow label={`RSZ werknemer (13,07 %)`} bedrag={r.rsz.werknemerBijdrage} />
           {r.werkbonus.totaal > 0 && (
             <NettoRow
@@ -1363,27 +1723,70 @@ function NettoPanel({ resultaat: r }: { resultaat: NettoResultaat }) {
             label={`Effectieve RSZ${r.werkbonus.totaal > 0 ? " (na werkbonus)" : ""}`}
             bedrag={r.effectieveRsz}
           />
-          {r.vaaBedrijfswagenPerMaand > 0 && (
-            <NettoRow
-              label="VAA bedrijfswagen (alleen BV-basis)"
-              bedrag={r.vaaBedrijfswagenPerMaand}
-              prefix="+"
-              dimmed
-            />
+          <NettoRow
+            label="Loon na effectieve RSZ"
+            bedrag={r.belastbaarMaandloon}
+            prefix=""
+            variant="subtotal"
+          />
+          <NettoRow
+            label="VAA bedrijfswagen"
+            bedrag={r.vaaBedrijfswagenPerMaand}
+            prefix="+"
+            dimmed
+          />
+          <NettoRow
+            label="Belastbaar loon"
+            bedrag={r.belastbaarMaandloonVoorBV}
+            prefix=""
+            variant="subtotal"
+          />
+          <NettoRow
+            label={`Bedrijfsvoorheffing (${r.bv.schaal}, vóór gezinsverminderingen)`}
+            bedrag={r.bv.bvPerMaand}
+            onToggle={() => setBvDetailOpen(!bvDetailOpen)}
+            open={bvDetailOpen}
+          />
+          {gebruiktSchaalII && (
+            <NettoDetailRow>
+              Lagere bedrijfsvoorheffing door partner zonder of beperkt beroepsinkomen:
+              Schaal II verhoogt de effectieve vrijstelling en verlaagt zo de maandelijkse BV.
+            </NettoDetailRow>
           )}
-          <NettoRow label={`Bedrijfsvoorheffing (${r.bv.schaal}, vóór gezinsverminderingen)`} bedrag={r.bv.bvPerMaand} />
+          {bvDetailOpen && (
+            <NettoDetailRow>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+                <tbody>
+                  {[
+                    ["Methode", r.bv.methode],
+                    ["Schaal", r.bv.schaal],
+                    ...(gebruiktSchaalII
+                      ? [["Impact Schaal II", "Lagere bedrijfsvoorheffing door partner zonder of beperkt beroepsinkomen"]]
+                      : []),
+                    ["Validatie", r.bv.validatieStatus],
+                    ["Belastbaar jaarloon", formatEUR(r.bv.jaarbasis)],
+                    ["Forfait beroepskosten (30%, max € 6.070 AJ 2027)", `- ${formatEUR(r.bv.forfaitBeroepskosten)}`],
+                    ["Belastbaar netto-inkomen", formatEUR(r.bv.belastbaarNettoJaar)],
+                    ["Belastingvrije som (AJ 2027)", formatEUR(r.bv.belastingvrijeSom)],
+                    ["PB (bruto, schijven 25/40/45/50%)", formatEUR(r.bv.pbBruto)],
+                    ["BVS-vermindering (BVS × 25%)", `- ${formatEUR(r.bv.bvsVermindering)}`],
+                    ["PB (netto, jaarbasis)", formatEUR(r.bv.pbNetto)],
+                    ["BV / maand sleutelformule (vóór gezinsvermindering)", formatEUR(r.bv.bvPerMaand)],
+                    ["BV / maand (na gezinsvermindering)", formatEUR(r.bv.bvNaVerminderingen)],
+                  ].map(([lbl, val]) => (
+                    <tr key={lbl} style={{ borderBottom: "1px solid var(--color-navy-50)" }}>
+                      <td style={{ padding: "4px 6px 4px 0", color: "var(--color-text-muted)" }}>{lbl}</td>
+                      <td style={{ padding: "4px 0 4px 6px", textAlign: "right", fontFamily: "var(--font-mono)", color: "var(--color-navy-500)" }}>{val}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </NettoDetailRow>
+          )}
           {r.bv.verminderingKinderen > 0 && (
             <NettoRow
               label={`BV-vermindering kinderen ten laste`}
               bedrag={r.bv.verminderingKinderen}
-              prefix="+"
-              dimmed
-            />
-          )}
-          {r.bv.verminderingKindOnder3 > 0 && (
-            <NettoRow
-              label={`BV-vermindering kind(eren) < 3 jaar`}
-              bedrag={r.bv.verminderingKindOnder3}
               prefix="+"
               dimmed
             />
@@ -1413,8 +1816,9 @@ function NettoPanel({ resultaat: r }: { resultaat: NettoResultaat }) {
             />
           )}
           <NettoRow label="BV (na verminderingen)" bedrag={r.bv.bvNaVerminderingen} />
+          <NettoSectionRow label="Onkostenvergoedingen en inhoudingen" />
           <NettoRow
-            label={`BBSZ (kwartaal ${formatEUR(r.bbsz.kwartaalbijdrage)} ÷ 3)`}
+            label={`BBSZ ${r.bbsz.scenarioLabel} (kwartaal ${formatEUR(r.bbsz.kwartaalbijdrage)} ÷ 3)`}
             bedrag={r.bbsz.maandelijksBedrag}
           />
           {r.maaltijdchequeWerknemersbijdrage > 0 && (
@@ -1445,101 +1849,62 @@ function NettoPanel({ resultaat: r }: { resultaat: NettoResultaat }) {
               dimmed
             />
           )}
-          <tr style={{ borderTop: "2px solid var(--color-primary)" }}>
-            <td
-              style={{
-                padding: "10px 8px 4px 0",
-                fontWeight: 700,
-                color: "var(--color-text)",
-                fontFamily: "var(--font-display)",
-                fontSize: 15,
-              }}
-            >
-              Nettoloon
-            </td>
-            <td
-              style={{
-                padding: "10px 0 4px 8px",
-                textAlign: "right",
-                fontFamily: "var(--font-mono)",
-                fontWeight: 700,
-                color: "var(--color-primary)",
-                fontSize: 22,
-              }}
-            >
-              {formatEUR(r.nettoloon)}
-            </td>
-          </tr>
+          <NettoRow
+            label="Terugname VAA"
+            bedrag={totaalTerugnameVaa}
+            onToggle={() => setVaaDetailOpen(!vaaDetailOpen)}
+            open={vaaDetailOpen}
+          />
+          {vaaDetailOpen && (
+            <NettoDetailRow>
+              <div style={{ display: "grid", gap: 5 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
+                  <span>VAA bedrijfswagen toegevoegd aan BV-basis</span>
+                  <span style={{ fontFamily: "var(--font-mono)", color: "var(--color-navy-500)" }}>
+                    + {formatEUR(r.vaaBedrijfswagenPerMaand)}
+                  </span>
+                </div>
+                {vaaWerkmiddelen?.lijnen.map((lijn) => (
+                  <div key={lijn.datapunt.id} style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
+                    <span>VAA {lijn.label} toegevoegd aan bruto RSZ/BV-basis</span>
+                    <span style={{ fontFamily: "var(--font-mono)", color: "var(--color-navy-500)" }}>
+                      + {formatEUR(lijn.bedrag)}
+                    </span>
+                  </div>
+                ))}
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
+                  <span>Terugname voordelen alle aard</span>
+                  <span style={{ fontFamily: "var(--font-mono)", color: "var(--color-navy-500)" }}>
+                    - {formatEUR(totaalTerugnameVaa)}
+                  </span>
+                </div>
+                <div>
+                  Voordelen alle aard verhogen de RSZ- en/of BV-basis, maar worden niet cash uitbetaald.
+                </div>
+              </div>
+            </NettoDetailRow>
+          )}
+          <NettoRow label="Nettoloon" bedrag={r.nettoloon} prefix="" variant="total" />
+          {maaltijdcheques.totaleWaarde > 0 && (
+            <NettoRow
+              label={`Nettoloon incl. maaltijdcheques (totale waarde ${formatEUR(maaltijdcheques.totaleWaardePerDag)} × ${maaltijdcheques.werkdagen} dagen)`}
+              bedrag={nettoloonInclusiefMaaltijdcheques}
+              prefix=""
+              variant="subtotal"
+            />
+          )}
         </tbody>
       </table>
 
-      {/* BV detail — inklapbaar */}
-      <div
-        style={{
-          marginTop: 14,
-          borderTop: "1px solid var(--color-border)",
-          paddingTop: 10,
-          fontSize: 12,
-          color: "var(--color-text-muted)",
-        }}
-      >
-        <button
-          onClick={() => setBvDetailOpen(!bvDetailOpen)}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            background: "transparent",
-            border: "none",
-            cursor: "pointer",
-            padding: 0,
-            fontFamily: "var(--font-body)",
-            fontSize: 13,
-            fontWeight: 600,
-            color: "var(--color-navy-500)",
-          }}
-        >
-          {bvDetailOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-          BV-berekening detail
-          <span style={{ fontWeight: 400, color: "var(--color-text-muted)", fontSize: 11 }}>
-            ({bvDetailOpen ? "verbergen" : "9 rijen"})
-          </span>
-        </button>
-        {bvDetailOpen && (
-          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, marginTop: 8 }}>
-            <tbody>
-              {[
-                ["Methode", r.bv.methode],
-                ["Schaal", r.bv.schaal],
-                ["Validatie", r.bv.validatieStatus],
-                ["Belastbaar jaarloon", formatEUR(r.bv.jaarbasis)],
-                ["Forfait beroepskosten (30%, max € 6.070 AJ 2027)", `- ${formatEUR(r.bv.forfaitBeroepskosten)}`],
-                ["Belastbaar netto-inkomen", formatEUR(r.bv.belastbaarNettoJaar)],
-                ["Belastingvrije som (AJ 2027)", formatEUR(r.bv.belastingvrijeSom)],
-                ["PB (bruto, schijven 25/40/45/50%)", formatEUR(r.bv.pbBruto)],
-                ["BVS-vermindering (BVS × 25%)", `- ${formatEUR(r.bv.bvsVermindering)}`],
-                ["PB (netto, jaarbasis)", formatEUR(r.bv.pbNetto)],
-                ["BV / maand sleutelformule (vóór gezinsvermindering)", formatEUR(r.bv.bvPerMaand)],
-                ["BV / maand (na gezinsvermindering)", formatEUR(r.bv.bvNaVerminderingen)],
-              ].map(([lbl, val]) => (
-                <tr key={lbl} style={{ borderBottom: "1px solid var(--color-navy-50)" }}>
-                  <td style={{ padding: "4px 6px 4px 0", color: "var(--color-text-muted)" }}>{lbl}</td>
-                  <td style={{ padding: "4px 0 4px 6px", textAlign: "right", fontFamily: "var(--font-mono)", color: "var(--color-navy-500)" }}>{val}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
-
       {/* Audit bronnen */}
-      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 4 }}>
-        <AuditPanel datapunt={r.werkbonus.datapunt} />
-        <AuditPanel datapunt={r.bbsz.datapunt} />
-        {r.bv.datapunten.map((dp) => (
-          <AuditPanel key={dp.id} datapunt={dp} />
-        ))}
-      </div>
+      <AuditSourceGroup
+        datapunten={[
+          r.werkbonus.datapunt,
+          r.bbsz.datapunt,
+          ...r.bv.datapunten,
+          ...(vaaWerkmiddelen?.datapunten ?? []),
+        ]}
+      />
     </div>
   );
 }
@@ -1584,7 +1949,7 @@ function WerkgeverskostPanel({
           marginBottom: 12,
         }}
       >
-        Werkgeverskost (totale loonkost)
+        Loonkost werkgever (per maand)
       </div>
 
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -1613,8 +1978,6 @@ function WerkgeverskostPanel({
               {formatEUR(r.totaleLoonkostSmal)}
             </td>
           </tr>
-          <NettoRow label="Provisie eindejaarspremie (8,33%)" bedrag={r.provisieEindejaarspremie} prefix="+" dimmed />
-          <NettoRow label="Provisie dubbel vakantiegeld (6,67%)" bedrag={r.provisieVakantiegeld} prefix="+" dimmed />
           {extras.groepsverzekering > 0 && (
             <NettoRow label="Patronale groepsverzekering" bedrag={extras.groepsverzekering} prefix="+" dimmed />
           )}
@@ -1623,9 +1986,6 @@ function WerkgeverskostPanel({
           )}
           {extras.hospitalisatie > 0 && (
             <NettoRow label="Hospitalisatieverzekering" bedrag={extras.hospitalisatie} prefix="+" dimmed />
-          )}
-          {extras.ecocheques > 0 && (
-            <NettoRow label={`Ecocheques (jaarlijks ÷ 12)`} bedrag={extras.ecocheques} prefix="+" dimmed />
           )}
           {extras.woonwerk > 0 && (
             <NettoRow label="Woon-werkvergoeding" bedrag={extras.woonwerk} prefix="+" dimmed />
@@ -1643,7 +2003,7 @@ function WerkgeverskostPanel({
                 fontSize: 15,
               }}
             >
-              Totale loonkost — breed (CTC)
+              Loonkost werkgever per maand
             </td>
             <td
               style={{
@@ -1680,72 +2040,148 @@ function WerkgeverskostPanel({
       </div>
 
       {/* Audit-bronnen */}
-      <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 4 }}>
-        {r.datapunten.map((dp) => (
-          <AuditPanel key={dp.id} datapunt={dp} />
-        ))}
-      </div>
+      <AuditSourceGroup datapunten={r.datapunten} />
     </div>
   );
 }
 
-function WoonwerkVerkeerCard({ mobiliteit }: { mobiliteit: MobiliteitBerekening }) {
-  const componenten = Object.values(mobiliteit.woonwerk.componenten).filter(
-    (component): component is NonNullable<typeof component> => Boolean(component),
+function NettoJaaroverzichtPanel({
+  jaaroverzicht,
+  maaltijdchequeWerkgeversaandeelPerDag,
+  maaltijdchequeWerknemersbijdragePerDag,
+  maaltijdchequeWerkdagenPerMaand,
+}: {
+  jaaroverzicht: JaaroverzichtResultaat;
+  maaltijdchequeWerkgeversaandeelPerDag: number;
+  maaltijdchequeWerknemersbijdragePerDag: number;
+  maaltijdchequeWerkdagenPerMaand: number;
+}) {
+  const r = jaaroverzicht.netto;
+  const maaltijdcheques = berekenMaaltijdchequeWaarde({
+    werkgeversaandeelPerDag: maaltijdchequeWerkgeversaandeelPerDag,
+    werknemersbijdragePerDag: maaltijdchequeWerknemersbijdragePerDag,
+    werkdagen: maaltijdchequeWerkdagenPerMaand * 12,
+  });
+  const nettoJaarloonInclusiefMaaltijdcheques = round2(
+    r.totaalNettoJaarloon + maaltijdcheques.totaleWaarde,
   );
   const datapunten = [
-    ...mobiliteit.woonwerk.datapunten,
-    ...(mobiliteit.vaaBedrijfswagen?.datapunten ?? []),
+    ...r.eindejaarspremie.datapunten,
+    ...r.dubbelVakantiegeld.datapunten,
+    ...r.jaarpremie.datapunten,
   ].filter((dp, index, all) => all.findIndex((item) => item.id === dp.id) === index);
 
   return (
-    <ResultCard
-      label="Woon-werk verkeer"
-      amountEUR={mobiliteit.woonwerk.totaalVergoeding}
-      datapunten={datapunten}
-      helper={
-        <div style={{ display: "grid", gap: 6 }}>
-          {componenten.length === 0 && <span>Geen woon-werkvergoeding geselecteerd.</span>}
-          {componenten.map((component) => (
-            <div
-              key={component.label}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                gap: 12,
-                color: "var(--color-navy-500)",
-              }}
-            >
-              <span>{component.label}</span>
-              <span style={{ fontFamily: "var(--font-mono)" }}>{formatEUR(component.vergoeding)}</span>
-            </div>
-          ))}
-          {mobiliteit.vaaBedrijfswagen && (
-            <div
-              style={{
-                borderTop: "1px solid var(--color-border)",
-                marginTop: 4,
-                paddingTop: 6,
-                display: "flex",
-                justifyContent: "space-between",
-                gap: 12,
-                color: "var(--color-navy-500)",
-              }}
-            >
-              <span>VAA bedrijfswagen / maand</span>
-              <span style={{ fontFamily: "var(--font-mono)" }}>
-                {formatEUR(mobiliteit.vaaBedrijfswagen.vaaMaand)}
-              </span>
-            </div>
+    <div
+      style={{
+        borderRadius: "var(--radius-lg)",
+        border: "2px solid var(--color-primary)",
+        background: "var(--color-surface)",
+        padding: "1rem 1.1rem",
+      }}
+    >
+      <div
+        style={{
+          fontSize: 15,
+          fontWeight: 700,
+          color: "var(--color-text)",
+          fontFamily: "var(--font-display)",
+          letterSpacing: 0,
+          marginBottom: 12,
+        }}
+      >
+        Netto jaaroverzicht
+      </div>
+      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <tbody>
+          <NettoRow label="Netto maandloon × 12" bedrag={r.maandloonNettoX12} prefix="" variant="subtotal" />
+          <JaarComponentRows titel="Eindejaarspremie" component={r.eindejaarspremie} />
+          <JaarComponentRows titel="Dubbel vakantiegeld" component={r.dubbelVakantiegeld} />
+          <JaarComponentRows titel="Sectorale jaarpremie PC 200" component={r.jaarpremie} />
+          <NettoRow label="Ecocheques" bedrag={r.ecocheques} prefix="+" dimmed />
+          <NettoRow label="Netto jaarloon" bedrag={r.totaalNettoJaarloon} prefix="" variant="total" />
+          {maaltijdcheques.totaleWaarde > 0 && (
+            <NettoRow
+              label={`Netto jaarloon incl. maaltijdcheques (totale waarde ${formatEUR(maaltijdcheques.totaleWaardePerDag)} × ${maaltijdcheques.werkdagen} werkdagen)`}
+              bedrag={nettoJaarloonInclusiefMaaltijdcheques}
+              prefix=""
+              variant="subtotal"
+            />
           )}
-          {mobiliteit.woonwerk.waarschuwingen.map((waarschuwing) => (
-            <span key={waarschuwing} style={{ color: "var(--color-warning)" }}>
-              {waarschuwing}
-            </span>
-          ))}
-        </div>
-      }
-    />
+        </tbody>
+      </table>
+      <AuditSourceGroup datapunten={datapunten} />
+    </div>
+  );
+}
+
+function JaarComponentRows({
+  titel,
+  component,
+}: {
+  titel: string;
+  component: JaarcomponentNetto;
+}) {
+  return (
+    <>
+      <NettoSectionRow label={titel} />
+      <NettoRow label="Bruto" bedrag={component.bruto} prefix="+" dimmed />
+      <NettoRow label="RSZ werknemer" bedrag={component.rsz} />
+      <NettoRow label="Belastbaar loon" bedrag={component.belastbaar} prefix="" variant="subtotal" />
+      <NettoRow
+        label={`Bedrijfsvoorheffing (${(component.bvTarief * 100).toFixed(2)} %)`}
+        bedrag={component.bv}
+      />
+      <NettoRow label={`Netto ${titel.toLowerCase()}`} bedrag={component.netto} prefix="+" dimmed />
+    </>
+  );
+}
+
+function WerkgeverJaaroverzichtPanel({ jaaroverzicht }: { jaaroverzicht: JaaroverzichtResultaat }) {
+  const r = jaaroverzicht.werkgever;
+
+  return (
+    <div
+      style={{
+        borderRadius: "var(--radius-lg)",
+        border: "2px solid var(--color-primary)",
+        background: "var(--color-surface)",
+        padding: "1rem 1.1rem",
+      }}
+    >
+      <div
+        style={{
+          fontSize: 15,
+          fontWeight: 700,
+          color: "var(--color-text)",
+          fontFamily: "var(--font-display)",
+          letterSpacing: 0,
+          marginBottom: 12,
+        }}
+      >
+        Loonkost werkgever (per jaar)
+      </div>
+      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <tbody>
+          <NettoRow label="Loonkost werkgever per maand × 12" bedrag={r.maandbasisX12} prefix="" />
+          <NettoRow
+            label="Eindejaarspremie + jaarpremie + ecocheques"
+            bedrag={r.jaarpremiesEnEcocheques}
+            prefix="+"
+            dimmed
+          />
+          <NettoRow
+            label="RSZ op eindejaarspremie + jaarpremie"
+            bedrag={r.rszOpEindejaarspremieEnJaarpremie}
+            prefix="+"
+            dimmed
+          />
+          <NettoRow label="Dubbel vakantiegeld" bedrag={r.dubbelVakantiegeld} prefix="+" dimmed />
+          <NettoRow label="Loonkost werkgever per jaar" bedrag={r.totaleLoonkostJaar} prefix="" variant="total" />
+        </tbody>
+      </table>
+      <AuditSourceGroup datapunten={r.datapunten} />
+    </div>
   );
 }
 
@@ -1768,13 +2204,13 @@ function bouwResultaten(p: Profiel): BouwResultaten {
           () => {
             const heeftMaaltijdcheques = p.maaltijdchequeWerkgeversaandeelPerDag > 0;
             const mobiliteit = berekenMobiliteitVoorProfiel(p, refDatum);
+            const vaaWerkmiddelen = berekenVaaWerkmiddelenVoorProfiel(p, refDatum);
             const netto = berekenNetto({
               brutoloon: p.brutoloon,
               refDatum,
               bouwVlag: p.bouwVlag,
               gezinstype: p.gezinstype,
               kinderenTenLaste: p.kinderenTenLaste,
-              kinderenOnder3: p.kinderenOnder3,
               fiscaalAlleenstaandeMetKind: p.fiscaalAlleenstaandeMetKind,
               groepsverzekeringEigenBijdrage: p.groepsverzekeringEigenBijdrage,
               maaltijdchequeWerknemersbijdragePerDag: heeftMaaltijdcheques
@@ -1783,54 +2219,84 @@ function bouwResultaten(p: Profiel): BouwResultaten {
               maaltijdchequeWerkdagen: heeftMaaltijdcheques ? p.arbeidsdagenPerMaand : 0,
               hospitalisatieEigenBijdrage: p.hospitalisatieEigenBijdrage,
               onkostenvergoedingPerMaand: p.onkostenvergoedingPerMaand,
-              woonwerkVrijgesteldPerMaand: mobiliteit.woonwerk.totaalVergoeding,
+              woonwerkVrijgesteldPerMaand: berekenWoonwerkVrijgesteld(
+                mobiliteit.woonwerk,
+                p.woonwerkPrivewagenBeroepskostMethode,
+              ),
+              vaaRszPlichtigPerMaand: vaaWerkmiddelen.totaalPerMaand,
               vaaBedrijfswagenPerMaand: mobiliteit.vaaBedrijfswagen?.vaaMaand ?? 0,
-            });
-            const ecoResult = ecocheques({
-              tewerkstellingsbreuk: p.tewerkstellingsbreuk,
-              refDatum,
             });
             const wgk = werkgeverskost({
               brutoloon: p.brutoloon,
               refDatum,
               bouwVlag: p.bouwVlag,
               arbeidsongevallenPct: p.arbeidsongevallenPct,
+              premieEjpPct: 0,
+              premieVakantiegeldPct: 0,
               extraGroepsverzekering: p.extraGroepsverzekering,
               maaltijdchequeWerkgeversaandeelPerDag: p.maaltijdchequeWerkgeversaandeelPerDag,
               maaltijdchequeWerkdagen: p.arbeidsdagenPerMaand,
               extraHospitalisatie: p.extraHospitalisatie,
-              extraEcocheques: ecoResult.bedrag / 12,
+              extraEcocheques: 0,
+              vaaRszPlichtigPerMaand: vaaWerkmiddelen.totaalPerMaand,
               onkostenvergoedingPerMaand: p.onkostenvergoedingPerMaand,
               woonwerkVergoedingPerMaand: mobiliteit.woonwerk.totaalVergoeding,
             });
             const wig = loonwig(wgk.totaleLoonkostBreed, netto.nettoloon);
-            return { netto, wgk, wig, ecoResult, mobiliteit };
+            const jaaroverzicht = berekenJaaroverzicht({
+              brutoloon: p.brutoloon,
+              nettoloonPerMaand: netto.nettoloon,
+              loonkostWerkgeverPerMaand: wgk.totaleLoonkostBreed,
+              refDatum,
+              gezinstype: p.gezinstype,
+              kinderenTenLaste: p.kinderenTenLaste,
+              ancienniteitMaanden: p.ancienniteitMaanden,
+              prestatieMaandenInRefertepériode: p.prestatieMaanden,
+              tewerkstellingsbreuk: p.tewerkstellingsbreuk,
+              vaaPerMaand:
+                vaaWerkmiddelen.totaalPerMaand +
+                (mobiliteit.vaaBedrijfswagen?.vaaMaand ?? 0),
+            });
+            return { netto, wgk, wig, mobiliteit, vaaWerkmiddelen, jaaroverzicht };
           },
-          ({ netto, wgk, wig, ecoResult, mobiliteit }) => (
-            <div
-              className="grid grid-cols-1 xl:grid-cols-2"
-              style={{ gap: 12, alignItems: "flex-start" }}
-            >
-              <NettoPanel resultaat={netto} />
-              <WerkgeverskostPanel
-                resultaat={wgk}
-                loonwigPct={wig}
-                netto={netto.nettoloon}
-                extras={{
-                  arbeidsongevallenPct: p.arbeidsongevallenPct,
-                  groepsverzekering: p.extraGroepsverzekering,
-                  maaltijdcheques: Math.round(
-                    Math.min(
-                      p.maaltijdchequeWerkgeversaandeelPerDag,
-                      MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026,
-                    ) * p.arbeidsdagenPerMaand * 100,
-                  ) / 100,
-                  hospitalisatie: p.extraHospitalisatie,
-                  ecocheques: ecoResult.bedrag / 12,
-                  woonwerk: mobiliteit.woonwerk.totaalVergoeding,
-                  onkostenvergoeding: p.onkostenvergoedingPerMaand,
-                }}
+          ({ netto, wgk, wig, mobiliteit, vaaWerkmiddelen, jaaroverzicht }) => (
+            <div style={{ display: "grid", gap: 12 }}>
+              <div
+                className="grid grid-cols-1 xl:grid-cols-2"
+                style={{ gap: 12, alignItems: "flex-start" }}
+              >
+                <NettoPanel
+                  resultaat={netto}
+                  vaaWerkmiddelen={vaaWerkmiddelen}
+                  maaltijdchequeWerkgeversaandeelPerDag={p.maaltijdchequeWerkgeversaandeelPerDag}
+                />
+                <WerkgeverskostPanel
+                  resultaat={wgk}
+                  loonwigPct={wig}
+                  netto={netto.nettoloon}
+                  extras={{
+                    arbeidsongevallenPct: p.arbeidsongevallenPct,
+                    groepsverzekering: p.extraGroepsverzekering,
+                    maaltijdcheques: Math.round(
+                      Math.min(
+                        p.maaltijdchequeWerkgeversaandeelPerDag,
+                        MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026,
+                      ) * p.arbeidsdagenPerMaand * 100,
+                    ) / 100,
+                    hospitalisatie: p.extraHospitalisatie,
+                    ecocheques: 0,
+                    woonwerk: mobiliteit.woonwerk.totaalVergoeding,
+                    onkostenvergoeding: p.onkostenvergoedingPerMaand,
+                  }}
+                />
+              </div>
+              <NettoJaaroverzichtPanel
+                jaaroverzicht={jaaroverzicht}
+                maaltijdchequeWerkgeversaandeelPerDag={p.maaltijdchequeWerkgeversaandeelPerDag}
+                maaltijdchequeWerknemersbijdragePerDag={p.maaltijdchequeWerknemersbijdragePerDag}
+                maaltijdchequeWerkdagenPerMaand={p.arbeidsdagenPerMaand}
               />
+              <WerkgeverJaaroverzichtPanel jaaroverzicht={jaaroverzicht} />
             </div>
           ),
         ),
@@ -1897,149 +2363,6 @@ function bouwResultaten(p: Profiel): BouwResultaten {
     blocks: loonbasisBlocks,
   });
 
-  // Band 3 — Periodieke voordelen
-  const voordelenBlocks: React.ReactNode[] = [];
-  if (p.statuut === "bediende") {
-    voordelenBlocks.push(
-      safeRender(
-        () => rszBijdragen({ brutoloon: p.brutoloon, refDatum, bouwVlag: p.bouwVlag }),
-        (r) => (
-          <div
-            style={{
-              borderRadius: "var(--radius-lg)",
-              border: "1px solid var(--color-border)",
-              background: "var(--color-surface)",
-              padding: "1rem 1.1rem",
-            }}
-          >
-            <div
-              style={{
-                fontSize: 13,
-                fontWeight: 500,
-                color: "var(--color-navy-500)",
-                marginBottom: 10,
-                fontFamily: "var(--font-body)",
-              }}
-            >
-              RSZ-bijdragen (op € {p.brutoloon.toFixed(2)})
-            </div>
-            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
-              <tbody>
-                {r.bronnen.map((b) => (
-                  <tr key={b.datapunt.id} style={{ borderBottom: "1px solid var(--color-navy-50)" }}>
-                    <td style={{ padding: "7px 8px 7px 0", color: "var(--color-navy-500)" }}>{b.label}</td>
-                    <td
-                      style={{
-                        padding: "7px 0 7px 8px",
-                        textAlign: "right",
-                        fontFamily: "var(--font-mono)",
-                        fontWeight: 600,
-                        color: "var(--color-text)",
-                      }}
-                    >
-                      {formatEUR(b.bedrag)}
-                    </td>
-                  </tr>
-                ))}
-                <tr style={{ borderTop: "2px solid var(--color-border)" }}>
-                  <td style={{ padding: "8px 8px 4px 0", fontWeight: 600, color: "var(--color-text)", fontSize: 13 }}>
-                    Totaal werkgeversbijdrage
-                  </td>
-                  <td
-                    style={{
-                      padding: "8px 0 4px 8px",
-                      textAlign: "right",
-                      fontFamily: "var(--font-mono)",
-                      fontWeight: 700,
-                      color: "var(--color-primary)",
-                      fontSize: 15,
-                    }}
-                  >
-                    {formatEUR(r.totaalWerkgever)}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
-              {r.bronnen.map((b) => (
-                <AuditPanel key={b.datapunt.id} datapunt={b.datapunt} />
-              ))}
-            </div>
-          </div>
-        ),
-      ),
-    );
-    voordelenBlocks.push(
-      safeRender(
-        () =>
-          eindejaarspremie({
-            brutoloon: p.brutoloon,
-            ancienniteitMaanden: p.ancienniteitMaanden,
-            prestatieMaandenInRefertepériode: p.prestatieMaanden,
-          }),
-        (r) => (
-          <ResultCard
-            label="Eindejaarspremie (pro-rata)"
-            amountEUR={r.premie}
-            helper={r.toelichting}
-            datapunten={[r.datapunt]}
-          />
-        ),
-      ),
-    );
-  }
-  voordelenBlocks.push(
-    safeRender(
-      () =>
-        ecocheques({
-          tewerkstellingsbreuk: p.tewerkstellingsbreuk,
-          refDatum,
-        }),
-      (r) => (
-        <ResultCard
-          label={`Ecocheques (${r.schaalLabel})`}
-          amountEUR={r.bedrag}
-          datapunten={[r.datapunt]}
-        />
-      ),
-    ),
-  );
-  voordelenBlocks.push(
-    safeRender(
-      () => jaarlijksePremie2026(refDatum),
-      (r) => (
-        <ResultCard
-          label="Jaarlijkse premie 2026"
-          amountEUR={r.bedrag}
-          datapunten={[r.datapunt]}
-        />
-      ),
-    ),
-  );
-  bands.push({
-    id: "band-voordelen",
-    title: "Periodieke voordelen",
-    shortLabel: "Voordelen",
-    icon: <Gift size={14} />,
-    blocks: voordelenBlocks,
-  });
-
-  // Band 4 — Mobiliteit
-  const mobilityBlocks: React.ReactNode[] = [];
-  mobilityBlocks.push(
-    safeRender(
-      () => berekenMobiliteitVoorProfiel(p, refDatum),
-      (mobiliteit) => <WoonwerkVerkeerCard mobiliteit={mobiliteit} />,
-    ),
-  );
-  bands.push({
-    id: "band-mobiliteit",
-    title: "Mobiliteit",
-    shortLabel: "Mobiliteit",
-    icon: <MapIcon size={14} />,
-    blocks: mobilityBlocks,
-  });
-
   return { summary, bands };
 }
 
@@ -2051,13 +2374,13 @@ function computeSummary(p: Profiel): ResultSummary {
   try {
     const heeftMaaltijdcheques = p.maaltijdchequeWerkgeversaandeelPerDag > 0;
     const mobiliteit = berekenMobiliteitVoorProfiel(p, refDatum);
+    const vaaWerkmiddelen = berekenVaaWerkmiddelenVoorProfiel(p, refDatum);
     const netto = berekenNetto({
       brutoloon: p.brutoloon,
       refDatum,
       bouwVlag: p.bouwVlag,
       gezinstype: p.gezinstype,
       kinderenTenLaste: p.kinderenTenLaste,
-      kinderenOnder3: p.kinderenOnder3,
       fiscaalAlleenstaandeMetKind: p.fiscaalAlleenstaandeMetKind,
       groepsverzekeringEigenBijdrage: p.groepsverzekeringEigenBijdrage,
       maaltijdchequeWerknemersbijdragePerDag: heeftMaaltijdcheques
@@ -2066,23 +2389,26 @@ function computeSummary(p: Profiel): ResultSummary {
       maaltijdchequeWerkdagen: heeftMaaltijdcheques ? p.arbeidsdagenPerMaand : 0,
       hospitalisatieEigenBijdrage: p.hospitalisatieEigenBijdrage,
       onkostenvergoedingPerMaand: p.onkostenvergoedingPerMaand,
-      woonwerkVrijgesteldPerMaand: mobiliteit.woonwerk.totaalVergoeding,
+      woonwerkVrijgesteldPerMaand: berekenWoonwerkVrijgesteld(
+        mobiliteit.woonwerk,
+        p.woonwerkPrivewagenBeroepskostMethode,
+      ),
+      vaaRszPlichtigPerMaand: vaaWerkmiddelen.totaalPerMaand,
       vaaBedrijfswagenPerMaand: mobiliteit.vaaBedrijfswagen?.vaaMaand ?? 0,
-    });
-    const ecoForSummary = ecocheques({
-      tewerkstellingsbreuk: p.tewerkstellingsbreuk,
-      refDatum,
     });
     const wgk = werkgeverskost({
       brutoloon: p.brutoloon,
       refDatum,
       bouwVlag: p.bouwVlag,
       arbeidsongevallenPct: p.arbeidsongevallenPct,
+      premieEjpPct: 0,
+      premieVakantiegeldPct: 0,
       extraGroepsverzekering: p.extraGroepsverzekering,
       maaltijdchequeWerkgeversaandeelPerDag: p.maaltijdchequeWerkgeversaandeelPerDag,
       maaltijdchequeWerkdagen: p.arbeidsdagenPerMaand,
       extraHospitalisatie: p.extraHospitalisatie,
-      extraEcocheques: ecoForSummary.bedrag / 12,
+      extraEcocheques: 0,
+      vaaRszPlichtigPerMaand: vaaWerkmiddelen.totaalPerMaand,
       onkostenvergoedingPerMaand: p.onkostenvergoedingPerMaand,
       woonwerkVergoedingPerMaand: mobiliteit.woonwerk.totaalVergoeding,
     });

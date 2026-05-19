@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="nl-BE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MVP-roadmap — Loonmotor BE</title>
+<style>
+:root{--bg:#fafbfc;--surface:#fff;--border:#e4e7eb;--text:#1a2332;--text-muted:#5a6779;--accent:#0b5394;--accent-light:#e8f0f9;--code-bg:#f5f7fa;--shadow:0 1px 3px rgba(0,0,0,.06)}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.6;color:var(--text);background:var(--bg)}
+header.topbar{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.topbar-inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-weight:700;font-size:17px;color:var(--accent);text-decoration:none}
+nav.topnav{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+nav.topnav a{font-size:13px;color:var(--text-muted);text-decoration:none;padding:6px 10px;border-radius:4px}
+nav.topnav a:hover{background:var(--accent-light);color:var(--accent)}
+nav.topnav a.active{background:var(--accent);color:#fff}
+main{max-width:1200px;margin:0 auto;padding:32px 24px 64px}
+h1{font-size:30px;margin:0 0 8px;font-weight:700}h2{font-size:22px;margin:32px 0 12px;font-weight:600;padding-bottom:6px;border-bottom:2px solid var(--accent-light)}
+h3{font-size:17px;margin:24px 0 8px;font-weight:600}h4{font-size:15px;margin:16px 0 6px;color:var(--accent);font-weight:600}
+p{margin:8px 0 12px}ul,ol{padding-left:22px}li{margin:4px 0}a{color:var(--accent)}a:hover{text-decoration:underline}
+code{font-family:"SF Mono",Monaco,Consolas,monospace;background:var(--code-bg);padding:1px 5px;border-radius:3px;font-size:13px}
+.subtitle{color:var(--text-muted);font-size:16px;margin:0 0 24px}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:14px;background:var(--surface);border-radius:6px;overflow:hidden;box-shadow:var(--shadow)}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:var(--accent-light);font-weight:600;font-size:13px}
+tr:last-child td{border-bottom:none}tr:hover{background:#f8fafc}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;margin:0 3px 2px 0;letter-spacing:.3px;text-transform:uppercase}
+.badge.feit{background:#d1fae5;color:#065f46}.badge.aanname{background:#fef3c7;color:#92400e}
+.badge.hypothese{background:#e0e7ff;color:#3730a3}.badge.mvp{background:#c7f0d3;color:#14532d}
+.badge.later{background:#ddd6fe;color:#5b21b6}.badge.enterprise{background:#fce7f3;color:#831843}
+.badge.openvraag{background:#fde68a;color:#78350f}
+.callout{border-left:4px solid var(--accent);background:var(--accent-light);padding:12px 16px;margin:14px 0;border-radius:0 4px 4px 0}
+.callout.warn{border-color:#d97706;background:#fef3c7}.callout.danger{border-color:#dc2626;background:#fee2e2}
+.callout.ok{border-color:#059669;background:#d1fae5}
+.phase{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px 24px;margin:18px 0;box-shadow:var(--shadow);border-left:5px solid var(--accent)}
+.phase h3{margin-top:0}
+.phase-meta{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--text-muted);margin-bottom:10px}
+.phase-meta span{background:var(--accent-light);color:var(--accent);padding:3px 10px;border-radius:4px;font-weight:600}
+.gate{background:#fef3c7;border:1px solid #d97706;border-radius:6px;padding:10px 14px;margin:10px 0;font-size:13.5px}
+.gate strong{color:#92400e}
+.scope-in{background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+.scope-out{background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size:13px;color:var(--text-muted);text-align:center}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+<a href="index.html" class="brand">Loonmotor BE</a>
+<nav class="topnav">
+<a href="index.html">Overzicht</a><a href="marktonderzoek.html">Markt</a>
+<a href="concurrentiematrix.html">Concurrenten</a><a href="werking-loonmotor.html">Werking</a>
+<a href="wetgevend-kader.html">Wetgeving</a><a href="requirements.html">Requirements</a>
+<a href="datamodel.html">Datamodel</a><a href="technische-architectuur.html">Architectuur</a>
+<a href="juridische-checklist.html">Juridisch</a><a href="mvp-roadmap.html" class="active">Roadmap</a>
+<a href="risicoregister.html">Risico's</a><a href="jaakie-specificatie.html">Jaakie</a>
+<a href="testcorpus.html">Testcorpus</a><a href="referentie-tools.html">Referenties</a>
+<a href="bronnen.html">Bronnen</a>
+</nav></div></header>
+
+<main>
+<h1>MVP-roadmap</h1>
+<p class="subtitle">Zes fases van verkenning naar erkend sociaal secretariaat. Per fase: scope, deliverables, exit-criteria, team-samenstelling en go/no-go gate.</p>
+
+<div class="callout">
+<strong>Scope:</strong> fases gemarkeerd met <span class="scope-in">In Jaakie</span> vallen binnen de huidige browser-only POC; <span class="scope-out">Niet in Jaakie</span> betreft de volledige loonmotor-roadmap.
+</div>
+
+<div class="callout">
+De roadmap is incrementeel: elke fase eindigt met een gebruiksbare deliverable. Geen big-bang. Het kennisrisico wordt vroeg uitgetest (Fase 1 PoC) vóór er commercieel iets wordt beloofd. <span class="badge hypothese">Hypothese</span> op de doorlooptijden — kalibreren na Fase 1.
+</div>
+
+<h2>Tijdlijn op één pagina</h2>
+<table>
+<thead><tr><th>Fase</th><th>Naam</th><th>Doorlooptijd</th><th>Inspanning</th><th>Schaal</th><th>Status na fase</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>Verkenning &amp; scoping</td><td>1–2 maanden</td><td>2–4 mm</td><td>—</td><td>Beslissingsdocument</td></tr>
+<tr><td>1</td><td>PoC berekenkern</td><td>2–3 maanden</td><td>4–6 mm</td><td>10 fictieve wn</td><td>Bruto→netto correct ±1%</td></tr>
+<tr><td>2</td><td>Simulator + master data</td><td>3–6 maanden</td><td>12–18 mm</td><td>100 wn (pilot)</td><td>Klant kan simulator gebruiken</td></tr>
+<tr><td>3</td><td>Aangiften + boekhouding</td><td>6–12 maanden</td><td>30–50 mm</td><td>500 wn</td><td>End-to-end zonder ESS</td></tr>
+<tr><td>4</td><td>Productie + scale</td><td>12–24 maanden</td><td>40–70 mm</td><td>5.000 wn</td><td>Commercieel uitrolbaar</td></tr>
+<tr><td>5</td><td>ESS-erkenning</td><td>24+ maanden</td><td>100+ mm</td><td>50.000+ wn <span class="badge enterprise">Enterprise</span></td><td>Erkend sociaal secretariaat</td></tr>
+</tbody>
+</table>
+<p style="font-size:13px;color:var(--text-muted)"><em>mm = mensmaand. Schattingen voor een ervaren Belgisch payroll-team — afwijking ±30% normaal.</em> <span class="badge aanname">Aanname</span></p>
+
+<h2>Fase 0 — Verkenning &amp; scoping <span class="scope-out">Niet in Jaakie</span></h2>
+<div class="phase">
+<h3>Doel</h3>
+<p>Vaststellen of het bouwen van een eigen loonmotor verantwoord is, en zo ja: voor welke doelgroep, met welke scope, en met welke commerciële propositie.</p>
+<div class="phase-meta"><span>Duur: 1–2 mnd</span><span>Effort: 2–4 mm</span><span>Team: 1 product owner + 1 sociaal-rechtjurist (extern) + 1 architect</span></div>
+<h4>Deliverables</h4>
+<ul>
+<li>Onderzoeksdossier (dit document) gevalideerd door externe expert.</li>
+<li>Commerciële positionering: doelmarkt (KMO 10–100 wn? scale-up 100–500 wn? enterprise?), bedreigingsanalyse vs Top 4 ESS.</li>
+<li>Build/Buy/Partner-beslissing per component (zie <a href="technische-architectuur.html">architectuur §12</a>).</li>
+<li>Business case: TCO 3 jaar vs huidige ESS-uitgave; break-even bij X klanten.</li>
+<li>Juridisch advies: ESS-erkenning nodig of niet voor target-fase 4?</li>
+</ul>
+<div class="gate"><strong>Go/No-Go gate 0:</strong> Voldoende differentiatie aantonen vs SD Worx/Acerta/Partena/Liantis, met scope die in 24 maanden naar productie kan zonder ESS-erkenning. Bij twijfel: niet bouwen, partner zoeken.</div>
+</div>
+
+<h2>Fase 1 — PoC berekenkern <span class="scope-in">In Jaakie</span></h2>
+<div class="phase">
+<h3>Doel</h3>
+<p>De berekenkern werkend krijgen voor één representatieve werknemer-categorie (PC 200, bediende, voltijds, eenvoudig gezin), met aantoonbare correctheid binnen ±1% van een gespecialiseerd ESS.</p>
+<div class="phase-meta"><span>Duur: 2–3 mnd</span><span>Effort: 4–6 mm</span><span>Team: 1 architect + 2 backend dev + 0,5 jurist</span></div>
+<h4>Scope</h4>
+<ul>
+<li>Bruto→netto berekening: basisloon, RSZ 13,07%, BV Bijlage III schalen, werkbonus, BBSZ.</li>
+<li>5 looncomponenten: basisloon, eindejaarspremie, MC-werknemer, fietsvergoeding, telewerkforfait.</li>
+<li>Decision tables in JSONB met geldigheidsperiode; geen UI; CLI/script-input JSON.</li>
+<li>Golden-master: 30 scenario's PC 200 met verwachte output (gemanueerd via ESS-loonbrieven of fiscaal-sociaal-handboek).</li>
+</ul>
+<h4>Exit-criteria</h4>
+<ul>
+<li>≥ 95% van golden-master scenario's binnen ±1% van verwachte netto.</li>
+<li>Berekening &lt; 200 ms per werknemer-maand.</li>
+<li>Idempotent: zelfde input → bit-identieke output.</li>
+<li>Audit-trail "explain": welke regel, welke versie, welke parameter.</li>
+</ul>
+<div class="gate"><strong>Go/No-Go gate 1:</strong> Lukt het correct met 6 mm? Zo nee, herzie scope of stop. Zo ja: domeinkennis is voldoende — door naar Fase 2.</div>
+</div>
+
+<h2>Fase 2 — Simulator + master data <span class="scope-out">Niet in Jaakie</span></h2>
+<div class="phase">
+<h3>Doel</h3>
+<p>Bouwbare en bruikbare bruto-netto simulator met multi-tenant master data; gebruikt door pilot-klant voor what-if oefeningen. Nog geen productieloon, nog geen aangiften.</p>
+<div class="phase-meta"><span>Duur: 3–6 mnd</span><span>Effort: 12–18 mm</span><span>Team: 2 backend + 1 frontend + 1 PO + 0,5 jurist + 0,25 designer</span></div>
+<h4>Scope</h4>
+<ul>
+<li>Web-UI (Next.js): bedrijf-onboarding, werknemer-CRUD, contract, simulator-pagina met "explain"-uitvoer.</li>
+<li>Multi-tenant Keycloak + RLS PostgreSQL.</li>
+<li>RBAC (admin, HR, employee read-only).</li>
+<li>Uitbreiding looncomponenten: bedrijfswagen-VAA, bonus, ploegenpremie.</li>
+<li>Statuut arbeider/bediende, 108% RSZ-basis arbeiders.</li>
+<li>Loonbeslag-schijven art. 1409 Ger.W. (KB 2026).</li>
+<li>Pilot-klant onboarding (max 100 wn, NDA, geen productieaangifte).</li>
+</ul>
+<h4>Exit-criteria</h4>
+<ul>
+<li>Pilot-klant valideert simulator met 100 eigen werknemers, afwijking &lt; 1% vs huidige ESS-loonbrief.</li>
+<li>OWASP ASVS L2 audit gehaald.</li>
+<li>Audit-log + idempotency-keys actief.</li>
+<li>Golden-master ≥ 100 scenario's, CI-blokkering bij regressie.</li>
+</ul>
+<div class="gate"><strong>Go/No-Go gate 2:</strong> Pilot-klant tevreden? Commerciële propositie geverifieerd? Zo ja: investeren in aangiften (Fase 3).</div>
+</div>
+
+<h2>Fase 3 — Aangiften + boekhouding <span class="scope-out">Niet in Jaakie</span></h2>
+<div class="phase">
+<h3>Doel</h3>
+<p>End-to-end loonbrief tot aangifte zonder afhankelijkheid van een ESS. Eerste klant draait productie-payroll bij ons; parallel-run met huidige ESS gedurende minstens 3 maanden.</p>
+<div class="phase-meta"><span>Duur: 6–12 mnd</span><span>Effort: 30–50 mm</span><span>Team: 4 backend + 1 frontend + 1 jurist (intern) + 1 PO + 1 SRE + 0,5 designer</span></div>
+<h4>Scope</h4>
+<ul>
+<li>Loonbrief PDF/A-3 conform art. 15 Wet 12/4/1965 + KB 27/9/1966.</li>
+<li>Dimona-aangifte (in/uit dienst) via webservice.</li>
+<li>DmfA kwartaalaangifte XML conform RSZ-schema.</li>
+<li>Belcotax-on-web fiches 281.10.</li>
+<li>Finprof BV-doorstorting.</li>
+<li>SEPA pain.001.001.03 batch-betaalbestand.</li>
+<li>Boekhoudjournaal (62x/45x) export CSV + UBL-variant.</li>
+<li>Parallel-run framework: vergelijk eigen output met ESS-output, verschillenrapport per werknemer.</li>
+<li>Volledige <a href="juridische-checklist.html">juridische checklist</a> §1 (GDPR), §2 (loonbrief), §5 (DPA klant).</li>
+</ul>
+<h4>Exit-criteria</h4>
+<ul>
+<li>Parallel-run 3 maanden, 100% match RSZ-totalen, &lt; 0,1% afwijking BV per werknemer (verschil afronding).</li>
+<li>Eerste echte klant heeft betaalde maandafrekening, loonbrief, Dimona, DmfA, Belcotax-fiche.</li>
+<li>DPIA goedgekeurd door DPO.</li>
+<li>SLA-monitoring met alerts op Dimona / DmfA / BV-deadlines.</li>
+</ul>
+<div class="gate"><strong>Go/No-Go gate 3:</strong> Aangiften aanvaard door RSZ + FOD Fin zonder rejection? Boekhoudbureau van klant tevreden? Geen escalatie naar arbeidsrechtbank? Zo ja: schaal-fase.</div>
+</div>
+
+<h2>Fase 4 — Productie &amp; scale <span class="scope-out">Niet in Jaakie</span></h2>
+<div class="phase">
+<h3>Doel</h3>
+<p>Commercieel uitrolbaar product voor 50–500 werknemer-bedrijven; multi-klant operatie; high availability; disaster recovery; pentest. Eigenaarschap van klant-data en uitvoering, met sociaal secretariaat in rol van laatste-mijl-controle of geheel zonder.</p>
+<div class="phase-meta"><span>Duur: 12–24 mnd</span><span>Effort: 40–70 mm</span><span>Team: 6 backend + 2 frontend + 2 jurist/payroll-consultant + 1 PO + 2 SRE + 1 designer + 1 customer-success</span></div>
+<h4>Scope</h4>
+<ul>
+<li>Productie HA (multi-AZ Azure Belgium Central), DR-regio (West-Europe), RTO 4 u / RPO 5 min.</li>
+<li>OWASP ASVS L3, jaarlijkse pentest, SOC 2 type II óf ISAE 3402 (klant-audit-vereiste).</li>
+<li>Uitbreiding paritaire comités (van PC 200 naar PC 124, 220, 226, 302, 111).</li>
+<li>EU 2023/970 loontransparantie-rapportages.</li>
+<li>Werknemer self-service portaal (loonbrief downloaden, gegevens-correctie request).</li>
+<li>Onboarding-flow: data-import vanuit andere ESS (Acerta, SD Worx, Partena, Liantis exports).</li>
+<li>Customer success-team, support-SLA, runbooks per aangiftetype.</li>
+<li>API-marketplace: integraties Officient, BambooHR, Protime, BCC, Exact, Odoo.</li>
+</ul>
+<h4>Exit-criteria</h4>
+<ul>
+<li>10+ klanten in productie zonder externe ESS-dependentie.</li>
+<li>Uptime 99,9% gedurende 12 aaneengesloten maanden.</li>
+<li>Pentest L3 zonder hoge of kritieke findings.</li>
+<li>Commerciële marge positief (klant LTV &gt; CAC × 3).</li>
+</ul>
+<div class="gate"><strong>Go/No-Go gate 4:</strong> Schaal en commerciële houdbaarheid bewezen? Klantsegment zonder ESS gerust? Volgende stap is enterprise (= ESS).</div>
+</div>
+
+<h2>Fase 5 — ESS-erkenning <span class="scope-out">Niet in Jaakie</span></h2>
+<div class="phase">
+<h3>Doel</h3>
+<p>Erkend sociaal secretariaat conform KB 28/11/1969 + KB 20/2/2017 — om als mandataris aangiften in eigen naam in te dienen voor klant-werkgevers, en om het volledige enterprise-segment (500+ wn) aan te kunnen.</p>
+<div class="phase-meta"><span>Duur: 24+ mnd</span><span>Effort: 100+ mm</span><span>Team: alle bovenstaande + 1 compliance officer + 1 bedrijfsrevisor + 1 intern auditteam + 1 DPO</span></div>
+<h4>Scope</h4>
+<ul>
+<li>Rechtsvorm: omvorming naar erkende beroepsvereniging of vzw met werkgevers-vertegenwoordiging.</li>
+<li>Waarborg: storting solidaire borg bij RSZ (zie <a href="juridische-checklist.html">juridische checklist §4</a>).</li>
+<li>Kwaliteitsbarometer KB 20/2/2017: jaarlijkse IT-audit, processen, juistheid aangiften.</li>
+<li>Bedrijfsrevisor + onafhankelijke commissaris.</li>
+<li>Permanente vorming personeel; KSZ-aansluiting als ESS-mandataris.</li>
+<li>Tweede datacenter + continuïteitsplan.</li>
+<li>Klacht- en geschillenprocedure formeel.</li>
+<li>Verzekering BA-uitbating + cyber + beroepsaansprakelijkheid op enterprise-niveau.</li>
+</ul>
+<h4>Exit-criteria</h4>
+<ul>
+<li>Erkenning RSZ verkregen (KB-publicatie BS).</li>
+<li>Eerste enterprise-klant (5.000+ wn) live als ESS-mandataris.</li>
+<li>SLA 99,95% maand 1–12 als ESS.</li>
+</ul>
+<div class="gate"><strong>Go/No-Go gate 5:</strong> Erkenning is een meerjaars-investering. Alleen doorzetten bij &gt; 50 klanten in Fase 4 én bewezen schaalcapaciteit. Anders: blijven in Fase 4-segment en partner-ESS voor enterprise-klanten.</div>
+</div>
+
+<h2>Cross-cutting werkstromen (parallel met alle fases)</h2>
+<table>
+<thead><tr><th>Werkstroom</th><th>Start</th><th>Doorloop</th></tr></thead>
+<tbody>
+<tr><td>Wettelijke parameter-monitoring (BS-publicaties RSZ/BV/CAO/PC)</td><td>Fase 0</td><td>Continu — 0,25–0,5 FTE</td></tr>
+<tr><td>Golden-master corpus uitbreiden</td><td>Fase 1</td><td>Continu</td></tr>
+<tr><td>Sociaal-rechtjuridische review per release</td><td>Fase 2</td><td>Continu</td></tr>
+<tr><td>Klantenfeedback &amp; productroadmap</td><td>Fase 2</td><td>Continu</td></tr>
+<tr><td>Security &amp; compliance audits</td><td>Fase 2 (ASVS L2)</td><td>Jaarlijks pentest</td></tr>
+<tr><td>Documentatie + opleidingen klant-HR</td><td>Fase 3</td><td>Continu</td></tr>
+</tbody>
+</table>
+
+<h2>Resource-curve indicatief</h2>
+<table>
+<thead><tr><th>Rol</th><th>Fase 1</th><th>Fase 2</th><th>Fase 3</th><th>Fase 4</th><th>Fase 5</th></tr></thead>
+<tbody>
+<tr><td>Backend dev</td><td>2</td><td>2</td><td>4</td><td>6</td><td>8</td></tr>
+<tr><td>Frontend dev</td><td>0</td><td>1</td><td>1</td><td>2</td><td>3</td></tr>
+<tr><td>SRE / DevOps</td><td>0,25</td><td>0,5</td><td>1</td><td>2</td><td>3</td></tr>
+<tr><td>Product owner</td><td>0,5</td><td>1</td><td>1</td><td>1</td><td>2</td></tr>
+<tr><td>Designer (UX)</td><td>0</td><td>0,25</td><td>0,5</td><td>1</td><td>1</td></tr>
+<tr><td>Sociaal-rechtjurist (intern of frequent extern)</td><td>0,25</td><td>0,5</td><td>1</td><td>2</td><td>3</td></tr>
+<tr><td>Payroll-consultant</td><td>0</td><td>0,25</td><td>0,5</td><td>1</td><td>2</td></tr>
+<tr><td>Customer success</td><td>0</td><td>0</td><td>0,5</td><td>1,5</td><td>3</td></tr>
+<tr><td>Compliance / DPO</td><td>0</td><td>0,1</td><td>0,25</td><td>0,5</td><td>1</td></tr>
+<tr><td>Bedrijfsrevisor / intern auditor</td><td>0</td><td>0</td><td>0</td><td>0,25</td><td>1</td></tr>
+<tr><td><strong>Totaal FTE-piek</strong></td><td><strong>3</strong></td><td><strong>5,6</strong></td><td><strong>9,8</strong></td><td><strong>17,3</strong></td><td><strong>27</strong></td></tr>
+</tbody>
+</table>
+
+<h2>Quarter-by-quarter view (indicatief)</h2>
+<table>
+<thead><tr><th>Kwartaal</th><th>Mijlpaal</th><th>Cumulatieve schaal</th></tr></thead>
+<tbody>
+<tr><td>Q1 — start</td><td>Onderzoeksdossier afgerond; Go/No-Go gate 0</td><td>—</td></tr>
+<tr><td>Q2</td><td>PoC berekenkern klaar; gate 1</td><td>10 fictief</td></tr>
+<tr><td>Q3</td><td>Simulator alpha; eerste pilot-klant</td><td>50</td></tr>
+<tr><td>Q4</td><td>Simulator GA; gate 2</td><td>100</td></tr>
+<tr><td>Q5–Q6</td><td>Dimona + DmfA + Belcotax bouwen</td><td>200</td></tr>
+<tr><td>Q7</td><td>SEPA + boekhouding; parallel-run start</td><td>300</td></tr>
+<tr><td>Q8</td><td>Eerste klant in volledig productie; gate 3</td><td>500</td></tr>
+<tr><td>Q9–Q12</td><td>HA + DR + ASVS L3 + extra PC's</td><td>1.500</td></tr>
+<tr><td>Q13–Q16</td><td>Klant-onboarding-engine; 10 klanten productie</td><td>5.000</td></tr>
+<tr><td>Q17–Q20</td><td>Gate 4; voorbereiding ESS-erkenning <em>(optioneel)</em></td><td>10.000+</td></tr>
+<tr><td>Q21+</td><td>ESS-aanvraag → erkenning → enterprise-klanten</td><td>50.000+ <span class="badge enterprise">Enterprise</span></td></tr>
+</tbody>
+</table>
+
+<h2>Wat NIET in MVP</h2>
+<div class="callout warn">
+Bewust uit scope gehouden voor MVP (= einde Fase 3):
+<ul style="margin:8px 0">
+<li>Werknemer self-service portaal (Fase 4)</li>
+<li>Mobile app (Fase 4+)</li>
+<li>Volledige set paritaire comités — PC 200 only voor MVP</li>
+<li>Sigedis/DB2P 2e pijler-aangiften (Fase 4)</li>
+<li>Limosa detacheringsaangifte (Fase 4)</li>
+<li>Grensarbeider DBV-routing (Fase 4)</li>
+<li>HR-tooling: skills, performance reviews, leerplatform (niet onze scope)</li>
+<li>ESS-mandataris voor klant (Fase 5)</li>
+</ul>
+</div>
+
+<div class="callout">
+Voor de wettelijke randvoorwaarden bij elke fase: <a href="juridische-checklist.html">juridische checklist</a>. Voor de risico's per fase: <a href="risicoregister.html">risicoregister</a>.
+</div>
+</main>
+
+<footer>Loonmotor BE — Onderzoeksdossier · <a href="index.html">Terug naar overzicht</a></footer>
+</body>
+</html>

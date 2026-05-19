@@ -486,7 +486,7 @@
   {
     "id": "vaa_telefoonabo_forfait_2026",
     "categorie": "fiscaliteit",
-    "naam": "VAA telefoonabonnement (privégebruik) — forfait jaarbedrag",
+    "naam": "VAA GSM-abonnement (privégebruik) — forfait jaarbedrag",
     "waarde_genormaliseerd": 48.00,
     "eenheid": "EUR/jaar",
     "wettelijke_basis": "KB 25 november 2017",

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="nl-BE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jaakie-specificatie — Loonmotor BE</title>
+<style>
+:root{--bg:#fafbfc;--surface:#fff;--border:#e4e7eb;--text:#1a2332;--text-muted:#5a6779;--accent:#0b5394;--accent-light:#e8f0f9;--code-bg:#f5f7fa;--shadow:0 1px 3px rgba(0,0,0,.06)}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.6;color:var(--text);background:var(--bg)}
+header.topbar{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.topbar-inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-weight:700;font-size:17px;color:var(--accent);text-decoration:none}
+nav.topnav{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+nav.topnav a{font-size:13px;color:var(--text-muted);text-decoration:none;padding:6px 10px;border-radius:4px}
+nav.topnav a:hover{background:var(--accent-light);color:var(--accent)}
+nav.topnav a.active{background:var(--accent);color:#fff}
+main{max-width:1200px;margin:0 auto;padding:32px 24px 64px}
+h1{font-size:30px;margin:0 0 8px;font-weight:700}h2{font-size:22px;margin:32px 0 12px;font-weight:600;padding-bottom:6px;border-bottom:2px solid var(--accent-light)}
+h3{font-size:17px;margin:24px 0 8px;font-weight:600}h4{font-size:15px;margin:16px 0 6px;color:var(--accent);font-weight:600}
+p{margin:8px 0 12px}ul,ol{padding-left:22px}li{margin:4px 0}a{color:var(--accent)}a:hover{text-decoration:underline}
+code{font-family:"SF Mono",Monaco,Consolas,monospace;background:var(--code-bg);padding:1px 5px;border-radius:3px;font-size:13px}
+pre{background:var(--code-bg);padding:14px 18px;border-radius:6px;overflow-x:auto;font-size:13px;border:1px solid var(--border)}
+.subtitle{color:var(--text-muted);font-size:16px;margin:0 0 24px}
+.meta{font-size:13px;color:var(--text-muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;margin-bottom:24px}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:14px;background:var(--surface);border-radius:6px;overflow:hidden;box-shadow:var(--shadow)}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:var(--accent-light);font-weight:600;font-size:13px}
+tr:last-child td{border-bottom:none}tr:hover{background:#f8fafc}
+table.compact th,table.compact td{padding:6px 10px;font-size:13px}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;margin:0 3px 2px 0;letter-spacing:.3px;text-transform:uppercase}
+.badge.feit{background:#d1fae5;color:#065f46}.badge.aanname{background:#fef3c7;color:#92400e}
+.badge.hypothese{background:#e0e7ff;color:#3730a3}.badge.onzekerheid{background:#fed7aa;color:#9a3412}
+.badge.openvraag{background:#fde68a;color:#78350f}.badge.mvp{background:#c7f0d3;color:#14532d}
+.badge.later{background:#ddd6fe;color:#5b21b6}.badge.enterprise{background:#fce7f3;color:#831843}
+.callout{border-left:4px solid var(--accent);background:var(--accent-light);padding:12px 16px;margin:14px 0;border-radius:0 4px 4px 0}
+.callout.warn{border-color:#d97706;background:#fef3c7}
+.callout.ok{border-color:#059669;background:#d1fae5}
+.section-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:18px 22px;margin:16px 0;box-shadow:var(--shadow)}
+.scope-in{background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+.scope-out{background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size:13px;color:var(--text-muted);text-align:center}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+<a href="index.html" class="brand">Loonmotor BE</a>
+<nav class="topnav">
+<a href="index.html">Overzicht</a>
+<a href="marktonderzoek.html">Markt</a>
+<a href="concurrentiematrix.html">Concurrenten</a>
+<a href="werking-loonmotor.html">Werking</a>
+<a href="wetgevend-kader.html">Wetgeving</a>
+<a href="requirements.html">Requirements</a>
+<a href="datamodel.html">Datamodel</a>
+<a href="technische-architectuur.html">Architectuur</a>
+<a href="juridische-checklist.html">Juridisch</a>
+<a href="mvp-roadmap.html">Roadmap</a>
+<a href="risicoregister.html">Risico's</a>
+<a href="jaakie-specificatie.html" class="active">Jaakie</a>
+<a href="testcorpus.html">Testcorpus</a>
+<a href="referentie-tools.html">Referenties</a>
+<a href="bronnen.html">Bronnen</a>
+</nav></div></header>
+
+<main>
+<h1>Jaakie-specificatie</h1>
+<p class="subtitle">Technische specificatie van de Jaakie browser-only calculator: scope, architectuur, berekeningsmodules, audit-trail en tier-1/2/3 bronverificatie.</p>
+
+<div class="meta">
+<strong>Versie:</strong> 1.1 · <strong>Peildatum:</strong> 2026-05-08 · <strong>Tech stack:</strong> TypeScript 5.6, React 19, Vite 8, Tailwind CSS v4 · <strong>Status POC:</strong> <span class="badge mvp">MVP</span>
+</div>
+
+<h2>1. Wat is Jaakie</h2>
+<p><strong>Jaakie</strong> is een browser-only Single Page Application (SPA) die payroll-experts helpt om lonen en werkgeverskosten te verifiëren onder <strong>Paritair Comité 200</strong> (PC 200, het Aanvullend Paritair Comité voor de Bedienden). <span class="badge feit">Feit</span></p>
+<ul>
+<li><strong>Geen vervanging</strong> voor een sociaal secretariaat — wel een audit-traceerbare berekening tegen een Tier-1/2-gevalideerde dataset.</li>
+<li><strong>Single-tenant</strong> in de browser: geen backend, geen database, geen authenticatie.</li>
+<li><strong>Audit-trail per waarde:</strong> elke berekende regel toont datapunt-id, status, tier, bron-URL en fragment-citaat.</li>
+</ul>
+
+<h2>2. Technologie-stack (kort)</h2>
+<table class="compact">
+<thead><tr><th>Laag</th><th>Technologie</th><th>Opmerking</th></tr></thead>
+<tbody>
+<tr><td>Build tool</td><td>Vite 8</td><td>Dev-server poort 5173 (<code>strictPort: true</code>)</td></tr>
+<tr><td>Framework</td><td>React 19 + react-dom</td><td>JSX-transform <code>react-jsx</code></td></tr>
+<tr><td>Router</td><td>react-router-dom 7.8.2</td><td>HashRouter — geen SSR nodig</td></tr>
+<tr><td>Styling</td><td>Tailwind CSS v4 + <code>@tailwindcss/vite</code></td><td>Design tokens in <code>brand.css</code></td></tr>
+<tr><td>Component primitives</td><td>@base-ui/react 1.4</td><td>Accordion, tabs, dialogs</td></tr>
+<tr><td>Iconen</td><td>lucide-react</td><td>—</td></tr>
+<tr><td>Datums</td><td>date-fns</td><td>—</td></tr>
+<tr><td>Test runner</td><td>bun:test</td><td>API-compatibel met Vitest</td></tr>
+<tr><td>Schema-validatie</td><td>Hand-rolled JSON Schema Draft-07</td><td><code>src/lib/schemaValidate.ts</code> — geen ajv</td></tr>
+</tbody>
+</table>
+<p>Zie <a href="technische-architectuur.html">technische architectuur</a> voor de volledige architectuurbeschrijving.</p>
+
+<h2>3. Laag-scheiding</h2>
+<table class="compact">
+<thead><tr><th>Laag</th><th>Pad</th><th>Regel</th></tr></thead>
+<tbody>
+<tr><td>Data (read-only)</td><td><code>src/data/</code></td><td>Raw JSON + schema. Geen berekeningen op <code>waarde_bron</code>.</td></tr>
+<tr><td>Berekeningen</td><td><code>src/lib/</code></td><td>Pure functies, geen React, geen UI-imports.</td></tr>
+<tr><td>UI-components</td><td><code>src/components/</code></td><td>Display only, geen calc-logica.</td></tr>
+<tr><td>Pagina's</td><td><code>src/pages/</code></td><td>Compositie van components + lib-calls.</td></tr>
+<tr><td>Tests</td><td><code>src/lib/__tests__/</code></td><td>Golden tests + schema smoke tests.</td></tr>
+</tbody>
+</table>
+
+<h2>4. Berekeningsmodules</h2>
+<table class="compact">
+<thead><tr><th>Module</th><th>Bestand</th><th>Verantwoordelijkheid</th><th>Bron A-ref</th></tr></thead>
+<tbody>
+<tr><td>Baremas</td><td><code>src/lib/baremas.ts</code></td><td>PC 200 Schaal I/II × Cat A–D × ervaring 0–26j; studentenbaremas</td><td><code>02_regelkader_2026.md §8</code></td></tr>
+<tr><td>RSZ</td><td><code>src/lib/rsz.ts</code></td><td>Werknemer 13,07%; werkgever ~25% (basis 19,88% + loonmatiging 7,48%); Sociaal Fonds 200 (0,23%)</td><td><code>04_calculator_netto.md §5</code></td></tr>
+<tr><td>Werkbonus (sociaal)</td><td><code>src/lib/werkbonus.ts</code></td><td>Luik A + Luik B; formule R = max − helling × (S − S₀)</td><td><code>04_calculator_netto.md §5.1</code></td></tr>
+<tr><td>BV (gewoon)</td><td><code>src/lib/bv.ts</code></td><td>Bijlage III sleutelformule 2026; Schaal I/II/III; verminderingen</td><td><code>04_calculator_netto.md §5.2-5.4</code></td></tr>
+<tr><td>BV (bijzonder)</td><td><code>src/lib/bvBijzonder.ts</code></td><td>Exceptionele bezoldiging: eindejaarspremie, jaarpremie, dubbel vakantiegeld</td><td><code>04_calculator_netto.md §5.4b</code></td></tr>
+<tr><td>BBSZ</td><td><code>src/lib/bbsz.ts</code></td><td>Bijzondere Bijdrage Sociale Zekerheid — info-band (pending exacte tabel)</td><td><code>04_calculator_netto.md §5.5</code></td></tr>
+<tr><td>Fiscale werkbonus</td><td><code>src/lib/netto.ts</code></td><td>Belastingkrediet: 33,14% × Luik A + 52,54% × Luik B</td><td><code>04_calculator_netto.md §5.3</code></td></tr>
+<tr><td>Netto-orchestratie</td><td><code>src/lib/netto.ts</code></td><td>Bruto → RSZ → werkbonus → BV → BBSZ → netto</td><td><code>04_calculator_netto.md §4</code></td></tr>
+<tr><td>Werkgeverskost</td><td><code>src/lib/werkgeverskost.ts</code></td><td>Totale loonkost + loonwig; provisies; extralegale voordelen</td><td><code>05_calculator_werkgeverskost.md</code></td></tr>
+<tr><td>Premies</td><td><code>src/lib/eindejaarspremie.ts</code> etc.</td><td>Eindejaarspremie, jaarpremie, ecocheques</td><td><code>02_regelkader_2026.md §7-9</code></td></tr>
+<tr><td>Mobiliteit</td><td><code>src/lib/woonwerkTrein.ts</code>, <code>fietsvergoeding.ts</code></td><td>CAO 19/9 trein, CAO 164 fiets (€0,32/km vanaf 1/10/2026)</td><td><code>02_regelkader_2026.md §9</code></td></tr>
+</tbody>
+</table>
+
+<h2>5. Dataset &amp; startup gate</h2>
+
+<h3>5.1 Startup gate</h3>
+<p><code>src/main.tsx</code> valideert de gebundelde JSON-dataset (<code>pc200_payroll_dataset_2026.json</code>) tegen het JSON Schema Draft-07 (<code>pc200_payroll_dataset.schema.json</code>) <strong>vóór</strong> de React-root mount.</p>
+<ul>
+<li>Bij succes: app start normaal.</li>
+<li>Bij falen: rood error-scherm met schema-fouten (max 50), app start <strong>niet</strong>.</li>
+</ul>
+<div class="callout warn"><strong>Nooit omzeilen.</strong> Deze gate waarborgt dat elke <code>Datapunt</code>-record de vereiste velden heeft voordat berekeningen erop vertrouwen.</div>
+
+<h3>5.2 Dataset-toegangspatroon</h3>
+<table class="compact">
+<thead><tr><th>Functie</th><th>Bestand</th><th>Doel</th></tr></thead>
+<tbody>
+<tr><td><code>getDatapunt(id)</code></td><td><code>src/lib/dataset.ts</code></td><td>Directe lookup voor audit-trail</td></tr>
+<tr><td><code>safeGetValue(id, { refDatum, toelatenMogelijkVerouderd? })</code></td><td><code>src/lib/periode.ts</code></td><td>Status guards + datumgeldigheid + waarschuwing</td></tr>
+</tbody>
+</table>
+<p><strong>Kritieke regel:</strong> voer <strong>nooit</strong> runtime-aritmetiek uit op <code>waarde_bron</code>. Gebruik alleen <code>waarde_genormaliseerd</code> of <code>tabel_per_*</code>.</p>
+
+<h3>5.3 Statussen</h3>
+<table class="compact">
+<thead><tr><th>Status</th><th>Betekenis</th><th>Lookup-gedrag</th></tr></thead>
+<tbody>
+<tr><td><code>actief</code></td><td>Geverifieerd op peildatum</td><td>✓ Waarde gebruikt</td></tr>
+<tr><td><code>mogelijk_verouderd</code></td><td>Vroeger geverifieerd, mogelijk niet meer actueel</td><td>Throw <code>DatapuntNietBruikbaar</code> tenzij expliciet toegelaten</td></tr>
+<tr><td><code>conflict</code></td><td>Actief bronconflict tussen Tier-2-bronnen</td><td>Throw <code>DatapuntNietBruikbaar</code></td></tr>
+<tr><td><code>niet_gevonden</code></td><td>Geen bron op peildatum</td><td>Throw <code>DatapuntNietBruikbaar</code></td></tr>
+<tr><td><code>gemarkeerd_voor_review</code></td><td>Vereist menselijke review</td><td>Throw <code>DatapuntNietBruikbaar</code></td></tr>
+</tbody>
+</table>
+
+<h2>6. Audit-trail</h2>
+<p>Elke berekende waarde die afhankelijk is van een dataset-parameter <strong>moet</strong> een bron-<code>Datapunt</code> meedragen. De <code>AuditPanel</code>-component rendert:</p>
+<ul>
+<li>Datapunt-id + <code>status</code>-icoon</li>
+<li><code>betrouwbaarheid</code>-tier (Tier 1 / Tier 2 / Tier 3)</li>
+<li><code>bron_organisatie</code> + klikbare <code>bron_url</code></li>
+<li><code>bron_fragment</code> (uitklapbaar citaat ≤ 200 karakters)</li>
+<li>Eventuele <code>triangulatie_bronnen</code></li>
+</ul>
+<p><code>AuditOpenContext</code> biedt een globale forced state (<code>force: "all" | "none" | null</code>). De "Toon alle bronnen"-knop in <code>ResultsSummaryStrip</code> schakelt tussen <code>"all"</code> en <code>null</code>.</p>
+
+<h2>7. In scope / Niet in scope</h2>
+
+<h3>Wel in scope <span class="scope-in">In Jaakie</span></h3>
+<table class="compact">
+<thead><tr><th>Onderdeel</th><th>Detail</th></tr></thead>
+<tbody>
+<tr><td>Sectorale baremas</td><td>Schaal I + II × Cat A/B/C/D × ervaring 0–26j; studentenbaremas</td></tr>
+<tr><td>RSZ</td><td>Werknemer 13,07%; werkgever ~25%; Sociaal Fonds 200 (0,23%)</td></tr>
+<tr><td>Sociale werkbonus</td><td>Luik A + Luik B (bedienden, vanaf 1/4/2026)</td></tr>
+<tr><td>Bedrijfsvoorheffing</td><td>Sleutelformule 2026 (KB 11/12/2025), Schaal I/II/III</td></tr>
+<tr><td>BV-verminderingen</td><td>Kinderen, fiscaal alleenstaande, groepsverzekering (30%)</td></tr>
+<tr><td>Fiscale werkbonus</td><td>33,14% × Luik A + 52,54% × Luik B</td></tr>
+<tr><td>Bijzondere BV</td><td>Eindejaarspremie, jaarpremie, dubbel vakantiegeld</td></tr>
+<tr><td>BBSZ</td><td>Info-band (pending exacte tabel RSZ-instructie 2026)</td></tr>
+<tr><td>Werkgeverskost</td><td>Patronale RSZ, SF200, AO, provisies, structurele vermindering</td></tr>
+<tr><td>Premies &amp; voordelen</td><td>Ecocheques (€250), jaarpremie (€330,84), woon-werk trein, fiets</td></tr>
+<tr><td>Audit-trail</td><td>Klikbare bronlinks per waarde, tier-1/2/3 verificatie</td></tr>
+</tbody>
+</table>
+
+<h3>Niet in scope <span class="scope-out">Niet in Jaakie</span></h3>
+<table class="compact">
+<thead><tr><th>Onderdeel</th><th>Reden</th></tr></thead>
+<tbody>
+<tr><td>Volledige PB-aangifte AJ 2027</td><td>Alleen BV-niveau, geen eindafrekening</td></tr>
+<tr><td>Bedrijfsleiders</td><td>Kostenforfait 3%, max €3.030 — buiten PC 200-bedienede</td></tr>
+<tr><td>Grensarbeiders</td><td>Dubbelbelastingverdragen — te complex voor POC</td></tr>
+<tr><td>VAA bedrijfswagen</td><td>CO₂-formule — Golf 3 roadmap</td></tr>
+<tr><td>VAA PC/GSM/internet/woonst</td><td>Forfaits — uitgesteld</td></tr>
+<tr><td>Mobiliteitsbudget</td><td>Beperkte penetratie; complex regelkader</td></tr>
+<tr><td>Maaltijdcheques</td><td>Geen sectorale CAO-verplichting PC 200</td></tr>
+<tr><td>Thuiswerkvergoeding</td><td>Geen sectorale verplichting</td></tr>
+<tr><td>Deeltijds regime</td><td>Nog niet geïmplementeerd</td></tr>
+<tr><td>Netto → Bruto</td><td>Roadmap-prioriteit, nog niet gebouwd</td></tr>
+<tr><td>Loonbrief / SEPA / Dimona / DmfA / Belcotax / Finprof</td><td>POC is calculator, geen payroll-run</td></tr>
+</tbody>
+</table>
+
+<h2>8. Definition of Done</h2>
+
+<h3>Per datapunt</h3>
+<ol>
+<li>✅ Gevuld <code>waarde_genormaliseerd</code> of <code>tabel_per_*</code> (geen runtime-arithmetic op <code>waarde_bron</code>)</li>
+<li>✅ <code>bron_url</code> klikbaar</li>
+<li>✅ <code>status</code> is <code>actief</code> (of <code>mogelijk_verouderd</code> met expliciete toelating)</li>
+<li>✅ <code>betrouwbaarheid</code> = Tier 1 OF Tier 2 zonder Tier-1-conflict OF Tier 3 met ≥1 Tier-1/2-triangulatie</li>
+<li>✅ <code>bron_fragment</code> letterlijk citaat ≤ 200 karakters</li>
+<li>✅ <code>geldig_vanaf</code> / <code>geldig_tot</code> gerespecteerd door periode-guard</li>
+</ol>
+
+<h3>Per release</h3>
+<ol>
+<li>✅ Schema-validatie bij start lukt (rode startup-scherm bij failure)</li>
+<li>✅ <code>pnpm typecheck</code> / <code>bun run typecheck</code> slaagt</li>
+<li>✅ Alle 25 TC-cases + 15 NTC-cases groen</li>
+<li>✅ Geen <code>Datapunt</code> zonder <code>bron_url</code> of <code>status</code></li>
+<li>✅ Voor BV-implementatie: minstens 18/20 cases binnen ±€2 van FOD Tax-Calc</li>
+<li>✅ Disclaimers tonen ("Netto is indicatief", "BV-eindafrekening via PB-aangifte AJ 2027")</li>
+</ol>
+
+<h2>9. Stakeholders</h2>
+<table class="compact">
+<thead><tr><th>Rol</th><th>Verantwoordelijkheid</th></tr></thead>
+<tbody>
+<tr><td>Product owner</td><td>Roadmap + scope-beslissingen + maandelijkse BS-scan voor pending wetgeving</td></tr>
+<tr><td>Payroll-expert</td><td>Verifieert dataset tegen actuele cao's en RSZ-instructies</td></tr>
+<tr><td>Developer</td><td>Implementatie + audit-trail + tests</td></tr>
+<tr><td>QA / validatie-eigenaar</td><td>FOD Tax-Calc-cross-check (zie <a href="testcorpus.html">testcorpus</a>)</td></tr>
+</tbody>
+</table>
+
+<p>Zie <a href="datamodel.html">datamodel</a> voor de dataset-structuur, <a href="testcorpus.html">testcorpus</a> voor de golden tests, en <a href="referentie-tools.html">referenties</a> voor de tier-1/2/3 bronhiërarchie.</p>
+</main>
+
+<footer>Loonmotor BE — Onderzoeksdossier · <a href="index.html">Terug naar overzicht</a></footer>
+</body>
+</html>

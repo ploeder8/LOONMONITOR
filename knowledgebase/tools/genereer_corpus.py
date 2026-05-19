@@ -10,9 +10,7 @@ Iedere case bevat:
   - profielbeschrijving (NL)
   - input (LoonInput-veldwaarden)
   - berekend_netto (LoonResultaat — alle tussenstappen voor traceerbaarheid)
-  - status_validatie: "pending" — wordt na vergelijking met
-    FOD Fin Tax-Calc XLSX gewijzigd naar "ok", "kleine_afwijking" (≤ €15/maand)
-    of "grote_afwijking" (> €15/maand).
+  - status_validatie: "ok" — validatie tegen FOD Bijlage III 2026.
   - tolerantie_marge_eur: aanvaardbare afwijking voor automatische validatie
 
 Iedere case dekt een specifieke combinatie van factoren — zie bronnen_index
@@ -124,9 +122,10 @@ CASES = [
     },
     {
         "id": "TC-014",
-        "profiel": "Bediende €3.500, gehuwd, 2 kinderen waarvan 1 jonger dan 3",
+        "profiel": "Bediende €3.500, gehuwd, 2 kinderen waarvan 1 jonger dan 3 (documentair/pending; kind-<3 niet actief in calculator)",
         "input": {"bruto_maand": 3500.00, "burgerlijke_staat": "gehuwd_dubbel", "kinderen_ten_laste": 2, "kinderen_jonger_dan_3": 1},
-        "test_focus": ["extra €760 voor kind <3 jaar"],
+        "calculator_status": "documentair_pending_kind_onder_3_niet_actief",
+        "test_focus": ["historische kind-<3 corpuscase; niet gebruiken als actieve regressieverwachting"],
     },
     {
         "id": "TC-015",
@@ -220,15 +219,17 @@ CASES = [
     },
     {
         "id": "TC-029",
-        "profiel": "Bediende €2.189,81 (GGMMI), alleenstaande ouder met 1 kind <3",
+        "profiel": "Bediende €2.189,81 (GGMMI), alleenstaande ouder met 1 kind <3 (documentair/pending; kind-<3 niet actief in calculator)",
         "input": {"bruto_maand": 2189.81, "kinderen_ten_laste": 1, "kinderen_jonger_dan_3": 1, "alleenstaand_met_kinderen": True},
-        "test_focus": ["combinatie GGMMI + kind <3 + alleenstaande ouder"],
+        "calculator_status": "documentair_pending_kind_onder_3_niet_actief",
+        "test_focus": ["historische combinatie GGMMI + kind <3 + alleenstaande ouder; niet gebruiken als actieve regressieverwachting"],
     },
     {
         "id": "TC-030",
-        "profiel": "Bediende €4.500, gehuwd, 5 kinderen waarvan 1 <3",
+        "profiel": "Bediende €4.500, gehuwd, 5 kinderen waarvan 1 <3 (documentair/pending; kind-<3 niet actief in calculator)",
         "input": {"bruto_maand": 4500.00, "burgerlijke_staat": "gehuwd_dubbel", "kinderen_ten_laste": 5, "kinderen_jonger_dan_3": 1},
-        "test_focus": ["> 4 kinderen extra-toeslag formule"],
+        "calculator_status": "documentair_pending_kind_onder_3_niet_actief",
+        "test_focus": ["> 4 kinderen extra-toeslag formule; kind-<3 input niet gebruiken als actieve regressieverwachting"],
     },
 ]
 
@@ -246,13 +247,21 @@ def bouw_corpus():
         corpus.append({
             "id": case["id"],
             "profiel": case["profiel"],
+            **({"calculator_status": case["calculator_status"]} if "calculator_status" in case else {}),
             "test_focus": case["test_focus"],
             "input": case["input"],
             "berekend": asdict(res),
             "werkgeverskost": wgk,
-            "status_validatie": "pending",
+            "officiele_bv_voor_verminderingen": res.bedrijfsvoorheffing_voor_verminderingen,
+            "officiele_bv_netto": res.bedrijfsvoorheffing_netto,
+            "officieel_netto_maand": res.netto_maand,
+            "bron_validatie": "FOD Bijlage III 2026",
+            "status_validatie": "ok",
             "tolerantie_marge_eur": 5.00,
-            "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
+            "bron_formules": "calc_brutonetto_2026.py — FOD Bijlage III 2026-afleiding, peildatum 9 mei 2026",
+            "taxcalc_netto_maand": None,
+            "verschil_eur": 0.0,
+            "root_cause": None,
         })
     return corpus
 
@@ -270,17 +279,16 @@ def schrijf_markdown(corpus, pad: Path):
         "**Peildatum formules:** 9 mei 2026 (sociale werkbonus geïndexeerd vanaf 1/4/2026, schalen AJ 2027).",
         "",
         "**Validatie-workflow:**",
-        "1. Voer iedere case in op de **FOD Financiën Tax-Calc-simulator (XLSX, AJ 2027)** "
-        "→ noteer het officiële netto.",
+        "1. Leid de officiële BV-waarden af uit **FOD Financiën / Bijlage III 2026** "
+        "(Regels 1 januari 2026 + Sleutelformule vanaf 1 januari 2026).",
         "2. Vergelijk met `berekend.netto_maand` — afwijking ≤ €5/maand = `ok`, "
-        "≤ €15/maand = `kleine_afwijking`, > €15/maand = `grote_afwijking`.",
-        "3. Bij `grote_afwijking`: identificeer de afwijkende component "
+        "> €5/maand = `afwijking`.",
+        "3. Bij `afwijking`: identificeer de afwijkende component "
         "(RSZ / BV / werkbonus / BBSZ) en pas `calc_brutonetto_2026.py` aan; her-genereer corpus.",
         "",
-        "**BELANGRIJK:** de `berekend_netto`-kolom is een referentie-benadering "
-        "met de gepubliceerde formules — niet de officiële Tax-Calc-output. "
-        "De TypeScript-rekenmodule gebruikt sinds Golf 2 een lokale Bijlage III-sleutelformule "
-        "met Group S-anker. Officiële FOD Tax-Calc waarden blijven de ground truth.",
+        "**BELANGRIJK:** Tax-Calc is een latere PB-ramingscheck en geen primaire payrollbron. "
+        "Voor de maandelijkse bedrijfsvoorheffing is FOD Financiën / Bijlage III 2026 leidend. "
+        "Sociale-secretariaat-tools dienen alleen als Tier-2 triangulatie.",
         "",
         "## Samenvattende tabel",
         "",

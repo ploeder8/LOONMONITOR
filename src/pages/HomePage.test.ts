@@ -10,6 +10,7 @@ import {
   refDatumVoorMaand,
   tewerkstellingsbreukNaarPercentage,
   HomePage,
+  waardeUitNumeriekeInput,
 } from "@/pages/HomePage";
 
 describe("Maand van berekening", () => {
@@ -70,14 +71,40 @@ describe("Ecocheques percentage-invoer", () => {
   });
 });
 
+describe("Numerieke invoer", () => {
+  it("laat een leeg veld tijdelijk leeg in plaats van meteen 0 te forceren", () => {
+    expect(waardeUitNumeriekeInput("", "float")).toBeNull();
+    expect(waardeUitNumeriekeInput("", "int")).toBeNull();
+  });
+
+  it("parseert geldige numerieke invoer naar een getal", () => {
+    expect(waardeUitNumeriekeInput("123.45", "float")).toBe(123.45);
+    expect(waardeUitNumeriekeInput("12", "int")).toBe(12);
+  });
+});
+
 describe("Profiel formulier", () => {
   it("toont de BV-gezinsvelden boven Statuut", () => {
     const html = renderToStaticMarkup(createElement(HomePage));
 
     expect(html.indexOf("Gezinstype (voor BV)")).toBeGreaterThanOrEqual(0);
     expect(html.indexOf("Kinderen ten laste")).toBeGreaterThanOrEqual(0);
+    expect(html).not.toContain("Kinderen < 3 jaar");
+    expect(html).not.toContain("Extra BV-vermindering");
     expect(html.indexOf("Gezinstype (voor BV)")).toBeLessThan(html.indexOf("Statuut"));
     expect(html.indexOf("Kinderen ten laste")).toBeLessThan(html.indexOf("Statuut"));
+  });
+
+  it("benoemt partner zonder of beperkt beroepsinkomen als lagere BV, niet als ten laste", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+
+    expect(html).toContain("Gehuwd/wettelijk samenwonend - partner zonder of beperkt beroepsinkomen");
+  });
+
+  it("toont geen BBSZ-scenario meer (afgeleid van gezinstype)", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+
+    expect(html).not.toContain("BBSZ-scenario");
   });
 
   it("plaatst de eigen bijdrage groepsverzekering onder bijkomende looncomponenten", () => {
@@ -94,5 +121,69 @@ describe("Profiel formulier", () => {
 
     expect(html.indexOf("Woon-werk verkeer")).toBeGreaterThanOrEqual(0);
     expect(html.indexOf("Werkgeversbijdragen")).toBeGreaterThan(html.indexOf("Woon-werk verkeer"));
+  });
+});
+
+describe("Netto-overzicht", () => {
+  it("toont de loonfiche-labels in de verwachte volgorde", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+
+    const labels = [
+      "Totaal bruto",
+      "Belastbaar loon",
+      "Bedrijfsvoorheffing",
+      "Onkostenvergoedingen en inhoudingen",
+      "Terugname VAA",
+      "Nettoloon",
+    ];
+    const positions = labels.map((label) => html.indexOf(label));
+
+    for (const position of positions) {
+      expect(position).toBeGreaterThanOrEqual(0);
+    }
+
+    expect(positions).toEqual([...positions].sort((a, b) => a - b));
+  });
+
+  it("toont aparte maand- en jaaroverzichtskaders voor netto en werkgeverskost", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+
+    expect(html).toContain("Netto berekening (per maand)");
+    expect(html).toContain("Netto jaaroverzicht");
+    expect(html).toContain("Loonkost werkgever (per maand)");
+    expect(html).toContain("Loonkost werkgever (per jaar)");
+    expect(html).toContain("Loonkost werkgever / maand");
+  });
+
+  it("toont de VAA-werkmiddelen als bijkomende looncomponenten", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+
+    expect(html).toContain("VAA werkmiddelen");
+    expect(html).toContain("Laptop / pc");
+    expect(html).toContain("GSM");
+    expect(html).toContain("Internet");
+    expect(html).toContain("GSM-abonnement");
+  });
+
+  it("toont nettoloon inclusief de totale waarde van maaltijdcheques", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+    const tekst = html.replace(/\u00a0/g, " ");
+
+    expect(tekst).toContain("Nettoloon incl. maaltijdcheques");
+    expect(tekst).toContain("totale waarde € 10,00 × 22 dagen");
+    expect(tekst.indexOf("Nettoloon")).toBeLessThan(
+      tekst.indexOf("Nettoloon incl. maaltijdcheques"),
+    );
+  });
+
+  it("toont netto jaarloon inclusief maaltijdcheques op jaarbasis", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+    const tekst = html.replace(/\u00a0/g, " ");
+
+    expect(tekst).toContain("Netto jaarloon incl. maaltijdcheques");
+    expect(tekst).toContain("totale waarde € 10,00 × 264 werkdagen");
+    expect(tekst.indexOf("Netto jaarloon")).toBeLessThan(
+      tekst.indexOf("Netto jaarloon incl. maaltijdcheques"),
+    );
   });
 });

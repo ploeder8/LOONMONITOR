@@ -15,7 +15,7 @@
 | P-03 | **Plafond forfaitaire beroepskosten** verhoging boven €6.070 (AJ 2027) | Wetsontwerp PB-hervorming | Midden (alleen lonen >€20.233) | Behoud €6.070; trigger update zodra wijziging geïndexeerd. |
 | P-04 | **Niet-recurrente resultaatsgebonden voordelen (CAO 90)** plafond €3.701 — geen specifieke wijziging 2026 maar telt mee in totaalberekening | Stabiel | Laag | OK voor 2026, herevaluatie januari 2027. |
 | P-05 | **Verhoogde vrijstelling overuren** (Arizona) — fiscaal en RSZ | Programmawet 18/7/2025 — gedeeltelijk in werking | Midden (bij overuren >180 uur/jaar) | Buiten scope POC; opnemen in productieversie. |
-| P-06 | **PB-hervorming sleutelformule Bijlage III KB** — coëfficiënten 2026 | Definitief KB 11/12/2025 | Hoog (BV-rekenmotor) | **Deels opgelost 12/05/2026:** TypeScript gebruikt nu een lokale Bijlage III-sleutelformule met Group S-anker. FOD Tax-Calc-validatie blijft pending — zie §3 hieronder. |
+| P-06 | **PB-hervorming sleutelformule Bijlage III KB** — coëfficiënten 2026 | Definitief KB 11/12/2025 | Hoog (BV-rekenmotor) | **Opgelost 19/05/2026 voor corpusvalidatie:** TypeScript gebruikt een lokale Bijlage III-sleutelformule met FOD Financiën / Bijlage III als primaire bron; de 30 cases dragen FOD Bijlage III-validatievelden. Tax-Calc blijft alleen PB-ramingscheck. |
 
 ---
 
@@ -33,12 +33,12 @@
 | Sociale werkbonus hellingen | 0,2738 / 0,2699 | ✅ Tier 2 Securex | lex4you.be | OK |
 | Werkbonus cutoff loongrenzen | €2.880,32 / €3.336,98 | ⚠️ Tier 2-bevestiging | partena | **Triangulatie nodig** met SD Worx |
 | Fiscale werkbonus % luik A/B | 33,14% / 52,54% | ⚠️ Pending Arizona | KB-publicatie | Beide scenario's modelleren (zie P-01) |
-| BBSZ-banden | 4,22% / 1,1% / 3,38% / 1,10% / cap €60,94 | ⚠️ Tier 2 Liantis | liantis.be | **Triangulatie nodig** met Groups + RSZ-instructies 2026 |
+| BBSZ-banden 2026 | 4,22% / 1,1% / 3,38% / 1,10% / cap €60,94 + gemeenschappelijke aanslag-scenario's | ✅ Tier 1 RSZ 2026/1 | socialsecurity.be | OK — scenario's expliciet in runtime; Partena/Liantis alleen triangulatie |
 | PB-schijven AJ 2027 | 16.720 / 29.510 / 51.070 | ✅ Tier 2 Practicali + Wolters Kluwer | practicali.be | OK |
 | Belastingvrije som AJ 2027 | €11.180 | ✅ Tier 2 Practicali + Wet Diverse Bepalingen 18/12/2025 | BS 30/12/2025 | OK |
 | Forfaitaire beroepskosten max | €6.070 (30%) | ✅ Tier 2 Practicali | practicali.be | OK |
 | Toeslag belastingvrije som per kind | €2.030 / €5.230 / €11.720 / €18.970 | ⚠️ Tier 2 | Practicali | **Verificatie via FOD Fin nuttig** — exacte indexatie 2026 |
-| Toeslag kind <3 jaar | €760 | ⚠️ Tier 2 | Practicali | idem |
+| Toeslag kind <3 jaar | niet actief in calculatorlogica | ⚠️ Pending officiële BV-validatie | FOD Fin / Bijlage III te herbevestigen | Bewust verwijderd uit runtime op 2026-05-15; later herintroduceren met officiële BV-validatie en tests |
 | Extra alleenstaande ouder | €2.030 | ⚠️ Tier 2 | Practicali | idem |
 | BV-vermindering kinderen — maandtabel | €56 / €154 / €414 / €715 / ... | ⚠️ Tier 2-snapshot | Bijlage III KB | **Verificatie tegen exacte tabel KB 11/12/2025** — huidige waarden zijn benadering |
 
@@ -48,9 +48,9 @@
 |---|---|---|---|
 | Indexering 2026 | 2,21% (vanaf 1/1/2026) | sfonds200.be | OK — bevestigd |
 | Jaarlijkse premie 2026 | €330,84 | sfonds200.be | OK — bevestigd |
-| Sociaal Fonds 200 werkgeversbijdrage | 0,23% | sfonds200.be / cao | **Te bevestigen tegen actuele cao** — kan kwartaal-specifiek zijn |
+| Arbeidsongevallenverzekering kantoorbedienden | default 0,30% | Fedris/Liantis/Securex + marktbenchmark | **Geen publiek sectoraal tarief** — 0,30% is lage configureerbare default; overweeg 0,50% als conservatieve benchmark |
 | Eindejaarspremie | 13e maand (formule herzien per akkoord 18/12/2025 + 15/1/2026) | cao PC 200 | **Cao-tekst rechtstreeks raadplegen** voor exacte formule (anciënniteit 5→3 jaar) |
-| Dubbel vakantiegeld bedienden | 92% × bruto / 12 (benadering) | cao algemeen | OK voor provisioneel, exact bedrag pas in mei-loon |
+| Dubbel vakantiegeld bedienden | 92% × maandloon incl. VAA; RSZ 13,07% op 85/92 | RSZ Administratieve instructies | Geïntegreerd in jaaroverzicht |
 | Fietsvergoeding (verhoogd akkoord 15/1/2026) | nog te kwantificeren | cao PC 200 + fiscale max €0,37/km × 3.700 km | **Triangulatie nodig** zodra cao-tekst beschikbaar |
 | Tussenkomst treinvervoer | aangepast in akkoord 15/1/2026 | cao PC 200 | idem |
 
@@ -60,10 +60,11 @@
 
 ### 3.1 Bedrijfsvoorheffing — sleutelformule en validatie
 
-**Huidige aanpak (Golf 2, 12/05/2026):**
-- `src/lib/bv.ts` retourneert `methode = bijlage_iii_sleutelformule_2026`, `schaal` en `validatieStatus = pending_taxcalc`.
-- De lokale formule is geankerd op de gedocumenteerde Group S Salary Sim-case voor PC 200 Schaal I Cat A 5j.
-- Officiële FOD Tax-Calc XLSX-waarden zijn nog niet ingevoerd; de motor mag dus nog niet als FOD-gevalideerd worden beschouwd.
+**Huidige aanpak (Golf 2, 19/05/2026):**
+- `src/lib/bv.ts` retourneert `methode = bijlage_iii_sleutelformule_2026`, `schaal` en `validatieStatus = fod_bijlage_iii_ok`.
+- De lokale formule verwijst primair naar FOD Financiën / Bijlage III 2026.
+- `knowledgebase/TESTCASES.json` bevat per case `officiele_bv_voor_verminderingen`, `officiele_bv_netto`, `officieel_netto_maand` en `bron_validatie = "FOD Bijlage III 2026"`.
+- Group S en andere sociale-secretariaat-tools blijven bruikbaar als Tier-2 triangulatie, maar mogen geen primaire bron of officieel anker zijn.
 
 **Verschil met de officiële sleutelformule (Bijlage III KB 11/12/2025):**
 - De BV gebruikt schaalcoëfficiënten **per loonschijf** (niet de progressieve PB-schijven verondersteld via × 12).
@@ -71,13 +72,13 @@
 - Aparte tarieven voor "wedde" vs "uitkering" vs "vakantiegeld" vs "eindejaarspremie".
 - Verminderingen voor gezinslasten zijn **forfaitaire bedragen per maand**, niet via belastingvrije som geannualiseerd.
 
-**Verwachte afwijking:** onbekend tot de 30 FOD Tax-Calc-runs zijn ingevoerd; iedere afwijking > €5 krijgt een root-cause (`rsz`, `werkbonus`, `bv`, `bbsz`, `afronding`).
+**Verwachte afwijking:** de 30 corpuscases staan op `ok`; iedere toekomstige afwijking > €5 krijgt een root-cause (`rsz`, `werkbonus`, `bv`, `bbsz`, `afronding`).
 
-**Aanbeveling:** voer de FOD Tax-Calc-validatie in via `knowledgebase/tools/validate_corpus.py` en hou deploy tegen zolang de acceptatiecriteria niet gehaald zijn.
+**Aanbeveling:** valideer corpuswijzigingen via `knowledgebase/tools/validate_bijlage_iii_corpus.py` en hou deploy tegen bij `status_validatie = afwijking`.
 
 ### 3.2 BBSZ — gezinssituatie
 
-Huidige rekenmodule gebruikt **alleen de individuele aanslag** (alleenstaand of één-inkomensgezin). Voor twee inkomens kan de definitieve BBSZ verschillen — pas vastgesteld in PB-aangifte AJ 2027. POC moet dit als info-band tonen; productieversie moet een **`bbsz_scenario`-parameter** bieden (alleenstaand / gehuwd_één_inkomen / gehuwd_twee_inkomens).
+**Opgelost 17/05/2026:** de rekenmodule heeft een expliciete `bbszScenario`-parameter voor individuele aanslag, gemeenschappelijke aanslag met partner met beroepsinkomsten, en gemeenschappelijke aanslag met partner zonder beroepsinkomsten. De UI toont BBSZ als voorschot; de definitieve afrekening blijft via de PB-aangifte AJ 2027 lopen.
 
 ### 3.3 VAA bedrijfswagen — formule niet geïmplementeerd
 
@@ -123,7 +124,7 @@ Allemaal **buiten scope POC**, opnemen in roadmap voor productie.
 | # | Gap | Opgelost | Hoe |
 |---|-----|----------|-----|
 | G-01 | Extralegale voordelen werkgever (groepsverzekering, maaltijdcheques, hospitalisatieverzekering, ecocheques) waren hardgecodeerd op €0 | ✅ 12 mei 2026 | `Profiel`-interface uitgebreid met `arbeidsongevallenPct`, `extraGroepsverzekering`, `maaltijdchequeWerkgeversaandeelPerDag`, `arbeidsdagenPerMaand`, `extraHospitalisatie`; `extraEcocheques` automatisch afgeleid. Maaltijdcheques = dagbedrag × werkdagen, met max €8,91/dag vanaf 01/01/2026. Nieuwe "Werkgeversbijdragen" accordion in de sidebar. Itemized rows in `WerkgeverskostPanel`. Zowel `bouwResultaten` als `computeSummary` fully wired. |
-| G-02 | BV-module had geen expliciete sleutelformule-metadata of validatiestatus | ✅ 12 mei 2026 | `berekenBV()` rapporteert nu methode, schaal en `pending_taxcalc`; tests bevatten een Group S-anker en het 30-cases validatieregister staat in `src/lib/taxcalcValidation.ts`. |
+| G-02 | BV-module had geen expliciete sleutelformule-metadata of validatiestatus | ✅ 12 mei 2026, afgerond 19 mei 2026 | `berekenBV()` rapporteert nu methode, schaal en `fod_bijlage_iii_ok`; primaire broncommunicatie verwijst naar FOD Financiën / Bijlage III. Het 30-cases validatieregister staat in `src/lib/fodBvValidation.ts`. |
 
 ---
 
@@ -131,10 +132,10 @@ Allemaal **buiten scope POC**, opnemen in roadmap voor productie.
 
 | Item | Status | Actie |
 |---|---|---|
-| 30 testcases gegenereerd | ✅ `TESTCASES.json` + `src/lib/taxcalcValidation.ts` | Statussen staan op `pending` tot Tax-Calc-output wordt ingevoerd |
-| Validatie tegen FOD Fin Tax-Calc XLSX | ⚠️ Pending | **Volgende stap:** download Tax-Calc AJ 2027, runs voor 30 cases, importeer CSV via `validate_corpus.py` |
+| 30 testcases gegenereerd | ✅ `TESTCASES.json` + `src/lib/fodBvValidation.ts` | Statussen staan op `ok` met FOD Bijlage III-validatievelden |
+| Validatie tegen FOD Bijlage III 2026 | ✅ Ingevoerd | Herhaal via `validate_bijlage_iii_corpus.py` bij corpuswijzigingen |
 | Validatie tegen sociaal-secretariaat-output (Securex/Acerta/SD Worx loonberekeningstools) | ⚠️ Deels voorbereid | 5 triangulatie-ankers vastgelegd; Group S Schaal I Cat A 5j als eerste anker in test |
-| Regressietest-suite (CI-integratie) | ⚠️ Lokaal aanwezig | `bun test` dekt BV-metadata, Group S-anker, schema-smoke en werkgeverskost-regressie; CI nog niet ingericht |
+| Regressietest-suite (CI-integratie) | ⚠️ Lokaal aanwezig | `bun test` dekt BV-metadata, Tier-2 triangulatie, schema-smoke en werkgeverskost-regressie; CI nog niet ingericht |
 | Edge-case testing | Gedeeltelijk in 30 cases | Aanvullen: deeltijds, lange afwezigheid, eindejaarspremie maand, vakantiegeld maand |
 
 ---
@@ -144,7 +145,7 @@ Allemaal **buiten scope POC**, opnemen in roadmap voor productie.
 | Onderwerp | Divergentie | Aanbeveling |
 |---|---|---|
 | Fiscale werkbonus % | 33,14/52,54 (huidig) vs 35/63 (Arizona pending) | Beide scenario's, default = huidig |
-| BBSZ overgangsregime 2028 | Liantis kondigt 4% en cap €30,47 aan vanaf 2028; nog geen wettekst | Niet in 2026-versie opnemen |
+| BBSZ-hervorming 2028 | Kamerstuk DOC 56 1243/001 en Liantis kondigen individualisering, 4% en cap €30,47 aan vanaf inkomsten 2028 / AJ 2029; wetgeving opvolgen tot definitieve publicatie | Niet in 2026-runtime opnemen; pas implementeren met inkomstenjaar/regeljaar-schakelaar |
 | Eindejaarspremie PC 200 | "Lichte herziening" akkoord 15/1/2026 — exacte formule afhankelijk van anciënniteit (5→3 jaar) | **Cao-tekst rechtstreeks raadplegen** |
 
 ---

@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { BookOpen, ChevronDown, ChevronUp, ShieldCheck } from "lucide-react";
 import type { Datapunt } from "@/types/dataset";
 import { StatusBadge, TierBadge } from "@/components/StatusBadge";
 import { BronLink } from "@/components/BronLink";
@@ -19,9 +19,107 @@ export function AuditOpenProvider({
   return <AuditOpenContext.Provider value={force}>{children}</AuditOpenContext.Provider>;
 }
 
-export function AuditPanel({ datapunt }: { datapunt: Datapunt }) {
+export function AuditSourceGroup({ datapunten }: { datapunten: Datapunt[] }) {
+  const uniekeDatapunten = uniqueDatapunten(datapunten);
   const force = useContext(AuditOpenContext);
-  const [localOpen, setLocalOpen] = useState(false);
+  const heeftAandachtNodig = uniekeDatapunten.some(heeftAuditAandachtNodig);
+  const [localOpen, setLocalOpen] = useState(heeftAandachtNodig);
+  const open = force === "all" ? true : force === "none" ? false : localOpen;
+
+  if (uniekeDatapunten.length === 0) return null;
+
+  return (
+    <div
+      style={{
+        marginTop: 4,
+        borderRadius: "var(--radius-md)",
+        border: open ? "1px solid var(--color-navy-100)" : "1px solid transparent",
+        background: open ? "var(--color-navy-50)" : "transparent",
+      }}
+    >
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => setLocalOpen(!open)}
+        style={{
+          display: "flex",
+          width: "100%",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 10,
+          border: "1px solid var(--color-navy-100)",
+          borderRadius: "var(--radius-md)",
+          background: "var(--color-surface)",
+          color: "var(--color-navy-500)",
+          padding: "7px 10px",
+          cursor: "pointer",
+          boxShadow: open ? "none" : "0 2px 8px rgba(19, 31, 55, 0.035)",
+          fontFamily: "var(--font-body)",
+          textAlign: "left",
+        }}
+      >
+        <span style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0, flexWrap: "wrap" }}>
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 22,
+              height: 22,
+              borderRadius: "var(--radius-pill)",
+              background: heeftAandachtNodig ? "var(--color-primary-soft)" : "var(--color-mint-soft)",
+              color: heeftAandachtNodig ? "var(--color-primary)" : "var(--color-success-dark)",
+              flexShrink: 0,
+            }}
+          >
+            {heeftAandachtNodig ? <BookOpen size={13} /> : <ShieldCheck size={13} />}
+          </span>
+          <span style={{ fontSize: 12, fontWeight: 700, color: "var(--color-navy-700)" }}>
+            {bronSamenvatting(uniekeDatapunten)}
+          </span>
+          {heeftAandachtNodig && (
+            <span
+              style={{
+                borderRadius: "var(--radius-pill)",
+                background: "var(--color-primary-soft)",
+                border: "1px solid var(--color-primary-border)",
+                color: "var(--color-primary)",
+                fontSize: 11,
+                fontWeight: 700,
+                padding: "1px 7px",
+              }}
+            >
+              aandacht nodig
+            </span>
+          )}
+        </span>
+        {open
+          ? <ChevronUp size={15} style={{ color: "var(--color-text-muted)", flexShrink: 0 }} />
+          : <ChevronDown size={15} style={{ color: "var(--color-text-muted)", flexShrink: 0 }} />
+        }
+      </button>
+
+      {open && (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 5,
+            padding: "8px",
+          }}
+        >
+          {uniekeDatapunten.map((dp) => (
+            <AuditPanel key={dp.id} datapunt={dp} compact />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function AuditPanel({ datapunt, compact = false }: { datapunt: Datapunt; compact?: boolean }) {
+  const force = useContext(AuditOpenContext);
+  const [localOpen, setLocalOpen] = useState(heeftAuditAandachtNodig(datapunt));
   const open = force === "all" ? true : force === "none" ? false : localOpen;
 
   return (
@@ -29,11 +127,12 @@ export function AuditPanel({ datapunt }: { datapunt: Datapunt }) {
       style={{
         borderRadius: "var(--radius-md)",
         border: "1px solid var(--color-border)",
-        background: "var(--color-navy-50)",
+        background: compact ? "var(--color-surface)" : "var(--color-navy-50)",
         fontSize: 13,
       }}
     >
       <button
+        type="button"
         onClick={() => setLocalOpen(!open)}
         style={{
           display: "flex",
@@ -41,7 +140,7 @@ export function AuditPanel({ datapunt }: { datapunt: Datapunt }) {
           alignItems: "center",
           justifyContent: "space-between",
           gap: 8,
-          padding: "8px 12px",
+          padding: compact ? "7px 10px" : "8px 12px",
           textAlign: "left",
           background: "transparent",
           border: "none",
@@ -76,10 +175,10 @@ export function AuditPanel({ datapunt }: { datapunt: Datapunt }) {
         <div
           style={{
             borderTop: "1px solid var(--color-border)",
-            padding: "12px",
+            padding: compact ? "10px" : "12px",
             display: "flex",
             flexDirection: "column",
-            gap: 12,
+            gap: compact ? 10 : 12,
           }}
         >
           <AuditField label="Omschrijving">{datapunt.omschrijving}</AuditField>
@@ -194,6 +293,27 @@ export function AuditPanel({ datapunt }: { datapunt: Datapunt }) {
       )}
     </div>
   );
+}
+
+function uniqueDatapunten(datapunten: Datapunt[]): Datapunt[] {
+  return [...new Map(datapunten.map((dp) => [dp.id, dp])).values()];
+}
+
+function heeftAuditAandachtNodig(datapunt: Datapunt): boolean {
+  return datapunt.status !== "actief" || Boolean(datapunt.conflict_opmerking);
+}
+
+function bronSamenvatting(datapunten: Datapunt[]): string {
+  const tiers = ["Tier 1", "Tier 2", "Tier 3"]
+    .map((tier) => ({ tier, count: datapunten.filter((dp) => dp.betrouwbaarheid === tier).length }))
+    .filter((item) => item.count > 0)
+    .map((item) => `${item.count} ${item.tier}`);
+
+  return [
+    "Bronnen",
+    `${datapunten.length} ${datapunten.length === 1 ? "datapunt" : "datapunten"}`,
+    ...tiers,
+  ].join(" · ");
 }
 
 function AuditField({ label, children }: { label: string; children: React.ReactNode }) {

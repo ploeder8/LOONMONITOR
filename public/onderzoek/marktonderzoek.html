@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="nl-BE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marktonderzoek — Loonmotor BE</title>
+
+<style>
+:root { --bg:#fafbfc; --surface:#fff; --border:#e4e7eb; --text:#1a2332; --text-muted:#5a6779; --accent:#0b5394; --accent-light:#e8f0f9; --code-bg:#f5f7fa; --shadow:0 1px 3px rgba(0,0,0,.06); }
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.6;color:var(--text);background:var(--bg)}
+header.topbar{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.topbar-inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-weight:700;font-size:17px;color:var(--accent);text-decoration:none}
+nav.topnav{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+nav.topnav a{font-size:13px;color:var(--text-muted);text-decoration:none;padding:6px 10px;border-radius:4px}
+nav.topnav a:hover{background:var(--accent-light);color:var(--accent)}
+nav.topnav a.active{background:var(--accent);color:#fff}
+main{max-width:1200px;margin:0 auto;padding:32px 24px 64px}
+h1{font-size:30px;margin:0 0 8px;font-weight:700}
+h2{font-size:22px;margin:32px 0 12px;font-weight:600;padding-bottom:6px;border-bottom:2px solid var(--accent-light)}
+h3{font-size:17px;margin:24px 0 8px;font-weight:600}
+h4{font-size:15px;margin:16px 0 6px;color:var(--accent);font-weight:600}
+p{margin:8px 0 12px}ul,ol{padding-left:22px}li{margin:4px 0}
+a{color:var(--accent)}a:hover{text-decoration:underline}
+code{font-family:"SF Mono",Monaco,Consolas,monospace;background:var(--code-bg);padding:1px 5px;border-radius:3px;font-size:13px}
+pre{background:var(--code-bg);padding:14px 18px;border-radius:6px;overflow-x:auto;font-size:13px;border:1px solid var(--border)}
+.subtitle{color:var(--text-muted);font-size:16px;margin:0 0 24px}
+.meta{font-size:13px;color:var(--text-muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;margin-bottom:24px}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:14px;background:var(--surface);border-radius:6px;overflow:hidden;box-shadow:var(--shadow)}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:var(--accent-light);font-weight:600;font-size:13px}
+tr:last-child td{border-bottom:none}tr:hover{background:#f8fafc}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;margin:0 3px 2px 0;letter-spacing:.3px;text-transform:uppercase}
+.badge.feit{background:#d1fae5;color:#065f46}
+.badge.aanname{background:#fef3c7;color:#92400e}
+.badge.hypothese{background:#e0e7ff;color:#3730a3}
+.badge.onzekerheid{background:#fed7aa;color:#9a3412}
+.badge.openvraag{background:#fde68a;color:#78350f}
+.badge.mvp{background:#c7f0d3;color:#14532d}
+.badge.later{background:#ddd6fe;color:#5b21b6}
+.badge.enterprise{background:#fce7f3;color:#831843}
+.callout{border-left:4px solid var(--accent);background:var(--accent-light);padding:12px 16px;margin:14px 0;border-radius:0 4px 4px 0}
+.callout.warn{border-color:#d97706;background:#fef3c7}
+.callout.ok{border-color:#059669;background:#d1fae5}
+.section-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:18px 22px;margin:16px 0;box-shadow:var(--shadow)}
+.scope-in{background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+.scope-out{background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size:13px;color:var(--text-muted);text-align:center}
+.tag{display:inline-block;background:var(--accent-light);color:var(--accent);padding:2px 8px;border-radius:3px;font-size:12px;font-weight:500}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:16px 0}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px;text-align:center}
+.kpi-value{font-size:24px;font-weight:700;color:var(--accent);display:block}
+.kpi-label{font-size:12px;color:var(--text-muted);text-transform:uppercase}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+<a href="index.html" class="brand">Loonmotor BE</a>
+<nav class="topnav">
+<a href="index.html">Overzicht</a>
+<a href="marktonderzoek.html" class="active">Markt</a>
+<a href="concurrentiematrix.html">Concurrenten</a>
+<a href="werking-loonmotor.html">Werking</a>
+<a href="wetgevend-kader.html">Wetgeving</a>
+<a href="requirements.html">Requirements</a>
+<a href="datamodel.html">Datamodel</a>
+<a href="technische-architectuur.html">Architectuur</a>
+<a href="juridische-checklist.html">Juridisch</a>
+<a href="mvp-roadmap.html">Roadmap</a>
+<a href="risicoregister.html">Risico's</a>
+<a href="jaakie-specificatie.html">Jaakie</a>
+<a href="testcorpus.html">Testcorpus</a>
+<a href="referentie-tools.html">Referenties</a>
+<a href="bronnen.html">Bronnen</a>
+</nav></div></header>
+
+<main>
+<h1>Marktonderzoek — Belgische payroll engines</h1>
+<p class="subtitle">Wie zijn de spelers, hoe verdienen ze geld, welke regelgevende druk staat op de sector, en waar zit een onderscheidende opportunity?</p>
+
+<h2>1. Marktstructuur</h2>
+<p>De Belgische loonadministratiemarkt is een tweedelige structuur:</p>
+<ul>
+  <li><strong>Erkende sociale secretariaten</strong> — door de RSZ erkend onder <a href="https://www.ejustice.just.fgov.be/eli/besluit/1969/11/28/1969112808/justel" target="_blank" rel="noopener">KB 28 november 1969</a> en onderworpen aan de kwaliteitsbarometer van <a href="https://www.ejustice.just.fgov.be/eli/besluit/2017/02/20/2017011164/justel" target="_blank" rel="noopener">KB 20 februari 2017</a>. Zij voeren namens werkgevers de wettelijke aangiften uit en innen sociale bijdragen door. <span class="badge feit">Feit</span></li>
+  <li><strong>HR-tech challengers / SaaS-aanbieders</strong> — geen erkenning, focus op self-service, integratie, UX. Werken doorgaans als partner van of integrator naar een erkend secretariaat. <span class="badge feit">Feit</span></li>
+</ul>
+
+<div class="kpi-grid">
+  <div class="kpi"><span class="kpi-value">~95k</span><span class="kpi-label">SD Worx werkgevers (BE)</span></div>
+  <div class="kpi"><span class="kpi-value">~81k</span><span class="kpi-label">Partena werkgevers</span></div>
+  <div class="kpi"><span class="kpi-value">~76k</span><span class="kpi-label">Liantis werkgevers</span></div>
+  <div class="kpi"><span class="kpi-value">~65k</span><span class="kpi-label">Acerta werkgevers</span></div>
+</div>
+<p class="meta">Aantallen werkgevers/klanten zijn benaderingen op basis van publieke jaarverslagen en corporate-communicatie. <span class="badge aanname">Aanname</span> dat samen >80% van de KMO-markt afgedekt wordt.</p>
+
+<h2>2. Top 4 erkende sociale secretariaten</h2>
+
+<h3>SD Worx</h3>
+<ul>
+  <li>Marktleider in BE, internationaal actief (NL, FR, DE, UK, …) na overnames van Aditro, Pointlogic, Centric HR &amp; Payroll Solutions.</li>
+  <li>Producten: SD Worx Payroll, SD Worx 365 (cloud), Eblox (KMO), Protime (tijdsregistratie). <span class="badge feit">Feit</span></li>
+  <li>Service-model: full-service sociaal secretariaat + grote eigen consultancy- en HR-tech-poot.</li>
+  <li>Bron: <a href="https://www.sdworx.com" target="_blank" rel="noopener">sdworx.com</a></li>
+</ul>
+
+<h3>Acerta</h3>
+<ul>
+  <li>Coöperatieve groep, sterk in zelfstandigen + KMO. Eigen ondernemingsloket, kinderbijslagfonds.</li>
+  <li>Producten: Acerta Connect (SaaS), AI-assistent Alix voor HR-vragen. <span class="badge feit">Feit</span></li>
+  <li>Bron: <a href="https://www.acerta.be" target="_blank" rel="noopener">acerta.be</a></li>
+</ul>
+
+<h3>Partena Professional</h3>
+<ul>
+  <li>Onderdeel van Securex-groep historisch, vandaag deels gelieerd aan ADP via Easypay-overname. Sterk in mid-market en grotere ondernemingen.</li>
+  <li>Producten: Partena Payroll, eBlox via ADP/Easypay-spoor. <span class="badge onzekerheid">Onzekerheid</span> over exacte huidige eigendomsstructuur ADP/Easypay/Partena.</li>
+  <li>Bron: <a href="https://www.partena-professional.be" target="_blank" rel="noopener">partena-professional.be</a></li>
+</ul>
+
+<h3>Liantis</h3>
+<ul>
+  <li>Sterke focus zelfstandigen + KMO, brede juridische dienstverlening. Sterke regionale aanwezigheid (Vlaanderen).</li>
+  <li>Producten: Liantis-portaal voor werkgevers en zelfstandigen, MyLiantis.</li>
+  <li>Bron: <a href="https://www.liantis.be" target="_blank" rel="noopener">liantis.be</a></li>
+</ul>
+
+<h2>3. Andere erkende secretariaten</h2>
+<table>
+<thead><tr><th>Speler</th><th>Profiel</th><th>Bron</th></tr></thead>
+<tbody>
+<tr><td>Securex</td><td>Internationale HR-groep, sterk in welzijn, well-being, ARBO.</td><td><a href="https://www.securex.be" target="_blank" rel="noopener">securex.be</a></td></tr>
+<tr><td>Group S</td><td>Onafhankelijk sociaal secretariaat, sterke focus klantnabijheid.</td><td><a href="https://www.groups.be" target="_blank" rel="noopener">groups.be</a></td></tr>
+<tr><td>Attentia</td><td>HR-services + preventie/welzijn. Vaak gecombineerd met externe preventiedienst.</td><td><a href="https://www.attentia.be" target="_blank" rel="noopener">attentia.be</a></td></tr>
+<tr><td>Easypay Group</td><td>HR &amp; payroll, eBlox-platform; integratiepunt voor ADP/Partena-spoor.</td><td><a href="https://www.easypay-group.com" target="_blank" rel="noopener">easypay-group.com</a></td></tr>
+<tr><td>UCM</td><td>Franstalige nadruk, zelfstandigen en KMO.</td><td><a href="https://www.ucm.be" target="_blank" rel="noopener">ucm.be</a></td></tr>
+</tbody>
+</table>
+
+<h2>4. HR-tech challengers</h2>
+<table>
+<thead><tr><th>Speler</th><th>Type</th><th>Onderscheid</th></tr></thead>
+<tbody>
+<tr><td>Officient</td><td>HR + payroll SaaS</td><td>Moderne KMO-UX, sterke API's, partnerschappen met sociaal secretariaat. <span class="badge feit">Feit</span></td></tr>
+<tr><td>Payflip</td><td>Flexibel verlonen / cafetariaplan SaaS</td><td>Specialiseert in mobiliteitsbudget en cafetariaplannen (CAO 90, KB IPT). <span class="badge feit">Feit</span></td></tr>
+<tr><td>Protime</td><td>Tijdsregistratie (deel van SD Worx-groep)</td><td>Vooral tijds- en planning, koppelt op payroll-engines.</td></tr>
+<tr><td>Prato</td><td>Workforce software (uitzendsector)</td><td>PC 322 (uitzendarbeid) gespecialiseerd.</td></tr>
+<tr><td>Shyfter / Combo HR / Loket-achtige spelers</td><td>Schedule + HR tooling</td><td>Vooral horeca/retail (PC 302). <span class="badge aanname">Aanname</span> dat zij payroll outsourcen.</td></tr>
+</tbody>
+</table>
+
+<h2>5. Geverifieerde Tier-2 referentie — Group S Salary Sim</h2>
+<p>Group S (onafhankelijk sociaal secretariaat) biedt een gratis publieke <a href="https://online.groups.be/salarysim/?lg=nl" target="_blank" rel="noopener">Salary Sim</a> die fungeert als <strong>Tier-2 triangulatieanker</strong> voor onze loonmotor. <span class="badge feit">Feit</span></p>
+
+<table>
+<thead><tr><th>Aspect</th><th>Group S Salary Sim</th><th>Jaakie (huidig)</th></tr></thead>
+<tbody>
+<tr><td>Scope PC's</td><td>Alle ±200 PC's</td><td>PC 200 only (bewust gespecialiseerd)</td></tr>
+<tr><td>Berekeningsrichting</td><td>Bruto→Netto én Netto→Bruto (vereenvoudigd)</td><td>Alleen Bruto→Netto</td></tr>
+<tr><td>Deeltijds</td><td>✅ Voltijds/deeltijds</td><td>❌ Nog niet</td></tr>
+<tr><td>Barema-lookup</td><td>❌ Geen sectorale baremas</td><td>✅ PC 200 Schaal I/II × Cat A–D</td></tr>
+<tr><td>Audit-trail / bronverificatie</td><td>❌ Black box</td><td>✅ <strong>Uniek: klikbare bronlinks + tier-1/2/3 hiërarchie</strong></td></tr>
+<tr><td>Ecocheques PC 200</td><td>❌ Geen apart veld</td><td>✅ €250/jaar voltijds</td></tr>
+<tr><td>Jaarpremie PC 200</td><td>❌ Geen apart veld</td><td>✅ €330,84</td></tr>
+<tr><td>Fietsvergoeding</td><td>❌ Geen apart veld</td><td>✅ CAO 164, €0,32/km</td></tr>
+<tr><td>Scenario-vergelijking</td><td>❌</td><td>❌</td></tr>
+<tr><td>Export (PDF/print)</td><td>✅</td><td>❌</td></tr>
+</tbody>
+</table>
+
+<div class="callout ok">
+<p><strong>Validatieresultaat:</strong> Bij bruto €2.276,51 (PC 200 bediende, ongehuwd, geen kinderen) geeft Group S: netto RSZ €9,55, BV €154,22, BBSZ €11,28, te ontvangen werknemer €2.101,46. Onze verwachte uitkomst ligt binnen ±€5 — dit is het primaire tier-2 anker voor de netto-module. <span class="badge feit">Feit</span> (geverifieerd via Playwright, geavanceerde modus, mei 2026)</p>
+</div>
+
+<p>Zie de volledige veld-voor-veld vergelijking in <code>knowledgebase/Referenties/groups_be_salarysim.md</code>. Zie <a href="concurrentiematrix.html">concurrentiematrix</a> voor de marktcontext.</p>
+
+<h2>6. Regelgevende druk en kantelpunten</h2>
+
+<h3>EU-richtlijn loontransparantie 2023/970</h3>
+<p>EU 2023/970 (<a href="https://eur-lex.europa.eu/legal-content/NL/TXT/?uri=CELEX%3A32023L0970" target="_blank" rel="noopener">richtlijntekst</a>) verplicht werkgevers tot transparantie over beloningsstructuren en loonkloofrapportage. <strong>Omzettingsdeadline: 7 juni 2026.</strong> <span class="badge feit">Feit</span></p>
+<ul>
+  <li>Werkgevers &gt; 100 wn moeten loonkloof rapporteren; &gt; 250 wn jaarlijks, 100–249 driejaarlijks. <span class="badge feit">Feit</span></li>
+  <li>Kandidaten hebben recht op pre-offer loonband. <span class="badge feit">Feit</span></li>
+  <li>Voor loonmotoren: nieuwe rapportagemodule + "gender pay gap" berekening per functie-categorie wordt commodity. <span class="badge mvp">MVP</span></li>
+</ul>
+
+<h3>Regering-De Wever — Programmawet 2025-2026</h3>
+<p>Het zogeheten "Arizona"-regeerakkoord brengt structurele wijzigingen: <span class="badge feit">Feit</span></p>
+<ul>
+  <li><strong>RSZ-cap</strong> op werkgeversbijdragen: <code>€86.700/kwartaal</code> per werknemer vanaf 1/1/2026 (Wet 27/12/2025, BS 30/12/2025). <span class="badge onzekerheid">Onzekerheid</span> over exacte uitwerking voor variabel loon en bonus.</li>
+  <li><strong>BBIB</strong> (bijzondere bijdrage voor de sociale zekerheid op individuele beloning) versoepelingen: drempel <code>€75k → €70k</code>, KEW-percentage <code>30% → 35%</code>. <span class="badge feit">Feit</span></li>
+  <li><strong>Beslagschijven 2026</strong> (<a href="https://www.ejustice.just.fgov.be" target="_blank" rel="noopener">KB 3/12/2025</a>): nieuwe schijven €1.418 / €1.523 / €1.681 / €1.838.</li>
+</ul>
+
+<h3>Indexatie loongroei</h3>
+<p>De automatische loonindexering blijft de drijfveer van wijzigingen: PC 200 +2,21% per 1/1/2026, PC 124 (bouw) eigen mechanisme, PC 302 (horeca) per 1/4 en 1/10. <span class="badge feit">Feit</span></p>
+
+<h2>7. M&amp;A en consolidatie</h2>
+<ul>
+  <li><strong>SD Worx</strong>: opeenvolgende internationale acquisities (Aditro, Pointlogic, Centric HR &amp; Payroll, GroupSoft, Intelligo) — strategie: pan-Europese payroll-suite. <span class="badge feit">Feit</span></li>
+  <li><strong>ADP / Easypay / Partena</strong>: complexe integratiehistorie; Easypay's eBlox-platform diende als technische integratielaag voor het Belgische ADP-aanbod. <span class="badge onzekerheid">Onzekerheid</span> over exacte huidige verhoudingen.</li>
+  <li><strong>Officient</strong>: strategische funding rondes, partnerschappen met meerdere sociale secretariaten. <span class="badge feit">Feit</span></li>
+  <li><strong>Payflip</strong>: acquisitie-doelwit door SD Worx (mobiliteitsbudget capability). <span class="badge aanname">Aanname</span> op basis van persberichten.</li>
+</ul>
+
+<h2>8. Verdienmodellen</h2>
+<table>
+<thead><tr><th>Model</th><th>Bij wie</th><th>Indicatie</th></tr></thead>
+<tbody>
+<tr><td>Per loonstrook / per werknemer / per maand</td><td>Klassieke sociale secretariaten</td><td>€5–€25 per loonstrook afhankelijk van complexiteit en service-niveau. <span class="badge aanname">Aanname</span></td></tr>
+<tr><td>Subscription SaaS</td><td>HR-tech challengers (Officient, Payflip)</td><td>€3–€12 per werknemer per maand. <span class="badge aanname">Aanname</span></td></tr>
+<tr><td>Consultancy / interventie</td><td>Top 4</td><td>Per uur of forfait; sterk variabel.</td></tr>
+<tr><td>Ondernemingsloket / juridisch advies / DPO</td><td>Top 4 + Securex</td><td>Cross-sell met loonadministratie.</td></tr>
+<tr><td>Verzekering / pensioen / IPT</td><td>Securex, Acerta, SD Worx</td><td>Distributie van financiële producten op de loonbrief.</td></tr>
+</tbody>
+</table>
+
+<h2>9. Marktopportuniteit — "Stripe voor Belgische payroll"</h2>
+<div class="callout">
+  <p><strong>Hypothese:</strong> Er is ruimte voor een API-first, ontwikkelaarsvriendelijke Belgische payroll engine die zich richt op (a) HR-tech bouwers die geen ESS willen worden, (b) accountants die zelf willen aanleveren, en (c) middelgrote ondernemingen met eigen HR-systemen. <span class="badge hypothese">Hypothese</span></p>
+</div>
+<h4>Waarom dit gat plausibel is</h4>
+<ul>
+  <li>De huidige top-4 oplossingen zijn UI-first, niet API-first. Integratie via SFTP, batch, of "klantportaal" overheerst. <span class="badge aanname">Aanname</span></li>
+  <li>Officient is dichtbij maar fungeert vooral als HR-laag, niet als loonmotor-as-a-service.</li>
+  <li>De vergunningsdrempel ligt vooral bij <em>aangiften namens werkgever</em>; berekening + aangifte voor eigen werkgever vereist géén ESS-erkenning. <span class="badge feit">Feit</span></li>
+</ul>
+
+<h4>Waarom dit gat lastig blijft</h4>
+<ul>
+  <li>Onderhoud van 80+ parameters + 164 PC's + sectorale CAO's vergt een payroll-juristen-team. <span class="badge feit">Feit</span></li>
+  <li>Compliance is een aanlooptijd: een loonmotor verdient pas geld na 12–24 maanden ontwikkeling.</li>
+  <li>Klanten zijn risico-avers: switching cost van een bestaand sociaal secretariaat is hoog (historiek, contracten, beslagdossiers). <span class="badge aanname">Aanname</span></li>
+</ul>
+
+<h2>10. Doelgroep-segmentatie voor een nieuwe loonmotor</h2>
+<table>
+<thead><tr><th>Segment</th><th>Pijn</th><th>Bereidheid om te switchen</th></tr></thead>
+<tbody>
+<tr><td>Single-employer (eigen gebruik, &lt; 50 wn)</td><td>Hoge service-fee voor weinig waarde, slechte UX</td><td>Laag — switching is duur. <span class="badge hypothese">Hypothese</span></td></tr>
+<tr><td>Family office / holding (50–500 wn over meerdere entiteiten)</td><td>Versnipperde data, gebrek aan consolidatie</td><td>Medium — overzichtsvoordeel is groot.</td></tr>
+<tr><td>HR-tech / SaaS-bouwer</td><td>Payroll-integratie ontbreekt, ESS partnership traag</td><td>Hoog — als API werkt.</td></tr>
+<tr><td>Accountantskantoor</td><td>Wil zelf doen voor cliënteel, maar te complex</td><td>Medium — afhankelijk van automation.</td></tr>
+<tr><td>Mid-market (500–5.000 wn)</td><td>Top-4 software verouderd, custom rapportering lastig</td><td>Laag op korte termijn, hoog op middellange.</td></tr>
+</tbody>
+</table>
+
+<h2>11. Conclusies marktonderzoek</h2>
+<ol>
+  <li>De markt is geconcentreerd: 4 spelers ~80% van de KMO-loonstroken. <span class="badge feit">Feit</span></li>
+  <li>Onderhoud van wetgevende parameters is de echte differentiator, niet de berekening.</li>
+  <li>Loontransparantie (EU 2023/970, juni 2026) en de De Wever-hervormingen creëren een venster voor nieuwe instappers met moderne reporting. <span class="badge hypothese">Hypothese</span></li>
+  <li>Een eigen loonmotor is strategisch zinvol voor partijen die <em>al</em> loonadministratie doen voor meerdere entiteiten (family office, accountantskantoor, holding).</li>
+</ol>
+
+<p class="meta">Zie <a href="concurrentiematrix.html">concurrentiematrix</a> voor de gedetailleerde vergelijking per speler.</p>
+</main>
+
+<footer>Loonmotor BE — Onderzoeksdossier · <a href="index.html">Terug naar overzicht</a></footer>
+</body>
+</html>

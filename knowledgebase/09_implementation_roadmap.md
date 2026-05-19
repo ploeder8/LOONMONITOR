@@ -32,18 +32,18 @@
 | 1.10 | **`06_werkgeverskost_specificatie.md`** | ✅ |
 | 1.11 | **`07_werkgeverskost_datapunten.md`** | ✅ |
 
-**Eindstand Golf 1:** alle kennisproducten klaar voor handover aan ontwikkelaarsteam. Validatie tegen FOD Fin Tax-Calc XLSX (cross-check 30 cases) is **niet** uitgevoerd in Golf 1 — dit gebeurt in Golf 2.
+**Eindstand Golf 1:** alle kennisproducten klaar voor handover aan ontwikkelaarsteam. Validatie tegen FOD Financiën / Bijlage III voor de 30 cases is in Golf 2 ingevoerd.
 
 ---
 
 ## Golf 2 — Validatie & calibratie (4 weken)
 
-**Doel:** zekerheid dat de rekenmodule binnen ±€5/maand op alle 30 testcases overeenkomt met FOD Fin Tax-Calc.
+**Doel:** zekerheid dat de rekenmodule binnen ±€5/maand op alle 30 testcases overeenkomt met de FOD Bijlage III-afleiding.
 
-### 2.1 Tax-Calc-validatie
+### 2.1 FOD Bijlage III-validatie
 
-- Download FOD Financiën **Tax-Calc XLSX simulator AJ 2027**.
-- Loop de 30 testcases handmatig of via `validate_corpus.py` (zie helper-script in repo).
+- Gebruik FOD Financiën **Regels 1 januari 2026** en **Sleutelformule vanaf 1 januari 2026** als primaire bron.
+- Loop de 30 testcases via `validate_bijlage_iii_corpus.py` (zie helper-script in repo).
 - Voor elke afwijking > €5: identificeer welke component (RSZ, BV, werkbonus, BBSZ).
 - Pas `calc_brutonetto_2026.py` aan; her-genereer corpus.
 - Iteratief tot ≤ €5 marge.
@@ -55,7 +55,7 @@ De geannualiseerde benadering vervangen door de exacte sleutelformule uit Bijlag
 - Aparte tarieven voor wedde / uitkering / vakantiegeld / eindejaarspremie.
 - Forfaitaire BV-vermindering per gezinslast.
 
-**Status 12/05/2026:** TypeScript gebruikt een lokale `bijlage_iii_sleutelformule_2026` met expliciete `pending_taxcalc` status en Group S-anker. FOD Tax-Calc-validatie moet nog worden ingevoerd.
+**Status 12/05/2026, afgerond 19/05/2026:** TypeScript gebruikt een lokale `bijlage_iii_sleutelformule_2026` met `fod_bijlage_iii_ok` status en FOD Financiën / Bijlage III als primaire bron. Sociale-secretariaat-tools blijven beperkt tot Tier-2 triangulatie.
 
 ### 2.3 Triangulatie sociale-secretariaat-output
 
@@ -174,7 +174,7 @@ Elke historische berekening moet **reproduceerbaar** blijven met de dataset zoal
 |---|--------|---------------------|--------|-----------|
 | R-01 | PB-hervormingswet wordt definitief gestemd vóór productiestart → schalen/vrije som veranderen | Hoog | Hoog | Pending-flag-systeem; beide scenario's modelleren |
 | R-02 | Fiscale werkbonus 35/63 in werking | Midden | Midden | Feature-flag, snelle activering |
-| R-03 | Tax-Calc-validatie levert structurele afwijking > €15/m op meerdere cases | Midden | Hoog | Sleutelformule Bijlage III directe implementatie (Golf 2.2) |
+| R-03 | FOD Bijlage III-validatie levert structurele afwijking > €5/m op meerdere cases | Midden | Hoog | Root-cause analyse in BV/RSZ/werkbonus/BBSZ en corpus hergenereren |
 | R-04 | Cao PC 200 onverwachte parameterwijziging (bv. eindejaarspremie-formule) | Laag | Midden | Sectoraal alert; sectorspecialist als tweede review |
 | R-05 | Browser-only beperkt schaalbaarheid bij grote organisaties | Hoog | Laag (Golf 1-3) → Hoog (Golf 4) | Backend-migratie in Golf 4 |
 | R-06 | Bron-divergenties (BBSZ, werkbonus-cutoffs) blijven onopgelost | Laag | Laag | Triangulatie in Golf 2.3 |
@@ -185,7 +185,7 @@ Elke historische berekening moet **reproduceerbaar** blijven met de dataset zoal
 
 Een release wordt pas naar productie gepubliceerd als:
 
-1. ✅ Alle 30 testcases binnen ±€5/m van Tax-Calc.
+1. ✅ Alle 30 testcases binnen ±€5/m van FOD Bijlage III-corpusvalidatie.
 2. ✅ Alle Datapunten hebben `betrouwbaarheid ≥ 0.8` of zijn expliciet als `pending` gemarkeerd in de UI.
 3. ✅ Geen Tier 3-bron als enige onderbouwing voor een Datapunt met `impact = hoog`.
 4. ✅ Audit-trail werkt voor elke berekening (drawer toont bron-URL).

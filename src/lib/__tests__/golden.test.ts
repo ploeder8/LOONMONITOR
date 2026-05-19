@@ -16,7 +16,9 @@ import { fietsvergoeding } from "@/lib/fietsvergoeding";
 import { woonwerkTrein } from "@/lib/woonwerkTrein";
 import { berekenWoonwerkVerkeer } from "@/lib/woonwerkVerkeer";
 import { vaaBedrijfswagen } from "@/lib/vaaBedrijfswagen";
+import { vaaForfaitsWerkmiddelen } from "@/lib/vaaForfaits";
 import { jaarlijksePremie2026 } from "@/lib/jaarpremie";
+import { berekenJaaroverzicht } from "@/lib/jaaroverzicht";
 import { getDatapunt } from "@/lib/dataset";
 import { safeGetValue } from "@/lib/periode";
 import { werkgeverskost } from "@/lib/werkgeverskost";
@@ -166,6 +168,18 @@ describe("TC-11 — Jaarlijkse premie 2026", () => {
     expect(r.bedrag).toBe(330.84);
     expect(r.datapunt.bron_url).toContain("sfonds200.be");
   });
+
+  it("rekent op de sectorale jaarpremie alleen werknemers-RSZ en geen bedrijfsvoorheffing", () => {
+    const r = jaarlijksePremie2026({
+      refDatum: REF_2026,
+      brutomaandloon: 4500,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+    });
+
+    expect(r.bvBijzonder).toBeUndefined();
+    expect(r.nettoBedrag).toBe(287.6);
+  });
 });
 
 describe("TC-12 — Eindejaarspremie pro-rata", () => {
@@ -285,7 +299,7 @@ describe("TC-16b — Woon-werk verkeer via PC200-tabellen", () => {
     expect(r.datapunten.map((dp) => dp.id)).toContain("pc200_woonwerk_trein_tabel_2026");
   });
 
-  it("privéwagen 15 km onder loonplafond → €46,00", () => {
+  it("privéwagen 15 km onder loonplafond → maandbedrag pro rata via 21,67 werkdagen", () => {
     const r = berekenWoonwerkVerkeer({
       refDatum: REF_2026,
       brutoloon: 3000,
@@ -297,8 +311,44 @@ describe("TC-16b — Woon-werk verkeer via PC200-tabellen", () => {
       privewagen: { actief: true, kmEnkel: 15 },
     });
 
-    expect(r.componenten.privewagen?.vergoeding).toBe(46);
-    expect(r.totaalVergoeding).toBe(46);
+    expect(r.componenten.privewagen?.basisMaandbedrag).toBe(46);
+    expect(r.componenten.privewagen?.vergoeding).toBe(46.7);
+    expect(r.totaalVergoeding).toBe(46.7);
+  });
+
+  it("privéwagen 3 km gebruikt €23,75 maandbedrag pro rata via 21,67 werkdagen", () => {
+    const r = berekenWoonwerkVerkeer({
+      refDatum: REF_2026,
+      brutoloon: 3000,
+      arbeidsdagenPerMaand: 10,
+      werkdagenInMaand: 22,
+      fiets: { actief: false, kmPerDag: 0 },
+      trein: { actief: false, kmEnkel: 0 },
+      busTramMetro: { actief: false, kmEnkel: 0, prijsPerMaand: 0 },
+      privewagen: { actief: true, kmEnkel: 3 },
+    });
+
+    expect(r.componenten.privewagen?.basisMaandbedrag).toBe(23.75);
+    expect(r.componenten.privewagen?.vergoeding).toBe(10.96);
+    expect(r.totaalVergoeding).toBe(10.96);
+  });
+
+  it("privéwagen 3 km en trein 15 km tellen samen als aparte trajectdelen", () => {
+    const r = berekenWoonwerkVerkeer({
+      refDatum: REF_2026,
+      brutoloon: 3000,
+      arbeidsdagenPerMaand: 10,
+      werkdagenInMaand: 22,
+      fiets: { actief: false, kmPerDag: 0 },
+      trein: { actief: true, kmEnkel: 15 },
+      busTramMetro: { actief: false, kmEnkel: 0, prijsPerMaand: 0 },
+      privewagen: { actief: true, kmEnkel: 3 },
+    });
+
+    expect(r.componenten.trein?.vergoeding).toBe(41.82);
+    expect(r.componenten.privewagen?.vergoeding).toBe(10.96);
+    expect(r.totaalVergoeding).toBe(52.78);
+    expect(r.waarschuwingen).toEqual([]);
   });
 
   it("privéwagen boven jaarloonplafond → €0 + waarschuwing", () => {
@@ -331,6 +381,24 @@ describe("TC-16b — Woon-werk verkeer via PC200-tabellen", () => {
 
     expect(r.componenten.busTramMetro?.vergoeding).toBe(45);
     expect(r.componenten.busTramMetro?.basisMaandbedrag).toBe(52);
+  });
+
+  it("fiets en privéwagen blijven niet combineerbaar", () => {
+    const r = berekenWoonwerkVerkeer({
+      refDatum: REF_2026,
+      brutoloon: 3000,
+      arbeidsdagenPerMaand: 10,
+      werkdagenInMaand: 22,
+      fiets: { actief: true, kmPerDag: 8 },
+      trein: { actief: false, kmEnkel: 0 },
+      busTramMetro: { actief: false, kmEnkel: 0, prijsPerMaand: 0 },
+      privewagen: { actief: true, kmEnkel: 3 },
+    });
+
+    expect(r.componenten.fiets?.vergoeding).toBe(21.6);
+    expect(r.componenten.privewagen?.vergoeding).toBe(0);
+    expect(r.totaalVergoeding).toBe(21.6);
+    expect(r.waarschuwingen.join(" ")).toContain("niet combineerbaar met fiets");
   });
 
   it("past maandtabellen pro rata toe op effectieve pendeldagen", () => {
@@ -492,13 +560,13 @@ describe("TC-21 — Werkbonus: hoog loon buiten bereik (SSOT factoren)", () => {
 
 describe("TC-22 — BBSZ: schijven", () => {
   it("brutoloon € 1.900 (< € 1.945,38) geeft kwartaalbijdrage € 0", () => {
-    const r = bbsz({ brutoloon: 1900 });
+    const r = bbsz({ brutoloon: 1900, gezinstype: "alleenstaand" });
     expect(r.kwartaalbijdrage).toBe(0);
     expect(r.maandelijksBedrag).toBe(0);
   });
 
   it("brutoloon € 2.242,81 (schijf 3) geeft correcte kwartaalbijdrage", () => {
-    const r = bbsz({ brutoloon: 2242.81 });
+    const r = bbsz({ brutoloon: 2242.81, gezinstype: "alleenstaand" });
     // qLoon = 3 × 2242.81 = 6728.43 → schijf 3 (6570.54–11211)
     // kw = 30.99 + 0.011 × (2242.81 − 2190.18) = 30.99 + 0.011 × 52.63 = 30.99 + 0.58 = 31.57
     expect(r.kwartaalbijdrage).toBe(31.57);
@@ -506,9 +574,92 @@ describe("TC-22 — BBSZ: schijven", () => {
   });
 
   it("brutoloon > € 6.038,82 geeft maximum € 182,82 per kwartaal", () => {
-    const r = bbsz({ brutoloon: 7000 });
+    const r = bbsz({ brutoloon: 7000, gezinstype: "alleenstaand" });
     expect(r.kwartaalbijdrage).toBe(182.82);
     expect(r.maandelijksBedrag).toBe(60.94);
+  });
+
+  it("berekent BBSZ voor individuele aanslag rond alle kwartaalschijven", () => {
+    const cases = [
+      [1945.37, 0],
+      [1945.38, 0],
+      [2190.18, 10.33],
+      [3737, 48.01],
+      [4100, 94.32],
+      [6038.82, 140.16],
+      [6038.83, 182.82],
+    ] as const;
+
+    for (const [brutoloon, kwartaalbijdrage] of cases) {
+      expect(
+        bbsz({ brutoloon, gezinstype: "alleenstaand" }).kwartaalbijdrage,
+      ).toBe(kwartaalbijdrage);
+    }
+  });
+
+  it("berekent BBSZ voor gemeenschappelijke aanslag met partner met beroepsinkomsten", () => {
+    const cases = [
+      [1095.09, 0],
+      [1095.10, 15.45],
+      [1945.38, 15.45],
+      [2190.18, 15.45],
+      [3737, 60.34],
+      [6038.82, 85.66],
+      [12000, 151.23],
+      [25000, 154.92],
+    ] as const;
+
+    for (const [brutoloon, kwartaalbijdrage] of cases) {
+      expect(
+        bbsz({
+          brutoloon,
+          gezinstype: "gehuwd_met_inkomen",
+        }).kwartaalbijdrage,
+      ).toBe(kwartaalbijdrage);
+    }
+  });
+
+  it("berekent BBSZ voor gemeenschappelijke aanslag met partner zonder beroepsinkomsten", () => {
+    const cases = [
+      [1945.37, 0],
+      [1945.38, 0],
+      [2190.18, 14.44],
+      [3737, 60.34],
+      [6038.82, 85.66],
+      [12000, 151.23],
+      [25000, 182.82],
+    ] as const;
+
+    for (const [brutoloon, kwartaalbijdrage] of cases) {
+      expect(
+        bbsz({
+          brutoloon,
+          gezinstype: "gehuwd_zonder_inkomen",
+        }).kwartaalbijdrage,
+      ).toBe(kwartaalbijdrage);
+    }
+  });
+
+  it("maandbedrag volgt maandformule (niet kwartaal/3) — gebruikersmelding €2.658 partner zonder inkomen", () => {
+    const r = bbsz({ brutoloon: 2658, gezinstype: "gehuwd_zonder_inkomen" });
+    // Kwartaal = 43,32 + 0,011 × (2658 − 2190,18) = 48,47 (correct)
+    expect(r.kwartaalbijdrage).toBe(48.47);
+    // Maand = 43,32/3 + 0,011 × (2658 − 2190,18) = 14,44 + 5,15 = 19,59
+    // Niet: 48,47 / 3 = 16,16
+    expect(r.maandelijksBedrag).toBe(19.59);
+  });
+
+  it("maandbedrag individuele aanslag schijf 3 — 10,33 + 1,10% (niet 30,99/3 + 1,10%/3)", () => {
+    const r = bbsz({ brutoloon: 2242.81, gezinstype: "alleenstaand" });
+    expect(r.kwartaalbijdrage).toBe(31.57);
+    // Maand = 10,33 + 0,011 × (2242,81 − 2190,18) = 10,33 + 0,58 = 10,91
+    expect(r.maandelijksBedrag).toBe(10.91);
+  });
+
+  it("maandbedrag partner met inkomen — maximum 51,64/maand", () => {
+    const r = bbsz({ brutoloon: 25000, gezinstype: "gehuwd_met_inkomen" });
+    expect(r.kwartaalbijdrage).toBe(154.92);
+    expect(r.maandelijksBedrag).toBe(51.64);
   });
 });
 
@@ -529,16 +680,21 @@ describe("TC-23 — BV: alleenstaand, 0 kinderen (AJ 2027)", () => {
     expect(r.pbNetto).toBe(1869);
     expect(r.methode).toBe("bijlage_iii_sleutelformule_2026");
     expect(r.schaal).toBe("I");
-    expect(r.bvPerMaand).toBeGreaterThan(155.75);
+    expect(r.bvPerMaand).toBe(155.75);
     expect(r.bvNaVerminderingen).toBe(r.bvPerMaand); // geen verminderingen
+    expect("verminderingKindOnder3" in r).toBe(false);
     expect(r.isApproximatie).toBe(false);
-    expect(r.validatieStatus).toBe("pending_taxcalc");
+    expect(r.validatieStatus).toBe("fod_bijlage_iii_ok");
+    expect(r.validatieOpmerking).toContain("FOD Financiën");
+    expect(r.validatieOpmerking).toContain("Bijlage III 2026");
+    expect(r.validatieOpmerking).not.toContain("pending");
+    expect(r.validatieOpmerking).not.toContain("Group S");
     expect(r.datapunten.length).toBeGreaterThanOrEqual(2);
   });
 });
 
-describe("TC-23b — BV: Group S triangulatie-anker", () => {
-  it("benadert de Group S Salary Sim-case voor Schaal I Cat A 5j", () => {
+describe("TC-23b — BV: Tier-2 triangulatie", () => {
+  it("houdt sociale-secretariaatoutput buiten de officiële validatiestatus", () => {
     const r = berekenNetto({
       brutoloon: 2276.51,
       refDatum: REF_2026,
@@ -547,7 +703,8 @@ describe("TC-23b — BV: Group S triangulatie-anker", () => {
     });
 
     expect(r.belastbaarMaandloon).toBe(2266.96);
-    expect(r.bv.bvNaVerminderingen).toBeCloseTo(154.22, 1);
+    expect(r.bv.validatieStatus).toBe("fod_bijlage_iii_ok");
+    expect(r.bv.validatieOpmerking).not.toContain("Group S");
   });
 });
 
@@ -563,6 +720,25 @@ describe("TC-24 — BV: gehuwd zonder inkomen, 2 kinderen (AJ 2027 maandtabel)",
     expect(r.pbNetto).toBeGreaterThanOrEqual(0);
     expect(r.bvPerMaand).toBeGreaterThanOrEqual(0);
     expect(r.bvNaVerminderingen).toBeLessThanOrEqual(r.bvPerMaand);
+  });
+
+  it("partner zonder of beperkt beroepsinkomen verlaagt de bedrijfsvoorheffing via Schaal II", () => {
+    const tweeverdiener = berekenBV({
+      belastbaarMaandloon: 3000,
+      gezinstype: "gehuwd_met_inkomen",
+      kinderenTenLaste: 0,
+    });
+    const partnerZonderOfBeperktInkomen = berekenBV({
+      belastbaarMaandloon: 3000,
+      gezinstype: "gehuwd_zonder_inkomen",
+      kinderenTenLaste: 0,
+    });
+
+    expect(tweeverdiener.schaal).toBe("I");
+    expect(partnerZonderOfBeperktInkomen.schaal).toBe("II");
+    expect(partnerZonderOfBeperktInkomen.bvNaVerminderingen).toBeLessThan(
+      tweeverdiener.bvNaVerminderingen,
+    );
   });
 });
 
@@ -585,7 +761,7 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
     // BBSZ datapunt aanwezig
     expect(r.bbsz.datapunt.id).toBe("bv_bbsz_schijven_2026");
     expect(r.bv.methode).toBe("bijlage_iii_sleutelformule_2026");
-    expect(r.bv.validatieStatus).toBe("pending_taxcalc");
+    expect(r.bv.validatieStatus).toBe("fod_bijlage_iii_ok");
   });
 
   it("audit: alle datapunten in netto-resultaat hebben bron_url", () => {
@@ -618,7 +794,7 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
       maaltijdchequeWerkdagen: 20,
     });
     expect(metMaaltijdcheques.maaltijdchequeWerknemersbijdrage).toBe(21.8);
-    expect(metMaaltijdcheques.nettoloon).toBe(basis.nettoloon - 21.8);
+    expect(metMaaltijdcheques.nettoloon).toBeCloseTo(basis.nettoloon - 21.8, 2);
     expect(metMaaltijdcheques.belastbaarMaandloon).toBe(basis.belastbaarMaandloon);
   });
 
@@ -651,6 +827,66 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
     expect(metWoonwerk.belastbaarMaandloon).toBe(basis.belastbaarMaandloon);
     expect(metWoonwerk.bv.bvNaVerminderingen).toBe(basis.bv.bvNaVerminderingen);
     expect(metWoonwerk.nettoloon).toBe(basis.nettoloon + 100);
+  });
+
+  it("telt privéwagenvergoeding 3 km mee in het cash-nettoloon", () => {
+    const woonwerk = berekenWoonwerkVerkeer({
+      refDatum: REF_2026,
+      brutoloon: 3000,
+      arbeidsdagenPerMaand: 10,
+      werkdagenInMaand: 22,
+      fiets: { actief: false, kmPerDag: 0 },
+      trein: { actief: false, kmEnkel: 0 },
+      busTramMetro: { actief: false, kmEnkel: 0, prijsPerMaand: 0 },
+      privewagen: { actief: true, kmEnkel: 3 },
+    });
+    const basis = berekenNetto({
+      brutoloon: 3000,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+    });
+    const metPrivewagen = berekenNetto({
+      brutoloon: 3000,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+      woonwerkVrijgesteldPerMaand: woonwerk.totaalVergoeding,
+    });
+
+    expect(woonwerk.totaalVergoeding).toBe(10.96);
+    expect(metPrivewagen.woonwerkVrijgesteldPerMaand).toBe(10.96);
+    expect(metPrivewagen.nettoloon).toBe(basis.nettoloon + 10.96);
+  });
+
+  it("telt privéwagen 3 km en trein samen mee in het cash-nettoloon", () => {
+    const woonwerk = berekenWoonwerkVerkeer({
+      refDatum: REF_2026,
+      brutoloon: 3000,
+      arbeidsdagenPerMaand: 10,
+      werkdagenInMaand: 22,
+      fiets: { actief: false, kmPerDag: 0 },
+      trein: { actief: true, kmEnkel: 15 },
+      busTramMetro: { actief: false, kmEnkel: 0, prijsPerMaand: 0 },
+      privewagen: { actief: true, kmEnkel: 3 },
+    });
+    const basis = berekenNetto({
+      brutoloon: 3000,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+    });
+    const metMultimodaalWoonwerk = berekenNetto({
+      brutoloon: 3000,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+      woonwerkVrijgesteldPerMaand: woonwerk.totaalVergoeding,
+    });
+
+    expect(woonwerk.totaalVergoeding).toBe(52.78);
+    expect(metMultimodaalWoonwerk.woonwerkVrijgesteldPerMaand).toBe(52.78);
+    expect(metMultimodaalWoonwerk.nettoloon).toBeCloseTo(basis.nettoloon + 52.78, 2);
   });
 
   it("past bijkomende netto-looncomponenten toe zonder RSZ/BV-basis te wijzigen", () => {
@@ -697,11 +933,56 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
     expect(metVaa.bv.bvNaVerminderingen).toBeGreaterThan(basis.bv.bvNaVerminderingen);
     expect(metVaa.nettoloon).toBeLessThan(basis.nettoloon);
   });
+
+  it("berekent forfaitaire VAA voor werkmiddelen op maandbasis", () => {
+    const r = vaaForfaitsWerkmiddelen({
+      pcLaptopActief: true,
+      gsmSmartphoneActief: true,
+      internetActief: true,
+      gsmAbonnementActief: true,
+      refDatum: REF_2026,
+    });
+
+    expect(r.pcLaptopPerMaand).toBe(6);
+    expect(r.gsmSmartphonePerMaand).toBe(3);
+    expect(r.internetPerMaand).toBe(5);
+    expect(r.gsmAbonnementPerMaand).toBe(4);
+    expect(r.totaalPerMaand).toBe(18);
+    expect(r.datapunten.map((dp) => dp.id)).toEqual([
+      "vaa_pc_laptop_forfait_2026",
+      "vaa_gsm_smartphone_forfait_2026",
+      "vaa_internet_forfait_2026",
+      "vaa_gsmabonnement_forfait_2026",
+    ]);
+  });
+
+  it("telt RSZ-plichtige VAA mee voor RSZ en BV maar neemt die cash terug", () => {
+    const basis = berekenNetto({
+      brutoloon: 4000,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+    });
+    const metWerkmiddelen = berekenNetto({
+      brutoloon: 4000,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+      vaaRszPlichtigPerMaand: 18,
+    });
+
+    expect(metWerkmiddelen.brutoRszBasis).toBe(4018);
+    expect(metWerkmiddelen.vaaRszPlichtigPerMaand).toBe(18);
+    expect(metWerkmiddelen.rsz.werknemerBijdrage).toBeGreaterThan(basis.rsz.werknemerBijdrage);
+    expect(metWerkmiddelen.belastbaarMaandloon).toBeGreaterThan(basis.belastbaarMaandloon);
+    expect(metWerkmiddelen.bv.bvNaVerminderingen).toBeGreaterThan(basis.bv.bvNaVerminderingen);
+    expect(metWerkmiddelen.nettoloon).toBeLessThan(basis.nettoloon);
+  });
 });
 
 // ─── NTC-01..NTC-15 — Netto-spec testcases ──────────────────────────────────
 // SSOT: knowledgebase/04_calculator_netto.md §9 + knowledgebase/07_testcorpus.md
-// PENDING: validate against FOD Fin Tax-Calc (AJ 2027). Tolerantie €0.50.
+// FOD Bijlage III-validatie (AJ 2027). Tolerantie €0.50.
 // Bijzondere BV (NTC-14, NTC-15) gebruikt bvBijzonder.ts.
 
 import { berekenBvBijzonder } from "@/lib/bvBijzonder";
@@ -719,7 +1000,7 @@ describe("NTC-01 — Schaal I Cat A 5j, alleenstaand, 0 kind", () => {
     expect(r.nettoloon).toBeGreaterThan(0);
     expect(r.nettoloon).toBeLessThan(r.brutoloon);
     // KB-spec gaf ≈€1.890; AJ 2027 + fiscale werkbonus geeft ~€2.121.
-    // Brede bounds tot FOD Tax-Calc-validatie het exacte cijfer pinpoint.
+    // Brede bounds voor jaarlijkse componenten; BV volgt FOD Bijlage III-validatie.
     expect(r.nettoloon).toBeGreaterThan(1700);
     expect(r.nettoloon).toBeLessThan(2200);
   });
@@ -822,7 +1103,20 @@ describe("NTC-13 — Werkbonus-edge: bruto €2.880,32 (Luik A grens, B nul)", (
 });
 
 describe("NTC-14 — Eindejaarspremie 1 maandloon — bijzondere BV", () => {
-  it("Bijzondere BV op €3.000 premie (refertejaar €36.000) → tarief 34,33%", () => {
+  it("bepaalt het tarief op het normale brutojaarloon na werknemers-RSZ", () => {
+    const r = eindejaarspremie({
+      brutoloon: 2658,
+      ancienniteitMaanden: 36,
+      prestatieMaandenInRefertepériode: 12,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+    });
+
+    expect(r.bvBijzonder?.refertejaarloon).toBe(27727.19);
+    expect(r.bvBijzonder?.tarief).toBe(0.4038);
+  });
+
+  it("Bijzondere BV op €3.000 premie gebruikt de kolom andere exceptionele vergoedingen", () => {
     const r = eindejaarspremie({
       brutoloon: 3000,
       ancienniteitMaanden: 36,
@@ -832,27 +1126,59 @@ describe("NTC-14 — Eindejaarspremie 1 maandloon — bijzondere BV", () => {
     });
     expect(r.premie).toBe(3000);
     expect(r.bvBijzonder).toBeDefined();
-    // refertejaarloon = 12 × 3000 = 36000 → schijf <36.180: tarief 34,33%
-    // 3000 × 0.3433 = 1029.90
-    expect(r.bvBijzonder?.tarief).toBeCloseTo(0.3433, 4);
-    expect(r.bvBijzonder?.bvBruto).toBeCloseTo(1029.9, 1);
-    expect(r.nettoPremie).toBeCloseTo(3000 - 1029.9, 1);
+    // refertejaarloon = 12 × 3000 min 13,07% RSZ = 31294,80 → tarief 40,38%
+    expect(r.bvBijzonder?.tarief).toBeCloseTo(0.4038, 4);
+    expect(r.bvBijzonder?.bvBruto).toBeCloseTo(1053.07, 1);
+    expect(r.nettoPremie).toBeCloseTo(1554.83, 1);
   });
 });
 
 describe("NTC-15 — Dubbel vakantiegeld 92% — bijzondere BV", () => {
-  it("Bijzondere BV op €2.760 premie (92% × €3.000)", () => {
-    const refertejaar = 3000 * 12;
-    const premie = 0.92 * 3000;
+  it("Bijzondere BV op €2.760 vakantiegeld gebruikt de vakantiegeldkolom", () => {
     const r = berekenBvBijzonder({
-      refertejaarloon: refertejaar,
-      exceptioneelBruto: premie,
+      refertejaarloon: 31294.8,
+      exceptioneelBruto: 2426.71,
       gezinstype: "alleenstaand",
       kinderenTenLaste: 0,
+      soort: "vakantiegeld",
     });
-    expect(r.tarief).toBeCloseTo(0.3433, 4);
-    expect(r.bvBruto).toBeCloseTo(947.51, 1); // 2760 × 0.3433 = 947.508
-    expect(r.nettoBedrag).toBeCloseTo(premie - 947.51, 1);
+    expect(r.tarief).toBeCloseTo(0.3634, 4);
+    expect(r.bvBruto).toBeCloseTo(881.87, 1);
+    expect(r.nettoBedrag).toBeCloseTo(1544.84, 1);
+  });
+});
+
+describe("Jaaroverzicht — netto en werkgeverskost", () => {
+  it("berekent de jaarcomponenten voor €4.500 bruto volgens het voorbeeld jaaroverzicht", () => {
+    const r = berekenJaaroverzicht({
+      brutoloon: 4500,
+      nettoloonPerMaand: 2500,
+      loonkostWerkgeverPerMaand: 5648.85,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+      ancienniteitMaanden: 36,
+      prestatieMaandenInRefertepériode: 12,
+      tewerkstellingsbreuk: 1,
+    });
+
+    expect(r.netto.dubbelVakantiegeld.bruto).toBe(4140);
+    expect(r.netto.dubbelVakantiegeld.rsz).toBe(499.93);
+    expect(r.netto.dubbelVakantiegeld.belastbaar).toBe(3640.07);
+    expect(r.netto.dubbelVakantiegeld.bv).toBe(1726.85);
+    expect(r.netto.dubbelVakantiegeld.netto).toBe(1913.22);
+    expect(r.netto.eindejaarspremie.bvTarief).toBe(0.5148);
+    expect(r.netto.jaarpremie.rsz).toBe(43.24);
+    expect(r.netto.jaarpremie.bv).toBe(0);
+    expect(r.netto.jaarpremie.bvTarief).toBe(0);
+    expect(r.netto.jaarpremie.netto).toBe(287.6);
+    expect(r.netto.totaalNettoJaarloon).toBe(34348.85);
+
+    expect(r.werkgever.maandbasisX12).toBe(67786.2);
+    expect(r.werkgever.jaarpremiesEnEcocheques).toBe(5080.84);
+    expect(r.werkgever.rszOpEindejaarspremieEnJaarpremie).toBe(1207.71);
+    expect(r.werkgever.dubbelVakantiegeld).toBe(4140);
+    expect(r.werkgever.totaleLoonkostJaar).toBe(78214.75);
   });
 });
 

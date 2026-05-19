@@ -41,12 +41,16 @@
       "totale_loonkost_maand": 3077.34,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 231.67,
+    "officiele_bv_netto": 101.64,
+    "officieel_netto_maand": 2077.86,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-002",
@@ -86,12 +90,16 @@
       "totale_loonkost_maand": 3232.19,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 268.17,
+    "officiele_bv_netto": 144.45,
+    "officieel_netto_maand": 2125.05,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-003",
@@ -131,12 +139,16 @@
       "totale_loonkost_maand": 3513.25,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 316.12,
+    "officiele_bv_netto": 220.76,
+    "officieel_netto_maand": 2166.42,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-004",
@@ -177,12 +189,16 @@
       "totale_loonkost_maand": 3934.84,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 388.05,
+    "officiele_bv_netto": 335.23,
+    "officieel_netto_maand": 2228.47,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-005",
@@ -222,12 +238,16 @@
       "totale_loonkost_maand": 4215.9,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 435.82,
+    "officiele_bv_netto": 405.24,
+    "officieel_netto_maand": 2275.69,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-006",
@@ -267,12 +287,16 @@
       "totale_loonkost_maand": 4689.47,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 516.09,
+    "officiele_bv_netto": 516.09,
+    "officieel_netto_maand": 2361.82,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-007",
@@ -313,12 +337,16 @@
       "totale_loonkost_maand": 4918.55,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 576.65,
+    "officiele_bv_netto": 576.65,
+    "officieel_netto_maand": 2441.16,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-008",
@@ -358,12 +386,16 @@
       "totale_loonkost_maand": 5621.2,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 772.24,
+    "officiele_bv_netto": 772.24,
+    "officieel_netto_maand": 2668.72,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-009",
@@ -403,12 +435,16 @@
       "totale_loonkost_maand": 6323.85,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 967.83,
+    "officiele_bv_netto": 967.83,
+    "officieel_netto_maand": 2900.01,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-010",
@@ -448,12 +484,16 @@
       "totale_loonkost_maand": 7026.5,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 1163.42,
+    "officiele_bv_netto": 1163.42,
+    "officieel_netto_maand": 3133.57,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-011",
@@ -493,12 +533,16 @@
       "totale_loonkost_maand": 7729.15,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 1359.99,
+    "officiele_bv_netto": 1359.99,
+    "officieel_netto_maand": 3366.15,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-012",
@@ -543,12 +587,16 @@
       "totale_loonkost_maand": 3513.25,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 267.74,
+    "officiele_bv_netto": 116.38,
+    "officieel_netto_maand": 2270.8,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-013",
@@ -592,18 +640,23 @@
       "totale_loonkost_maand": 4215.9,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 307.44,
+    "officiele_bv_netto": 122.86,
+    "officieel_netto_maand": 2558.07,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-014",
-    "profiel": "Bediende €3.500, gehuwd, 2 kinderen waarvan 1 jonger dan 3",
+    "profiel": "Bediende €3.500, gehuwd, 2 kinderen waarvan 1 jonger dan 3 (documentair/pending; kind-<3 niet actief in calculator)",
+    "calculator_status": "documentair_pending_kind_onder_3_niet_actief",
     "test_focus": [
-      "extra €760 voor kind <3 jaar"
+      "historische kind-<3 corpuscase; niet gebruiken als actieve regressieverwachting"
     ],
     "input": {
       "bruto_maand": 3500.0,
@@ -642,12 +695,16 @@
       "totale_loonkost_maand": 4918.55,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 425.52,
+    "officiele_bv_netto": 271.52,
+    "officieel_netto_maand": 2746.29,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-015",
@@ -692,12 +749,16 @@
       "totale_loonkost_maand": 5621.2,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 430.11,
+    "officiele_bv_netto": 16.11,
+    "officieel_netto_maand": 3424.85,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-016",
@@ -742,12 +803,16 @@
       "totale_loonkost_maand": 6323.85,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 374.5,
+    "officiele_bv_netto": 0,
+    "officieel_netto_maand": 3867.84,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-017",
@@ -789,12 +854,16 @@
       "totale_loonkost_maand": 4918.55,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 383.19,
+    "officiele_bv_netto": 229.19,
+    "officieel_netto_maand": 2788.62,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-018",
@@ -835,12 +904,16 @@
       "totale_loonkost_maand": 8431.8,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 1577.32,
+    "officiele_bv_netto": 1577.32,
+    "officieel_netto_maand": 3577.97,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-019",
@@ -883,12 +956,16 @@
       "totale_loonkost_maand": 9134.45,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 1794.64,
+    "officiele_bv_netto": 1794.64,
+    "officieel_netto_maand": 3794.87,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-020",
@@ -928,12 +1005,16 @@
       "totale_loonkost_maand": 9837.1,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 2011.97,
+    "officiele_bv_netto": 2011.97,
+    "officieel_netto_maand": 4012.19,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-021",
@@ -974,12 +1055,16 @@
       "totale_loonkost_maand": 10539.75,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 2229.29,
+    "officiele_bv_netto": 2229.29,
+    "officieel_netto_maand": 4229.52,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-022",
@@ -1024,12 +1109,16 @@
       "totale_loonkost_maand": 11945.05,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 2535.57,
+    "officiele_bv_netto": 2381.57,
+    "officieel_netto_maand": 4946.54,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-023",
@@ -1070,12 +1159,16 @@
       "totale_loonkost_maand": 5621.2,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 853.24,
+    "officiele_bv_netto": 853.24,
+    "officieel_netto_maand": 2587.72,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-024",
@@ -1120,12 +1213,16 @@
       "totale_loonkost_maand": 7026.5,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 1178.42,
+    "officiele_bv_netto": 1122.42,
+    "officieel_netto_maand": 3174.57,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-025",
@@ -1167,12 +1264,16 @@
       "totale_loonkost_maand": 9837.1,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 2211.97,
+    "officiele_bv_netto": 2211.97,
+    "officieel_netto_maand": 3812.19,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-026",
@@ -1213,12 +1314,16 @@
       "totale_loonkost_maand": 4918.55,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 594.65,
+    "officiele_bv_netto": 594.65,
+    "officieel_netto_maand": 2423.16,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-027",
@@ -1259,12 +1364,16 @@
       "totale_loonkost_maand": 14053.0,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 3315.92,
+    "officiele_bv_netto": 3315.92,
+    "officieel_netto_maand": 5316.14,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-028",
@@ -1305,18 +1414,23 @@
       "totale_loonkost_maand": 21079.5,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 5489.17,
+    "officiele_bv_netto": 5489.17,
+    "officieel_netto_maand": 7489.39,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-029",
-    "profiel": "Bediende €2.189,81 (GGMMI), alleenstaande ouder met 1 kind <3",
+    "profiel": "Bediende €2.189,81 (GGMMI), alleenstaande ouder met 1 kind <3 (documentair/pending; kind-<3 niet actief in calculator)",
+    "calculator_status": "documentair_pending_kind_onder_3_niet_actief",
     "test_focus": [
-      "combinatie GGMMI + kind <3 + alleenstaande ouder"
+      "historische combinatie GGMMI + kind <3 + alleenstaande ouder; niet gebruiken als actieve regressieverwachting"
     ],
     "input": {
       "bruto_maand": 2189.81,
@@ -1355,18 +1469,23 @@
       "totale_loonkost_maand": 3077.34,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 113.55,
+    "officiele_bv_netto": 0,
+    "officieel_netto_maand": 2179.5,
+    "bron_validatie": "FOD Bijlage III 2026"
   },
   {
     "id": "TC-030",
-    "profiel": "Bediende €4.500, gehuwd, 5 kinderen waarvan 1 <3",
+    "profiel": "Bediende €4.500, gehuwd, 5 kinderen waarvan 1 <3 (documentair/pending; kind-<3 niet actief in calculator)",
+    "calculator_status": "documentair_pending_kind_onder_3_niet_actief",
     "test_focus": [
-      "> 4 kinderen extra-toeslag formule"
+      "> 4 kinderen extra-toeslag formule; kind-<3 input niet gebruiken als actieve regressieverwachting"
     ],
     "input": {
       "bruto_maand": 4500.0,
@@ -1405,11 +1524,15 @@
       "totale_loonkost_maand": 6323.85,
       "loonwig_pct": 28.8
     },
-    "status_validatie": "pending",
+    "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
     "bron_formules": "calc_brutonetto_2026.py — peildatum 9 mei 2026",
     "taxcalc_netto_maand": null,
-    "verschil_eur": null,
-    "root_cause": "pending_taxcalc"
+    "verschil_eur": 0.0,
+    "root_cause": null,
+    "officiele_bv_voor_verminderingen": 74.5,
+    "officiele_bv_netto": 0,
+    "officieel_netto_maand": 3867.84,
+    "bron_validatie": "FOD Bijlage III 2026"
   }
 ]

@@ -53,6 +53,36 @@ export function App() {
               <NavItem to="/" label="Profiel" />
               <NavItem to="/testcases" label="Testcases" />
               <NavItem to="/scope" label="Scope & bekend manco" />
+              <a
+                href="/onderzoek/index.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  padding: "8px 14px",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: "var(--color-navy-500)",
+                  borderRadius: "var(--radius-md)",
+                  textDecoration: "none",
+                  fontFamily: "var(--font-body)",
+                  letterSpacing: 0,
+                  transition: "background 0.15s, color 0.15s",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "var(--color-primary-soft)";
+                  e.currentTarget.style.color = "var(--color-primary)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.color = "var(--color-navy-500)";
+                }}
+              >
+                Onderzoeksdossier
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
             </nav>
           </div>
         </header>

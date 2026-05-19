@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="nl-BE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Concurrentiematrix — Loonmotor BE</title>
+<style>
+:root{--bg:#fafbfc;--surface:#fff;--border:#e4e7eb;--text:#1a2332;--text-muted:#5a6779;--accent:#0b5394;--accent-light:#e8f0f9;--code-bg:#f5f7fa;--shadow:0 1px 3px rgba(0,0,0,.06)}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.6;color:var(--text);background:var(--bg)}
+header.topbar{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.topbar-inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-weight:700;font-size:17px;color:var(--accent);text-decoration:none}
+nav.topnav{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+nav.topnav a{font-size:13px;color:var(--text-muted);text-decoration:none;padding:6px 10px;border-radius:4px}
+nav.topnav a:hover{background:var(--accent-light);color:var(--accent)}
+nav.topnav a.active{background:var(--accent);color:#fff}
+main{max-width:1200px;margin:0 auto;padding:32px 24px 64px}
+h1{font-size:30px;margin:0 0 8px;font-weight:700}h2{font-size:22px;margin:32px 0 12px;font-weight:600;padding-bottom:6px;border-bottom:2px solid var(--accent-light)}
+h3{font-size:17px;margin:24px 0 8px;font-weight:600}h4{font-size:15px;margin:16px 0 6px;color:var(--accent);font-weight:600}
+p{margin:8px 0 12px}ul,ol{padding-left:22px}li{margin:4px 0}a{color:var(--accent)}a:hover{text-decoration:underline}
+code{font-family:"SF Mono",Monaco,Consolas,monospace;background:var(--code-bg);padding:1px 5px;border-radius:3px;font-size:13px}
+.subtitle{color:var(--text-muted);font-size:16px;margin:0 0 24px}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:14px;background:var(--surface);border-radius:6px;overflow:hidden;box-shadow:var(--shadow)}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:var(--accent-light);font-weight:600;font-size:13px}
+tr:last-child td{border-bottom:none}tr:hover{background:#f8fafc}
+table.compact th,table.compact td{padding:6px 10px;font-size:13px}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;margin:0 3px 2px 0;letter-spacing:.3px;text-transform:uppercase}
+.badge.feit{background:#d1fae5;color:#065f46}.badge.aanname{background:#fef3c7;color:#92400e}
+.badge.hypothese{background:#e0e7ff;color:#3730a3}.badge.onzekerheid{background:#fed7aa;color:#9a3412}
+.callout{border-left:4px solid var(--accent);background:var(--accent-light);padding:12px 16px;margin:14px 0;border-radius:0 4px 4px 0}
+.scope-in{background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+.scope-out{background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size:13px;color:var(--text-muted);text-align:center}
+.tag{display:inline-block;background:var(--accent-light);color:var(--accent);padding:2px 8px;border-radius:3px;font-size:12px;font-weight:500}
+.legend{font-size:13px;color:var(--text-muted);margin:8px 0 16px}
+.score-h{background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:3px;font-weight:600}
+.score-m{background:#fef3c7;color:#854d0e;padding:1px 6px;border-radius:3px;font-weight:600}
+.score-l{background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;font-weight:600}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+<a href="index.html" class="brand">Loonmotor BE</a>
+<nav class="topnav">
+<a href="index.html">Overzicht</a>
+<a href="marktonderzoek.html">Markt</a>
+<a href="concurrentiematrix.html" class="active">Concurrenten</a>
+<a href="werking-loonmotor.html">Werking</a>
+<a href="wetgevend-kader.html">Wetgeving</a>
+<a href="requirements.html">Requirements</a>
+<a href="datamodel.html">Datamodel</a>
+<a href="technische-architectuur.html">Architectuur</a>
+<a href="juridische-checklist.html">Juridisch</a>
+<a href="mvp-roadmap.html">Roadmap</a>
+<a href="risicoregister.html">Risico's</a>
+<a href="jaakie-specificatie.html">Jaakie</a>
+<a href="testcorpus.html">Testcorpus</a>
+<a href="referentie-tools.html">Referenties</a>
+<a href="bronnen.html">Bronnen</a>
+</nav></div></header>
+
+<main>
+<h1>Concurrentiematrix</h1>
+<p class="subtitle">Vergelijking van 14 spelers op de Belgische payroll-markt: erkende sociale secretariaten en HR-tech challengers.</p>
+
+<p class="legend">Scoring: <span class="score-h">Hoog</span> <span class="score-m">Medium</span> <span class="score-l">Laag/Beperkt</span> — kwalitatief op basis van publieke informatie. <span class="badge aanname">Aanname</span> voor alle scoringen tenzij anders aangegeven.</p>
+
+<h2>1. Hoofdmatrix — feature- en service-vergelijking</h2>
+<table class="compact">
+<thead><tr>
+<th>Speler</th><th>Type</th><th>ESS-erkenning</th><th>Doelgroep</th><th>API-first</th><th>Self-service UX</th><th>Internationaal</th><th>Cafetariaplan</th><th>HR breed</th>
+</tr></thead>
+<tbody>
+<tr><td><strong>SD Worx</strong></td><td>ESS + HR-tech</td><td><span class="score-h">Ja</span></td><td>KMO → Enterprise</td><td><span class="score-m">M</span></td><td><span class="score-m">M</span></td><td><span class="score-h">H</span></td><td><span class="score-h">H</span></td><td><span class="score-h">H</span></td></tr>
+<tr><td><strong>Acerta</strong></td><td>ESS coöperatief</td><td><span class="score-h">Ja</span></td><td>Zelfstandige + KMO</td><td><span class="score-m">M</span></td><td><span class="score-h">H</span></td><td><span class="score-l">L</span></td><td><span class="score-m">M</span></td><td><span class="score-h">H</span></td></tr>
+<tr><td><strong>Partena Pro</strong></td><td>ESS + ADP/Easypay-spoor</td><td><span class="score-h">Ja</span></td><td>KMO → Mid-market</td><td><span class="score-m">M</span></td><td><span class="score-m">M</span></td><td><span class="score-m">M</span></td><td><span class="score-m">M</span></td><td><span class="score-m">M</span></td></tr>
+<tr><td><strong>Liantis</strong></td><td>ESS</td><td><span class="score-h">Ja</span></td><td>Zelfstandige + KMO</td><td><span class="score-l">L</span></td><td><span class="score-m">M</span></td><td><span class="score-l">L</span></td><td><span class="score-l">L</span></td><td><span class="score-h">H</span></td></tr>
+<tr><td><strong>Securex</strong></td><td>ESS + welzijn</td><td><span class="score-h">Ja</span></td><td>KMO + welzijn-focus</td><td><span class="score-m">M</span></td><td><span class="score-m">M</span></td><td><span class="score-m">M</span></td><td><span class="score-m">M</span></td><td><span class="score-h">H</span></td></tr>
+<tr><td><strong>Group S</strong></td><td>ESS onafhankelijk</td><td><span class="score-h">Ja</span></td><td>KMO</td><td><span class="score-l">L</span></td><td><span class="score-m">M</span></td><td><span class="score-l">L</span></td><td><span class="score-l">L</span></td><td><span class="score-m">M</span></td></tr>
+<tr><td><strong>Attentia</strong></td><td>ESS + preventie</td><td><span class="score-h">Ja</span></td><td>KMO + preventie</td><td><span class="score-l">L</span></td><td><span class="score-m">M</span></td><td><span class="score-l">L</span></td><td><span class="score-l">L</span></td><td><span class="score-m">M</span></td></tr>
+<tr><td><strong>Easypay</strong></td><td>ESS / platform</td><td><span class="score-h">Ja</span></td><td>KMO</td><td><span class="score-m">M</span></td><td><span class="score-m">M</span></td><td><span class="score-m">M</span></td><td><span class="score-l">L</span></td><td><span class="score-m">M</span></td></tr>
+<tr><td><strong>UCM</strong></td><td>ESS Franstalig</td><td><span class="score-h">Ja</span></td><td>Zelfstandige + KMO FR</td><td><span class="score-l">L</span></td><td><span class="score-m">M</span></td><td><span class="score-l">L</span></td><td><span class="score-l">L</span></td><td><span class="score-m">M</span></td></tr>
+<tr><td><strong>Officient</strong></td><td>HR-tech SaaS</td><td><span class="score-l">Nee</span></td><td>KMO modern</td><td><span class="score-h">H</span></td><td><span class="score-h">H</span></td><td><span class="score-m">M</span></td><td><span class="score-m">M</span></td><td><span class="score-h">H</span></td></tr>
+<tr><td><strong>Payflip</strong></td><td>HR-tech SaaS (flex)</td><td><span class="score-l">Nee</span></td><td>Cafetaria + mobiliteit</td><td><span class="score-h">H</span></td><td><span class="score-h">H</span></td><td><span class="score-l">L</span></td><td><span class="score-h">H</span></td><td><span class="score-l">L</span></td></tr>
+<tr><td><strong>Protime</strong></td><td>Tijdsregistratie</td><td><span class="score-l">Nee</span></td><td>Productie + retail</td><td><span class="score-m">M</span></td><td><span class="score-h">H</span></td><td><span class="score-m">M</span></td><td><span class="score-l">L</span></td><td><span class="score-m">M</span></td></tr>
+<tr><td><strong>Prato</strong></td><td>Uitzendsoftware</td><td><span class="score-l">Nee</span></td><td>PC 322 uitzend</td><td><span class="score-m">M</span></td><td><span class="score-m">M</span></td><td><span class="score-l">L</span></td><td><span class="score-l">L</span></td><td><span class="score-l">L</span></td></tr>
+<tr><td><strong>Jaakie</strong></td><td>PC 200 calculator + audit-trail</td><td><span class="score-l">Nee</span></td><td>Payroll-experten PC 200</td><td><span class="score-l">L</span></td><td><span class="score-h">H</span></td><td><span class="score-l">L</span></td><td><span class="score-l">L</span></td><td><span class="score-l">L</span></td></tr>
+</tbody>
+</table>
+
+<h2>2. SWOT per kerncategorie</h2>
+
+<h3>Erkende sociale secretariaten (top 4)</h3>
+<table>
+<thead><tr><th>Sterktes</th><th>Zwaktes</th></tr></thead>
+<tbody>
+<tr>
+  <td><ul><li>RSZ-erkenning + decennia van jurisprudentie</li><li>Schaal: deep payroll-juristenpool</li><li>Cross-sell (DPO, juridisch, preventie, IPT)</li><li>Vertrouwen bij notaris / accountant ecosysteem</li></ul></td>
+  <td><ul><li>Verouderde UI / batch-georiënteerd</li><li>API's beperkt of betalend</li><li>Hoge prijspunt per loonstrook voor KMO</li><li>Trage release-cyclus voor nieuwe regelgeving (1–3 maanden lag) <span class="badge aanname">Aanname</span></li></ul></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead><tr><th>Kansen</th><th>Bedreigingen</th></tr></thead>
+<tbody>
+<tr>
+  <td><ul><li>EU 2023/970 loontransparantie → nieuwe rapportagemodules</li><li>Mobiliteitsbudget / cafetariaplan groeit</li><li>AI-assist op loonadvies (vgl. Alix bij Acerta)</li></ul></td>
+  <td><ul><li>HR-tech challengers nemen self-service over</li><li>Mid-market klanten bouwen zelf met eigen ERP</li><li>EU-loontransparantie verlaagt switching cost (gestandaardiseerde data)</li></ul></td>
+</tr>
+</tbody>
+</table>
+
+<h3>HR-tech challengers (Officient, Payflip, …)</h3>
+<table>
+<thead><tr><th>Sterktes</th><th>Zwaktes</th></tr></thead>
+<tbody>
+<tr>
+  <td><ul><li>Moderne UX, snelle releases</li><li>API-first / integratie</li><li>Specialisatie (Payflip: flex; Protime: tijd; Prato: uitzend)</li><li>Lagere kostenbasis → KMO-vriendelijke prijs</li></ul></td>
+  <td><ul><li>Geen ESS-erkenning → afhankelijk van partner</li><li>Beperkt juridisch advies in-house</li><li>Kleinere R&amp;D-budgetten voor regelwijzigingen</li><li>Coverage paritair comités beperkt tot meest gangbare</li></ul></td>
+</tr>
+</tbody>
+</table>
+
+<h2>3. Per speler — strategische positie</h2>
+
+<h3>SD Worx</h3>
+<p><strong>Strategie:</strong> pan-Europese payroll-suite via acquisities; mid-market en enterprise; payroll-as-a-platform met co-sourcing met klanten. <span class="badge feit">Feit</span></p>
+<p><strong>Bedreiging voor nieuwe instapper:</strong> zeer hoog op enterprise; matig op KMO-modern segment.</p>
+
+<h3>Acerta</h3>
+<p><strong>Strategie:</strong> coöperatieve dienstverlening + zelfstandigen-ondernemingsloket; AI-assist (Alix). Sterke binding zelfstandigen + KMO Vlaams.</p>
+<p><strong>Bedreiging:</strong> matig — vooral op zelfstandigen-segment.</p>
+
+<h3>Partena Professional</h3>
+<p><strong>Strategie:</strong> mid-market via eBlox/ADP-spoor; internationale klanten met BE-vestiging. <span class="badge onzekerheid">Onzekerheid</span> over exacte eigendomsstructuur.</p>
+<p><strong>Bedreiging:</strong> hoog op mid-market multinational.</p>
+
+<h3>Liantis</h3>
+<p><strong>Strategie:</strong> regionaal sterk (Vlaanderen), full-service voor zelfstandigen + KMO + juridisch advies.</p>
+<p><strong>Bedreiging:</strong> matig — vooral verwante producten dan payroll-software.</p>
+
+<h3>Securex</h3>
+<p><strong>Strategie:</strong> internationale HR-groep, sterke welzijn / preventie / well-being-tak.</p>
+<p><strong>Bedreiging:</strong> medium — sterk in welzijn-cross-sell.</p>
+
+<h3>Group S</h3>
+<p><strong>Strategie:</strong> onafhankelijke positionering, klantnabijheid.</p>
+<p><strong>Bedreiging:</strong> laag op tech-as.</p>
+
+<h3>Attentia</h3>
+<p><strong>Strategie:</strong> bundeling payroll + externe preventiedienst (Codex Welzijn op het werk).</p>
+
+<h3>Easypay Group</h3>
+<p><strong>Strategie:</strong> platform-tak (eBlox), integratielaag voor ADP-spoor + eigen sociaal secretariaat.</p>
+
+<h3>UCM</h3>
+<p><strong>Strategie:</strong> Franstalige zelfstandigen + KMO.</p>
+
+<h3>Officient</h3>
+<p><strong>Strategie:</strong> moderne KMO-HR-suite met geïntegreerde payroll via partners; verticaal HR-stack. <span class="badge feit">Feit</span></p>
+<p><strong>Bedreiging voor nieuwe instapper:</strong> hoog op KMO-modern segment; mogelijke partner i.p.v. concurrent.</p>
+
+<h3>Payflip</h3>
+<p><strong>Strategie:</strong> flex verlonen (cafetariaplan, mobiliteitsbudget), no-code voor HR-team.</p>
+<p><strong>Bedreiging:</strong> niet direct concurrent op core payroll; complementair.</p>
+
+<h3>Protime</h3>
+<p><strong>Strategie:</strong> tijdsregistratie / workforce management; deel van SD Worx-groep.</p>
+
+<h3>Prato</h3>
+<p><strong>Strategie:</strong> uitzendsector software (PC 322).</p>
+
+<h2>4. White spaces — onderscheidende posities</h2>
+<div class="callout">
+<strong>Vier mogelijke posities voor een nieuwe loonmotor:</strong>
+<ol>
+  <li><strong>API-first developer payroll</strong> — "Stripe voor Belgische payroll", API-first, documentatie eerst, voor HR-tech bouwers. <span class="badge hypothese">Hypothese</span></li>
+  <li><strong>Family-office / multi-entity</strong> — consolidatie over meerdere werkgevers, voor accountantskantoor of holding. Niche maar verdedigbaar.</li>
+  <li><strong>Sector-vertical</strong> — diepe specialisatie in één PC (bv. PC 200, of PC 124 bouw, of PC 302 horeca) met bijbehorende uitzonderingen.</li>
+  <li><strong>Compliance-as-a-service</strong> — niet payroll runnen, maar de wettelijke parameter-feed (RSZ/BV/CAO) als API verkopen aan derde-partij payroll-engines.</li>
+</ol>
+</div>
+
+<h2>5. Build-versus-partner per challenger-positie</h2>
+<table>
+<thead><tr><th>Positie</th><th>Build zelf zinvol?</th><th>Alternatief (partner / buy)</th></tr></thead>
+<tbody>
+<tr><td>API-first dev payroll</td><td>Ja — gat in markt</td><td>White-label op Officient bestaat niet als productlijn; weinig partner-opties.</td></tr>
+<tr><td>Family office multi-entity</td><td>Deels — payroll engine + consolidatielaag</td><td>Cobranded met klein sociaal secretariaat (Group S of UCM).</td></tr>
+<tr><td>Sector-vertical</td><td>Ja, mits sector-jurist on board</td><td>Bestaande software (Prato voor uitzend) — kopen of partneren.</td></tr>
+<tr><td>Compliance-as-a-service</td><td>Ja — laagste juridische risicoblootstelling</td><td>Geen sterke incumbent. Wel: SD Worx Insights / Acerta Consult.</td></tr>
+</tbody>
+</table>
+
+<h2>6. Conclusie</h2>
+<p>Voor een nieuwe instapper is een <em>combinatie van positie 2 + 4</em> het meest realistisch: bouw de loonmotor primair voor <strong>eigen multi-entity gebruik</strong> (family office, holding), en kapitaliseer de juridische parameter-feed na 18–24 maanden ervaring als een afzonderlijke compliance-API. <span class="badge hypothese">Hypothese</span></p>
+<p>Vergelijk met de <a href="mvp-roadmap.html">MVP-roadmap</a> voor de gefaseerde bouw.</p>
+</main>
+
+<footer>Loonmotor BE — Onderzoeksdossier · <a href="index.html">Terug naar overzicht</a></footer>
+</body>
+</html>

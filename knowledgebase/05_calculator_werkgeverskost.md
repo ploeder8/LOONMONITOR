@@ -6,24 +6,25 @@
 
 ---
 
-## 1. Definitie totale loonkost werkgever
+## 1. Definitie loonkost werkgever
 
 ```
-totale_loonkost = bruto_maandloon
-                + RSZ_werkgever
-                + sectoraal_sociaal_fonds (PC 200)
-                + arbeidsongevallen_verzekering
-                + provisie_eindejaarspremie
-                + provisie_dubbel_vakantiegeld
-                + extra_voordelen_werkgever (groepsverz, MC, ECO, hosp, maaltijdcheques)
-                − structurele_vermindering (indien van toepassing)
+loonkost_maand = bruto_maandloon
+               + RSZ_werkgever
+               + sectoraal_sociaal_fonds (PC 200)
+               + arbeidsongevallen_verzekering
+               + maandelijkse_extra_voordelen_werkgever
+               − structurele_vermindering (indien van toepassing)
+
+loonkost_jaar = loonkost_maand × 12
+              + eindejaarspremie
+              + jaarlijkse_premie_pc200
+              + ecocheques
+              + RSZ_werkgever_25pct_op_eindejaarspremie_en_jaarpremie
+              + dubbel_vakantiegeld
 ```
 
-Twee interpretaties:
-- **Smal** ("hard" loonkost): bruto + RSZ wg + sectorale bijdragen. Geen provisies, geen extralegale voordelen.
-- **Breed** (volledig "Cost-to-Company"): inclusief provisies eindejaarspremie + dubbel vakantiegeld + alle extralegale voordelen.
-
-De loonmotor toont **beide** views.
+De loonmotor toont de maandelijkse loonkost en de jaarlijkse loonkost in aparte kaders. Eindejaarspremie, jaarpremie, ecocheques en dubbel vakantiegeld horen niet in het maandtotaal; ze worden expliciet in het jaaroverzicht getoond.
 
 ---
 
@@ -46,31 +47,31 @@ Samenstelling (RSZ-instructies werkgevers, peildatum 2026):
 
 **Tarief:** **0,23%** van bruto loon (werkgeversbijdrage).
 
-**Bron:** sfonds200.be ("verloning"-rubriek, inkomstenjaar 2026).
+**Bron:** sectorakkoord PC 200 2025-2026 en sociaal-secretariaat-analyse. Securex en CLB bevestigen dat de werkgeversbijdrage aan het Sociaal Fonds van PC 200 op **0,23% van de brutolonen van de bedienden** blijft voor **1 januari 2026 t.e.m. 31 december 2027**.
 
 Doel: financiering eindejaarspremie + collectieve voorzieningen + opleidingen.
 
 ### 2.3 Arbeidsongevallen-verzekering
 
-**Tarief bedienden bureau:** ~0,30% van bruto loon (sector-afhankelijk en verzekeraar-afhankelijk).
+**Tarief bedienden bureau:** default **0,30%** van bruto loon in Jaakie, maar dit is een **indicatieve aanname**, geen wettelijk of PC 200-sectoraal percentage.
 
-**Bron:** Federale Pensioendienst — wettelijk verplicht voor alle werkgevers.
+**Bron:** Fedris bevestigt de wettelijke verzekeringsplicht voor privésectorwerkgevers. Liantis en Securex bevestigen dat de premievoet door de verzekeraar wordt bepaald op basis van activiteit, functie/personeelscategorie, loonmassa en risico. Een publieke marktbron vermeldt ongeveer **0,50% voor kantoorpersoneel**; er is geen publieke bron gevonden die **0,30%** als algemene PC 200-norm bevestigt.
 
-Voor PC 200-bedienden in een typisch bureauomgeving is dit aan de lage kant (versus arbeiders in PC 124 bouw waar tot 4–6% mogelijk is).
+Voor PC 200-bedienden in een typisch bureauomgeving is 0,30% verdedigbaar als lage default voor een laag-risico profiel, maar de UI moet dit configureerbaar houden en mag het niet als harde sectorparameter presenteren. Voor een conservatievere werkgeverskostinschatting is **0,50%** verdedigbaar.
 
-### 2.4 Provisie eindejaarspremie
+### 2.4 Eindejaarspremie in jaaroverzicht
 
-**Tarief:** **8,33%** van brutoloon = (13e maand) / 12.
+**Bedrag:** brutomaandloon volgens de PC 200-formule, pro rata volgens anciënniteit/prestaties.
 
 **Bron:** PC 200 cao 18/12/2025 — anciënniteit 5 jaar → **3 jaar** vanaf 2026. Lichte herziening 15/1/2026 akkoord.
 
-> **Belangrijk:** de provisie is een **boekhoudkundige inschatting**. De werkelijke uitkering gebeurt in december en kan afwijken bij in/uitstroom of langdurige afwezigheid.
+**Werkgeverskost jaarbasis:** tel het brutobedrag op in het jaaroverzicht en bereken daarnaast 25% werkgevers-RSZ op de som van eindejaarspremie + jaarpremie.
 
-### 2.5 Provisie dubbel vakantiegeld
+### 2.5 Dubbel vakantiegeld in jaaroverzicht
 
-**Tarief:** **6,67%** van brutoloon = (92% × bruto) / 12 (benadering bedienden).
+**Bedrag:** **92% × maandloon incl. VAA**, betaalbaar in de vakantieperiode.
 
-**Detail:** dubbel vakantiegeld bedienden = 92% × maandloon, betaalbaar in mei. Provisioneel verspreid over 12 maanden.
+**Werkgeverskost jaarbasis:** tel het brutobedrag op als jaarlijkse component. Er wordt in deze loonmotor geen werkgevers-RSZ op dubbel vakantiegeld toegevoegd.
 
 ### 2.6 Extra voordelen werkgever (configureerbaar)
 
@@ -79,12 +80,12 @@ Voor PC 200-bedienden in een typisch bureauomgeving is dit aan de lage kant (ver
 | Groepsverzekering | 3–8% van brutoloon (werkgeverdeel) | WAP, ondernemingsspecifiek | ✅ Configureerbaar (€/m) |
 | Maaltijdcheques | €8,91/dag vanaf 01/01/2026 (max werkgeverdeel €8,91) × werkdagen in maand | KB indexering 2026 | ✅ Configureerbaar (€/dag + werkdagen) |
 | Hospitalisatieverzekering | €30–€90/m per persoon | sectorbreed | ✅ Configureerbaar (€/m) |
-| ECO-cheques | tot €250/jaar | cao 98 nationale arbeidsraad | ✅ Automatisch afgeleid van tewerkstellingsbreuk (÷ 12/maand) |
+| ECO-cheques | tot €250/jaar | cao 98 nationale arbeidsraad | ✅ Automatisch afgeleid van tewerkstellingsbreuk (jaarcomponent) |
 | Mobiliteitsvergoeding | tot €0,37/km × max 3.700 km/jaar | fiscaal vrijgesteld AJ 2027 | ⏳ Buiten scope |
 | Bedrijfswagen | TCO autoleasing — verschilt sterk per model | apart luik | ⏳ Buiten scope |
 | GSM/laptop/internet | €4–€20/m forfaitair | KB BV-tabellen | ⏳ Buiten scope |
 
-Loonmotor accepteert groepsverzekering, maaltijdcheques, hospitalisatieverzekering en ecocheques als configureerbare UI-inputs. Maaltijdcheques worden berekend als werkgeversaandeel per dag × werkdagen in de gekozen maand; werkdagen wordt vooringevuld op basis van weekdagen en blijft aanpasbaar. De AO-verzekeringtarief (default 0,30%) is eveneens aanpasbaar per werkgever via de "Werkgeversbijdragen"-sectie in het profiel-formulier.
+Loonmotor accepteert groepsverzekering, maaltijdcheques en hospitalisatieverzekering als maandelijkse werkgeverskosten. Ecocheques worden automatisch afgeleid van de tewerkstellingsbreuk en alleen in het jaaroverzicht toegevoegd. Maaltijdcheques worden berekend als werkgeversaandeel per dag × werkdagen in de gekozen maand; werkdagen wordt vooringevuld op basis van weekdagen en blijft aanpasbaar. De AO-verzekeringtarief (default 0,30%) is eveneens aanpasbaar per werkgever via de "Werkgeversbijdragen"-sectie in het profiel-formulier.
 
 ### 2.7 Structurele vermindering werkgever
 
@@ -120,19 +121,15 @@ Met loongrens-categorieën specifiek per loonsegment (lage-lonen-component, hoge
 RSZ_WERKGEVER_BASIS_PCT = 0.25
 SOCIAAL_FONDS_200_PCT   = 0.0023
 ARBEIDSONGEVALLEN_PCT   = 0.003
-PROVISIE_EINDEJAAR_PCT  = 0.0833    # 13e maand / 12
-PROVISIE_VAKANTIE_PCT   = 0.0667    # 92% × bruto / 12
+DUBBEL_VAKANTIEGELD_PCT = 0.92
 
 def werkgeverskost_maand(bruto, structurele_vermindering=0, extra_voordelen=0):
     rsz_wg          = bruto * RSZ_WERKGEVER_BASIS_PCT
     sf200           = bruto * SOCIAAL_FONDS_200_PCT
     ao_verz         = bruto * ARBEIDSONGEVALLEN_PCT
-    prov_ejp        = bruto * PROVISIE_EINDEJAAR_PCT
-    prov_vg         = bruto * PROVISIE_VAKANTIE_PCT
 
     totaal = (bruto
               + rsz_wg + sf200 + ao_verz
-              + prov_ejp + prov_vg
               + extra_voordelen
               - structurele_vermindering)
 
@@ -141,13 +138,19 @@ def werkgeverskost_maand(bruto, structurele_vermindering=0, extra_voordelen=0):
       "rsz_werkgever": rsz_wg,
       "sociaal_fonds_200": sf200,
       "arbeidsongevallen_verzekering": ao_verz,
-      "provisie_eindejaarspremie": prov_ejp,
-      "provisie_dubbel_vakantiegeld": prov_vg,
       "extra_voordelen": extra_voordelen,
       "structurele_vermindering": structurele_vermindering,
       "totale_loonkost_maand": totaal,
       "loonwig_pct": (totaal - bruto) / totaal * 100,
     }
+
+def werkgeverskost_jaar(loonkost_maand, eindejaarspremie, jaarpremie, ecocheques, maandloon_incl_vaa):
+    dubbel_vakantiegeld = maandloon_incl_vaa * DUBBEL_VAKANTIEGELD_PCT
+    rsz_jaarpremies = (eindejaarspremie + jaarpremie) * RSZ_WERKGEVER_BASIS_PCT
+    return (loonkost_maand * 12
+            + eindejaarspremie + jaarpremie + ecocheques
+            + rsz_jaarpremies
+            + dubbel_vakantiegeld)
 ```
 
 ---
@@ -155,18 +158,10 @@ def werkgeverskost_maand(bruto, structurele_vermindering=0, extra_voordelen=0):
 ## 4. Loonwig-percentage
 
 ```
-loonwig = (totale_loonkost − netto_werknemer) / totale_loonkost × 100
+loonwig_maand = (loonkost_maand − netto_maandloon) / loonkost_maand × 100
 ```
 
-Voor een typische PC 200-bediende met €3.500 bruto, alleenstaand, 0 kinderen:
-- Bruto: €3.500
-- Totale loonkost (smal): ~€4.730
-- Totale loonkost (breed): ~€4.840 (incl. provisies)
-- Netto werknemer: ~€2.300
-- **Loonwig (smal): 51,4%**
-- **Loonwig (breed): 52,5%**
-
-Loonmotor toont beide percentages met uitsplitsing per component.
+De summary-strip gebruikt de maandelijkse loonkost. Het jaaroverzicht toont daarnaast het volledige jaarbedrag met jaarlijkse componenten.
 
 ---
 
@@ -174,16 +169,17 @@ Loonmotor toont beide percentages met uitsplitsing per component.
 
 ### 5.1 Waterfall-chart
 
-Van **bruto** naar **totale loonkost**, met balken voor:
+Van **bruto** naar **loonkost werkgever per jaar**, met balken voor:
 1. Bruto loon (basis)
 2. + RSZ werkgever
 3. + Sociaal Fonds 200
 4. + Arbeidsongevallen-verzekering
-5. + Provisie eindejaarspremie
-6. + Provisie vakantiegeld
-7. + Extra voordelen (configureerbaar)
-8. − Structurele vermindering (indien toegepast)
-9. = Totale loonkost (eindbalk)
+5. + Maandelijkse extra voordelen
+6. = Loonkost maand × 12
+7. + Eindejaarspremie + jaarpremie + ecocheques
+8. + Werkgevers-RSZ op eindejaarspremie + jaarpremie
+9. + Dubbel vakantiegeld
+10. = Totale loonkost per jaar
 
 ### 5.2 Donut-chart "wie krijgt wat van de loonkost?"
 
@@ -194,7 +190,7 @@ Van **bruto** naar **totale loonkost**, met balken voor:
 | Werknemer (BV + BBSZ) | x | xx% |
 | Werkgever (RSZ) | x | xx% |
 | Sectorale bijdragen | x | xx% |
-| Provisies (toekomstige uitkering) | x | xx% |
+| Jaarcomponenten (premies, ecocheques, vakantiegeld) | x | xx% |
 
 ### 5.3 Vergelijkingstabel "twee scenario's"
 
@@ -228,8 +224,8 @@ Bv. twee bruto-loonniveaus naast elkaar voor cliëntgesprek.
 |-----------|----------|------|
 | RSZ werkgever 25% | rsz.fgov.be/nl/werkgevers/bijdragen | 1 |
 | Loonmatigingsbijdrage | rsz.fgov.be (instructies werkgevers) | 1 |
-| Sociaal Fonds 200 (0,23%) | sfonds200.be/nl/verloning | 1 |
-| Arbeidsongevallen-verzekering | fpd.fgov.be / Fedris | 1 |
+| Sociaal Fonds 200 (0,23%) | Securex PC 200 analyse 2025-2026 + CLB sectorakkoord 2025-2026 | 2 |
+| Arbeidsongevallen-verzekering | Fedris verzekeringsplicht + Liantis/Securex kostprijsinformatie | 2 voor verplichting, 3 voor indicatief percentage |
 | Eindejaarspremie PC 200 (cao 18/12/2025 + 15/1/2026) | sfonds200.be/cao | 1 |
 | Dubbel vakantiegeld bedienden (92%) | rva.fgov.be | 1 |
 | Structurele vermindering (helling 0,1600 vanaf 1/4/2026) | KB 2/7/2025, BS 15/7/2025 | 1 |

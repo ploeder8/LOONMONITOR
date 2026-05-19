@@ -44,7 +44,7 @@ Geen runtime-arithmetic op `waarde_bron` van het PC 200-dataset blijft van toepa
 | Schaal | Doelgroep | Belastingvrije som AJ2027 |
 |--------|-----------|---------------------------|
 | **I** | Alleenstaande zonder kinderen ten laste; gehuwde/wettelijk samenwonende waar **beide** partners beroepsinkomsten hebben | €11.180 (volledig toegekend in I) |
-| **II** | Gehuwde/wettelijk samenwonende waar de partner **geen of beperkte** beroepsinkomsten heeft (split-toepassing — huwelijksquotiënt) | Hogere effectieve vrijstelling via splitsing |
+| **II** | Gehuwde/wettelijk samenwonende waar de partner **geen of beperkte** beroepsinkomsten heeft (split-toepassing — huwelijksquotiënt). Dit is geen "partner ten laste"; het effect in de loonmotor is een lagere bedrijfsvoorheffing en dus een hoger geraamd nettoloon. | Hogere effectieve vrijstelling via splitsing |
 | **III** | Niet-inwoners (zonder Belgische fiscale woonplaats) | Geen vrije som tenzij ≥ 75 % van wereldwijde beroepsinkomsten in BE |
 
 Bron: [FOD Financiën — Berekening BV](https://financien.belgium.be/nl/ondernemingen/personeel_en_loon/bedrijfsvoorheffing/berekening) (Tier 1; enig geautoriseerde bron voor BV-cijfers).
@@ -214,7 +214,7 @@ Bron: [Wolters Kluwer (Jef Wellens)](https://www.wolterskluwer.com/), [Practical
 | PC ter beschikking | €72/jaar | KB-vastgesteld forfait |
 | Internet ter beschikking | €60/jaar | idem |
 | Tablet/GSM-toestel | €36/jaar | idem |
-| Telefoonabonnement | €48/jaar | idem |
+| GSM-abonnement | €48/jaar | idem |
 | Huisvesting (niet-bemeubeld) | KI × 100/60 × 2 (× indexcoëfficiënt 2,3000) | [BDO](https://www.bdo.be/), [fibofin.be](https://www.fibofin.be/) |
 
 Bedrijfswagen-formule: **cataloguswaarde × 6/7 × CO2-percentage**. CO2-percentage = 5,5 % + 0,1 % per g/km verschil tussen werkelijke uitstoot en referentie-CO2 (min 4 %, max 18 %).
@@ -252,7 +252,7 @@ Bedrijfswagen-formule: **cataloguswaarde × 6/7 × CO2-percentage**. CO2-percent
      - Tablet: **€3/maand**
      - Internet (privé-gebruik): **€5/maand**
      - GSM-toestel: **€3/maand**
-     - Telefoonabonnement: **€4/maand**
+     - GSM-abonnement: **€4/maand**
    - Andere VAA (verwarming, elektriciteit, huisvesting, etc.): zie §10 voor forfaits; RSZ-behandeling per geval (woning + verwarming/elektriciteit ter beschikking gesteld door werkgever zijn typisch onderworpen aan RSZ).
    Bron: [FOD Financiën — Voordelen alle aard](https://financien.belgium.be/nl/ondernemingen/personeel_en_loon/voordelen_alle_aard).
 4. **− BV (bedrijfsvoorheffing)** via KB Bijlage III sleutelformule + verminderingen kinderen ten laste / fiscale werkbonus / overuren / groepsverzekering — zie §1, §3, §6.
@@ -369,7 +369,7 @@ Jaarloonkost = X                                       (brutomaandloon × 12)
 > *"Het is november 2026. De Loonmotor levert verkeerde netto-cijfers. Waarom?"*
 
 1. **BBSZ-banden onvolledig in dataset.** RSZ-instructie 2026 publiceert kwartaalbanden meestal pas in maart/april — als de POC dataset niet wordt geüpdatet, draait de berekening op stale 2025-banden. **Mitigatie:** `meta.laatste_update`-veld + UI-banner als > 90 dagen oud. Markeer BBSZ als info-only zolang Tier-1 tabel mist.
-2. **Sleutelformule-implementatie wijkt mogelijk af van FOD Fin.** Eigen TS-implementatie van Bijlage III is nu aanwezig in `src/lib/bv.ts`, maar de 30 FOD Tax-Calc-runs zijn nog niet ingevoerd. **Mitigatie:** behoud `pending_taxcalc` in de UI en behandel FOD Tax-Calc als leidende referentie tot de validatiematrix compleet is.
+2. **Sleutelformule-implementatie moet FOD Fin blijven volgen.** Eigen TS-implementatie van Bijlage III is nu aanwezig in `src/lib/bv.ts` en de 30 cases dragen FOD Bijlage III-validatievelden. **Mitigatie:** behandel FOD Financiën / Bijlage III als leidende payrollreferentie; Tax-Calc blijft alleen een latere PB-ramingscheck.
 3. **Werkbonus-grenzen verschuiven door GGMMI-aanpassing buiten cyclus.** GGMMI gaat naar €2.189,81 op 1/4/2026; volgende aanpassing afhankelijk van centenindex-trigger. **Mitigatie:** datapunten met `geldig_vanaf`/`geldig_tot` strikt respecteren; UI toont actuele datum + filter op `referentiedatum`.
 
 ---

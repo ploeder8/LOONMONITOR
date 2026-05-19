@@ -3,7 +3,7 @@
 **Bron:** 
 `src/data/pc200_payroll_dataset_2026.json`
 
-**Peildatum:** 2026-05-08
+**Peildatum:** 2026-05-17
 **Doeljaar:** 2026
 
 ---
@@ -46,7 +46,7 @@
 | `fiscaal_overuren_contingent_2026` | mogelijk_verouderd | Tier 2 | Algemeen contingent fiscaalvriendelijke overuren 2026 (BV-vermindering werkne... |
 | `fiscaal_studentenarbeid_650u_2026` | actief | Tier 2 | Geen bedrijfsvoorheffing op eerste 650 uren studentenarbeid per kalenderjaar |
 | `bv_werkbonus_bedienden_2026` | actief | Tier 2 | Sociale werkbonus (RSZ-vermindering) voor bedienden â€“ drie perioden 2026. L... |
-| `bv_bbsz_schijven_2026` | actief | Tier 2 | Bijzondere Bijdrage Sociale Zekerheid (BBSZ) 2026 â€“ kwartaalschijven catego... |
+| `bv_bbsz_schijven_2026` | actief | Tier 1 | Bijzondere Bijdrage Sociale Zekerheid (BBSZ) 2026 - kwartaalschijven voor individuele en gemeenschappelijke aanslag |
 
 ## `premies_en_voordelen` (13 datapunten)
 
@@ -64,7 +64,7 @@
 | `pc200_maaltijdcheques_sectoraal` | niet_gevonden | ? | Sectorale verplichting maaltijdcheques in PC 200 |
 | `pc200_thuiswerkvergoeding_sectoraal` | niet_gevonden | ? | Sectorale thuiswerkvergoeding in PC 200 |
 | `pc200_landingsbaan_sectorvergoeding_2026` | actief | Tier 3 | Bijkomende sectorale vergoeding bij 1/5e landingsbaan PC 200 vanaf 1/6/2026 |
-| `pc200_vakantiegeld_bedienden` | niet_gevonden | ? | Vakantiegeld voor bedienden PC 200 (enkel + dubbel vakantiegeld) â€“ wettelij... |
+| `pc200_vakantiegeld_bedienden` | actief | Tier 1 | Vakantiegeld voor bedienden PC 200 (enkel + dubbel vakantiegeld) en RSZ-basis 85/92 |
 
 ## `arbeidsvoorwaarden` (3 datapunten)
 
@@ -73,6 +73,10 @@
 | `pc200_klein_verlet_rouwverlof_2026` | actief | Tier 3 | Uitbreiding rouwverlof PC 200 vanaf 1/1/2026 (sectorakkoord 15/01/2026) |
 | `pc200_arbeidsduur` | niet_gevonden | Tier 2 | Sectorale arbeidsduur PC 200 |
 | `pc200_overuren_toeslagen` | niet_gevonden | ? | Sectorale toeslagen overuren PC 200 |
+| `vaa_pc_laptop_forfait_2026` | actief | Tier 1 | VAA pc, laptop en randapparatuur — forfait jaarbedrag |
+| `vaa_gsm_smartphone_forfait_2026` | actief | Tier 1 | VAA mobiele telefoon, smartphone of tablet — forfait jaarbedrag |
+| `vaa_internet_forfait_2026` | actief | Tier 1 | VAA internetaansluiting — forfait jaarbedrag |
+| `vaa_GSM-abonnement_forfait_2026` | actief | Tier 1 | VAA vast of mobiel GSM-abonnement — forfait jaarbedrag |
 
 ---
 
@@ -96,4 +100,5 @@
 - Bedrijfsvoorheffingsregels 2026 gepubliceerd via KB 11/12/2025 in BS 29/12/2025 (Bijlage III)
 - Volledige sectorale baremamatrix PC 200 (Schaal I, Schaal II, studenten Ã— Cat A/B/C/D) opgenomen vanaf 2026-05-08; primaire bron SSN (Tier 2), getrianguleerd met ACV en ACLVB (Tier 3) â€” alle 228 cellen onderling bevestigd
 - Sectorpensioen-onderzoek (2026-05-08): bevestigd dat er geen algemeen sectoraal aanvullend pensioen bestaat voor het volledige PC 200 â€” enkel voor de bouw-subset (1,80% solidariteitsluik vanaf 1/1/2026 via CAO 13/03/2025 nr. 192.922)
-- Sociaal Fonds 200 werkgeversbijdrage (0,23%) verlengd voor 1/1/2026â€“31/12/2027; bevestigd door 3 onafhankelijke Tier 2 bronnen (Partena Professional, Liantis, CLB Group)
+- Sociaal Fonds 200 werkgeversbijdrage (0,23%) verlengd voor 1/1/2026-31/12/2027; bevestigd door Securex PC 200 analyse en CLB sectorakkoord.
+- Arbeidsongevallenverzekering voor bedienden blijft configureerbaar: 0,30% is een lage indicatieve Jaakie-default voor bureaupersoneel, geen wettelijk of sectoraal PC 200-tarief.

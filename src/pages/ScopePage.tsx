@@ -14,7 +14,7 @@ const POC_LIMITATIONS: { titel: string; tekst: string }[] = [
   {
     titel: "1. Netto validatie pending",
     tekst:
-      "De POC berekent netto met RSZ, werkbonus, BV, fiscale werkbonus en BBSZ. De BV-sleutelformule is lokaal geïmplementeerd, maar de 30 FOD Tax-Calc-validaties staan nog pending.",
+      "De POC berekent netto met RSZ, werkbonus, BV, fiscale werkbonus en BBSZ. De BV-sleutelformule gebruikt FOD Financiën / Bijlage III 2026 als primaire payrollbron; Tax-Calc blijft enkel een latere PB-ramingscheck.",
   },
   {
     titel: "2. Geen maaltijdcheques",

@@ -5,8 +5,14 @@ import {
   DatapuntOnbekend,
 } from "@/lib/errors";
 import type { Datapunt } from "@/types/dataset";
-import { berekenBvBijzonder, type BvBijzonderResultaat } from "@/lib/bvBijzonder";
+import {
+  berekenBvBijzonder,
+  berekenRefertejaarloonBijzonder,
+  type BvBijzonderResultaat,
+} from "@/lib/bvBijzonder";
 import type { GezinsType } from "@/lib/bv";
+
+const RSZ_WERKNEMER_PCT = 0.1307;
 
 export interface EindejaarsInput {
   brutoloon: number;
@@ -66,11 +72,14 @@ export function eindejaarspremie(input: EindejaarsInput): EindejaarsResultaat {
   };
 
   if (input.gezinstype && premie > 0) {
+    const rsz = round2(premie * RSZ_WERKNEMER_PCT);
+    const belastbaar = round2(premie - rsz);
     const bv = berekenBvBijzonder({
-      refertejaarloon: round2(input.brutoloon * 12),
-      exceptioneelBruto: premie,
+      refertejaarloon: berekenRefertejaarloonBijzonder(input.brutoloon),
+      exceptioneelBruto: belastbaar,
       gezinstype: input.gezinstype,
       kinderenTenLaste: input.kinderenTenLaste ?? 0,
+      soort: "andere_exceptionele_vergoeding",
     });
     base.bvBijzonder = bv;
     base.nettoPremie = bv.nettoBedrag;

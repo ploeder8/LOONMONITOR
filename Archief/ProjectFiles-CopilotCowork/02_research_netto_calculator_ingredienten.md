@@ -83,7 +83,7 @@ CO2-coëfficiënt = 5,5% + (CO2-uitstoot - referentie-uitstoot) × 0,1%
 | PC (incl. randapparatuur, indien gratis ter beschikking) | €72/jaar |
 | Internetaansluiting (privégebruik) | €60/jaar |
 | GSM-toestel | €36/jaar |
-| Telefoonabonnement (privégebruik) | €48/jaar |
+| GSM-abonnement (privégebruik) | €48/jaar |
 | Tablet | €36/jaar |
 
 (Bedragen sinds KB 25 november 2017, ongewijzigd; geen indexering.)

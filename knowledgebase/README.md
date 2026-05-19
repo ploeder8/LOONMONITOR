@@ -43,8 +43,9 @@
 
 ### Mappen
 - **`bronnen/`** — Volledig bronnenarchief: 57 URLs + 8 PDF-snapshots, gerangschikt per Tier (1/2/3) + categorie
-- **`tools/`** — Python referentie-implementatie: `calc_brutonetto_2026.py`, `genereer_corpus.py`, `validate_corpus.py`
+- **`tools/`** — Python referentie-implementatie: `calc_brutonetto_2026.py`, `genereer_corpus.py`, `validate_bijlage_iii_corpus.py`
 - **`Referenties/`** — Vergelijkende analyses van externe looncalculatoren (UX, invoervelden, featureset)
+- **`onderzoek/`** — HTML-onderzoeksdossier (15 pagina's): marktonderzoek, concurrentiematrix, wetgevend kader, Jaakie-specificatie, testcorpus, referentietools. Dit dossier is **secundair** ten opzichte van de markdown-kennisbank: alle cijfers, formules en test-golden-masters leven in de `.md`-bestanden hierboven.
 
 ---
 
@@ -66,7 +67,7 @@
 Bij een loon dat in mei 2026 wordt uitbetaald, gelden de **AJ 2027-parameters** voor de BV-inhouding, want dat is het aanslagjaar waarin inkomstenjaar 2026 wordt aangegeven. AJ 2026-parameters (€10.910 BVS, €5.840 forfait, oude schijven) gelden enkel voor inkomsten 2025.
 
 ### Sleutelformule vs FOD-validatie
-De TypeScript-module gebruikt sinds 12/05/2026 een lokale Bijlage III-sleutelformule voor BV met expliciete `pending_taxcalc` status. De netto-bedragen zijn nog **niet officieel FOD Tax-Calc-gevalideerd**. Voor productie-validatie: voer de 30 cases in via `tools/validate_corpus.py`.
+De TypeScript-module gebruikt sinds 12/05/2026 een lokale Bijlage III-sleutelformule voor BV en sinds 19/05/2026 expliciete FOD Financiën / Bijlage III-bronprioriteit. De 30 corpuscases dragen nu FOD Bijlage III-validatievelden (`bron_validatie: "FOD Bijlage III 2026"`). Tax-Calc blijft alleen een latere PB-ramingscheck. Voor corpusvalidatie: voer `tools/validate_bijlage_iii_corpus.py` uit. Sociale-secretariaat-tools zijn alleen secundaire triangulatie.
 
 ### Pending wetgeving (regering-De Wever)
 Sommige parameters zijn **wetsontwerp**, nog niet in BS:

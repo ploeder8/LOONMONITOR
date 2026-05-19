@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="nl-BE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Werking loonmotor — Loonmotor BE</title>
+<style>
+:root{--bg:#fafbfc;--surface:#fff;--border:#e4e7eb;--text:#1a2332;--text-muted:#5a6779;--accent:#0b5394;--accent-light:#e8f0f9;--code-bg:#f5f7fa;--shadow:0 1px 3px rgba(0,0,0,.06)}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.6;color:var(--text);background:var(--bg)}
+header.topbar{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.topbar-inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-weight:700;font-size:17px;color:var(--accent);text-decoration:none}
+nav.topnav{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+nav.topnav a{font-size:13px;color:var(--text-muted);text-decoration:none;padding:6px 10px;border-radius:4px}
+nav.topnav a:hover{background:var(--accent-light);color:var(--accent)}
+nav.topnav a.active{background:var(--accent);color:#fff}
+main{max-width:1200px;margin:0 auto;padding:32px 24px 64px}
+h1{font-size:30px;margin:0 0 8px;font-weight:700}h2{font-size:22px;margin:32px 0 12px;font-weight:600;padding-bottom:6px;border-bottom:2px solid var(--accent-light)}
+h3{font-size:17px;margin:24px 0 8px;font-weight:600}h4{font-size:15px;margin:16px 0 6px;color:var(--accent);font-weight:600}
+p{margin:8px 0 12px}ul,ol{padding-left:22px}li{margin:4px 0}a{color:var(--accent)}a:hover{text-decoration:underline}
+code{font-family:"SF Mono",Monaco,Consolas,monospace;background:var(--code-bg);padding:1px 5px;border-radius:3px;font-size:13px}
+pre{background:var(--code-bg);padding:14px 18px;border-radius:6px;overflow-x:auto;font-size:13px;border:1px solid var(--border)}
+.subtitle{color:var(--text-muted);font-size:16px;margin:0 0 24px}
+table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:14px;background:var(--surface);border-radius:6px;overflow:hidden;box-shadow:var(--shadow)}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:var(--accent-light);font-weight:600;font-size:13px}
+tr:last-child td{border-bottom:none}tr:hover{background:#f8fafc}
+table.compact th,table.compact td{padding:6px 10px;font-size:13px}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;margin:0 3px 2px 0;letter-spacing:.3px;text-transform:uppercase}
+.badge.feit{background:#d1fae5;color:#065f46}.badge.aanname{background:#fef3c7;color:#92400e}
+.badge.hypothese{background:#e0e7ff;color:#3730a3}.badge.onzekerheid{background:#fed7aa;color:#9a3412}
+.badge.openvraag{background:#fde68a;color:#78350f}.badge.mvp{background:#c7f0d3;color:#14532d}
+.badge.later{background:#ddd6fe;color:#5b21b6}.badge.enterprise{background:#fce7f3;color:#831843}
+.callout{border-left:4px solid var(--accent);background:var(--accent-light);padding:12px 16px;margin:14px 0;border-radius:0 4px 4px 0}
+.callout.warn{border-color:#d97706;background:#fef3c7}
+.callout.ok{border-color:#059669;background:#d1fae5}
+.callout.danger{border-color:#dc2626;background:#fee2e2}
+.section-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:18px 22px;margin:16px 0;box-shadow:var(--shadow)}
+.step{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px 18px;margin:10px 0;box-shadow:var(--shadow)}
+.step-num{display:inline-block;background:var(--accent);color:#fff;font-weight:700;border-radius:50%;width:28px;height:28px;text-align:center;line-height:28px;margin-right:10px;font-size:13px}
+.scope-in{background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+.scope-out{background:#fee2e2;color:#991b1b;padding:1px 6px;border-radius:3px;font-weight:600;font-size:11px;text-transform:uppercase}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size:13px;color:var(--text-muted);text-align:center}
+.tag{display:inline-block;background:var(--accent-light);color:var(--accent);padding:2px 8px;border-radius:3px;font-size:12px;font-weight:500}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+<a href="index.html" class="brand">Loonmotor BE</a>
+<nav class="topnav">
+<a href="index.html">Overzicht</a><a href="marktonderzoek.html">Markt</a>
+<a href="concurrentiematrix.html">Concurrenten</a><a href="werking-loonmotor.html" class="active">Werking</a>
+<a href="wetgevend-kader.html">Wetgeving</a><a href="requirements.html">Requirements</a>
+<a href="datamodel.html">Datamodel</a><a href="technische-architectuur.html">Architectuur</a>
+<a href="juridische-checklist.html">Juridisch</a><a href="mvp-roadmap.html">Roadmap</a>
+<a href="risicoregister.html">Risico's</a><a href="jaakie-specificatie.html">Jaakie</a>
+<a href="testcorpus.html">Testcorpus</a><a href="referentie-tools.html">Referenties</a>
+<a href="bronnen.html">Bronnen</a>
+</nav></div></header>
+
+<main>
+<h1>Werking van een Belgische loonmotor</h1>
+<p class="subtitle">Het end-to-end proces van bruto naar netto, met alle wettelijke tussenstappen, aangiften en integraties. Inclusief concreet bruto-netto-voorbeeld PC 200.</p>
+
+<h2>1. Het proces in 22 stappen</h2>
+<p>Elke loonperiode (doorgaans maand) doorloopt onderstaand pad. <span class="badge feit">Feit</span> voor de basisstappen; <span class="badge aanname">Aanname</span> voor de exacte volgorde — implementaties kunnen variëren in hoe ze checks en aangiften ordenen.</p>
+
+<div class="callout">
+<strong>Scope:</strong> stappen gemarkeerd met <span class="scope-in">In Jaakie</span> zijn geïmplementeerd in de Jaakie POC-calculator; stappen met <span class="scope-out">Niet in Jaakie</span> vallen buiten de huidige browser-only scope (geen aangiften, geen loonbrief, geen archivering).
+</div>
+
+<div class="step"><span class="step-num">1</span><strong>Master data &amp; tewerkstellingsgegevens vergrendelen</strong> — werkgever, vestigingseenheid, werknemer (incl. RRN), contract (PC, functie, arbeidsregime, loonschaal), gezinssituatie (huwelijk, ten laste), bankrekening.</div>
+<div class="step"><span class="step-num">2</span><strong>Dimona-status controleren</strong> — bij in/uit dienst tijdig <a href="https://www.socialsecurity.be" target="_blank" rel="noopener">Dimona</a>-aangifte (KSZ/RSZ). Zonder Dimona geen loonberekening voor die periode. <span class="badge feit">Feit</span></div>
+<div class="step"><span class="step-num">3</span><strong>Kalender opbouwen</strong> — werkdagen, feestdagen, te recupereren dagen, jaarlijkse vakantie (KB 30/3/1967), schorsingen, tijdskrediet.</div>
+<div class="step"><span class="step-num">4</span><strong>Prestaties &amp; afwezigheden ophalen</strong> — uit tijdsregistratie of HR-input: gewone uren, overuren (Wet 16/3/1971), ziekte (gewaarborgd loon Wet 3/7/1978 art. 52/70), arbeidsongeval (Wet 10/4/1971), tijdelijke werkloosheid, vakantie.</div>
+<div class="step"><span class="step-num">5</span><strong>Bruto-componenten samenstellen</strong> — basisloon, ploegen/nacht/zon-feestdag premies, eindejaarspremie, vakantiegeld, bonus, premie 13e/14e maand, voordelen alle aard (bedrijfswagen, smartphone, IPT), retributies.</div>
+<div class="step"><span class="step-num">6</span><strong>Brutoloon arbeiders × 108%</strong> — voor RSZ-berekening wordt het brutoloon arbeiders verhoogd met 8% (vakantiegeldcomponent). Bedienden: 100%. <span class="badge feit">Feit</span> (art. 23 RSZ-wet)</div>
+<div class="step"><span class="step-num">7</span><strong>RSZ-werknemer berekenen</strong> — 13,07% op bruto100% (bedienden) of bruto108% (arbeiders). Cap Arizona <code>€86.700/kwartaal</code> per werknemer (vanaf 1/1/2026). <span class="badge feit">Feit</span></div>
+<div class="step"><span class="step-num">8</span><strong>Werkbonus toepassen</strong> — vermindering RSZ-werknemer voor lage lonen (KB 17/1/2000 en wijzigingen). Twee luiken: Luik A (algemeen) en Luik B (extra). <strong>Vanaf 1/4/2026 (bedienden):</strong> Luik A max €125,04 (S₀ = €2.880,32); Luik B max €168,62 (S₀ = €2.255,50). Formule: R = max − helling × (S − S₀). <span class="badge feit">Feit</span> <span class="badge onzekerheid">Onzekerheid</span> voor arbeiders — andere maxima.</div>
+<div class="step"><span class="step-num">9</span><strong>Belastbaar bedrag bepalen</strong> — bruto − RSZ-werknemer − sociaal-fiscale aftrekken (forfaitaire beroepskosten via BV, niet hier; wel: vrijgesteld deel maaltijdcheques etc.).</div>
+<div class="step"><span class="step-num">10</span><strong>Bedrijfsvoorheffing (BV) berekenen</strong> — via <a href="https://financien.belgium.be" target="_blank" rel="noopener">Bijlage III KB/WIB 92</a> (KB 11/12/2025, BS 29/12/2025). Sinds 2023: <strong>sleutelformule</strong> (glijdende schaal), geen vaste schijftarieven meer. Drie schalen (I/II/III) op basis van gezinssituatie; verminderingen voor kinderen ten laste, andere personen, groepsverzekering, fiscale werkbonus. <span class="badge feit">Feit</span> <span class="badge aanname">Aanname</span> — vroeger golden schijven 26,75%/42,80%/48,15%/53,50%; deze zijn vervangen door de sleutelformule.</div>
+<div class="step"><span class="step-num">11</span><strong>BBSZ &amp; bijzondere bijdragen</strong> — Bijzondere Bijdrage Sociale Zekerheid (art. 106 Wet 30/3/1994), solidariteitsbijdrage bedrijfswagen (CO2), eventueel bijdrage tweede pensioenpijler.</div>
+<div class="step"><span class="step-num">12</span><strong>Inhoudingen voordelen</strong> — werknemersbijdrage maaltijdcheques (min €1,09), persoonlijke bijdragen IPT, premie groepsverzekering.</div>
+<div class="step"><span class="step-num">13</span><strong>Loonbeslag / loonoverdracht</strong> — toepassing schijven art. 1409 Ger.W. (KB 3/12/2025 voor schijven 2026). Volgorde van prioriteit: onderhoudsgeld voor, andere schuldeisers daarna. <span class="badge feit">Feit</span></div>
+<div class="step"><span class="step-num">14</span><strong>Netto loon bepalen</strong> — belastbaar − BV − BBSZ − inhoudingen − beslag + netto-voordelen (kostenvergoedingen, fietsvergoeding KB-plafond €0,36/km — PC 200 CAO €0,32/km vanaf 1/10/2026, plafond €3.700/jaar). Telewerkforfait €160,99/m vanaf 3/2026 <span class="badge later">Later</span> — niet in Jaakie-scope.</div>
+<div class="step"><span class="step-num">15</span><strong>Werkgeverskosten opbouwen</strong> — RSZ-werkgever ~25%, vakantiegeld arbeiders (RJV) of bediende (15,38% / 8% wettelijk), eindejaarspremie, premie sectorfonds, premie aanvullend pensioen.</div>
+<div class="step"><span class="step-num">16</span><strong>Loonbrief genereren</strong> — verplichte vermeldingen volgens art. 15 <a href="https://www.ejustice.just.fgov.be/eli/wet/1965/04/12/1965041209/justel" target="_blank" rel="noopener">Wet 12/4/1965 betreffende de bescherming van het loon</a> + <a href="https://www.ejustice.just.fgov.be/eli/besluit/1966/09/27/1966092702/justel" target="_blank" rel="noopener">KB 27 september 1966 (BS 11/10/1966)</a>. <span class="badge feit">Feit</span></div>
+<div class="step"><span class="step-num">17</span><strong>SEPA-betaalbestand</strong> — pain.001.001.03 (XML) genereren voor uitvoering door bank. Inclusief end-to-end-id voor reconciliatie.</div>
+<div class="step"><span class="step-num">18</span><strong>DmfA kwartaalaangifte</strong> — aggregatie 3 maanden, opgesplitst per werknemer, looncode, dagencodes, voordelen. Indiening uiterlijk laatste dag maand na kwartaaleinde. <span class="badge feit">Feit</span></div>
+<div class="step"><span class="step-num">19</span><strong>Belcotax-on-web fiches</strong> — jaarlijks 281.10 (bezoldigingen werknemers), 281.20 (zelfstandige bestuurders), 281.25 (auteursrechten), 281.50 (commissies). <span class="badge feit">Feit</span></div>
+<div class="step"><span class="step-num">20</span><strong>Finprof BV-doorstorting</strong> — maandelijks of kwartaal naar FOD Financiën via <a href="https://financien.belgium.be" target="_blank" rel="noopener">Finprof</a>.</div>
+<div class="step"><span class="step-num">21</span><strong>Boekhoudregels journaliseren</strong> — 62x rekeningen (personeelskosten), 45x rekeningen (schuld RSZ/BV/loonadministratie), tegenboekingen bij betaling.</div>
+<div class="step"><span class="step-num">22</span><strong>Archivering &amp; bewaartermijnen</strong> — loonbrieven min. 5 jaar, sociale documenten 5 jaar (KB 8/8/1980), DmfA-data 7 jaar fiscaal + langer voor pensioenopbouw via Sigedis/DB2P. <span class="badge feit">Feit</span></div>
+
+<h2>2. Classificatie van looncomponenten</h2>
+<p>Elk looncomponent valt onder een combinatie van: <strong>RSZ-plichtig?</strong> (werknemer 13,07% + werkgever ~25%), <strong>BV-plichtig?</strong> (al dan niet bedrijfsvoorheffing), <strong>belastbaar?</strong> (jaarlijks 281.10). De combinaties zijn niet symmetrisch.</p>
+
+<table class="compact">
+<thead><tr><th>Component</th><th>RSZ-pl?</th><th>BV-pl?</th><th>Belastbaar?</th><th>Toelichting</th></tr></thead>
+<tbody>
+<tr><td>Basisloon, premies, bonus</td><td>Ja</td><td>Ja</td><td>Ja</td><td>Standaard. <span class="badge feit">Feit</span></td></tr>
+<tr><td>Eindejaarspremie / 13e maand</td><td>Ja</td><td>Ja (afz. tarief)</td><td>Ja</td><td>Exceptionele bezoldiging — apart BV-tarief.</td></tr>
+<tr><td>Dubbel vakantiegeld</td><td>Ja (8%)</td><td>Ja (afz. tarief)</td><td>Ja</td><td>Reductie RSZ 8% i.p.v. 13,07%.</td></tr>
+<tr><td>Maaltijdcheques (€10 max in 2026)</td><td>Nee</td><td>Nee</td><td>Nee</td><td>Mits werknemersbijdrage ≥€1,09. <span class="badge feit">Feit</span></td></tr>
+<tr><td>Ecocheques (€250/jaar)</td><td>Nee</td><td>Nee</td><td>Nee</td><td>Mits CAO of individuele overeenkomst.</td></tr>
+<tr><td>Fietsvergoeding (KB €0,36/km; PC 200 €0,32/km vanaf 1/10/2026; plafond €3.700)</td><td>Nee</td><td>Nee</td><td>Nee</td><td>Tot plafond — surplus belastbaar. <span class="badge feit">Feit</span></td></tr>
+<tr><td>Telewerkforfait (€160,99/m vanaf 3/2026)</td><td>Nee</td><td>Nee</td><td>Nee</td><td>Mits structureel telewerk en niet-cumulatief met andere bureauforfaits.</td></tr>
+<tr><td>Bedrijfswagen (VAA)</td><td>Solidariteit (CO2)</td><td>Ja</td><td>Ja</td><td>Cataloguswaarde × 6/7 × CO2-coëfficiënt × ouderdoms-coëfficient.</td></tr>
+<tr><td>IPT / groepsverzekering</td><td>Ja (8,86% wg-bijdrage)</td><td>Nee (in opbouw)</td><td>Nee (in opbouw)</td><td>80%-regel art. 59 WIB 92 voor aftrekbaarheid wg.</td></tr>
+<tr><td>Mobiliteitsbudget</td><td>Variabel</td><td>Variabel</td><td>Variabel</td><td>3 pijlers met eigen behandeling (Wet 17/3/2019).</td></tr>
+<tr><td>Onkostenvergoeding (werkelijk)</td><td>Nee</td><td>Nee</td><td>Nee</td><td>Mits bewijs werkelijke kost — risico herkwalificatie.</td></tr>
+<tr><td>Auteursrechten (Wet 16/7/2008)</td><td>Nee (tot drempel)</td><td>15% RV</td><td>Beperkt</td><td>Hervormd in 2023 — beperkter toepassingsgebied.</td></tr>
+</tbody>
+</table>
+
+<h2>3. Concreet bruto-netto-voorbeeld — PC 200, bediende, €3.500/m</h2>
+<p>Werknemer: gehuwd, partner zonder inkomen, 2 kinderen ten laste, voltijds, bediende PC 200 (algemeen aanvullend paritair comité voor bedienden). Peildatum: januari 2026.</p>
+
+<table>
+<thead><tr><th style="width:55%">Component</th><th style="width:20%">Bedrag (€)</th><th>Berekening</th></tr></thead>
+<tbody>
+<tr><td>Brutoloon</td><td><strong>3.500,00</strong></td><td>Maandsalaris</td></tr>
+<tr><td>RSZ-werknemer</td><td>–457,45</td><td>13,07% × 3.500,00</td></tr>
+<tr><td>Belastbaar loon</td><td><strong>3.042,55</strong></td><td>3.500,00 – 457,45</td></tr>
+<tr><td>Bedrijfsvoorheffing (Bijlage III sleutelformule 2026, Schaal II, 2 kinderen)</td><td>–334,00</td><td>Sleutelformule op €3.042,55 ≈ €468; vermindering 2 kinderen €138/m → €334. <span class="badge aanname">Aanname</span> exacte waarde via sleutelformule</td></tr>
+<tr><td>BBSZ (bijzondere bijdrage)</td><td>–31,00</td><td>Tarief volgens schijf belastbaar (geschat)</td></tr>
+<tr><td>Werknemersbijdrage maaltijdcheques</td><td>–21,80</td><td>20 dagen × €1,09 (minimum)</td></tr>
+<tr><td><strong>Netto loon (uit te betalen)</strong></td><td><strong>≈ 2.655,75</strong></td><td>3.042,55 – 334,00 – 31,00 – 21,80</td></tr>
+</tbody>
+</table>
+
+<table>
+<thead><tr><th>Werkgeverskosten (indicatief)</th><th>Bedrag (€)</th></tr></thead>
+<tbody>
+<tr><td>Brutoloon</td><td>3.500,00</td></tr>
+<tr><td>RSZ-werkgever (basis 19,88% + loonmatiging 7,48% ≈ 25%)</td><td>+875,00</td></tr>
+<tr><td>Bijdrage maaltijdcheques (20 × €8,91)</td><td>+178,20</td></tr>
+<tr><td>Provisie eindejaarspremie (8,33%) + dubbel vakantiegeld (6,67%)</td><td>+886,00 <span class="badge aanname">Aanname</span></td></tr>
+<tr><td><strong>Totale werkgeverskost</strong></td><td><strong>≈ 5.439,20</strong></td></tr>
+<tr><td>Werkgevers/werknemerswig</td><td><strong>≈ 51%</strong> verschil bruto-werkgeverkost vs netto-werknemer</td></tr>
+</tbody>
+</table>
+
+<div class="callout warn">
+<strong>Disclaimer:</strong> BV-bedragen op basis van KB Bijlage III sleutelformule 2026 (KB 11/12/2025, BS 29/12/2025). Exacte uitkomst kan afwijken van een gespecialiseerd ESS door afronding. De vaste schijftarieven 26,75%/42,80%/48,15%/53,50% zijn voor 2026 niet meer van toepassing. <span class="badge onzekerheid">Onzekerheid</span> op 1–3% niveau.
+</div>
+
+<h2>4. Geverifieerde bruto-netto referentietabel — PC 200 testcorpus (BNTC)</h2>
+<p>De onderstaande tabel bevat <strong>exacte verwachte waarden</strong> uit het 30-cases bruto-netto testcorpus (BNTC-001..BNTC-030), berekend met de formules geldig op <strong>9 mei 2026</strong>. Deze waarden dienen als "golden master" voor regressietesten. <span class="badge feit">Feit</span> Bron: <code>knowledgebase/07_testcorpus.md</code>.</p>
+
+<table class="compact">
+<thead><tr><th>ID</th><th>Profiel</th><th>Bruto/m</th><th>RSZ-wn</th><th>Werkbonus</th><th>BV netto</th><th>BBSZ</th><th>Netto/m</th></tr></thead>
+<tbody>
+<tr><td>TC-001</td><td>GGMMI €2.189,81, alleenstaand, 0 kind</td><td>€2.189,81</td><td>€0,00</td><td>€293,66</td><td>€101,64</td><td>€10,31</td><td><strong>€2.077,86</strong></td></tr>
+<tr><td>TC-002</td><td>€2.300, alleenstaand — werkbonus volledig</td><td>€2.300,00</td><td>€18,96</td><td>€281,65</td><td>€144,45</td><td>€11,54</td><td><strong>€2.125,05</strong></td></tr>
+<tr><td>TC-003</td><td>€2.500, alleenstaand — A volledig, B in afbouw</td><td>€2.500,00</td><td>€99,08</td><td>€227,67</td><td>€220,76</td><td>€13,74</td><td><strong>€2.166,42</strong></td></tr>
+<tr><td>TC-004</td><td>€2.800, alleenstaand — A volledig, B nul</td><td>€2.800,00</td><td>€219,26</td><td>€146,70</td><td>€335,23</td><td>€17,04</td><td><strong>€2.228,47</strong></td></tr>
+<tr><td>TC-005</td><td>€3.000, alleenstaand — A in afbouw, B nul</td><td>€3.000,00</td><td>€299,83</td><td>€92,27</td><td>€405,24</td><td>€19,24</td><td><strong>€2.275,69</strong></td></tr>
+</tbody>
+</table>
+
+<div class="callout">
+<strong>Validatie-workflow:</strong>
+<ol>
+<li>Valideer iedere case tegen <strong>FOD Financiën / Bijlage III 2026</strong> → noteer officiële BV en netto-impact.</li>
+<li>Vergelijk met bovenstaande <code>Netto/m</code> — afwijking ≤ €5/maand = <span class="badge feit">ok</span>, ≤ €15 = <span class="badge aanname">kleine afwijking</span>, > €15 = <span class="badge onzekerheid">grote afwijking</span> (root-cause analyse vereist).</li>
+<li>Alle 30 cases (BNTC-001..BNTC-030) staan in <code>knowledgebase/TESTCASES.json</code>; status = <code>ok</code> met FOD Bijlage III-validatievelden.</li>
+</ol>
+</div>
+
+<p>Zie ook de <a href="technische-architectuur.html">technische architectuur</a> voor de testpipeline (bun test, golden masters).</p>
+
+<h2>5. Edge cases die elke loonmotor moet kunnen</h2>
+<ol>
+  <li><strong>Variabel loon (commissie, bonus)</strong> — exceptionele bezoldiging met eigen BV-tarief; impact op vakantiegeld berekening basis. <span class="badge mvp">MVP</span> <span class="scope-in">In Jaakie</span></li>
+  <li><strong>Loonbeslag &amp; loonoverdracht</strong> — schijven art. 1409 Ger.W., +€88/kind ten laste. Volgorde: alimentatie eerst, andere schuldeisers daarna. <span class="badge mvp">MVP</span> <span class="scope-out">Niet in Jaakie</span></li>
+  <li><strong>Meerdere contracten bij dezelfde werkgever</strong> — aggregatie voor RSZ-cap, maar gescheiden voor BV. <span class="badge later">Later</span> <span class="scope-out">Niet in Jaakie</span></li>
+  <li><strong>GMMI (Gewaarborgd Minimum Maandinkomen)</strong> — CAO 43 NAR (€2.189,81 vanaf 1/4/2026 voor 22 jaar+ 12 mnd anciënniteit). Wettelijke ondergrens. <span class="badge feit">Feit</span> <span class="scope-in">In Jaakie</span></li>
+  <li><strong>Ziekte / gewaarborgd loon</strong> — 30 dagen bedienden (Wet 3/7/1978); arbeiders gefragmenteerd (eerste week 100%, dan 85,88% mutualiteit-aanvulling). <span class="badge mvp">MVP</span> <span class="scope-out">Niet in Jaakie</span></li>
+  <li><strong>Arbeidsongeval</strong> — 90% basisloon vanaf eerste dag (Wet 10/4/1971 + KB 21/12/1971). Aangifte FedRis verplicht. <span class="scope-out">Niet in Jaakie</span></li>
+  <li><strong>Tijdskrediet / thematisch verlof</strong> — onderbrekingsuitkering RVA, geen loon werkgever; pro-rata berekeningen. <span class="scope-out">Niet in Jaakie</span></li>
+  <li><strong>Grensarbeider (NL/FR/DE)</strong> — DBV-verdrag bepaalt belastingdomicilie; sociale zekerheid Vo. 883/2004 (A1-formulier). <span class="badge later">Later</span> <span class="scope-out">Niet in Jaakie</span></li>
+  <li><strong>Student-arbeid</strong> — 650 u/jaar (Wet 21/3/2025), solidariteitsbijdrage 8,13% i.p.v. RSZ 13,07%. <span class="badge mvp">MVP</span> <span class="scope-in">In Jaakie</span></li>
+  <li><strong>Flexi-jobs</strong> — Wet 16/11/2015 + Programmawet 26/12/2022; 25% wg-bijdrage; flexi-loon vrijgesteld BV/RSZ-wn binnen plafond. <span class="badge mvp">MVP</span> <span class="scope-out">Niet in Jaakie</span></li>
+  <li><strong>Wagenwissel mid-month</strong> — herproratie VAA per dag, CO2-coëfficient herrekenen. <span class="scope-out">Niet in Jaakie</span></li>
+  <li><strong>Retroactieve indexatie (vb. PC 200 1/1)</strong> — gevolgen voor BV historiek en aangiften; vergt rerun-mechanisme. <span class="scope-out">Niet in Jaakie</span></li>
+  <li><strong>Correctie vorige periode</strong> — DmfA correctie-aangifte; Belcotax 281.x rectificatie indien jaar afgesloten. <span class="badge mvp">MVP</span> <span class="scope-out">Niet in Jaakie</span></li>
+</ol>
+
+<h2>6. Integraties — 18 essentiële koppelingen</h2>
+<table>
+<thead><tr><th>Systeem</th><th>Type</th><th>Doel</th></tr></thead>
+<tbody>
+<tr><td>Dimona</td><td>RSZ webservice</td><td>In/uit dienst aangifte (KSZ/RSZ)</td></tr>
+<tr><td>DmfA</td><td>Kwartaalaangifte</td><td>Aggregatie sociale bijdragen</td></tr>
+<tr><td>Belcotax-on-web</td><td>Jaaraangifte</td><td>281.10 / 281.20 / 281.25 / 281.50</td></tr>
+<tr><td>Finprof</td><td>FOD Fin</td><td>BV-doorstorting</td></tr>
+<tr><td>e-Box Enterprise</td><td>Federale postbus</td><td>Officiële mededelingen ontvangen</td></tr>
+<tr><td>Sigedis / DB2P</td><td>Pensioendatabank</td><td>2e pijler / IPT-rapportering</td></tr>
+<tr><td>KSZ</td><td>Kruispuntbank Sociale Zekerheid</td><td>Authentieke bronnen (RRN, KBO, FBZ…)</td></tr>
+<tr><td>SEPA / pain.001.001.03</td><td>Bankbetaling</td><td>Loon + RSZ + BV + boetes uitbetalen</td></tr>
+<tr><td>Limosa</td><td>RSZ</td><td>Detacheringsaangifte buitenland</td></tr>
+<tr><td>Studentatwork</td><td>RSZ</td><td>650 u contingent monitoring</td></tr>
+<tr><td>FedRis</td><td>Arbeidsongevallenfonds</td><td>AO-aangifte</td></tr>
+<tr><td>RVA</td><td>Werkloosheid / tijdskrediet</td><td>Tijdelijke werkloosheid, onderbreking</td></tr>
+<tr><td>Mutualiteiten</td><td>Ziekteverzekering</td><td>Gewaarborgd loon → tussenkomst</td></tr>
+<tr><td>Sectorfondsen (per PC)</td><td>Sociale fondsen</td><td>Eindejaarspremie, premie anciënniteit</td></tr>
+<tr><td>Verzekeraars (groepsverz., IPT, AO)</td><td>Premie-aangiften</td><td>Maand/kwartaal premies</td></tr>
+<tr><td>Boekhouding (ERP)</td><td>Journalisatie</td><td>62x/45x boekingen</td></tr>
+<tr><td>Tijdsregistratie (Protime, BCC, …)</td><td>Prestaties</td><td>Werktijden, afwezigheden</td></tr>
+<tr><td>HR-systeem (BambooHR, Officient, …)</td><td>Master data</td><td>Werknemer- en contractgegevens</td></tr>
+</tbody>
+</table>
+
+<h2>7. Verplichte loonbrief-vermeldingen</h2>
+<div class="callout">
+<strong>Juridische basis:</strong> art. 15 <a href="https://www.ejustice.just.fgov.be/eli/wet/1965/04/12/1965041209/justel" target="_blank" rel="noopener">Wet 12 april 1965 betreffende de bescherming van het loon der werknemers</a> + <a href="https://www.ejustice.just.fgov.be/eli/besluit/1966/09/27/1966092702/justel" target="_blank" rel="noopener">KB 27 september 1966 (BS 11/10/1966)</a>.
+<br><br>
+<em>Let op:</em> in de oorspronkelijke verkenning werd verwezen naar "KB 27/8/1993" — dat is het uitvoeringsbesluit WIB 92 (fiscaal) en is hier <strong>niet</strong> de basis voor de loonbriefvermeldingen. <span class="badge feit">Feit (gecorrigeerd)</span>
+</div>
+
+<ol>
+<li>Naam en adres werkgever, KBO-nummer</li>
+<li>Naam, voornamen, identificatie werknemer (RRN of insz)</li>
+<li>Functie, paritair comité, statuut (arbeider/bediende)</li>
+<li>Loonperiode (begin- en einddatum)</li>
+<li>Bruto bezoldiging gedetailleerd per bestanddeel</li>
+<li>Eventuele inhoudingen (RSZ, BV, BBSZ, MC-werknemer, beslag)</li>
+<li>Voordelen alle aard met waardering</li>
+<li>Werknemersaandeel sociale bijdragen</li>
+<li>Bedrijfsvoorheffing</li>
+<li>Eventueel loonbeslag of overdracht</li>
+<li>Werkgeversbijdragen (informatief)</li>
+<li>Aantal gepresteerde + gelijkgestelde dagen/uren</li>
+<li>Netto te betalen bedrag</li>
+<li>Datum en wijze van betaling, rekeningnummer</li>
+<li>Eindtotalen jaar-tot-datum (YTD)</li>
+</ol>
+
+<h2>8. Foutbronnen — zes categorieën</h2>
+<ol>
+  <li><strong>Master data-fouten</strong> — verkeerd PC, onjuiste gezinscoëfficient, foutief RRN. Validatie via KSZ + jaarlijkse vragenlijst werknemer.</li>
+  <li><strong>Prestatiefouten</strong> — uren niet ingegeven, dubbeltelling overuren, ziekte foutief gecodeerd. Validatie: kruiscontrole tegen tijdsregistratie.</li>
+  <li><strong>Parameter-fouten</strong> — verouderde BV-schalen, niet bijgewerkte werkbonus, foute MC-tarieven. Validatie: parameter-versie gelinkt aan run.</li>
+  <li><strong>Berekeningsfouten</strong> — afrondingsfouten (HALF_UP vs HALF_EVEN), foute volgorde inhoudingen. Validatie: golden master tests.</li>
+  <li><strong>Aangiftefouten</strong> — DmfA looncode niet matchend, Belcotax fiche met ontbrekende code. Validatie: pre-validatie tegen RSZ-schema's.</li>
+  <li><strong>Procedurale fouten</strong> — Dimona te laat, BV te laat doorgestort, loonbrief niet binnen wettelijke termijn. Validatie: SLA-monitor + alerting.</li>
+</ol>
+
+<p>Voor de wettelijke achtergrond: <a href="wetgevend-kader.html">wetgevend kader</a>. Voor het datamodel: <a href="datamodel.html">datamodel</a>.</p>
+</main>
+
+<footer>Loonmotor BE — Onderzoeksdossier · <a href="index.html">Terug naar overzicht</a></footer>
+</body>
+</html>

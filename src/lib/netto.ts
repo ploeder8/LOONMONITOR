@@ -15,7 +15,6 @@ export interface NettoInput {
   bouwVlag?: boolean;
   gezinstype: GezinsType;
   kinderenTenLaste: number;
-  kinderenOnder3?: number;
   fiscaalAlleenstaandeMetKind?: boolean;
   groepsverzekeringEigenBijdrage?: number;
   maaltijdchequeWerknemersbijdragePerDag?: number;
@@ -23,11 +22,13 @@ export interface NettoInput {
   woonwerkVrijgesteldPerMaand?: number;
   hospitalisatieEigenBijdrage?: number;
   onkostenvergoedingPerMaand?: number;
+  vaaRszPlichtigPerMaand?: number;
   vaaBedrijfswagenPerMaand?: number;
 }
 
 export interface NettoResultaat {
   brutoloon: number;
+  brutoRszBasis: number;
   rsz: RszResultaat;
   werkbonus: WerkbonusResultaat;
   fiscaleWerkbonus: number;        // 33,14% × Luik A + 52,54% × Luik B
@@ -35,6 +36,7 @@ export interface NettoResultaat {
   belastbaarMaandloon: number;
   belastbaarMaandloonVoorBV: number;
   woonwerkVrijgesteldPerMaand: number;
+  vaaRszPlichtigPerMaand: number;
   vaaBedrijfswagenPerMaand: number;
   bbsz: BbszResultaat;
   bv: BvResultaat;
@@ -53,7 +55,6 @@ export function berekenNetto(input: NettoInput): NettoResultaat {
     bouwVlag = false,
     gezinstype,
     kinderenTenLaste,
-    kinderenOnder3 = 0,
     fiscaalAlleenstaandeMetKind = false,
     groepsverzekeringEigenBijdrage = 0,
     maaltijdchequeWerknemersbijdragePerDag = 0,
@@ -61,16 +62,19 @@ export function berekenNetto(input: NettoInput): NettoResultaat {
     woonwerkVrijgesteldPerMaand = 0,
     hospitalisatieEigenBijdrage = 0,
     onkostenvergoedingPerMaand = 0,
+    vaaRszPlichtigPerMaand = 0,
     vaaBedrijfswagenPerMaand = 0,
   } = input;
 
-  const rszR = rszBijdragen({ brutoloon, refDatum, bouwVlag });
-  const werkbonusR = werkbonus({ brutoloon, refDatum });
-  const bbszR = bbsz({ brutoloon });
+  const vaaRszPlichtig = round2(Math.max(vaaRszPlichtigPerMaand, 0));
+  const brutoRszBasis = round2(brutoloon + vaaRszPlichtig);
+  const rszR = rszBijdragen({ brutoloon: brutoRszBasis, refDatum, bouwVlag });
+  const werkbonusR = werkbonus({ brutoloon: brutoRszBasis, refDatum });
+  const bbszR = bbsz({ brutoloon: brutoRszBasis, gezinstype });
 
   // Effective RSZ = statutory RSZ minus social bonus (werkbonus), minimum 0
   const effectieveRsz = round2(Math.max(0, rszR.werknemerBijdrage - werkbonusR.totaal));
-  const belastbaarMaandloon = round2(brutoloon - effectieveRsz);
+  const belastbaarMaandloon = round2(brutoRszBasis - effectieveRsz);
   const belastbaarMaandloonVoorBV = round2(
     belastbaarMaandloon + Math.max(vaaBedrijfswagenPerMaand, 0),
   );
@@ -85,7 +89,6 @@ export function berekenNetto(input: NettoInput): NettoResultaat {
     belastbaarMaandloon: belastbaarMaandloonVoorBV,
     gezinstype,
     kinderenTenLaste,
-    kinderenOnder3,
     fiscaalAlleenstaandeMetKind,
     groepsverzekeringEigenBijdrage,
     fiscaleWerkbonusKrediet: fiscaleWerkbonus,
@@ -103,18 +106,20 @@ export function berekenNetto(input: NettoInput): NettoResultaat {
   const onkostenvergoedingBedrag = round2(Math.max(onkostenvergoedingPerMaand, 0));
 
   const nettoloon = round2(
-    brutoloon -
-      effectieveRsz -
+    belastbaarMaandloonVoorBV -
       bvR.bvNaVerminderingen -
       bbszR.maandelijksBedrag -
       maaltijdchequeWerknemersbijdrage +
       Math.max(woonwerkVrijgesteldPerMaand, 0) -
       hospitalisatieEigenBijdrageBedrag +
-      onkostenvergoedingBedrag,
+      onkostenvergoedingBedrag -
+      round2(Math.max(vaaBedrijfswagenPerMaand, 0)) -
+      vaaRszPlichtig,
   );
 
   return {
     brutoloon,
+    brutoRszBasis,
     rsz: rszR,
     werkbonus: werkbonusR,
     fiscaleWerkbonus,
@@ -122,6 +127,7 @@ export function berekenNetto(input: NettoInput): NettoResultaat {
     belastbaarMaandloon,
     belastbaarMaandloonVoorBV,
     woonwerkVrijgesteldPerMaand: round2(Math.max(woonwerkVrijgesteldPerMaand, 0)),
+    vaaRszPlichtigPerMaand: vaaRszPlichtig,
     vaaBedrijfswagenPerMaand: round2(Math.max(vaaBedrijfswagenPerMaand, 0)),
     bbsz: bbszR,
     bv: bvR,

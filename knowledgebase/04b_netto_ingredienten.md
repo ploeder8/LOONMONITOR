@@ -83,7 +83,7 @@ CO2-coëfficiënt = 5,5% + (CO2-uitstoot - referentie-uitstoot) × 0,1%
 | PC (incl. randapparatuur, indien gratis ter beschikking) | €72/jaar |
 | Internetaansluiting (privégebruik) | €60/jaar |
 | GSM-toestel | €36/jaar |
-| Telefoonabonnement (privégebruik) | €48/jaar |
+| GSM-abonnement (privégebruik) | €48/jaar |
 | Tablet | €36/jaar |
 
 (Bedragen sinds KB 25 november 2017, ongewijzigd; geen indexering.)
@@ -419,9 +419,10 @@ Voor een **kompleet "totale werkgeverskost = bruto × X"** model is de volgende 
 ### 8.3 Vakantiegeld bedienden
 
 - **Enkel vakantiegeld:** = maandloon (= reservering 7,67%/maand of provisie 92%/jaar)
-- **Dubbel vakantiegeld:** **92% × bruto maandloon** per vakantiedienstjaar (RJV-formule).
+- **Dubbel vakantiegeld:** **92% × bruto maandloon incl. VAA** per vakantiedienstjaar.
+- **RSZ werknemer:** 13,07% op **85/92** van het dubbel vakantiegeld.
 - **Provisioneel reserveringspercentage:** ca. **15,38%** bruto (= enkel + dubbel jaarlijks).
-- **Bedrijfsvoorheffing op dubbel vakantiegeld:** afzonderlijke schaal (17,16% / 23,22% afhankelijk van bedrag).
+- **Bedrijfsvoorheffing op dubbel vakantiegeld:** bijzondere BV-schaal, kolom vakantiegeld, op belastbaar bedrag na RSZ.
 
 ### 8.4 Eindejaarspremie PC 200
 
@@ -429,7 +430,7 @@ Voor een **kompleet "totale werkgeverskost = bruto × X"** model is de volgende 
 - **CAO-basis:** Sectorale CAO 26 januari 2012, geactualiseerd in opeenvolgende sectorakkoorden.
 - **Anciënniteit-vereiste:** in het sectoraal akkoord 18 december 2025 verlaagd naar **3 jaar** anciënniteit op 31 december (vroeger 5 jaar).
 - **Pro rata**: bij deeltijdse arbeid en/of gedeeltelijk gewerkt jaar.
-- **BV-tarief:** afzonderlijke schaal (gemiddelde fiscale druk).
+- **BV-tarief:** bijzondere BV-schaal, kolom andere vergoedingen en toelagen, op belastbaar bedrag na RSZ.
 - **Patronale RSZ:** 25% (zoals op gewoon loon).
 
 ### 8.5 Sociaal Fonds PC 200
