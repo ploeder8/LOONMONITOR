@@ -85,7 +85,7 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 <table class="compact">
 <thead><tr><th>Bouwsteen</th><th>Tier 1</th><th>Tier 2 fallback</th><th>Confidence</th></tr></thead>
 <tbody>
-<tr><td>Bedrijfsvoorheffing (BV)</td><td>KB 11/12/2025 (BS 29/12/2025); FOD Fin Tax-Calc</td><td>Securex, CLB Group, Partena</td><td><span class="badge feit">HIGH</span></td></tr>
+<tr><td>Bedrijfsvoorheffing (BV)</td><td>KB 11/12/2025 (BS 29/12/2025); FOD Bijlage III</td><td>Securex, CLB Group, Partena</td><td><span class="badge feit">HIGH</span></td></tr>
 <tr><td>BV-verminderingen</td><td>FOD Financiën (exclusief)</td><td>—</td><td><span class="badge feit">HIGH</span></td></tr>
 <tr><td>RSZ-werknemer</td><td>RSZ basisbijdragevoeten (13,07%)</td><td>—</td><td><span class="badge feit">HIGH</span></td></tr>
 <tr><td>Sociale werkbonus</td><td>Programmawet 18/7/2025; KB 6/10/2025</td><td>Liantis, Daenens, Securex, Attentia (viervoudig)</td><td><span class="badge feit">HIGH</span></td></tr>
@@ -157,7 +157,7 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 <table class="compact">
 <thead><tr><th>Tool</th><th>Tier</th><th>Scope</th><th>Opmerking</th></tr></thead>
 <tbody>
-<tr><td><a href="https://eservices.minfin.fgov.be/taxcalc/" target="_blank" rel="noopener">FOD Fin Tax-Calc</a></td><td><strong>Tier 1</strong></td><td>Alle werknemers</td><td>Officiële BV-simulator; XLSX-download; referentie voor alle BV-tests</td></tr>
+<tr><td><a href="https://financien.belgium.be/nl/ondernemingen/personeel_en_loon/bedrijfsvoorheffing/berekening" target="_blank" rel="noopener">FOD Fin BV-berekening</a></td><td><strong>Tier 1</strong></td><td>Alle werknemers</td><td>Regels 1 januari 2026 + sleutelformule; referentie voor alle BV-tests</td></tr>
 <tr><td><a href="https://www.socialsecurity.be/citizen/nl/static/applics/findmybonus/" target="_blank" rel="noopener">RSZ Find My Bonus</a></td><td><strong>Tier 1</strong></td><td>Werkbonus</td><td>Officiële werkbonus-rekenmodule RSZ</td></tr>
 <tr><td><a href="https://online.groups.be/salarysim/?lg=nl" target="_blank" rel="noopener">Group S Salary Sim</a></td><td>Tier 2</td><td>Alle PC's</td><td>Primaire tier-2 triangulatieanker voor Jaakie</td></tr>
 <tr><td>Securex / Partena / Liantis loonwijzers</td><td>Tier 2</td><td>Eigen klanten + publiek</td><td>Goed voor parameter-validatie; geen open API</td></tr>
@@ -180,7 +180,7 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 <h2>7. Gemarkeerde gaps &amp; pending bronnen</h2>
 <ul>
 <li><strong>BBSZ exacte tabel:</strong> Status <code>mogelijk_verouderd</code> — info-band €0–€60,94 tot RSZ-instructie 2026 bevestigd. <span class="badge onzekerheid">Onzekerheid</span></li>
-<li><strong>FOD Tax-Calc BV-validatie:</strong> 30 cases moeten extern worden gevalideerd. Status <code>pending_taxcalc</code>. <span class="badge onzekerheid">Onzekerheid</span></li>
+<li><strong>FOD Bijlage III BV-validatie:</strong> 30 cases dragen officiële Bijlage III-validatievelden. Status <code>ok</code>. <span class="badge feit">Feit</span></li>
 <li><strong>Arizona hervormingen:</strong> Wetsontwerp — fiscale werkbonus 35%/63%, belastingvrije som €11.550. Alleen feature-flag tot in werking. <span class="badge hypothese">Hypothese</span></li>
 <li><strong>VAA auto-berekening:</strong> Niet geïmplementeerd. Bedrijfswagen CO₂-formule, woonst, verwarming. <span class="badge later">Later</span></li>
 <li><strong>Netto → Bruto:</strong> Ontbreekt. Roadmap-prioriteit. <span class="badge later">Later</span></li>

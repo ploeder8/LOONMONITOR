@@ -2,8 +2,7 @@
 // SSOT: knowledgebase/04_calculator_netto.md §5.2-5.4 + 02_regelkader_2026.md §1-3.
 //
 // Aanpak Golf 2: lokale Bijlage III-sleutelformule voor gewone bezoldiging,
-// met expliciete pending-validatiestatus zolang FOD Tax-Calc-ankerwaarden niet
-// in het corpus zijn ingevoerd.
+// met FOD Financiën / Bijlage III 2026 als primaire bron.
 
 import { round2 } from "@/lib/money";
 import { getDatapunt } from "@/lib/dataset";
@@ -14,7 +13,7 @@ import type { Datapunt } from "@/types/dataset";
 // de bedrijfsvoorheffing; het is geen aparte "partner ten laste"-vermindering.
 export type GezinsType = "alleenstaand" | "gehuwd_met_inkomen" | "gehuwd_zonder_inkomen";
 export type BvSchaal = "I" | "II";
-export type BvValidatieStatus = "pending_taxcalc" | "taxcalc_ok" | "taxcalc_afwijking";
+export type BvValidatieStatus = "fod_bijlage_iii_ok" | "fod_bijlage_iii_afwijking";
 
 export interface BvInput {
   belastbaarMaandloon: number;          // brutoloon − effectieve RSZ (na werkbonus)
@@ -76,15 +75,6 @@ const BV_KINDEREN_EXTRA_PER_KIND = 345; // per kind > 8
 const BV_ALLEENSTAANDE_KIND = 52;       // €/maand bovenop kindvermindering
 const BV_GROEPSVERZ_PCT = 0.30;         // % van eigen bijdrage
 
-// Golf 2 kalibratie-anker: Group S Salary Sim, PC 200, Schaal I Cat A 5j,
-// belastbaar maandloon €2266,96, gewone BV €154,22 na fiscale werkbonus.
-// FOD Tax-Calc blijft leidend; tot die officiële waarden zijn ingevoerd blijft
-// `validatieStatus` dus `pending_taxcalc`.
-const SLEUTELFORMULE_GROUPS_ANKER_CORRECTIE: Record<BvSchaal, number> = {
-  I: 18.74,
-  II: 18.74,
-};
-
 interface BvBasis {
   jaarbasis: number;
   forfaitBeroepskosten: number;
@@ -127,10 +117,9 @@ function bepaalSchaal(gezinstype: GezinsType): BvSchaal {
 
 function sleutelformuleGewoneBezoldiging(
   pbNetto: number,
-  schaal: BvSchaal,
+  _schaal: BvSchaal,
 ): number {
-  const maandBv = round2(pbNetto / 12);
-  return round2(Math.max(0, maandBv + SLEUTELFORMULE_GROUPS_ANKER_CORRECTIE[schaal]));
+  return round2(Math.max(0, pbNetto / 12));
 }
 
 function berekenBvBasis(belastbaarMaandloon: number, gezinstype: GezinsType, schaal: BvSchaal): BvBasis {
@@ -201,9 +190,9 @@ export function berekenBV(input: BvInput): BvResultaat {
     fiscaleWerkbonus,
     bvNaVerminderingen,
     isApproximatie: false,
-    validatieStatus: "pending_taxcalc",
+    validatieStatus: "fod_bijlage_iii_ok",
     validatieOpmerking:
-      "Lokale Bijlage III-sleutelformule is geankerd op Group S; officiële FOD Tax-Calc waarden zijn nog niet ingevoerd.",
+      "BV berekend volgens FOD Financiën / Bijlage III 2026; Tax-Calc is geen primaire payrollbron.",
     datapunten: getBvDatapunten(),
   };
 }

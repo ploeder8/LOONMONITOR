@@ -47,17 +47,17 @@ Samenstelling (RSZ-instructies werkgevers, peildatum 2026):
 
 **Tarief:** **0,23%** van bruto loon (werkgeversbijdrage).
 
-**Bron:** sfonds200.be ("verloning"-rubriek, inkomstenjaar 2026).
+**Bron:** sectorakkoord PC 200 2025-2026 en sociaal-secretariaat-analyse. Securex en CLB bevestigen dat de werkgeversbijdrage aan het Sociaal Fonds van PC 200 op **0,23% van de brutolonen van de bedienden** blijft voor **1 januari 2026 t.e.m. 31 december 2027**.
 
 Doel: financiering eindejaarspremie + collectieve voorzieningen + opleidingen.
 
 ### 2.3 Arbeidsongevallen-verzekering
 
-**Tarief bedienden bureau:** ~0,30% van bruto loon (sector-afhankelijk en verzekeraar-afhankelijk).
+**Tarief bedienden bureau:** default **0,30%** van bruto loon in Jaakie, maar dit is een **indicatieve aanname**, geen wettelijk of PC 200-sectoraal percentage.
 
-**Bron:** Federale Pensioendienst — wettelijk verplicht voor alle werkgevers.
+**Bron:** Fedris bevestigt de wettelijke verzekeringsplicht voor privésectorwerkgevers. Liantis en Securex bevestigen dat de premievoet door de verzekeraar wordt bepaald op basis van activiteit, functie/personeelscategorie, loonmassa en risico. Een publieke marktbron vermeldt ongeveer **0,50% voor kantoorpersoneel**; er is geen publieke bron gevonden die **0,30%** als algemene PC 200-norm bevestigt.
 
-Voor PC 200-bedienden in een typisch bureauomgeving is dit aan de lage kant (versus arbeiders in PC 124 bouw waar tot 4–6% mogelijk is).
+Voor PC 200-bedienden in een typisch bureauomgeving is 0,30% verdedigbaar als lage default voor een laag-risico profiel, maar de UI moet dit configureerbaar houden en mag het niet als harde sectorparameter presenteren. Voor een conservatievere werkgeverskostinschatting is **0,50%** verdedigbaar.
 
 ### 2.4 Eindejaarspremie in jaaroverzicht
 
@@ -224,8 +224,8 @@ Bv. twee bruto-loonniveaus naast elkaar voor cliëntgesprek.
 |-----------|----------|------|
 | RSZ werkgever 25% | rsz.fgov.be/nl/werkgevers/bijdragen | 1 |
 | Loonmatigingsbijdrage | rsz.fgov.be (instructies werkgevers) | 1 |
-| Sociaal Fonds 200 (0,23%) | sfonds200.be/nl/verloning | 1 |
-| Arbeidsongevallen-verzekering | fpd.fgov.be / Fedris | 1 |
+| Sociaal Fonds 200 (0,23%) | Securex PC 200 analyse 2025-2026 + CLB sectorakkoord 2025-2026 | 2 |
+| Arbeidsongevallen-verzekering | Fedris verzekeringsplicht + Liantis/Securex kostprijsinformatie | 2 voor verplichting, 3 voor indicatief percentage |
 | Eindejaarspremie PC 200 (cao 18/12/2025 + 15/1/2026) | sfonds200.be/cao | 1 |
 | Dubbel vakantiegeld bedienden (92%) | rva.fgov.be | 1 |
 | Structurele vermindering (helling 0,1600 vanaf 1/4/2026) | KB 2/7/2025, BS 15/7/2025 | 1 |

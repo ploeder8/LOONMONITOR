@@ -100,4 +100,5 @@
 - Bedrijfsvoorheffingsregels 2026 gepubliceerd via KB 11/12/2025 in BS 29/12/2025 (Bijlage III)
 - Volledige sectorale baremamatrix PC 200 (Schaal I, Schaal II, studenten Ã— Cat A/B/C/D) opgenomen vanaf 2026-05-08; primaire bron SSN (Tier 2), getrianguleerd met ACV en ACLVB (Tier 3) â€” alle 228 cellen onderling bevestigd
 - Sectorpensioen-onderzoek (2026-05-08): bevestigd dat er geen algemeen sectoraal aanvullend pensioen bestaat voor het volledige PC 200 â€” enkel voor de bouw-subset (1,80% solidariteitsluik vanaf 1/1/2026 via CAO 13/03/2025 nr. 192.922)
-- Sociaal Fonds 200 werkgeversbijdrage (0,23%) verlengd voor 1/1/2026â€“31/12/2027; bevestigd door 3 onafhankelijke Tier 2 bronnen (Partena Professional, Liantis, CLB Group)
+- Sociaal Fonds 200 werkgeversbijdrage (0,23%) verlengd voor 1/1/2026-31/12/2027; bevestigd door Securex PC 200 analyse en CLB sectorakkoord.
+- Arbeidsongevallenverzekering voor bedienden blijft configureerbaar: 0,30% is een lage indicatieve Jaakie-default voor bureaupersoneel, geen wettelijk of sectoraal PC 200-tarief.

@@ -93,7 +93,7 @@ src/
 │   ├── __tests__/
 │   │   ├── golden.test.ts              # ~900 regels TC/NTC golden tests
 │   │   ├── schemaValidate.smoke.test.ts
-│   │   ├── taxcalcValidation.test.ts
+│   │   ├── fodBvValidation.test.ts
 │   │   └── HomePage.test.ts            # UI-structuur tests (render zonder browser)
 │   ├── errors.ts         # PC200DatasetError hierarchy
 │   ├── dataset.ts        # getDatapunt, indexById
@@ -150,6 +150,8 @@ src/
 ## Single Source of Truth (SSOT)
 
 Voor **alle inhoudelijke vragen** (regelkader, calculator-specs, datapunten, testcorpus, gaps & roadmap, bronnenhiërarchie, AJ 2027-parameters): raadpleeg de **`knowledgebase/`** folder. Start bij `knowledgebase/README.md`.
+
+Wanneer in een chat nieuwe inhoudelijke kennis wordt besproken of wanneer een tegenspraak wordt vastgesteld tussen code, dataset, tests, documentatie of gebruikersinformatie, werk dan steeds de relevante bestanden in `knowledgebase/` bij met de nieuwste en juiste informatie. Doe dit in dezelfde wijziging als de inhoudelijke fix, zodat de kennisbank de actuele SSOT blijft.
 
 | Vraag | Bron |
 |---|---|
@@ -233,7 +235,7 @@ Elke module verwijst naar zijn specificatie in `knowledgebase/`:
 
 ### BV-status (Golf 2)
 
-`src/lib/bv.ts` gebruikt een lokale `bijlage_iii_sleutelformule_2026` voor gewone bezoldiging. Het resultaat bevat `methode`, `schaal`, `validatieStatus` en `validatieOpmerking`. De implementatie blijft `pending_taxcalc` tot de 30 corpuscases extern tegen FOD Tax-Calc zijn gevalideerd; een eerste Tier-2 anker tegen Group S Salary Sim zit al in de tests.
+`src/lib/bv.ts` gebruikt een lokale `bijlage_iii_sleutelformule_2026` voor gewone bezoldiging met FOD Financiën / Bijlage III als primaire bron. Het resultaat bevat `methode`, `schaal`, `validatieStatus` en `validatieOpmerking`. De BV-validatiestatus is `fod_bijlage_iii_ok` wanneer de berekening uitsluitend op de FOD-regelset steunt. Tax-Calc is alleen een latere PB-ramingscheck, geen primaire payrollbron. Sociale-secretariaat-tools zoals Group S mogen alleen als Tier-2 triangulatie dienen, nooit als primaire bron of officieel anker.
 
 ---
 
@@ -271,19 +273,19 @@ De test-suite draait op `bun:test` (zelfde API als Vitest). Standaard referentie
 |---|---|---|
 | `golden.test.ts` | ~900 regels exacte EUR-golden tests per `TC-XX` / `NTC-XX` | Baremas, RSZ, werkbonus, BBSZ, BV, netto end-to-end, eindejaarspremie, ecocheques, fietsvergoeding, woonwerk trein/verkeer, VAA, jaarpremie, werkgeverskost, audit-URL's, bijzondere BV |
 | `schemaValidate.smoke.test.ts` | Dataset valideert tegen schema; broken dataset wordt afgewezen | Data-integriteit |
-| `taxcalcValidation.test.ts` | Metadata-test: 30 FOD Tax-Calc cases moeten `status: "pending"` hebben; ≥5 triangulatie-ankers geregistreerd | Validatie-proces tracking |
+| `fodBvValidation.test.ts` | Metadata-test: 30 cases moeten FOD Bijlage III-validatievelden hebben en `status_validatie: "ok"` dragen | Validatie-proces tracking |
 | `HomePage.test.ts` | Statische render-tests (`react-dom/server`): veld-volgorde, accordion-nesting, maandgrensregels | UI-structuur regressie |
 
 ### Testfilosofie
 - **Golden tests:** exacte verwachte waarden, zero tolerance op bedragen (tenzij `toBeCloseTo` met €0,50 tolerantie voor BV).
 - **Audit-tests:** elk resultaat moet een `datapunt` dragen met een truthy `bron_url`.
 - **Edge-cases:** grenswaarden werkbonus-luiken, BBSZ-schijven, BV-verminderingen, fiets-tariefswitch (oktober 2026), pro-rata woonwerk.
-- **Tier-2 triangulatie:** Group S Salary Sim-ankers zijn gecodeerd (bijv. TC-23b: Schaal I Cat A 5j → `bvNaVerminderingen` dicht bij €154,22).
+- **Tier-2 triangulatie:** sociale-secretariaat-output mag alleen secundair worden vergeleken en mag geen officiële BV-status of bronwaarde bepalen.
 
 ### Acceptatieregels
 - Laag 1: `expect(...).toBe(...)` — exacte EUR, nul tolerantie.
-- Laag 2: `toBeCloseTo(..., 0)` (~€0,50 tolerantie). BV-uitkomsten moeten binnen **±€2** van FOD Fin Tax-Calc liggen voor **≥12/15** cases.
-- Laag 3: ±€5/maand tolerantie vs. Tax-Calc; >€15 = "grote_afwijking" die root-cause analyse vereist.
+- Laag 2: `toBeCloseTo(..., 0)` (~€0,50 tolerantie). BV-uitkomsten moeten overeenkomen met FOD Financiën / Bijlage III 2026 voor de representatieve NTC-cases.
+- Laag 3: ±€5/maand tolerantie vs. het FOD Bijlage III-corpus; >€5 = `afwijking` die root-cause analyse vereist.
 
 ---
 
@@ -315,6 +317,7 @@ Wijzig toekomstige branding eerst in `src/branding/*` en pas componenten alleen 
 ## Workflow-richtlijnen
 
 - Houd wijzigingen zo simpel en klein mogelijk. Kies de minst invasieve fix die het werkelijke probleem oplost.
+- Werk na elke inhoudelijke wijziging `MEMORY.md` bij met een korte logregel: datum, wat is aangepast en waarom. Houd dit zeer summier maar concreet.
 - Rapporteer na een gefocuste wijziging kort wat er is veranderd en vraag de gebruiker om bevestiging voordat je extra of tijdrovende verificatiestappen uitvoert.
 - Minimale checks die rechtstreeks breuk beschermen zijn toegestaan zonder bevestiging: een gerichte test, `bun test`, `bun run typecheck`, of `bun run build` wanneer de wijziging compiled code raakt.
 - Besteed geen tijd aan brede handmatige verificatie, herhaalde dev-server pogingen, browser-automatisering of ongerelateerde checks tenzij de gebruiker dit expliciet vraagt of bevestigt.
@@ -347,7 +350,7 @@ Voor het volledige overzicht: zie `knowledgebase/08_gaps_en_pending.md`.
 
 | Item | Status | Impact |
 |---|---|---|
-| FOD Tax-Calc BV-validatie | `pending_taxcalc` | 30 cases moeten extern worden gevalideerd |
+| FOD Bijlage III BV-validatie | `fod_bijlage_iii_ok` | 30 cases dragen officiële BV/netto-validatievelden |
 | BBSZ exacte tabel | `mogelijk_verouderd` | Info-band €0–€60,94 tot RSZ-instructie 2026 bevestigd |
 | Arizona hervormingen | Wetsontwerp | Alleen feature-flag: fiscale werkbonus 35%/63%, belastingvrije som €11.550 |
 | VAA auto-berekening | Niet geïmplementeerd | Bedrijfswagen CO₂-formule, woonst, verwarming |
@@ -366,4 +369,3 @@ Voor het volledige overzicht: zie `knowledgebase/08_gaps_en_pending.md`.
 | Testcases toevoegen | `src/lib/__tests__/golden.test.ts` + `knowledgebase/07_testcorpus.md` |
 | Branding wijzigen | `src/branding/brand.ts` en/of `src/branding/brand.css` |
 | Een nieuwe pagina toevoegen | `src/pages/<Naam>Page.tsx` + route in `src/App.tsx` |
-

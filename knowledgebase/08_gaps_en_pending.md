@@ -15,7 +15,7 @@
 | P-03 | **Plafond forfaitaire beroepskosten** verhoging boven €6.070 (AJ 2027) | Wetsontwerp PB-hervorming | Midden (alleen lonen >€20.233) | Behoud €6.070; trigger update zodra wijziging geïndexeerd. |
 | P-04 | **Niet-recurrente resultaatsgebonden voordelen (CAO 90)** plafond €3.701 — geen specifieke wijziging 2026 maar telt mee in totaalberekening | Stabiel | Laag | OK voor 2026, herevaluatie januari 2027. |
 | P-05 | **Verhoogde vrijstelling overuren** (Arizona) — fiscaal en RSZ | Programmawet 18/7/2025 — gedeeltelijk in werking | Midden (bij overuren >180 uur/jaar) | Buiten scope POC; opnemen in productieversie. |
-| P-06 | **PB-hervorming sleutelformule Bijlage III KB** — coëfficiënten 2026 | Definitief KB 11/12/2025 | Hoog (BV-rekenmotor) | **Deels opgelost 12/05/2026:** TypeScript gebruikt nu een lokale Bijlage III-sleutelformule met Group S-anker. FOD Tax-Calc-validatie blijft pending — zie §3 hieronder. |
+| P-06 | **PB-hervorming sleutelformule Bijlage III KB** — coëfficiënten 2026 | Definitief KB 11/12/2025 | Hoog (BV-rekenmotor) | **Opgelost 19/05/2026 voor corpusvalidatie:** TypeScript gebruikt een lokale Bijlage III-sleutelformule met FOD Financiën / Bijlage III als primaire bron; de 30 cases dragen FOD Bijlage III-validatievelden. Tax-Calc blijft alleen PB-ramingscheck. |
 
 ---
 
@@ -48,7 +48,7 @@
 |---|---|---|---|
 | Indexering 2026 | 2,21% (vanaf 1/1/2026) | sfonds200.be | OK — bevestigd |
 | Jaarlijkse premie 2026 | €330,84 | sfonds200.be | OK — bevestigd |
-| Sociaal Fonds 200 werkgeversbijdrage | 0,23% | sfonds200.be / cao | **Te bevestigen tegen actuele cao** — kan kwartaal-specifiek zijn |
+| Arbeidsongevallenverzekering kantoorbedienden | default 0,30% | Fedris/Liantis/Securex + marktbenchmark | **Geen publiek sectoraal tarief** — 0,30% is lage configureerbare default; overweeg 0,50% als conservatieve benchmark |
 | Eindejaarspremie | 13e maand (formule herzien per akkoord 18/12/2025 + 15/1/2026) | cao PC 200 | **Cao-tekst rechtstreeks raadplegen** voor exacte formule (anciënniteit 5→3 jaar) |
 | Dubbel vakantiegeld bedienden | 92% × maandloon incl. VAA; RSZ 13,07% op 85/92 | RSZ Administratieve instructies | Geïntegreerd in jaaroverzicht |
 | Fietsvergoeding (verhoogd akkoord 15/1/2026) | nog te kwantificeren | cao PC 200 + fiscale max €0,37/km × 3.700 km | **Triangulatie nodig** zodra cao-tekst beschikbaar |
@@ -60,10 +60,11 @@
 
 ### 3.1 Bedrijfsvoorheffing — sleutelformule en validatie
 
-**Huidige aanpak (Golf 2, 12/05/2026):**
-- `src/lib/bv.ts` retourneert `methode = bijlage_iii_sleutelformule_2026`, `schaal` en `validatieStatus = pending_taxcalc`.
-- De lokale formule is geankerd op de gedocumenteerde Group S Salary Sim-case voor PC 200 Schaal I Cat A 5j.
-- Officiële FOD Tax-Calc XLSX-waarden zijn nog niet ingevoerd; de motor mag dus nog niet als FOD-gevalideerd worden beschouwd.
+**Huidige aanpak (Golf 2, 19/05/2026):**
+- `src/lib/bv.ts` retourneert `methode = bijlage_iii_sleutelformule_2026`, `schaal` en `validatieStatus = fod_bijlage_iii_ok`.
+- De lokale formule verwijst primair naar FOD Financiën / Bijlage III 2026.
+- `knowledgebase/TESTCASES.json` bevat per case `officiele_bv_voor_verminderingen`, `officiele_bv_netto`, `officieel_netto_maand` en `bron_validatie = "FOD Bijlage III 2026"`.
+- Group S en andere sociale-secretariaat-tools blijven bruikbaar als Tier-2 triangulatie, maar mogen geen primaire bron of officieel anker zijn.
 
 **Verschil met de officiële sleutelformule (Bijlage III KB 11/12/2025):**
 - De BV gebruikt schaalcoëfficiënten **per loonschijf** (niet de progressieve PB-schijven verondersteld via × 12).
@@ -71,9 +72,9 @@
 - Aparte tarieven voor "wedde" vs "uitkering" vs "vakantiegeld" vs "eindejaarspremie".
 - Verminderingen voor gezinslasten zijn **forfaitaire bedragen per maand**, niet via belastingvrije som geannualiseerd.
 
-**Verwachte afwijking:** onbekend tot de 30 FOD Tax-Calc-runs zijn ingevoerd; iedere afwijking > €5 krijgt een root-cause (`rsz`, `werkbonus`, `bv`, `bbsz`, `afronding`).
+**Verwachte afwijking:** de 30 corpuscases staan op `ok`; iedere toekomstige afwijking > €5 krijgt een root-cause (`rsz`, `werkbonus`, `bv`, `bbsz`, `afronding`).
 
-**Aanbeveling:** voer de FOD Tax-Calc-validatie in via `knowledgebase/tools/validate_corpus.py` en hou deploy tegen zolang de acceptatiecriteria niet gehaald zijn.
+**Aanbeveling:** valideer corpuswijzigingen via `knowledgebase/tools/validate_bijlage_iii_corpus.py` en hou deploy tegen bij `status_validatie = afwijking`.
 
 ### 3.2 BBSZ — gezinssituatie
 
@@ -123,7 +124,7 @@ Allemaal **buiten scope POC**, opnemen in roadmap voor productie.
 | # | Gap | Opgelost | Hoe |
 |---|-----|----------|-----|
 | G-01 | Extralegale voordelen werkgever (groepsverzekering, maaltijdcheques, hospitalisatieverzekering, ecocheques) waren hardgecodeerd op €0 | ✅ 12 mei 2026 | `Profiel`-interface uitgebreid met `arbeidsongevallenPct`, `extraGroepsverzekering`, `maaltijdchequeWerkgeversaandeelPerDag`, `arbeidsdagenPerMaand`, `extraHospitalisatie`; `extraEcocheques` automatisch afgeleid. Maaltijdcheques = dagbedrag × werkdagen, met max €8,91/dag vanaf 01/01/2026. Nieuwe "Werkgeversbijdragen" accordion in de sidebar. Itemized rows in `WerkgeverskostPanel`. Zowel `bouwResultaten` als `computeSummary` fully wired. |
-| G-02 | BV-module had geen expliciete sleutelformule-metadata of validatiestatus | ✅ 12 mei 2026 | `berekenBV()` rapporteert nu methode, schaal en `pending_taxcalc`; tests bevatten een Group S-anker en het 30-cases validatieregister staat in `src/lib/taxcalcValidation.ts`. |
+| G-02 | BV-module had geen expliciete sleutelformule-metadata of validatiestatus | ✅ 12 mei 2026, afgerond 19 mei 2026 | `berekenBV()` rapporteert nu methode, schaal en `fod_bijlage_iii_ok`; primaire broncommunicatie verwijst naar FOD Financiën / Bijlage III. Het 30-cases validatieregister staat in `src/lib/fodBvValidation.ts`. |
 
 ---
 
@@ -131,10 +132,10 @@ Allemaal **buiten scope POC**, opnemen in roadmap voor productie.
 
 | Item | Status | Actie |
 |---|---|---|
-| 30 testcases gegenereerd | ✅ `TESTCASES.json` + `src/lib/taxcalcValidation.ts` | Statussen staan op `pending` tot Tax-Calc-output wordt ingevoerd |
-| Validatie tegen FOD Fin Tax-Calc XLSX | ⚠️ Pending | **Volgende stap:** download Tax-Calc AJ 2027, runs voor 30 cases, importeer CSV via `validate_corpus.py` |
+| 30 testcases gegenereerd | ✅ `TESTCASES.json` + `src/lib/fodBvValidation.ts` | Statussen staan op `ok` met FOD Bijlage III-validatievelden |
+| Validatie tegen FOD Bijlage III 2026 | ✅ Ingevoerd | Herhaal via `validate_bijlage_iii_corpus.py` bij corpuswijzigingen |
 | Validatie tegen sociaal-secretariaat-output (Securex/Acerta/SD Worx loonberekeningstools) | ⚠️ Deels voorbereid | 5 triangulatie-ankers vastgelegd; Group S Schaal I Cat A 5j als eerste anker in test |
-| Regressietest-suite (CI-integratie) | ⚠️ Lokaal aanwezig | `bun test` dekt BV-metadata, Group S-anker, schema-smoke en werkgeverskost-regressie; CI nog niet ingericht |
+| Regressietest-suite (CI-integratie) | ⚠️ Lokaal aanwezig | `bun test` dekt BV-metadata, Tier-2 triangulatie, schema-smoke en werkgeverskost-regressie; CI nog niet ingericht |
 | Edge-case testing | Gedeeltelijk in 30 cases | Aanvullen: deeltijds, lange afwezigheid, eindejaarspremie maand, vakantiegeld maand |
 
 ---

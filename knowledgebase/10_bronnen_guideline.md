@@ -65,7 +65,7 @@
 **Wettelijke ankerbron (Tier 1):**
 - [KB 11 december 2025 — wijziging KB/WIB 92 inzake Bijlage III](https://www.ejustice.just.fgov.be/) — gepubliceerd in **BS 29/12/2025**. (Zoek in eJustice op datum + trefwoord "Bijlage III".)
 - [FOD Financiën — Berekening van de bedrijfsvoorheffing 2026](https://financien.belgium.be/nl/ondernemingen/personeel_en_loon/bedrijfsvoorheffing/berekening) — landingspagina met sleutelformule + downloadbare KB-tekst.
-- [FOD Financiën — Tax-Calc 2026](https://eservices.minfin.fgov.be/taxcalc/) — officiële BV-simulator (referentie voor cross-check eigen implementatie).
+- [FOD Financiën — Berekening bedrijfsvoorheffing 2026](https://financien.belgium.be/nl/ondernemingen/personeel_en_loon/bedrijfsvoorheffing/berekening) — primaire bron voor Regels 1 januari 2026, Sleutelformule vanaf 1 januari 2026 en BV-simulator.
 
 **Operationele toelichting (Tier 2):**
 - [Securex — Bijlage III KB/WIB 92 voor 2026](https://www.securex.be/) — uitleg sleutelformule + cijfermatige illustraties.
@@ -73,7 +73,7 @@
 - [Partena Professional — verminderingen BV 2026](https://www.partena-professional.be/).
 
 **Implementatieadvies:**
-- **POC-fase 1:** UI-link naar FOD Fin BV-simulator + duidelijke audit-banner *"Bedrijfsvoorheffing wordt berekend via FOD Financiën — Tax-Calc"*.
+- **Huidige aanpak:** lokale BV-berekening volgens FOD Financiën / Bijlage III 2026 + audit-banner *"BV berekend volgens FOD Financiën / Bijlage III 2026"*.
 - **POC-fase 2 / post-POC:** eigen TS-implementatie van de sleutelformule met de KB-coëfficiënten als constants in `src/lib/bv.ts`. **Verplicht** validatie tegen de FOD-simulator voor minstens 20 cijfermatige testcases (zie spec).
 
 **Confidence:** HIGH (Tier-1 KB + 4+ Tier-2 corroboratie).
@@ -270,7 +270,7 @@
 
 | Tool | URL | Gebruik |
 |---|---|---|
-| FOD Fin Tax-Calc 2026 | https://eservices.minfin.fgov.be/taxcalc/ | PB AJ 2027 simulator — referentie voor netto |
+| FOD Fin Tax-Calc | https://eservices.minfin.fgov.be/taxcalc/ | PB-simulator — latere raming/eindafrekeningcheck, geen primaire payrollbron |
 | FOD Fin BV-simulator 2026 | https://financien.belgium.be/nl/ondernemingen/personeel_en_loon/bedrijfsvoorheffing/berekening | Officiële BV-rekenmodule |
 | RSZ Find My Bonus | https://www.socialsecurity.be/citizen/nl/static/applics/findmybonus/ | Werkbonus-cross-check |
 
@@ -335,7 +335,7 @@
 
 1. **BBSZ-hervorming 2028** — aangekondigd via DOC 56 1243/001 en Tier-2 duiding; niet toepassen in 2026-runtime zonder inkomstenjaar/regeljaar-schakelaar.
 2. **AAFisc-circulaire VAA 2026** — bedrijfswagen min-VAA (€1.690) en ref-CO2 (58/70 g/km) alleen via fibofin Tier-2. Markeer `vaa_bedrijfswagen_*_2026` als `mogelijk_verouderd`.
-3. **Eigen sleutelformule-implementatie** — divergentierisico met FOD Fin Tax-Calc. Mitigatie: in POC-fase 1 alleen UI-link naar FOD Fin-simulator; eigen implementatie pas in fase 2 met 20+ regressietests.
+3. **Eigen sleutelformule-implementatie** — divergentierisico met FOD Bijlage III. Mitigatie: corpusvalidatie via `validate_bijlage_iii_corpus.py` en release blokkeren bij `status_validatie = afwijking`.
 4. **Aanvullende gemeentebelasting per gemeente** — geen Tier-1 machine-leesbare lijst. Aanbevolen aanpak: parameter met default 7,3 % + UI-disclaimer. **Niet** als datapunt in de JSON opnemen.
 5. **`pb_schijven_inkomstenjaar_2026`** — huidige status `niet_gevonden`. Op basis van Tier-1 (FOD Fin geïndexeerde bedragen) + drievoudige Tier-2 (Wolters Kluwer, Practicali, NCOI) kan dit naar **`actief`** worden gepromoveerd.
 6. **Wetsontwerp Arizona (belastingvrije som €11.180 → €15.300; fiscale werkbonus 35/63 %)** — **NIET** in BS op peildatum. Markeer als `[hypothesis]` / niet implementeren.

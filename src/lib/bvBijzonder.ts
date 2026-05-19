@@ -1,8 +1,8 @@
 // Bijzondere BV-schaal voor variabel loon (eindejaarspremie, jaarpremie,
 // dubbel vakantiegeld, ad-hoc bonussen). SSOT: knowledgebase/04_calculator_netto.md §5.4b.
 //
-// Tarief wordt opgezocht op basis van het REFERTEJAARLOON (= 12 × normaal
-// brutomaandloon), niet op basis van het exceptionele bedrag zelf.
+// Tarief wordt opgezocht op basis van het REFERTEJAARLOON (= 12 × normale
+// bruto bezoldiging min werknemers-RSZ), niet op basis van het exceptionele bedrag zelf.
 
 import { round2 } from "@/lib/money";
 import { getDatapunt } from "@/lib/dataset";
@@ -11,7 +11,7 @@ import { bvKinderen } from "@/lib/bv";
 import type { GezinsType } from "@/lib/bv";
 
 export interface BvBijzonderInput {
-  refertejaarloon: number;          // 12 × normaal brutomaandloon
+  refertejaarloon: number;          // 12 × normale bruto bezoldiging min werknemers-RSZ
   exceptioneelBruto: number;         // het te belasten variabele inkomen
   gezinstype: GezinsType;
   kinderenTenLaste: number;
@@ -51,6 +51,13 @@ const SCHAAL_2026: SchaalRij[] = [
   { jaarloonTot: 59900,    vakantiegeld: 0.4744, andereExceptioneleVergoeding: 0.5148 },
   { jaarloonTot: Infinity, vakantiegeld: 0.5350, andereExceptioneleVergoeding: 0.5350 },
 ];
+
+const RSZ_WERKNEMER_PCT = 0.1307;
+
+export function berekenRefertejaarloonBijzonder(brutomaandloon: number): number {
+  const normaalBrutoJaarloon = round2(brutomaandloon * 12);
+  return round2(normaalBrutoJaarloon - normaalBrutoJaarloon * RSZ_WERKNEMER_PCT);
+}
 
 function lookupTarief(
   refertejaarloon: number,

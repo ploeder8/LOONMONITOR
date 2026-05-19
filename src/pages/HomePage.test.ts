@@ -101,13 +101,10 @@ describe("Profiel formulier", () => {
     expect(html).toContain("Gehuwd/wettelijk samenwonend - partner zonder of beperkt beroepsinkomen");
   });
 
-  it("toont het BBSZ-scenario bij de fiscale gezinsvelden", () => {
+  it("toont geen BBSZ-scenario meer (afgeleid van gezinstype)", () => {
     const html = renderToStaticMarkup(createElement(HomePage));
 
-    expect(html).toContain("BBSZ-scenario");
-    expect(html).toContain("Individuele aanslag");
-    expect(html.indexOf("BBSZ-scenario")).toBeGreaterThan(html.indexOf("Gezinstype (voor BV)"));
-    expect(html.indexOf("BBSZ-scenario")).toBeLessThan(html.indexOf("Statuut"));
+    expect(html).not.toContain("BBSZ-scenario");
   });
 
   it("plaatst de eigen bijdrage groepsverzekering onder bijkomende looncomponenten", () => {
@@ -166,5 +163,27 @@ describe("Netto-overzicht", () => {
     expect(html).toContain("GSM");
     expect(html).toContain("Internet");
     expect(html).toContain("GSM-abonnement");
+  });
+
+  it("toont nettoloon inclusief de totale waarde van maaltijdcheques", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+    const tekst = html.replace(/\u00a0/g, " ");
+
+    expect(tekst).toContain("Nettoloon incl. maaltijdcheques");
+    expect(tekst).toContain("totale waarde € 10,00 × 22 dagen");
+    expect(tekst.indexOf("Nettoloon")).toBeLessThan(
+      tekst.indexOf("Nettoloon incl. maaltijdcheques"),
+    );
+  });
+
+  it("toont netto jaarloon inclusief maaltijdcheques op jaarbasis", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+    const tekst = html.replace(/\u00a0/g, " ");
+
+    expect(tekst).toContain("Netto jaarloon incl. maaltijdcheques");
+    expect(tekst).toContain("totale waarde € 10,00 × 264 werkdagen");
+    expect(tekst.indexOf("Netto jaarloon")).toBeLessThan(
+      tekst.indexOf("Netto jaarloon incl. maaltijdcheques"),
+    );
   });
 });

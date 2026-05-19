@@ -5,7 +5,11 @@ import {
   DatapuntOnbekend,
 } from "@/lib/errors";
 import type { Datapunt } from "@/types/dataset";
-import { berekenBvBijzonder, type BvBijzonderResultaat } from "@/lib/bvBijzonder";
+import {
+  berekenBvBijzonder,
+  berekenRefertejaarloonBijzonder,
+  type BvBijzonderResultaat,
+} from "@/lib/bvBijzonder";
 import type { GezinsType } from "@/lib/bv";
 
 const RSZ_WERKNEMER_PCT = 0.1307;
@@ -71,7 +75,7 @@ export function eindejaarspremie(input: EindejaarsInput): EindejaarsResultaat {
     const rsz = round2(premie * RSZ_WERKNEMER_PCT);
     const belastbaar = round2(premie - rsz);
     const bv = berekenBvBijzonder({
-      refertejaarloon: round2(input.brutoloon * 12),
+      refertejaarloon: berekenRefertejaarloonBijzonder(input.brutoloon),
       exceptioneelBruto: belastbaar,
       gezinstype: input.gezinstype,
       kinderenTenLaste: input.kinderenTenLaste ?? 0,

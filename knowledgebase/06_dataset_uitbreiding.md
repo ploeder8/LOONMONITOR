@@ -292,7 +292,7 @@
     {"organisatie": "SSN", "url": "https://www.ssn.be/", "tier": 2}
   ],
   "laatst_bevestigd_op": "2026-05-08",
-  "opmerkingen": "Dubbel vakantiegeld gebruikt kolom vakantiegeld; eindejaarspremie en jaarpremie gebruiken kolom andere vergoedingen en toelagen."
+  "opmerkingen": "Dubbel vakantiegeld gebruikt kolom vakantiegeld; eindejaarspremie gebruikt kolom andere vergoedingen en toelagen. De sectorale PC 200-jaarpremie krijgt alleen werknemers-RSZ en geen bedrijfsvoorheffing."
 }
 ```
 

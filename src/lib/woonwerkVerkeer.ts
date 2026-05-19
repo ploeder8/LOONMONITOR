@@ -48,6 +48,8 @@ interface KmRij {
   maand: number;
 }
 
+const GEMIDDELDE_WERKDAGEN_PER_MAAND = 21.67;
+
 const TREIN_TABEL_2026: KmRij[] = [
   r(1, 1, 39), r(2, 2, 43.5), r(3, 3, 47.5), r(4, 4, 52), r(5, 5, 56),
   r(6, 6, 60), r(7, 7, 63), r(8, 8, 67), r(9, 9, 70), r(10, 10, 74),
@@ -81,11 +83,10 @@ export function berekenWoonwerkVerkeer(input: WoonwerkVerkeerInput): WoonwerkVer
   const componenten: WoonwerkVerkeerResultaat["componenten"] = {};
   const waarschuwingen: string[] = [];
 
-  const heeftOpenbaarVervoer = input.trein.actief || input.busTramMetro.actief;
-  const priveMagMeetellen = input.privewagen.actief && !input.fiets.actief && !heeftOpenbaarVervoer;
+  const priveMagMeetellen = input.privewagen.actief && !input.fiets.actief;
 
   if (input.privewagen.actief && !priveMagMeetellen) {
-    waarschuwingen.push("Privéwagenvergoeding is niet combineerbaar met fiets of openbaar vervoer en telt niet mee.");
+    waarschuwingen.push("Privéwagenvergoeding is niet combineerbaar met fiets en telt niet mee.");
   }
 
   if (input.fiets.actief) {
@@ -113,7 +114,7 @@ export function berekenWoonwerkVerkeer(input: WoonwerkVerkeerInput): WoonwerkVer
       basisMaandbedrag: 0,
       km: Math.max(input.privewagen.kmEnkel ?? 0, 0),
       datapunt: dp,
-      toelichting: "Niet combineerbaar met de geselecteerde vervoerscomponenten.",
+      toelichting: "Niet combineerbaar met fietsvergoeding.",
     };
   }
 
@@ -198,11 +199,11 @@ function berekenPrivewagen(
   const basis = round2(lookupMaandbedrag(TREIN_TABEL_2026, km) / 2);
   return {
     label: "Privéwagen",
-    vergoeding: proRata(basis, input),
+    vergoeding: proRataGemiddeldeWerkdagen(basis, input),
     basisMaandbedrag: basis,
     km,
     datapunt: dp,
-    toelichting: "50% van de maandtreinkaart 2e klasse voor dezelfde afstand.",
+    toelichting: "50% van de maandtreinkaart 2e klasse, pro rata via 21,67 werkdagen.",
   };
 }
 
@@ -234,6 +235,10 @@ function lookupMaandbedrag(tabel: KmRij[], km: number): number {
 function proRata(maandbedrag: number, input: WoonwerkVerkeerInput): number {
   if (input.werkdagenInMaand <= 0) return 0;
   return round2(maandbedrag * Math.max(input.arbeidsdagenPerMaand, 0) / input.werkdagenInMaand);
+}
+
+function proRataGemiddeldeWerkdagen(maandbedrag: number, input: WoonwerkVerkeerInput): number {
+  return round2(maandbedrag * Math.max(input.arbeidsdagenPerMaand, 0) / GEMIDDELDE_WERKDAGEN_PER_MAAND);
 }
 
 function datapunt(id: string, refDatum: string): Datapunt {

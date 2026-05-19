@@ -2004,34 +2004,41 @@
       "subcategorie": "arbeidsongevallen_verzekering",
       "type": "parameter",
       "pc": "200",
-      "omschrijving": "Arbeidsongevallenverzekering — werkgeversbijdrage bedienden bureaupersoneel ~0,30%",
+      "omschrijving": "Arbeidsongevallenverzekering — indicatieve werkgeverskost bedienden bureaupersoneel, configureerbaar per werkgever",
       "waarde_bron": "~0,30% van brutoloon (verzekeraar-afhankelijk; bureaupersoneel)",
       "waarde_genormaliseerd": 0.003,
       "eenheid": "fractie",
-      "valuta": "EUR",
+      "valuta": null,
       "frequentie": "maandelijks",
-      "berekeningsbasis": null,
-      "toepassingsgebied": [],
-      "voorwaarden": [],
+      "berekeningsbasis": "brutoloonmassa, meestal beperkt tot wettelijk loonplafond en toegepast volgens premievoet per activiteit/functie",
+      "toepassingsgebied": [
+        "werkgevers privésector met bedienden",
+        "indicatieve Jaakie-default voor kantoor-/bureaupersoneel"
+      ],
+      "voorwaarden": [
+        "reële premievoet wordt contractueel bepaald door de arbeidsongevallenverzekeraar",
+        "premievoet hangt af van activiteit, functie/personeelscategorie, jaarloon en schadehistoriek"
+      ],
       "uitsluitingen": [],
       "geldig_vanaf": "2026-01-01",
       "geldig_tot": "2026-12-31",
-      "laatst_bevestigd_op": "2026-05-08",
-      "bron_organisatie": "Federale Pensioendienst / Fedris",
-      "bron_type": "overheid",
-      "bron_titel": "Wettelijk verplichte arbeidsongevallenverzekering werkgever",
-      "bron_url": "https://fedris.be/",
+      "laatst_bevestigd_op": "2026-05-19",
+      "bron_organisatie": "Fedris / Liantis / Securex",
+      "bron_type": "sociaal_secretariaat",
+      "bron_titel": "Arbeidsongevallenverzekering verplicht; premievoet verzekeraar-afhankelijk",
+      "bron_url": "https://www.fedris.be/nl/themas/definitie-en-verzekering-ao/wie-verzekerd-tegen-arbeidsongevallen",
       "bron_publicatiedatum": null,
-      "bron_vindplaats": null,
-      "bron_fragment": "Werkgeversbijdrage arbeidsongevallenverzekering ~0,3% voor bureaupersoneel",
-      "betrouwbaarheid": "Tier 2",
-      "extractie_methode": "gestructureerde_overname",
+      "bron_vindplaats": "Fedris verzekeringsplicht; Liantis/Securex kostprijs arbeidsongevallenverzekering",
+      "bron_fragment": "Fedris bevestigt de wettelijke verzekeringsplicht; Liantis en Securex bevestigen dat de premievoet afhangt van activiteit/functie en loonmassa. Geen publieke PC 200-norm van 0,30% gevonden.",
+      "betrouwbaarheid": "Tier 3",
+      "extractie_methode": "samenvattend_met_bronverwijzing",
       "normalisatie_toegepast": true,
-      "normalisatie_opmerking": null,
+      "normalisatie_opmerking": "0,30% genormaliseerd als decimale default 0.003; geen wettelijk of sectoraal tarief",
       "status": "actief",
       "conflict_opmerking": null,
       "opmerkingen": [
-        "Indicatief percentage; reële premie hangt af van verzekeraar en sector"
+        "Indicatief percentage; reële premie hangt af van verzekeraar, functie, activiteit, jaarloon en schadehistoriek",
+        "Publieke marktbron vermeldt gemiddeld 0,50% voor kantoorpersoneel; 0,30% is daarom een lage maar verdedigbare default voor laag-risico bureauprofiel, niet geschikt als harde norm"
       ]
     },
     {
@@ -2835,7 +2842,7 @@
       "subcategorie": "bv_bijzondere_schaal",
       "type": "parameter",
       "pc": "200",
-      "omschrijving": "Bijzondere BV-schaal 2026 voor variabel loon: aparte tarieven voor vakantiegeld en andere exceptionele vergoedingen (eindejaarspremie, jaarpremie, bonus) volgens refertejaarloon",
+      "omschrijving": "Bijzondere BV-schaal 2026 voor variabel loon: aparte tarieven voor vakantiegeld en andere exceptionele vergoedingen (eindejaarspremie, bonus) volgens refertejaarloon",
       "waarde_bron": "Refertejaarloon 2026: tot 10.675: 0%/0%; 10.675,01-13.660: 19,17%/23,22%; 13.660,01-17.375: 21,20%/25,23%; 17.375,01-20.840: 26,25%/30,28%; 20.840,01-23.580: 31,30%/35,33%; 23.580,01-26.340: 34,33%/38,36%; 26.340,01-31.830: 36,34%/40,38%; 31.830,01-34.640: 39,37%/43,41%; 34.640,01-45.860: 42,39%/46,44%; 45.860,01-59.900: 47,44%/51,48%; boven 59.900: 53,50%/53,50% (vakantiegeld/andere vergoedingen)",
       "waarde_genormaliseerd": null,
       "eenheid": null,
@@ -2862,8 +2869,8 @@
       "status": "actief",
       "conflict_opmerking": null,
       "opmerkingen": [
-        "Toepassing: refertejaarloon = 12 × normaal maandbruto",
-        "Dubbel vakantiegeld gebruikt de kolom vakantiegeld; eindejaarspremie, jaarpremie en bonussen gebruiken de kolom andere vergoedingen en toelagen",
+        "Toepassing: refertejaarloon = (12 × normale bruto bezoldiging) − werknemers-RSZ 13,07%",
+        "Dubbel vakantiegeld gebruikt de kolom vakantiegeld; eindejaarspremie en bonussen gebruiken de kolom andere vergoedingen en toelagen; de sectorale PC 200-jaarpremie krijgt alleen werknemers-RSZ en geen BV",
         "Bedrijfsvoorheffing wordt toegepast op het belastbare bedrag na toepasselijke werknemers-RSZ"
       ]
     },
@@ -3524,7 +3531,7 @@
         "afstand minstens 3 km"
       ],
       "uitsluitingen": [
-        "niet combineerbaar met fietsvergoeding of openbaar vervoer"
+        "niet combineerbaar met fietsvergoeding"
       ],
       "geldig_vanaf": "2026-02-01",
       "geldig_tot": null,

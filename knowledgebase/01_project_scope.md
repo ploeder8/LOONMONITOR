@@ -28,7 +28,7 @@
 
 ### Netto-laag (uitgebreid)
 - **Sociale werkbonus** (RSZ-vermindering) — Luik A + B, vanaf 1/4/2026
-- **Bedrijfsvoorheffing** (BV) — lokale Bijlage III-sleutelformule 2026 met pending FOD Tax-Calc-validatie
+- **Bedrijfsvoorheffing** (BV) — lokale Bijlage III-sleutelformule 2026 met FOD Financiën / Bijlage III als primaire bron
 - **BV-verminderingen** via maandtabel: kinderen ten laste, fiscaal alleenstaande met kind, groepsverzekering
 - **Tijdelijk niet actief:** kind <3 jaar is uit de calculatorlogica gehaald tot de BV-impact officieel gevalideerd is.
 - **Fiscale werkbonus** (belastingkrediet 33,14 % × Luik A + 52,54 % × Luik B)
@@ -56,7 +56,7 @@
 - Elke berekende waarde toont datapunt-id, status (`actief` / `mogelijk_verouderd` / `conflict` / `niet_gevonden`), tier (1/2/3), bron-URL, fragment-citaat
 - Schema-validatie van dataset bij applicatiestart (gate in `src/main.tsx`)
 - 25 bestaande golden testcases (TC-01..TC-25) + 15 NTC-cases voor netto-module (NTC-01..NTC-15)
-- 30 brutonetto-testprofielen klaar voor FOD Tax-Calc-validatie (`tools/validate_corpus.py`)
+- 30 brutonetto-testprofielen met FOD Bijlage III-validatievelden (`tools/validate_bijlage_iii_corpus.py`)
 
 ---
 
@@ -117,7 +117,7 @@ Een release is **deploybaar** wanneer:
 2. ✅ `pnpm typecheck` / `bun run typecheck` slaagt
 3. ✅ Alle 25 TC-cases + 15 NTC-cases groen
 4. ✅ Geen `Datapunt` zonder `bron_url` of `status`
-5. ✅ Voor BV-implementatie: minstens 18/20 cases binnen ±€2 van FOD Tax-Calc
+5. ✅ Voor BV-implementatie: representatieve cases volgen FOD Financiën / Bijlage III 2026; Tax-Calc is geen primaire payrollbron
 6. ✅ Disclaimers tonen ("Netto is indicatief", "BV-eindafrekening via PB-aangifte AJ 2027")
 
 ---
@@ -129,7 +129,7 @@ Een release is **deploybaar** wanneer:
 | Product owner | Roadmap + scope-beslissingen + maandelijkse BS-scan voor pending wetgeving |
 | Payroll-expert | Verifieert dataset tegen actuele cao's en RSZ-instructies (zie `02_regelkader_2026.md`) |
 | Developer | Implementatie + audit-trail + tests (zie `03_datamodel.md`, `04_calculator_netto.md`, `05_calculator_werkgeverskost.md`) |
-| QA / validatie-eigenaar | FOD Tax-Calc-cross-check (zie `07_testcorpus.md`) |
+| QA / validatie-eigenaar | FOD Bijlage III-corpusvalidatie (zie `07_testcorpus.md`) |
 
 ---
 

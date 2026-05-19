@@ -1,4 +1,4 @@
-import { berekenBvBijzonder } from "@/lib/bvBijzonder";
+import { berekenBvBijzonder, berekenRefertejaarloonBijzonder } from "@/lib/bvBijzonder";
 import type { GezinsType } from "@/lib/bv";
 import { getDatapunt } from "@/lib/dataset";
 import { ecocheques } from "@/lib/ecocheques";
@@ -59,7 +59,7 @@ export interface JaaroverzichtResultaat {
 }
 
 export function berekenJaaroverzicht(input: JaaroverzichtInput): JaaroverzichtResultaat {
-  const refertejaarloon = round2(input.brutoloon * 12);
+  const refertejaarloon = berekenRefertejaarloonBijzonder(input.brutoloon);
   const eindejaar = eindejaarspremie({
     brutoloon: input.brutoloon,
     ancienniteitMaanden: input.ancienniteitMaanden,
@@ -79,13 +79,7 @@ export function berekenJaaroverzicht(input: JaaroverzichtInput): JaaroverzichtRe
     eindejaar.datapunt,
   );
   const dubbelVakantiegeld = berekenDubbelVakantiegeldComponent(input, refertejaarloon);
-  const jaarpremieNetto = berekenAndereExceptioneleComponent(
-    jaarpremie.bedrag,
-    refertejaarloon,
-    input.gezinstype,
-    input.kinderenTenLaste,
-    jaarpremie.datapunt,
-  );
+  const jaarpremieNetto = berekenJaarpremieComponent(jaarpremie.bedrag, jaarpremie.datapunt);
 
   const maandloonNettoX12 = round2(input.nettoloonPerMaand * 12);
   const totaalNettoJaarloon = round2(
@@ -158,6 +152,24 @@ function berekenAndereExceptioneleComponent(
     bvTarief: bv.tarief,
     netto: bv.nettoBedrag,
     datapunten: uniekeDatapunten([datapunt, bv.datapunt]),
+  };
+}
+
+function berekenJaarpremieComponent(
+  bruto: number,
+  datapunt: Datapunt,
+): JaarcomponentNetto {
+  const rsz = round2(bruto * RSZ_WERKNEMER_PCT);
+  const belastbaar = round2(bruto - rsz);
+
+  return {
+    bruto,
+    rsz,
+    belastbaar,
+    bv: 0,
+    bvTarief: 0,
+    netto: belastbaar,
+    datapunten: [datapunt],
   };
 }
 

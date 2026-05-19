@@ -8,8 +8,8 @@ expliciete bron — zie bronnen_index.md in het bronnen-archief.
 BELANGRIJK: deze Python-module is een legacy REFERENTIE-BENADERING met de
 gepubliceerde formules. De TypeScript-module bevat sinds Golf 2 de lokale
 Bijlage III-sleutelformule. De definitieve "ground truth" blijft FOD Fin
-Tax-Calc XLSX-simulator.
-Gebruik validate_corpus.py om afwijkingen te flaggen.
+FOD Bijlage III 2026.
+Gebruik validate_bijlage_iii_corpus.py om afwijkingen te flaggen.
 
 Auteur: Loonmotor PC 200 — Golf 1
 Peildatum formules: 1 april 2026 (sociale werkbonus geïndexeerd)

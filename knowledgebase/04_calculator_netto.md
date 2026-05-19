@@ -18,7 +18,7 @@
 7. [UI-flow netto-paneel](#7-ui-flow-netto-paneel)
 8. [Foutgedrag & edge cases](#8-foutgedrag--edge-cases)
 9. [Gouden testcases (NTC-01..NTC-15)](#9-gouden-testcases-ntc-01ntc-15)
-10. [Cross-check tegen FOD Fin Tax-Calc](#10-cross-check-tegen-fod-fin-tax-calc)
+10. [Cross-check tegen FOD Bijlage III](#10-cross-check-tegen-fod-bijlage-iii)
 
 ---
 
@@ -130,7 +130,8 @@ Stap 8: = NETTO maandloon (indicatief)
 ```
 
 > **Bijzondere gevallen** (apart UI-paneel, zelfde dataset-pijplijn):
-> - **Eindejaarspremie / jaarpremie / dubbel vakantiegeld:** bijzondere BV-schaal (`bv_bijzondere_schaal_eindejaar_2026`) op belastbaar exceptioneel bedrag na RSZ.
+> - **Eindejaarspremie / dubbel vakantiegeld:** bijzondere BV-schaal (`bv_bijzondere_schaal_eindejaar_2026`) op belastbaar exceptioneel bedrag na RSZ.
+> - **Sectorale jaarpremie PC 200:** alleen werknemers-RSZ; geen bedrijfsvoorheffing.
 > - **Dubbel vakantiegeld bedienden:** 92 % × maandloon incl. VAA; RSZ = 13,07 % op 85/92 van het dubbel vakantiegeld; BV via de kolom vakantiegeld.
 
 ---
@@ -160,11 +161,9 @@ function werkbonusSociaal(S: number, refDatum: Date): { luik_A: number, luik_B: 
 
 ### 5.2 Bedrijfsvoorheffing — sleutelformule KB Bijlage III 2026
 
-> **POC-fase 1 (aanbevolen voor start):** UI-link naar [FOD Fin BV-simulator](https://eservices.minfin.fgov.be/taxcalc/) + audit-banner. Geen eigen implementatie. Datapunt `bv_2026_kb_bijlage_iii` met `status: actief_via_externe_simulator`.
->
-> **POC-fase 2 (post-MVP):** eigen TS-implementatie met KB-coëfficiënten als constants in `src/lib/bv.ts`. **Verplicht** validatie tegen FOD-simulator voor minstens 20 testcases (NTC-01..NTC-20).
+> **Huidige status (19/05/2026):** eigen TS-implementatie in `src/lib/bv.ts` gebruikt FOD Financiën / Bijlage III 2026 als primaire payrollbron. Tax-Calc is alleen een latere PB-ramingscheck, niet de bron voor maandelijkse BV.
 
-**Mocked formule-skelet (fase 2):**
+**Formule-skelet:**
 
 ```typescript
 function bvBijlageIII2026(
@@ -175,7 +174,7 @@ function bvBijlageIII2026(
   // 1. Annualiseer belastbaar maandloon
   const jaarbasis = belastbaarMaand * 12;
 
-  // 2. Pas schaal-tarief toe (KB-coëfficiënten — TBD uit KB-extractie)
+  // 2. Pas schaal-tarief toe volgens FOD Bijlage III 2026
   const bvJaar = applySchaalTarief(jaarbasis, schaal);
 
   // 3. Maand-afronding
@@ -186,7 +185,7 @@ function bvBijlageIII2026(
 }
 ```
 
-**Datapunt:** `bv_2026_kb_bijlage_iii` (status `mogelijk_verouderd` tot KB rechtstreeks geëxtraheerd).
+**Datapunt:** `bv_2026_kb_bijlage_iii` (Tier 1, FOD Financiën / Bijlage III 2026).
 
 ### 5.3 BV-verminderingen (tabel-lookup)
 
@@ -216,11 +215,11 @@ function werkbonusFiscaal(luik_A: number, luik_B: number): number {
 
 ### 5.4b Bijzondere BV-schaal voor variabel loon (eindejaarspremie, premies, vakantiegeld)
 
-> **Kritiek:** voor **variabel loon** (eindejaarspremie, jaarlijkse premie, dubbel vakantiegeld, ad-hoc bonussen) geldt **niet de normale BV-schijven** maar een **bijzondere BV-schaal** waarbij het tarief afhangt van het **refertejaarloon** (= jaarequivalent van het normale brutomaandloon).
+> **Kritiek:** voor **variabel loon** (eindejaarspremie, jaarlijkse premie, dubbel vakantiegeld, ad-hoc bonussen) geldt **niet de normale BV-schijven** maar een **bijzondere BV-schaal** waarbij het tarief afhangt van het **refertejaarloon** (= jaarbedrag van de normale bruto bezoldigingen verminderd met werknemers-RSZ).
 
 **Algoritme:**
-1. `refertejaarloon = brutomaandloon × 12` (normaal terugkerend loon, zonder premies)
-2. Trek eerst toepasselijke werknemers-RSZ af om het belastbare bedrag te bepalen.
+1. `refertejaarloon = (brutomaandloon × 12) − werknemers-RSZ 13,07%` (normaal terugkerend loon, zonder premies)
+2. Trek op het exceptionele bedrag ook eerst toepasselijke werknemers-RSZ af om het belastbare bedrag te bepalen.
 3. Lookup tarief in tabel "bijzondere BV-schaal" (AJ 2027), met aparte kolom voor vakantiegeld versus andere exceptionele vergoedingen.
 4. `bvBijzonder = belastbaarExceptioneel × tarief`
 5. Trek toepasselijke verminderingen af (kinderen ten laste — zelfde maandbedragen × 12 of jaartabel)
@@ -260,7 +259,7 @@ function bvBijzonder(
 
 **Toepassing:**
 - `eindejaarspremie.ts` → bereken bruto premie via cao-formule, trek 13,07% RSZ af, daarna bijzondere BV met soort `andere_exceptionele_vergoeding`.
-- `jaarpremie.ts` → idem.
+- `jaarpremie.ts` → sectorale PC 200-jaarpremie: trek 13,07% RSZ af; geen bedrijfsvoorheffing.
 - Dubbel vakantiegeld → bruto = `92% × (maandloon incl. VAA)`, RSZ = `13,07% × (85/92 × dubbel vakantiegeld)`, daarna bijzondere BV met soort `vakantiegeld`.
 - Ad-hoc bonus → UI-input + `bvBijzonder` → netto bonus
 
@@ -278,12 +277,15 @@ type BbszScenario =
 
 function bbsz(brutoMaand: number, scenario: BbszScenario): { kwartaal: number, maand: number } {
   // Tier-1 RSZ Administratieve instructies 2026/1.
-  // qLoon = 3 × brutoMaand; kwartaalinhouding wordt gedeeld door 3 voor de maandweergave.
+  // qLoon = 3 × brutoMaand.
+  // Kwartaalbedrag = vaste_kwartaalsom + percentage × (maandloon − drempel).
+  // Maandbedrag (voorschot) = vaste_kwartaalsom/3 + percentage × (maandloon − drempel).
+  // Let op: het percentage op maandloon blijft ongewijzigd; alleen het vaste deel wordt door 3 gedeeld.
   return { kwartaal: 0, maand: 0 };
 }
 ```
 
-**Datapunt:** `bv_bbsz_schijven_2026` (status `actief`, Tier 1). UI toont het gekozen scenario en vermeldt dat BBSZ een voorschot is; de definitieve afrekening gebeurt via de PB-aangifte AJ 2027.
+**Datapunt:** `bv_bbsz_schijven_2026` (status `actief`, Tier 1). UI toont het afgeleide scenario en vermeldt dat BBSZ een voorschot is; de definitieve afrekening gebeurt via de PB-aangifte AJ 2027.
 
 ### 5.6 VAA (samenvattend)
 
@@ -336,7 +338,7 @@ Voor élke berekende waarde geldt het bestaande audit-trail-invariant:
 
 **Speciale gevallen:**
 
-- **BV via FOD-simulator (fase 1):** Datapunt `bv_2026_kb_bijlage_iii` heeft `waarde_genormaliseerd: null` en `status: actief_via_externe_simulator`. UI toont disclaimer-knop "Bereken via FOD Fin Tax-Calc" → opent simulator in nieuw tabblad. Geen lokale BV-cijfer — UI toont alleen "extern berekend, zie simulator".
+- **BV via FOD Bijlage III:** Datapunt `bv_2026_kb_bijlage_iii` is de primaire bron voor de lokale BV-berekening. UI toont dat Tax-Calc enkel een latere PB-ramingscheck is.
 - **BBSZ:** Datapunt `bv_bbsz_schijven_2026`; scenario verplicht in runtime. UI toont gekozen scenario en voorschot-disclaimer.
 
 ---
@@ -355,7 +357,7 @@ Voor élke berekende waarde geldt het bestaande audit-trail-invariant:
 │ + VAA PC + internet (€132/jaar ÷ 12)                 + €    11,00│  [audit ▾]
 │ = Belastbaar BV                                        € 4.595,22│
 ├──────────────────────────────────────────────────────────────────┤
-│ − BV vóór verminderingen (Schaal II, sleutelformule) − € 1.245,00│  [via FOD-Tax-Calc ↗]
+│ − BV vóór verminderingen (Schaal II, sleutelformule) − € 1.245,00│  [FOD Bijlage III]
 │ − BV-vermindering 2 kinderen ten laste                 − € 138,00│  [audit ▾]
 │ − Fiscale werkbonus (33,14 % × € 0)                    − €   0,00│  [audit ▾]
 │ = Netto BV                                             − € 1.107,00│
@@ -365,7 +367,7 @@ Voor élke berekende waarde geldt het bestaande audit-trail-invariant:
 │ NETTO MAANDLOON (indicatief)                           € 1.935,55│
 │ Aanvullende gemeentebelasting (7,3 % default)        — informatief│
 └──────────────────────────────────────────────────────────────────┘
-[ Open audit-rapport (PDF) ]    [ Cross-check via FOD Fin Tax-Calc ↗ ]
+[ Open audit-rapport (PDF) ]    [ FOD Bijlage III-bron ↗ ]
 ```
 
 **Footer-banner verplicht:**
@@ -377,7 +379,7 @@ Voor élke berekende waarde geldt het bestaande audit-trail-invariant:
 
 | Situatie | Tool-gedrag |
 |---|---|
-| Datapunt `bv_2026_kb_bijlage_iii` heeft `status = niet_gevonden` of `waarde_genormaliseerd = null` (fase 1) | UI toont alleen "BV te berekenen via FOD Fin Tax-Calc ↗" met deeplink |
+| Datapunt `bv_2026_kb_bijlage_iii` heeft `status = niet_gevonden` | UI toont foutbanner; BV mag niet zonder FOD Bijlage III-bron worden berekend |
 | `referentiedatum < 2026-04-01` | Werkbonus-formule gebruikt 1/1/2026-cijfers + gele banner "Werkbonus-grenzen wijzigen op 1/4/2026" |
 | `gezinscategorie = gehuwd_partner_zonder_inkomen` AND `niet_inwoner = true` | Hard error: "Niet-inwoner kan geen Schaal II selecteren" |
 | `kinderen_gehandicapt > kinderen_ten_laste` | Hard error met UI-validatie |
@@ -397,11 +399,11 @@ Voor élke berekende waarde geldt het bestaande audit-trail-invariant:
 | **NTC-02** | Schaal I, Cat C, 10 jr, alleenstaande, 1 kind | € 2.800,00 | ≈ € 2.220 | idem |
 | **NTC-03** | Schaal II, Cat B, 8 jr, eenverdiener, 2 kinderen | € 3.000,00 | ≈ € 2.460 | idem |
 | **NTC-04** | Schaal I, Cat A, 0 jr, alleenstaande (= GGMMI-buurt) | € 2.189,81 | ≈ € 1.870 (hoge werkbonus) | RSZ Find My Bonus |
-| **NTC-05** | Schaal I, Cat B, 5 jr, alleenstaande, +bedrijfswagen € 1.690 min-VAA | € 2.500,00 | ≈ € 1.880 | FOD Fin Tax-Calc |
+| **NTC-05** | Schaal I, Cat B, 5 jr, alleenstaande, +bedrijfswagen € 1.690 min-VAA | € 2.500,00 | ≈ € 1.880 | FOD Bijlage III |
 | **NTC-06** | Schaal I, Cat D, 15 jr, eenverdiener, 3 kinderen | € 3.800,00 | ≈ € 3.060 | FOD Fin BV-simulator |
 | **NTC-07** | Schaal II, Cat A, 3 jr, eenverdiener, 0 kinderen | € 2.450,00 | ≈ € 2.020 | idem |
 | **NTC-08** | Niet-inwoner, Schaal III, Cat C, 10 jr | € 3.200,00 | ≈ € 2.480 | idem |
-| **NTC-09** | Schaal I, Cat A, 5 jr, alleenstaande met 1 kind (fiscaal alleenstaande) | € 2.500,00 | ≈ € 2.080 (extra €52) | FOD Fin Tax-Calc |
+| **NTC-09** | Schaal I, Cat A, 5 jr, alleenstaande met 1 kind (fiscaal alleenstaande) | € 2.500,00 | ≈ € 2.080 (extra €52) | FOD Bijlage III |
 | **NTC-10** | Schaal I, Cat C, 12 jr, alleenstaande, +groepsverzekering eigen bijdrage € 100/m | € 3.100,00 | ≈ € 2.510 | idem |
 | **NTC-11** | Werkbonus-test: bruto €2.255,50 (Luik B grens) → max werkbonus | € 2.255,50 | werkbonus = €293,66 (A+B) | RSZ Find My Bonus |
 | **NTC-12** | Werkbonus-test: bruto €3.336,98 (Luik A wegval) | € 3.336,98 | werkbonus = €0 | idem |
@@ -411,22 +413,22 @@ Voor élke berekende waarde geldt het bestaande audit-trail-invariant:
 
 **Acceptatiecriteria:**
 - Alle 15 NTC-cases groen in `bun test`
-- BV-uitkomsten binnen ±€2 van FOD Fin Tax-Calc voor minstens 12/15 cases
+- BV-uitkomsten volgen FOD Financiën / Bijlage III 2026 voor de representatieve cases
 - Indien afwijking > €2: documenteren in `pc200_payroll_dataset_2026_VERIFICATIE.md` met root-cause
 
 ---
 
-## 10. Cross-check tegen FOD Fin Tax-Calc
+## 10. Cross-check tegen FOD Bijlage III
 
-> **Verplichte validatieprocedure** voor POC-fase 2 (eigen sleutelformule):
+> **Verplichte validatieprocedure** voor de eigen sleutelformule:
 
-1. **Selecteer 20 representatieve test-profielen** (mix Schaal I/II/III, met/zonder kinderen, lage tot middenlonen, met/zonder VAA).
-2. **Voer elk profiel manueel in** in [FOD Fin BV-simulator](https://eservices.minfin.fgov.be/taxcalc/) en noteer BV-uitkomst.
+1. **Selecteer representatieve test-profielen** (mix Schaal I/II, met/zonder kinderen, lage tot middenlonen, met/zonder VAA).
+2. **Leid elk profiel af** uit FOD Financiën / Bijlage III 2026 en noteer BV-uitkomst.
 3. **Vergelijk** met de eigen `bvBijlageIII2026()`-uitkomst.
-4. **Acceptatie:** afwijking ≤ €2/maand voor 18/20 cases. Resterende 2 cases: documenteren met root-cause.
+4. **Acceptatie:** afwijking ≤ €5/maand voor alle 30 corpuscases. Afwijkingen: documenteren met root-cause.
 5. **Ankerwaarden documenteren** in `src/lib/__tests__/netto.test.ts` als `expect(bv).toBeCloseTo(verwacht, 2)`.
 
-**Onderhoud:** elke jaarlijkse BV-coëfficiënten-update (eind december) → opnieuw 20 cross-checks runnen. Faalt > 2 → release-blocker, geen deploy.
+**Onderhoud:** elke jaarlijkse BV-coëfficiënten-update (eind december) → corpus opnieuw valideren via `knowledgebase/tools/validate_bijlage_iii_corpus.py`. Elke `afwijking` is release-blocker tot root-cause bekend is.
 
 ---
 

@@ -299,7 +299,7 @@ Bij dezelfde invoer (bruto €2.276,51, ongehuwd, geen kinderen, voltijds, Vlaan
 | **Fietsvergoeding** | ❌ geen apart veld | ✅ | CAO 164, €0,32/km |
 | **Werkbonus sociaal** | ✅ (luik A + luik B apart getoond) | ✅ | AJ 2027 parameters |
 | **Werkbonus fiscaal** | ✅ (verrekend in BV) | ✅ | 33,14% × A + 52,54% × B |
-| **Bijzondere BV variabel loon** | ✅ (eindejaarspremie invoerveld) | ✅ | Eindejaar, jaarpremie, DVG |
+| **Bijzondere BV variabel loon** | ✅ (eindejaarspremie invoerveld) | ✅ | Eindejaar, DVG; sectorale PC 200-jaarpremie enkel RSZ |
 | **Barema-lookup sectoraal** | ❌ (bruto zelf ingeven) | ✅ PC 200 Schaal I/II × Cat A–D | Groot verschil |
 | **Functieclassificatie / anciënniteit** | ❌ niet beschikbaar | ✅ PC 200 Cat A–D, 0–40j | |
 | **Audit-trail per waarde** | ❌ black box | ✅ **Uniek onderscheidend voordeel** | Klikbare bronlinks + tier |

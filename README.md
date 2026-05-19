@@ -47,7 +47,7 @@ Single-page tool voor payroll-experts om lonen en kosten te verifiëren onder **
 - Woon-werk trein (100 % CAO 19/9)
 - Fietsvergoeding (€0,32/km — CAO 164, vanaf 1/10/2026)
 
-¹ *AJ 2027 = inkomstenjaar 2026 (huidig kalenderjaar). Parameters: belastingvrije som €11.180, forfait max €6.070, schijven €16.720/€29.510/€51.070. Geverifieerd via Wet diverse bepalingen 18/12/2025 (BS 30/12/2025) + FOD Financiën. BV gebruikt lokaal de Bijlage III-sleutelformule met pending FOD Tax-Calc-validatie; voor finale cijfers blijft [FOD Tax-Calc](https://eservices.minfin.fgov.be/taxcalc/) leidend.*
+¹ *AJ 2027 = inkomstenjaar 2026 (huidig kalenderjaar). Parameters: belastingvrije som €11.180, forfait max €6.070, schijven €16.720/€29.510/€51.070. Geverifieerd via Wet diverse bepalingen 18/12/2025 (BS 30/12/2025) + FOD Financiën. BV gebruikt lokaal de Bijlage III-sleutelformule met FOD Financiën / Bijlage III 2026 als primaire payrollbron; Tax-Calc is enkel een latere PB-raming.*
 
 ## Gebruik
 

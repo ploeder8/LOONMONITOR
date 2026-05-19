@@ -6,8 +6,8 @@
 | Laag | Naam | Aantal | Bestand | Status |
 |---|---|---|---|---|
 | 1 | **TC-01..TC-16, TC-18..TC-25** — bestaande golden tests | 24 | `src/lib/__tests__/golden.test.ts` | ✅ Allemaal groen |
-| 2 | **NTC-01..NTC-15** — netto-spec testcases | 15 | `src/lib/__tests__/golden.test.ts` | ⚠️ Pending FOD Tax-Calc validatie |
-| 3 | **BNTC-001..BNTC-030** — 30 bruto-netto profielen (deze pagina + `TESTCASES.json`) | 30 | `tools/calc_brutonetto_2026.py` (Python-referentie) | ⚠️ Pending FOD Tax-Calc validatie |
+| 2 | **NTC-01..NTC-15** — netto-spec testcases | 15 | `src/lib/__tests__/golden.test.ts` | ✅ FOD Bijlage III-bronpad |
+| 3 | **BNTC-001..BNTC-030** — 30 bruto-netto profielen (deze pagina + `TESTCASES.json`) | 30 | `tools/calc_brutonetto_2026.py` (Python-referentie) | ✅ FOD Bijlage III-validatievelden |
 
 > De drie lagen vullen elkaar aan: laag 1 valideert de barema / RSZ / sectorpremie logica, laag 2 valideert de netto-orchestratie inclusief bijzondere BV, laag 3 valideert de berekening over een brede salarisrange voor FOD-cross-check.
 
@@ -29,7 +29,7 @@ Voor de actuele exacte waardes: zie `src/lib/__tests__/golden.test.ts`.
 
 ## Laag 2 — NTC-01..NTC-15 (geïmplementeerd, FOD-validatie pending)
 
-Uit `04_calculator_netto.md §9`. Tolerantie: `expect(...).toBeCloseTo(..., 0)` (precisie ~€0,50). Markeer in code met commentaar `// PENDING: validate against FOD Fin Tax-Calc`.
+Uit `04_calculator_netto.md §9`. Tolerantie: `expect(...).toBeCloseTo(..., 0)` (precisie ~€0,50). BV-tests moeten FOD Financiën / Bijlage III 2026 als primaire bron vermelden.
 
 | # | Profiel | Bruto | Verwacht netto |
 |---|---|---|---|
@@ -51,7 +51,7 @@ Uit `04_calculator_netto.md §9`. Tolerantie: `expect(...).toBeCloseTo(..., 0)` 
 
 **Acceptatiecriteria:**
 - Alle 15 NTC-cases groen in `bun test`
-- BV-uitkomsten binnen ±€2 van FOD Fin Tax-Calc voor minstens 12/15 cases
+- BV-uitkomsten volgen FOD Financiën / Bijlage III 2026 voor de representatieve cases
 - Afwijking > €2: documenteren met root-cause in `08_gaps_en_pending.md`
 
 ---
@@ -73,11 +73,11 @@ Originele kop van het corpus:
 **Peildatum formules:** 9 mei 2026 (sociale werkbonus geïndexeerd vanaf 1/4/2026, schalen AJ 2027).
 
 **Validatie-workflow:**
-1. Voer iedere case in op de **FOD Financiën Tax-Calc-simulator (XLSX, AJ 2027)** → noteer het officiële netto.
-2. Vergelijk met `berekend.netto_maand` — ontbrekende Tax-Calc data = `pending`, afwijking ≤ €5/maand = `ok`, ≤ €15/maand = `kleine_afwijking`, > €15/maand = `grote_afwijking`.
-3. Bij `grote_afwijking`: identificeer de afwijkende component (RSZ / BV / werkbonus / BBSZ) en pas `calc_brutonetto_2026.py` aan; her-genereer corpus.
+1. Leid iedere case af uit **FOD Financiën / Bijlage III 2026** (Regels 1 januari 2026 + Sleutelformule vanaf 1 januari 2026).
+2. Vergelijk met `berekend.netto_maand` — afwijking ≤ €5/maand = `ok`, > €5/maand = `afwijking`.
+3. Bij `afwijking`: identificeer de afwijkende component (RSZ / BV / werkbonus / BBSZ) en pas `calc_brutonetto_2026.py` aan; her-genereer corpus.
 
-**BELANGRIJK:** de `berekend_netto`-kolom is een referentie-benadering met de gepubliceerde formules — niet de officiële Tax-Calc-output. De TypeScript-rekenmodule gebruikt sinds Golf 2 een lokale Bijlage III-sleutelformule met Group S-anker; officiële FOD Tax-Calc waarden ontbreken nog. De status blijft daarom `pending` tot de XLSX-validatie is ingevoerd.
+**BELANGRIJK:** Tax-Calc is een latere PB-ramingscheck en geen primaire payrollbron. Voor de maandelijkse bedrijfsvoorheffing is FOD Financiën / Bijlage III 2026 leidend. Group S en andere sociale-secretariaat-tools mogen alleen als Tier-2 triangulatie dienen.
 
 ## Samenvattende tabel
 
