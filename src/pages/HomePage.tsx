@@ -188,6 +188,7 @@ interface Profiel {
   extraHospitalisatie: number;
   hospitalisatieEigenBijdrage: number;
   onkostenvergoedingPerMaand: number;
+  gemeentebelastingPct: number;
 }
 
 const DEFAULTS: Profiel = {
@@ -236,6 +237,7 @@ const DEFAULTS: Profiel = {
   extraHospitalisatie: 0,
   hospitalisatieEigenBijdrage: 0,
   onkostenvergoedingPerMaand: 0,
+  gemeentebelastingPct: 7.3,
 };
 
 export function aantalWeekdagenInMaand(berekeningsJaar: string, berekeningsMaand: string): number {
@@ -1357,7 +1359,25 @@ function TaxProfileFields({
       {profiel.gezinstype === "alleenstaand" && profiel.kinderenTenLaste > 0 && (
         <AlleenstaandeOuderField profiel={profiel} set={set} />
       )}
+      <GemeentebelastingField profiel={profiel} set={set} />
     </>
+  );
+}
+
+function GemeentebelastingField({ profiel, set }: { profiel: Profiel; set: ProfielSetter }) {
+  return (
+    <FormField
+      label={<>Gemeentebelasting (%) <HelpTooltip text="Aanvullende gemeentelijke belasting. Tarief varieert per gemeente (0% tot ~9%). Default 7,3% is het gewogen landelijk gemiddelde. Wordt niet afgetrokken van het maandelijks nettoloon; het is een jaarlijkse PB-aanvulling." /></>}
+    >
+      <NumeriekeInput
+        className={inputClass}
+        step="0.1"
+        min={0}
+        max={20}
+        value={profiel.gemeentebelastingPct}
+        onValueChange={(waarde) => set("gemeentebelastingPct", waarde)}
+      />
+    </FormField>
   );
 }
 
@@ -1648,10 +1668,12 @@ function NettoPanel({
   resultaat: r,
   vaaWerkmiddelen,
   maaltijdchequeWerkgeversaandeelPerDag,
+  gemeentebelastingPct,
 }: {
   resultaat: NettoResultaat;
   vaaWerkmiddelen?: VaaForfaitsWerkmiddelenResultaat;
   maaltijdchequeWerkgeversaandeelPerDag: number;
+  gemeentebelastingPct: number;
 }) {
   const [bvDetailOpen, setBvDetailOpen] = useState(false);
   const [vaaDetailOpen, setVaaDetailOpen] = useState(false);
@@ -1700,7 +1722,7 @@ function NettoPanel({
           lineHeight: 1.5,
         }}
       >
-        <strong>FOD Bijlage III:</strong> BV wordt berekend volgens FOD Financiën / Bijlage III 2026 als primaire payrollbron. Tax-Calc is alleen een latere PB-raming, geen bron voor maandelijkse payroll-BV. BBSZ = kwartaalbedrag ÷ 3. Gemeentebelasting niet inbegrepen. Eindafrekening via PB-aangifte AJ 2027.
+        <strong>FOD Bijlage III:</strong> BV wordt berekend volgens FOD Financiën / Bijlage III 2026 als primaire payrollbron. Tax-Calc is alleen een latere PB-raming, geen bron voor maandelijkse payroll-BV. BBSZ = kwartaalbedrag ÷ 3. Gemeentebelasting wordt apart getoond maar is niet in het maandloon inbegrepen (jaarlijkse PB-aanvulling). Eindafrekening via PB-aangifte AJ 2027.
       </div>
 
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -1893,6 +1915,20 @@ function NettoPanel({
               variant="subtotal"
             />
           )}
+          <tr>
+            <td
+              colSpan={2}
+              style={{
+                padding: "8px 0",
+                fontSize: 12,
+                color: "var(--color-text-muted)",
+                borderTop: "1px dashed var(--color-border)",
+              }}
+            >
+              Aanvullende gemeentebelasting: {gemeentebelastingPct.toFixed(1).replace(".", ",")}% —
+              geschat {formatEUR(round2((r.nettoloon * 12 * gemeentebelastingPct) / 100))}/jaar (niet inbegrepen in maandloon; jaarlijkse PB-aanvulling)
+            </td>
+          </tr>
         </tbody>
       </table>
 
@@ -2269,6 +2305,7 @@ function bouwResultaten(p: Profiel): BouwResultaten {
                   resultaat={netto}
                   vaaWerkmiddelen={vaaWerkmiddelen}
                   maaltijdchequeWerkgeversaandeelPerDag={p.maaltijdchequeWerkgeversaandeelPerDag}
+                  gemeentebelastingPct={p.gemeentebelastingPct}
                 />
                 <WerkgeverskostPanel
                   resultaat={wgk}

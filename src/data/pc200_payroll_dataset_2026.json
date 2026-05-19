@@ -21,15 +21,14 @@
       "Sectorale verplichting thuiswerkvergoeding PC 200",
       "Volledige tekst centenindex-regelgeving 2026 (regelgeving niet tijdig gefinaliseerd)"
     ],
-    "conflicten": [
-      "Gemeentebelasting (aanvullende gemeentelijke belasting): bron Tier 3 (NettoCalc) vermeldt gemiddeld 7%; geen Tier 1 bevestiging in deze extractie – datapunt niet opgenomen"
-    ],
+    "conflicten": [],
     "opmerkingen": [
       "Sectorakkoord PC 200 voor 2025-2026 afgesloten op 15 januari 2026 door sociale partners; bevestigd door sfonds200.be",
       "Bedrijfsvoorheffingsregels 2026 gepubliceerd via KB 11/12/2025 in BS 29/12/2025 (Bijlage III)",
       "Volledige sectorale baremamatrix PC 200 (Schaal I, Schaal II, studenten × Cat A/B/C/D) opgenomen vanaf 2026-05-08; primaire bron SSN (Tier 2), getrianguleerd met ACV en ACLVB (Tier 3) — alle 228 cellen onderling bevestigd",
       "Sectorpensioen-onderzoek (2026-05-08): bevestigd dat er geen algemeen sectoraal aanvullend pensioen bestaat voor het volledige PC 200 — enkel voor de bouw-subset (1,80% solidariteitsluik vanaf 1/1/2026 via CAO 13/03/2025 nr. 192.922)",
-      "Sociaal Fonds 200 werkgeversbijdrage (0,23%) verlengd voor 1/1/2026–31/12/2027; bevestigd door 3 onafhankelijke Tier 2 bronnen (Partena Professional, Liantis, CLB Group)"
+      "Sociaal Fonds 200 werkgeversbijdrage (0,23%) verlengd voor 1/1/2026–31/12/2027; bevestigd door 3 onafhankelijke Tier 2 bronnen (Partena Professional, Liantis, CLB Group)",
+      "Aanvullende gemeentebelasting: geen Tier-1 machine-leesbare lijst per gemeente beschikbaar; behandeld als UI-parameter (default 7,3%) met disclaimer — niet opgenomen als dataset-datapunt"
     ]
   },
   "lonen": [
