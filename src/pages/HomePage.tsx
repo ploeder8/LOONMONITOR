@@ -997,6 +997,8 @@ function ProfileForm({
         padding: "1.2rem 1.1rem",
       }}
     >
+      {csvPanel}
+
       <div style={{ display: "flex", justifyContent: "center" }}>
         <BerekeningsRichtingToggle
           value={profiel.berekeningsRichting}
@@ -1016,8 +1018,6 @@ function ProfileForm({
       >
         Profiel
       </h2>
-
-      {csvPanel}
 
       {profiel.statuut === "bediende" && (
         <TaxProfileFields profiel={profiel} set={set} />
