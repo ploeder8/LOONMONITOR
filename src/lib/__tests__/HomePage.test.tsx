@@ -9,3 +9,12 @@ it("rendert periodieke voordelen en mobiliteit niet als aparte onderste resultaa
   expect(html).not.toContain('id="band-voordelen"');
   expect(html).not.toContain('id="band-mobiliteit"');
 });
+
+it("rendert CSV import/export velden", () => {
+  const html = renderToStaticMarkup(<HomePage />);
+
+  expect(html).toContain("Exportnaam");
+  expect(html).toContain("Commentaar");
+  expect(html).toContain("Importeer CSV");
+  expect(html).toContain("Exporteer CSV");
+});
