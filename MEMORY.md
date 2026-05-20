@@ -11,6 +11,7 @@ Kort projectlogboek voor wijzigingen door coding agents.
 
 ## Log
 
+- 2026-05-20 — Dubbel-vakantiegeld-provisie gewijzigd van hardcoded 6,67% naar runtime-berekening `(bruto + VAA) × 92% / 12`; bestanden: `werkgeverskost.ts`, `jaaroverzicht.ts`, `HomePage.tsx`, dataset (`vakantiegeld_dubbel_pct_2026` toegevoegd, `provisie_dubbel_vakantiegeld_2026` gemarkeerd als deprecated), knowledgebase; reden: 6,67% was wiskundig inconsistent met 92%/12 = 7,67% en gebruiker vroeg expliciek geen hardcoded provisie.
 - 2026-05-20 — CSV import/export voor één profiel toegevoegd met exportnaam, commentaar, inputkolommen en kernoutputkolommen; reden: testers kunnen input-snapshots delen en resultaten reproduceerbaar vergelijken.
 - 2026-05-19 — Netto → Bruto calculatie toegevoegd: `src/lib/nettoNaarBruto.ts` (binary search), `BerekeningsRichtingToggle` component, 25 inverse golden tests, 2 virtuele dataset-datapunten voor methodologie/audit; reden: gebruikers willen weten welk bruto nodig is voor een gewenst netto.
 - 2026-05-19 — Bronconflict gemeentebelasting opgelost: verwijderd uit dataset `conflicten`, opgenomen als UI-parameter `gemeentebelastingPct` (default 7,3%) in `HomePage.tsx` met info-regel in netto-resultaten; reden: geen Tier-1 lijst beschikbaar, dus bewust geen dataset-datapunt maar wel transparante parameter met disclaimer.

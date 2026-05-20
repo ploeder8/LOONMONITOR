@@ -1263,7 +1263,7 @@ function ProfileForm({
             onChange={(checked) => set("woonwerkFiets", checked)}
           />
           {profiel.woonwerkFiets && (
-            <FormField label="Fiets km per dag">
+            <FormField label="Fiets km per dag (heen + terug)">
               <NumeriekeInput
                 className={inputClass}
                 min={0}
@@ -1281,7 +1281,7 @@ function ProfileForm({
           />
           {profiel.woonwerkPrivewagen && (
             <>
-              <FormField label="Privéwagen afstand km">
+              <FormField label="Privéwagen afstand km (enkele rit)">
                 <NumeriekeInput
                   className={inputClass}
                   min={0}
@@ -1326,7 +1326,7 @@ function ProfileForm({
           />
           {profiel.woonwerkBusTramMetro && (
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <FormField label="OV afstand km">
+              <FormField label="Afstand km (enkele rit)">
                 <NumeriekeInput
                   className={inputClass}
                   min={0}
@@ -1334,7 +1334,7 @@ function ProfileForm({
                   onValueChange={(waarde) => set("busTramMetroKm", waarde)}
                 />
               </FormField>
-              <FormField label="OV prijs / maand (€)">
+              <FormField label="Prijs / maand (€)">
                 <NumeriekeInput
                   className={inputClass}
                   step="0.01"
@@ -1353,7 +1353,7 @@ function ProfileForm({
             onChange={(checked) => set("woonwerkTrein", checked)}
           />
           {profiel.woonwerkTrein && (
-            <FormField label="Trein afstand km">
+            <FormField label="Trein afstand km (enkele rit)">
               <NumeriekeInput
                 className={inputClass}
                 min={0}
@@ -2415,19 +2415,22 @@ function bouwResultaten(p: Profiel): BouwResultaten {
             const mobiliteit = berekenMobiliteitVoorProfiel(p, refDatum);
             const vaaWerkmiddelen = berekenVaaWerkmiddelenVoorProfiel(p, refDatum);
             const netto = berekenNettoVoorProfiel(p, refDatum);
+            const vaaPerMaand =
+              vaaWerkmiddelen.totaalPerMaand +
+              (mobiliteit.vaaBedrijfswagen?.vaaMaand ?? 0);
             const wgk = werkgeverskost({
               brutoloon: p.brutoloon,
               refDatum,
               bouwVlag: p.bouwVlag,
               arbeidsongevallenPct: p.arbeidsongevallenPct,
               premieEjpPct: 0,
-              premieVakantiegeldPct: 0,
               extraGroepsverzekering: p.extraGroepsverzekering,
               maaltijdchequeWerkgeversaandeelPerDag: p.maaltijdchequeWerkgeversaandeelPerDag,
               maaltijdchequeWerkdagen: p.arbeidsdagenPerMaand,
               extraHospitalisatie: p.extraHospitalisatie,
               extraEcocheques: 0,
               vaaRszPlichtigPerMaand: vaaWerkmiddelen.totaalPerMaand,
+              vaaPerMaand,
               onkostenvergoedingPerMaand: p.onkostenvergoedingPerMaand,
               woonwerkVergoedingPerMaand: mobiliteit.woonwerk.totaalVergoeding,
             });
@@ -2442,9 +2445,7 @@ function bouwResultaten(p: Profiel): BouwResultaten {
               ancienniteitMaanden: p.ancienniteitMaanden,
               prestatieMaandenInRefertepériode: p.prestatieMaanden,
               tewerkstellingsbreuk: p.tewerkstellingsbreuk,
-              vaaPerMaand:
-                vaaWerkmiddelen.totaalPerMaand +
-                (mobiliteit.vaaBedrijfswagen?.vaaMaand ?? 0),
+              vaaPerMaand,
             });
             return { netto, wgk, wig, mobiliteit, vaaWerkmiddelen, jaaroverzicht };
           },
@@ -2565,19 +2566,22 @@ function computeSummary(p: Profiel): ResultSummary {
     const mobiliteit = berekenMobiliteitVoorProfiel(p, refDatum);
     const vaaWerkmiddelen = berekenVaaWerkmiddelenVoorProfiel(p, refDatum);
     const netto = berekenNettoVoorProfiel(p, refDatum);
+    const vaaPerMaand =
+      vaaWerkmiddelen.totaalPerMaand +
+      (mobiliteit.vaaBedrijfswagen?.vaaMaand ?? 0);
     const wgk = werkgeverskost({
       brutoloon: p.brutoloon,
       refDatum,
       bouwVlag: p.bouwVlag,
       arbeidsongevallenPct: p.arbeidsongevallenPct,
       premieEjpPct: 0,
-      premieVakantiegeldPct: 0,
       extraGroepsverzekering: p.extraGroepsverzekering,
       maaltijdchequeWerkgeversaandeelPerDag: p.maaltijdchequeWerkgeversaandeelPerDag,
       maaltijdchequeWerkdagen: p.arbeidsdagenPerMaand,
       extraHospitalisatie: p.extraHospitalisatie,
       extraEcocheques: 0,
       vaaRszPlichtigPerMaand: vaaWerkmiddelen.totaalPerMaand,
+      vaaPerMaand,
       onkostenvergoedingPerMaand: p.onkostenvergoedingPerMaand,
       woonwerkVergoedingPerMaand: mobiliteit.woonwerk.totaalVergoeding,
     });

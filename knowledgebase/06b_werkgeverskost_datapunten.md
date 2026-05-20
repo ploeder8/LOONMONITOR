@@ -202,26 +202,55 @@ type AuditEntry = {
 }
 ```
 
-### 4.2 `provisie_dubbel_vakantiegeld_pct_2026`
+### 4.2 `provisie_dubbel_vakantiegeld_pct_2026` — DEPRECATED
+
+> **Status:** vervangen door runtime-berekening obv `vakantiegeld_dubbel_pct_2026`.
+> De waarde 6,67% was wiskundig inconsistent met 92%/12 = 7,67%.
 
 ```json
 {
   "id": "provisie_dubbel_vakantiegeld_pct_2026",
   "categorie": "loonprovisie",
-  "label": { "nl": "Provisie dubbel vakantiegeld bedienden", "fr": "Provision double pécule de vacances employés" },
-  "beschrijving": { "nl": "Maandelijkse provisie voor dubbel vakantiegeld bedienden, betaalbaar in mei. Benadering: 92% × bruto / 12.", "fr": "Provision mensuelle pour le double pécule de vacances des employés, payable en mai. Approximation: 92% × brut / 12." },
+  "label": { "nl": "[DEPRECATED] Provisie dubbel vakantiegeld bedienden", "fr": "[DEPRECATED] Provision double pécule de vacances employés" },
+  "beschrijving": { "nl": "Vervangen door runtime-berekening: (bruto + VAA) × 92% / 12.", "fr": "Remplacé par calcul runtime: (brut + AV) × 92% / 12." },
   "eenheid": "pct",
   "waarde_bron": 6.67,
   "waarde_canoniek": 0.0667,
   "geldig_van": "2026-01-01",
-  "geldig_tot": null,
+  "geldig_tot": "2026-12-31",
   "bron_url": "https://www.rva.be/",
   "bron_titel": "RVA — vakantiegeld bedienden",
   "bron_tier": 1,
-  "status": "actief",
+  "status": "vervangen",
   "betrouwbaarheid": 0.80,
   "audit_trail": [
-    { "datum": "2026-05-09", "actie": "aangemaakt", "bron": "RVA — vakantiewetgeving bedienden" }
+    { "datum": "2026-05-09", "actie": "aangemaakt", "bron": "RVA — vakantiewetgeving bedienden" },
+    { "datum": "2026-05-20", "actie": "vervangen", "notitie": "Inconsistente waarde; provisie wordt nu runtime berekend obv 92%-percentage." }
+  ]
+}
+```
+
+### 4.3 `vakantiegeld_dubbel_pct_2026` (nieuw)
+
+```json
+{
+  "id": "vakantiegeld_dubbel_pct_2026",
+  "categorie": "premies_en_voordelen",
+  "subcategorie": "vakantiegeld",
+  "label": { "nl": "Percentage dubbel vakantiegeld bedienden", "fr": "Pourcentage double pécule de vacances employés" },
+  "beschrijving": { "nl": "Percentage dubbel vakantiegeld ten opzichte van brutomaandloon incl. VAA. Gebruikt voor zowel jaarlijkse berekening als maandelijkse provisie (= 92% / 12).", "fr": "Pourcentage du double pécule de vacances par rapport au salaire brut mensuel incl. AV. Utilisé pour le calcul annuel et la provision mensuelle (= 92% / 12)." },
+  "eenheid": "fractie",
+  "waarde_bron": 0.92,
+  "waarde_canoniek": 0.92,
+  "geldig_van": "2026-01-01",
+  "geldig_tot": null,
+  "bron_url": "https://www.socialsecurity.be/employer/instructions/dmfa/fr/latest/instructions/salary/particularcases/holidaypay.html",
+  "bron_titel": "RSZ — vakantiegeld bedienden",
+  "bron_tier": 1,
+  "status": "actief",
+  "betrouwbaarheid": 1.0,
+  "audit_trail": [
+    { "datum": "2026-05-20", "actie": "aangemaakt", "bron": "RSZ administratieve instructies + RVA wetgeving" }
   ]
 }
 ```
@@ -380,6 +409,7 @@ De bovenstaande datapunten worden toegevoegd aan de bestaande `loonmotor_dataset
       "arbeidsongevallen_bedienden_bureau_2026": { ... },
       "provisie_eindejaarspremie_pct_2026": { ... },
       "provisie_dubbel_vakantiegeld_pct_2026": { ... },
+      "vakantiegeld_dubbel_pct_2026": { ... },
       "structurele_vermindering_helling_2026_april": { ... }
     },
     "extralegaal": {

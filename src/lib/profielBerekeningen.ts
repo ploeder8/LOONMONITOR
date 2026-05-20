@@ -140,19 +140,23 @@ export function berekenWerkgeverskostVoorProfiel(
   const resolvedVaaWerkmiddelen = vaaWerkmiddelen ?? berekenVaaWerkmiddelenVoorProfiel(p, refDatum);
   const resolvedMobiliteit = mobiliteit ?? berekenMobiliteitVoorProfiel(p, refDatum);
 
+  const vaaPerMaand =
+    resolvedVaaWerkmiddelen.totaalPerMaand +
+    (resolvedMobiliteit.vaaBedrijfswagen?.vaaMaand ?? 0);
+
   return werkgeverskost({
     brutoloon: p.brutoloon,
     refDatum,
     bouwVlag: p.bouwVlag,
     arbeidsongevallenPct: p.arbeidsongevallenPct,
     premieEjpPct: 0,
-    premieVakantiegeldPct: 0,
     extraGroepsverzekering: p.extraGroepsverzekering,
     maaltijdchequeWerkgeversaandeelPerDag: p.maaltijdchequeWerkgeversaandeelPerDag,
     maaltijdchequeWerkdagen: p.arbeidsdagenPerMaand,
     extraHospitalisatie: p.extraHospitalisatie,
     extraEcocheques: 0,
     vaaRszPlichtigPerMaand: resolvedVaaWerkmiddelen.totaalPerMaand,
+    vaaPerMaand,
     onkostenvergoedingPerMaand: p.onkostenvergoedingPerMaand,
     woonwerkVergoedingPerMaand: resolvedMobiliteit.woonwerk.totaalVergoeding,
   });
