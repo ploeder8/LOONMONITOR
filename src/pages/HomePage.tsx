@@ -15,6 +15,8 @@ import {
   Map as MapIcon,
   Building2,
   HelpCircle,
+  Download,
+  Upload,
 } from "lucide-react";
 
 import { Banner } from "@/components/Banner";
@@ -65,6 +67,12 @@ import {
   PC200DatasetError,
 } from "@/lib/errors";
 import { formatEUR, round2 } from "@/lib/money";
+import {
+  normaliseerCsvBestandsnaam,
+  profielNaarCsv,
+  profielUitCsv,
+  standaardCsvNaamPrefix,
+} from "@/lib/profielCsv";
 
 type Statuut = "bediende" | "student";
 type BeroepskostMethode = "forfaitair" | "reeel";
@@ -433,10 +441,43 @@ function berekenMobiliteitVoorProfiel(
 
 export function HomePage() {
   const [p, setP] = useState<Profiel>(DEFAULTS);
+  const [exportNaam, setExportNaam] = useState(() => standaardCsvNaamPrefix());
+  const [commentaar, setCommentaar] = useState("");
+  const [csvStatus, setCsvStatus] = useState<{ kind: "success" | "error"; tekst: string } | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const profiel = normaliseerProfiel(p);
 
   function set<K extends keyof Profiel>(k: K, v: Profiel[K]) {
     setP((prev) => ({ ...normaliseerProfiel(prev), [k]: v }));
+  }
+
+  function exporteerCsv() {
+    const csv = profielNaarCsv({ profiel, commentaar });
+    const vandaag = standaardCsvNaamPrefix().slice(0, -1);
+    const bestandsnaam = normaliseerCsvBestandsnaam(exportNaam, vandaag);
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = bestandsnaam;
+    link.click();
+    URL.revokeObjectURL(url);
+    setCsvStatus({ kind: "success", tekst: `CSV geëxporteerd als ${bestandsnaam}.` });
+  }
+
+  async function importeerCsvBestand(file: File | null) {
+    if (!file) return;
+    try {
+      const parsed = profielUitCsv(await file.text());
+      setP(normaliseerProfiel(parsed.profiel));
+      setCommentaar(parsed.commentaar);
+      setCsvStatus({ kind: "success", tekst: "CSV geïmporteerd. Outputkolommen zijn genegeerd." });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "CSV kon niet worden gelezen.";
+      setCsvStatus({ kind: "error", tekst: message });
+    } finally {
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
   }
 
   function setBerekeningsRichting(richting: BerekeningsRichting) {
@@ -538,6 +579,18 @@ export function HomePage() {
         profiel={profiel}
         set={set}
         setBerekeningsRichting={setBerekeningsRichting}
+        csvPanel={(
+          <CsvImportExportPanel
+            exportNaam={exportNaam}
+            setExportNaam={setExportNaam}
+            commentaar={commentaar}
+            setCommentaar={setCommentaar}
+            status={csvStatus}
+            fileInputRef={fileInputRef}
+            onImport={(file) => void importeerCsvBestand(file)}
+            onExport={exporteerCsv}
+          />
+        )}
       />
       <ErrorBoundary
         fallbackRender={({ error, resetErrorBoundary }) => (
@@ -808,14 +861,105 @@ function baremaInlineStyle(ok: boolean): CSSProperties {
 
 // ─── ProfileForm ─────────────────────────────────────────────────────────────
 
+function CsvImportExportPanel({
+  exportNaam,
+  setExportNaam,
+  commentaar,
+  setCommentaar,
+  status,
+  fileInputRef,
+  onImport,
+  onExport,
+}: {
+  exportNaam: string;
+  setExportNaam: (waarde: string) => void;
+  commentaar: string;
+  setCommentaar: (waarde: string) => void;
+  status: { kind: "success" | "error"; tekst: string } | null;
+  fileInputRef: React.RefObject<HTMLInputElement | null>;
+  onImport: (file: File | null) => void;
+  onExport: () => void;
+}) {
+  return (
+    <div
+      style={{
+        border: "1px solid var(--color-border)",
+        borderRadius: 8,
+        padding: 10,
+        display: "grid",
+        gap: 10,
+        background: "var(--color-navy-50)",
+      }}
+    >
+      <FormField label="Exportnaam">
+        <input
+          className={inputClass}
+          value={exportNaam}
+          onChange={(e) => setExportNaam(e.target.value)}
+        />
+      </FormField>
+      <FormField label="Commentaar">
+        <textarea
+          className={inputClass}
+          rows={3}
+          value={commentaar}
+          onChange={(e) => setCommentaar(e.target.value)}
+          style={{ resize: "vertical", minHeight: 76 }}
+        />
+      </FormField>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".csv,text/csv"
+        onChange={(e) => onImport(e.target.files?.[0] ?? null)}
+        style={{ display: "none" }}
+      />
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          style={miniButtonStyle}
+        >
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <Upload size={13} />
+            Importeer CSV
+          </span>
+        </button>
+        <button type="button" onClick={onExport} style={miniButtonStyle}>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <Download size={13} />
+            Exporteer CSV
+          </span>
+        </button>
+      </div>
+      {status && (
+        <div
+          style={{
+            borderRadius: 8,
+            padding: "7px 9px",
+            fontSize: 12,
+            color: status.kind === "success" ? "var(--color-success-dark)" : "#991b1b",
+            background: status.kind === "success" ? "var(--color-mint-soft)" : "#fff1f2",
+            border: `1px solid ${status.kind === "success" ? "rgba(28,210,163,0.35)" : "#fca5a5"}`,
+          }}
+        >
+          {status.tekst}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ProfileForm({
   profiel,
   set,
   setBerekeningsRichting,
+  csvPanel,
 }: {
   profiel: Profiel;
   set: ProfielSetter;
   setBerekeningsRichting: (richting: BerekeningsRichting) => void;
+  csvPanel: React.ReactNode;
 }) {
   function setBerekeningsMaand(maand: string) {
     set("berekeningsMaand", maand);
@@ -872,6 +1016,8 @@ function ProfileForm({
       >
         Profiel
       </h2>
+
+      {csvPanel}
 
       {profiel.statuut === "bediende" && (
         <TaxProfileFields profiel={profiel} set={set} />
