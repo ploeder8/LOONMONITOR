@@ -418,10 +418,10 @@ Voor een **kompleet "totale werkgeverskost = bruto × X"** model is de volgende 
 
 ### 8.3 Vakantiegeld bedienden
 
-- **Enkel vakantiegeld:** = maandloon (= reservering 7,67%/maand of provisie 92%/jaar)
+- **Enkel vakantiegeld:** = doorbetaald loon tijdens vakantie (geen aparte provisie; valt onder regulier brutoloon).
 - **Dubbel vakantiegeld:** **92% × bruto maandloon incl. VAA** per vakantiedienstjaar.
 - **RSZ werknemer:** 13,07% op **85/92** van het dubbel vakantiegeld.
-- **Provisioneel reserveringspercentage:** ca. **15,38%** bruto (= enkel + dubbel jaarlijks).
+- **Maandelijkse provisie dubbel vakantiegeld (werkgeverskost):** **(bruto + VAA) × 92% / 12** — runtime berekend, niet hardcoded.
 - **Bedrijfsvoorheffing op dubbel vakantiegeld:** bijzondere BV-schaal, kolom vakantiegeld, op belastbaar bedrag na RSZ.
 
 ### 8.4 Eindejaarspremie PC 200
@@ -462,7 +462,7 @@ Voor één maand bruto = €3.500:
 | + Patronale RSZ 25% | +€875,00 |
 | + Sociaal Fonds 0,23% | +€8,05 |
 | + FSO + tijd. wkl + risico (≈ 0,5%) | +€17,50 |
-| + Provisie vakantiegeld (15,38%) | +€538,30 |
+| + Provisie dubbel vakantiegeld (92% / 12 ≈ 7,67%) | +€268,33 |
 | + Provisie eindejaarspremie (1/12 = 8,33%) | +€291,67 |
 | + Arbeidsongevallenverzekering (≈ 1%) | +€35,00 |
 | + Aanvullend pensioen (sectoraal, indien CAO) | sector-afhankelijk |

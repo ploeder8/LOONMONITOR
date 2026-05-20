@@ -1,7 +1,6 @@
 import { ArrowRightLeft } from "lucide-react";
 
-import type { BerekeningsRichting } from "@/lib/profiel";
-export type { BerekeningsRichting };
+export type BerekeningsRichting = "bruto_naar_netto" | "netto_naar_bruto";
 
 interface Props {
   value: BerekeningsRichting;
@@ -12,7 +11,6 @@ export function BerekeningsRichtingToggle({ value, onChange }: Props) {
   return (
     <div className="flex items-center gap-2">
       <ArrowRightLeft className="w-4 h-4 text-gray-500" />
-      <span className="text-sm font-medium text-gray-700">Richting</span>
       <div className="inline-flex rounded-md shadow-sm" role="group">
         <button
           type="button"

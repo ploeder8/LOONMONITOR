@@ -2082,8 +2082,8 @@
       "subcategorie": "werkgeverskost_provisie_vakantiegeld",
       "type": "parameter",
       "pc": "200",
-      "omschrijving": "Provisie dubbel vakantiegeld bedienden: 6,67% (= 92%/12) van brutoloon op werkgeverskost",
-      "waarde_bron": "6,67% van brutoloon (= 92% × bruto / 12)",
+      "omschrijving": "[DEPRECATED] Provisie dubbel vakantiegeld bedienden — vervangen door runtime-berekening obv 92%-percentage",
+      "waarde_bron": "6,67% was inconsistent; 92%/12 = 7,67%",
       "waarde_genormaliseerd": 0.0667,
       "eenheid": "fractie",
       "valuta": "EUR",
@@ -2106,9 +2106,50 @@
       "extractie_methode": "gestructureerde_overname",
       "normalisatie_toegepast": true,
       "normalisatie_opmerking": null,
+      "status": "gemarkeerd_voor_review",
+      "conflict_opmerking": "Vervangen door runtime-berekening: provisie = (bruto + VAA) × 92% / 12",
+      "opmerkingen": [
+        "Deze waarde (6,67%) is wiskundig inconsistent met 92%/12 = 7,67%.",
+        "De loonmotor berekent de provisie nu runtime obv het aparte 92%-percentage-datapunt."
+      ]
+    },
+    {
+      "id": "vakantiegeld_dubbel_pct_2026",
+      "categorie": "premies_en_voordelen",
+      "subcategorie": "vakantiegeld",
+      "type": "parameter",
+      "pc": "200",
+      "omschrijving": "Percentage dubbel vakantiegeld bedienden ten opzichte van brutomaandloon inclusief VAA",
+      "waarde_bron": "92% van brutomaandloon inclusief VAA",
+      "waarde_genormaliseerd": 0.92,
+      "eenheid": "fractie",
+      "valuta": "EUR",
+      "frequentie": "jaarlijks",
+      "berekeningsbasis": "brutomaandloon inclusief VAA",
+      "toepassingsgebied": [
+        "bedienden – wettelijk algemeen kader, ook van toepassing op PC 200"
+      ],
+      "voorwaarden": [],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": "2026-12-31",
+      "laatst_bevestigd_op": "2026-05-20",
+      "bron_organisatie": "RSZ / RVA",
+      "bron_type": "overheid",
+      "bron_titel": "Dubbel vakantiegeld bedienden = 92% × maandloon",
+      "bron_url": "https://www.socialsecurity.be/employer/instructions/dmfa/fr/latest/instructions/salary/particularcases/holidaypay.html",
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": null,
+      "bron_fragment": "Dubbel vakantiegeld wettelijk = 92% van het normale maandloon",
+      "betrouwbaarheid": "Tier 1",
+      "extractie_methode": "gestructureerde_overname",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": null,
       "status": "actief",
       "conflict_opmerking": null,
-      "opmerkingen": []
+      "opmerkingen": [
+        "Gebruikt door loonmotor voor zowel jaarlijkse dubbel-vakantiegeld-berekening als maandelijkse provisie (= 92% / 12)"
+      ]
     },
     {
       "id": "structurele_vermindering_laagloon_2026",

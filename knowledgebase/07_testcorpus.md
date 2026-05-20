@@ -1,6 +1,8 @@
 # Testcorpus — PC 200 Loonmotor
 
-**Versie:** 2026-05-11
+**Versie:** 2026-05-20
+
+> **Wijziging 2026-05-20:** De maandelijkse provisie voor dubbel vakantiegeld is gewijzigd van een hardcoded 6,67% naar een **runtime-berekening**: `(bruto + VAA) × 92% / 12`. Alle testcases met een maandelijkse loonkost-weergave vertonen nu een hogere provisie (~7,67% van bruto i.p.v. 6,67%). De exacte bedragen in de tabellen hieronder zijn nog gedeeltelijk op basis van de oude 6,67% en worden bij de volgende volledige testcase-herberekening gesynchroniseerd.
 **Drie testlagen** (van groen naar pending validatie):
 
 | Laag | Naam | Aantal | Bestand | Status |
@@ -155,7 +157,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €5.04 |
 | Arbeidsongevallen-verzekering (~0,3%) | €6.57 |
 | Provisie eindejaarspremie (~8,33%) | €182.41 |
-| Provisie dubbel vakantiegeld (~6,67%) | €146.06 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €146.06 |
 | **Totale loonkost werkgever** | **€3077.34** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -205,7 +207,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €5.29 |
 | Arbeidsongevallen-verzekering (~0,3%) | €6.90 |
 | Provisie eindejaarspremie (~8,33%) | €191.59 |
-| Provisie dubbel vakantiegeld (~6,67%) | €153.41 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €153.41 |
 | **Totale loonkost werkgever** | **€3232.19** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -252,7 +254,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €5.75 |
 | Arbeidsongevallen-verzekering (~0,3%) | €7.50 |
 | Provisie eindejaarspremie (~8,33%) | €208.25 |
-| Provisie dubbel vakantiegeld (~6,67%) | €166.75 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €166.75 |
 | **Totale loonkost werkgever** | **€3513.25** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -299,7 +301,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €6.44 |
 | Arbeidsongevallen-verzekering (~0,3%) | €8.40 |
 | Provisie eindejaarspremie (~8,33%) | €233.24 |
-| Provisie dubbel vakantiegeld (~6,67%) | €186.76 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €186.76 |
 | **Totale loonkost werkgever** | **€3934.84** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -346,7 +348,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €6.90 |
 | Arbeidsongevallen-verzekering (~0,3%) | €9.00 |
 | Provisie eindejaarspremie (~8,33%) | €249.90 |
-| Provisie dubbel vakantiegeld (~6,67%) | €200.10 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €200.10 |
 | **Totale loonkost werkgever** | **€4215.90** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -393,7 +395,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €7.68 |
 | Arbeidsongevallen-verzekering (~0,3%) | €10.01 |
 | Provisie eindejaarspremie (~8,33%) | €277.97 |
-| Provisie dubbel vakantiegeld (~6,67%) | €222.58 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €222.58 |
 | **Totale loonkost werkgever** | **€4689.47** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -440,7 +442,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €8.05 |
 | Arbeidsongevallen-verzekering (~0,3%) | €10.50 |
 | Provisie eindejaarspremie (~8,33%) | €291.55 |
-| Provisie dubbel vakantiegeld (~6,67%) | €233.45 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €233.45 |
 | **Totale loonkost werkgever** | **€4918.55** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -487,7 +489,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €9.20 |
 | Arbeidsongevallen-verzekering (~0,3%) | €12.00 |
 | Provisie eindejaarspremie (~8,33%) | €333.20 |
-| Provisie dubbel vakantiegeld (~6,67%) | €266.80 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €266.80 |
 | **Totale loonkost werkgever** | **€5621.20** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -534,7 +536,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €10.35 |
 | Arbeidsongevallen-verzekering (~0,3%) | €13.50 |
 | Provisie eindejaarspremie (~8,33%) | €374.85 |
-| Provisie dubbel vakantiegeld (~6,67%) | €300.15 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €300.15 |
 | **Totale loonkost werkgever** | **€6323.85** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -581,7 +583,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €11.50 |
 | Arbeidsongevallen-verzekering (~0,3%) | €15.00 |
 | Provisie eindejaarspremie (~8,33%) | €416.50 |
-| Provisie dubbel vakantiegeld (~6,67%) | €333.50 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €333.50 |
 | **Totale loonkost werkgever** | **€7026.50** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -628,7 +630,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €12.65 |
 | Arbeidsongevallen-verzekering (~0,3%) | €16.50 |
 | Provisie eindejaarspremie (~8,33%) | €458.15 |
-| Provisie dubbel vakantiegeld (~6,67%) | €366.85 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €366.85 |
 | **Totale loonkost werkgever** | **€7729.15** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -677,7 +679,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €5.75 |
 | Arbeidsongevallen-verzekering (~0,3%) | €7.50 |
 | Provisie eindejaarspremie (~8,33%) | €208.25 |
-| Provisie dubbel vakantiegeld (~6,67%) | €166.75 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €166.75 |
 | **Totale loonkost werkgever** | **€3513.25** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -729,7 +731,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €6.90 |
 | Arbeidsongevallen-verzekering (~0,3%) | €9.00 |
 | Provisie eindejaarspremie (~8,33%) | €249.90 |
-| Provisie dubbel vakantiegeld (~6,67%) | €200.10 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €200.10 |
 | **Totale loonkost werkgever** | **€4215.90** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -784,7 +786,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €8.05 |
 | Arbeidsongevallen-verzekering (~0,3%) | €10.50 |
 | Provisie eindejaarspremie (~8,33%) | €291.55 |
-| Provisie dubbel vakantiegeld (~6,67%) | €233.45 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €233.45 |
 | **Totale loonkost werkgever** | **€4918.55** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -836,7 +838,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €9.20 |
 | Arbeidsongevallen-verzekering (~0,3%) | €12.00 |
 | Provisie eindejaarspremie (~8,33%) | €333.20 |
-| Provisie dubbel vakantiegeld (~6,67%) | €266.80 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €266.80 |
 | **Totale loonkost werkgever** | **€5621.20** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -888,7 +890,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €10.35 |
 | Arbeidsongevallen-verzekering (~0,3%) | €13.50 |
 | Provisie eindejaarspremie (~8,33%) | €374.85 |
-| Provisie dubbel vakantiegeld (~6,67%) | €300.15 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €300.15 |
 | **Totale loonkost werkgever** | **€6323.85** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -940,7 +942,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €8.05 |
 | Arbeidsongevallen-verzekering (~0,3%) | €10.50 |
 | Provisie eindejaarspremie (~8,33%) | €291.55 |
-| Provisie dubbel vakantiegeld (~6,67%) | €233.45 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €233.45 |
 | **Totale loonkost werkgever** | **€4918.55** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -987,7 +989,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €13.80 |
 | Arbeidsongevallen-verzekering (~0,3%) | €18.00 |
 | Provisie eindejaarspremie (~8,33%) | €499.80 |
-| Provisie dubbel vakantiegeld (~6,67%) | €400.20 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €400.20 |
 | **Totale loonkost werkgever** | **€8431.80** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -1035,7 +1037,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €14.95 |
 | Arbeidsongevallen-verzekering (~0,3%) | €19.50 |
 | Provisie eindejaarspremie (~8,33%) | €541.45 |
-| Provisie dubbel vakantiegeld (~6,67%) | €433.55 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €433.55 |
 | **Totale loonkost werkgever** | **€9134.45** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -1085,7 +1087,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €16.10 |
 | Arbeidsongevallen-verzekering (~0,3%) | €21.00 |
 | Provisie eindejaarspremie (~8,33%) | €583.10 |
-| Provisie dubbel vakantiegeld (~6,67%) | €466.90 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €466.90 |
 | **Totale loonkost werkgever** | **€9837.10** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -1132,7 +1134,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €17.25 |
 | Arbeidsongevallen-verzekering (~0,3%) | €22.50 |
 | Provisie eindejaarspremie (~8,33%) | €624.75 |
-| Provisie dubbel vakantiegeld (~6,67%) | €500.25 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €500.25 |
 | **Totale loonkost werkgever** | **€10539.75** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -1181,7 +1183,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €19.55 |
 | Arbeidsongevallen-verzekering (~0,3%) | €25.50 |
 | Provisie eindejaarspremie (~8,33%) | €708.05 |
-| Provisie dubbel vakantiegeld (~6,67%) | €566.95 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €566.95 |
 | **Totale loonkost werkgever** | **€11945.05** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -1232,7 +1234,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €9.20 |
 | Arbeidsongevallen-verzekering (~0,3%) | €12.00 |
 | Provisie eindejaarspremie (~8,33%) | €333.20 |
-| Provisie dubbel vakantiegeld (~6,67%) | €266.80 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €266.80 |
 | **Totale loonkost werkgever** | **€5621.20** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -1282,7 +1284,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €11.50 |
 | Arbeidsongevallen-verzekering (~0,3%) | €15.00 |
 | Provisie eindejaarspremie (~8,33%) | €416.50 |
-| Provisie dubbel vakantiegeld (~6,67%) | €333.50 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €333.50 |
 | **Totale loonkost werkgever** | **€7026.50** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -1334,7 +1336,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €16.10 |
 | Arbeidsongevallen-verzekering (~0,3%) | €21.00 |
 | Provisie eindejaarspremie (~8,33%) | €583.10 |
-| Provisie dubbel vakantiegeld (~6,67%) | €466.90 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €466.90 |
 | **Totale loonkost werkgever** | **€9837.10** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -1382,7 +1384,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €8.05 |
 | Arbeidsongevallen-verzekering (~0,3%) | €10.50 |
 | Provisie eindejaarspremie (~8,33%) | €291.55 |
-| Provisie dubbel vakantiegeld (~6,67%) | €233.45 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €233.45 |
 | **Totale loonkost werkgever** | **€4918.55** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -1429,7 +1431,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €23.00 |
 | Arbeidsongevallen-verzekering (~0,3%) | €30.00 |
 | Provisie eindejaarspremie (~8,33%) | €833.00 |
-| Provisie dubbel vakantiegeld (~6,67%) | €667.00 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €667.00 |
 | **Totale loonkost werkgever** | **€14053.00** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -1476,7 +1478,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €34.50 |
 | Arbeidsongevallen-verzekering (~0,3%) | €45.00 |
 | Provisie eindejaarspremie (~8,33%) | €1249.50 |
-| Provisie dubbel vakantiegeld (~6,67%) | €1000.50 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €1000.50 |
 | **Totale loonkost werkgever** | **€21079.50** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -1528,7 +1530,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €5.04 |
 | Arbeidsongevallen-verzekering (~0,3%) | €6.57 |
 | Provisie eindejaarspremie (~8,33%) | €182.41 |
-| Provisie dubbel vakantiegeld (~6,67%) | €146.06 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €146.06 |
 | **Totale loonkost werkgever** | **€3077.34** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
@@ -1583,7 +1585,7 @@ Originele kop van het corpus:
 | Sociaal Fonds 200 (0,23%) | €10.35 |
 | Arbeidsongevallen-verzekering (~0,3%) | €13.50 |
 | Provisie eindejaarspremie (~8,33%) | €374.85 |
-| Provisie dubbel vakantiegeld (~6,67%) | €300.15 |
+| Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €300.15 |
 | **Totale loonkost werkgever** | **€6323.85** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 

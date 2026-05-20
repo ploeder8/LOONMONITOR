@@ -1,6 +1,7 @@
 import { berekenBvBijzonder, berekenRefertejaarloonBijzonder } from "@/lib/bvBijzonder";
 import type { GezinsType } from "@/lib/bv";
 import { getDatapunt } from "@/lib/dataset";
+import { safeGetValue } from "@/lib/periode";
 import { ecocheques } from "@/lib/ecocheques";
 import { eindejaarspremie } from "@/lib/eindejaarspremie";
 import { jaarlijksePremie2026 } from "@/lib/jaarpremie";
@@ -9,7 +10,7 @@ import type { Datapunt } from "@/types/dataset";
 
 const RSZ_WERKNEMER_PCT = 0.1307;
 const RSZ_WERKGEVER_JAARPREMIES_PCT = 0.25;
-const DUBBEL_VAKANTIEGELD_PCT = 0.92;
+
 const DUBBEL_VAKANTIEGELD_RSZ_BASIS_FRACTIE = 85 / 92;
 
 export interface JaaroverzichtInput {
@@ -177,8 +178,10 @@ function berekenDubbelVakantiegeldComponent(
   input: JaaroverzichtInput,
   refertejaarloon: number,
 ): JaarcomponentNetto {
+  const vgPctRes = safeGetValue("vakantiegeld_dubbel_pct_2026", { refDatum: input.refDatum });
+  const vgPct = vgPctRes.waarde ?? 0.92;
   const bruto = round2(
-    (input.brutoloon + Math.max(input.vaaPerMaand ?? 0, 0)) * DUBBEL_VAKANTIEGELD_PCT,
+    (input.brutoloon + Math.max(input.vaaPerMaand ?? 0, 0)) * vgPct,
   );
   const rszBasis = round2(bruto * DUBBEL_VAKANTIEGELD_RSZ_BASIS_FRACTIE);
   const rsz = round2(rszBasis * RSZ_WERKNEMER_PCT);
@@ -199,7 +202,7 @@ function berekenDubbelVakantiegeldComponent(
     bv: bv.bvNetto,
     bvTarief: bv.tarief,
     netto: bv.nettoBedrag,
-    datapunten: uniekeDatapunten([vakantiegeldDatapunt, bv.datapunt]),
+    datapunten: uniekeDatapunten([vakantiegeldDatapunt, bv.datapunt, vgPctRes.datapunt]),
   };
 }
 
