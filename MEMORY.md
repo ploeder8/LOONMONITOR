@@ -11,6 +11,7 @@ Kort projectlogboek voor wijzigingen door coding agents.
 
 ## Log
 
+- 2026-05-20 — CSV import/export-paneel boven de bruto/netto-toggle geplaatst en pijltjesicoon uit de toggle verwijderd; reden: gewenste formulierhiërarchie en rustiger toggle-UI.
 - 2026-05-20 — CSV import/export UI hersteld na latere `HomePage.tsx`-wijzigingen en CSV-defaults gelijkgetrokken met huidige profieldefaults (€3000, woon-werk uit); reden: import/export opnieuw beschikbaar zonder latere branchwijzigingen terug te draaien.
 - 2026-05-20 — Dubbel-vakantiegeld-provisie gewijzigd van hardcoded 6,67% naar runtime-berekening `(bruto + VAA) × 92% / 12`; bestanden: `werkgeverskost.ts`, `jaaroverzicht.ts`, `HomePage.tsx`, dataset (`vakantiegeld_dubbel_pct_2026` toegevoegd, `provisie_dubbel_vakantiegeld_2026` gemarkeerd als deprecated), knowledgebase; reden: 6,67% was wiskundig inconsistent met 92%/12 = 7,67% en gebruiker vroeg expliciek geen hardcoded provisie.
 - 2026-05-20 — CSV import/export voor één profiel toegevoegd met exportnaam, commentaar, inputkolommen en kernoutputkolommen; reden: testers kunnen input-snapshots delen en resultaten reproduceerbaar vergelijken.
