@@ -27,6 +27,8 @@ import {
   type JumpAnchor,
   type SummaryCell,
 } from "@/components/ResultsSummaryStrip";
+import { BerekeningsRichtingToggle } from "@/components/BerekeningsRichtingToggle";
+import type { BerekeningsRichting } from "@/components/BerekeningsRichtingToggle";
 import { brutolocheck, lookupBarema, lookupStudentenbarema } from "@/lib/baremas";
 import type { BaremaCat, Schaal, StudentenCat } from "@/lib/baremas";
 import {
@@ -49,6 +51,7 @@ import {
 } from "@/lib/jaaroverzicht";
 import { berekenNetto } from "@/lib/netto";
 import type { GezinsType, NettoResultaat } from "@/lib/netto";
+import { zoekBrutoVoorNetto } from "@/lib/nettoNaarBruto";
 import {
   MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026,
   werkgeverskost,
@@ -142,6 +145,7 @@ function HelpTooltip({ text }: { text: string }) {
 }
 
 interface Profiel {
+  berekeningsRichting: BerekeningsRichting;
   statuut: Statuut;
   schaal: Schaal;
   cat: BaremaCat;
@@ -149,6 +153,7 @@ interface Profiel {
   studentenCat: StudentenCat;
   studentLeeftijd: number;
   brutoloon: number;
+  doelNettoloon: number;
   bouwVlag: boolean;
   berekeningsMaand: string;
   berekeningsJaar: string;
@@ -192,6 +197,7 @@ interface Profiel {
 }
 
 const DEFAULTS: Profiel = {
+  berekeningsRichting: "bruto_naar_netto",
   statuut: "bediende",
   schaal: "I",
   cat: "A",
@@ -199,6 +205,7 @@ const DEFAULTS: Profiel = {
   studentenCat: "A",
   studentLeeftijd: 17,
   brutoloon: 2276.51,
+  doelNettoloon: 1800,
   bouwVlag: false,
   berekeningsMaand: "06",
   berekeningsJaar: "2026",
@@ -392,11 +399,15 @@ function berekenWoonwerkVrijgesteld(
   return round2(Math.max(0, vrijgesteld));
 }
 
-function berekenMobiliteitVoorProfiel(p: Profiel, refDatum: string): MobiliteitBerekening {
+function berekenMobiliteitVoorProfiel(
+  p: Profiel,
+  refDatum: string,
+  brutoloonOverride?: number,
+): MobiliteitBerekening {
   const werkdagenInMaand = aantalWeekdagenInMaand(p.berekeningsJaar, p.berekeningsMaand);
   const woonwerk = berekenWoonwerkVerkeer({
     refDatum,
-    brutoloon: p.brutoloon,
+    brutoloon: brutoloonOverride ?? p.brutoloon,
     arbeidsdagenPerMaand: p.arbeidsdagenPerMaand,
     werkdagenInMaand,
     fiets: { actief: p.woonwerkFiets, kmPerDag: p.kmPerDag },
@@ -428,9 +439,106 @@ export function HomePage() {
     setP((prev) => ({ ...normaliseerProfiel(prev), [k]: v }));
   }
 
+  function setBerekeningsRichting(richting: BerekeningsRichting) {
+    if (richting === profiel.berekeningsRichting) return;
+    if (richting === "netto_naar_bruto") {
+      const refDatum = refDatumVoorMaand(profiel.berekeningsJaar, profiel.berekeningsMaand);
+      const netto = berekenNettoVoorProfiel(profiel, refDatum);
+      setP((prev) => ({
+        ...normaliseerProfiel(prev),
+        berekeningsRichting: richting,
+        doelNettoloon: netto.nettoloon,
+      }));
+    } else {
+      setP((prev) => ({ ...normaliseerProfiel(prev), berekeningsRichting: richting }));
+    }
+  }
+
+  // Root-finding voor netto → bruto modus
+  useEffect(() => {
+    if (profiel.berekeningsRichting !== "netto_naar_bruto") return;
+    if (profiel.statuut !== "bediende") return;
+
+    const refDatum = refDatumVoorMaand(profiel.berekeningsJaar, profiel.berekeningsMaand);
+    const mobiliteit = berekenMobiliteitVoorProfiel(profiel, refDatum);
+    const vaaWerkmiddelen = berekenVaaWerkmiddelenVoorProfiel(profiel, refDatum);
+    const heeftMaaltijdcheques = profiel.maaltijdchequeWerkgeversaandeelPerDag > 0;
+
+    const inverse = zoekBrutoVoorNetto({
+      doelNettoloon: profiel.doelNettoloon,
+      refDatum,
+      bouwVlag: profiel.bouwVlag,
+      gezinstype: profiel.gezinstype,
+      kinderenTenLaste: profiel.kinderenTenLaste,
+      fiscaalAlleenstaandeMetKind: profiel.fiscaalAlleenstaandeMetKind,
+      groepsverzekeringEigenBijdrage: profiel.groepsverzekeringEigenBijdrage,
+      maaltijdchequeWerknemersbijdragePerDag: heeftMaaltijdcheques
+        ? profiel.maaltijdchequeWerknemersbijdragePerDag
+        : 0,
+      maaltijdchequeWerkdagen: heeftMaaltijdcheques ? profiel.arbeidsdagenPerMaand : 0,
+      hospitalisatieEigenBijdrage: profiel.hospitalisatieEigenBijdrage,
+      onkostenvergoedingPerMaand: profiel.onkostenvergoedingPerMaand,
+      woonwerkVrijgesteldPerMaand: berekenWoonwerkVrijgesteld(
+        mobiliteit.woonwerk,
+        profiel.woonwerkPrivewagenBeroepskostMethode,
+      ),
+      vaaRszPlichtigPerMaand: vaaWerkmiddelen.totaalPerMaand,
+      vaaBedrijfswagenPerMaand: mobiliteit.vaaBedrijfswagen?.vaaMaand ?? 0,
+    });
+
+    if (
+      inverse.gevondenBruto !== null &&
+      Math.abs(inverse.gevondenBruto - profiel.brutoloon) > 0.01
+    ) {
+      setP((prev) => ({
+        ...normaliseerProfiel(prev),
+        brutoloon: inverse.gevondenBruto!,
+      }));
+    }
+  }, [
+    profiel.berekeningsRichting,
+    profiel.doelNettoloon,
+    profiel.statuut,
+    profiel.berekeningsJaar,
+    profiel.berekeningsMaand,
+    profiel.gezinstype,
+    profiel.kinderenTenLaste,
+    profiel.fiscaalAlleenstaandeMetKind,
+    profiel.groepsverzekeringEigenBijdrage,
+    profiel.maaltijdchequeWerkgeversaandeelPerDag,
+    profiel.maaltijdchequeWerknemersbijdragePerDag,
+    profiel.arbeidsdagenPerMaand,
+    profiel.hospitalisatieEigenBijdrage,
+    profiel.onkostenvergoedingPerMaand,
+    profiel.woonwerkPrivewagenBeroepskostMethode,
+    profiel.woonwerkFiets,
+    profiel.woonwerkPrivewagen,
+    profiel.woonwerkTrein,
+    profiel.woonwerkBusTramMetro,
+    profiel.woonwerkBedrijfswagen,
+    profiel.kmPerDag,
+    profiel.treinKm,
+    profiel.busTramMetroKm,
+    profiel.busTramMetroPrijs,
+    profiel.privewagenKm,
+    profiel.bouwVlag,
+    profiel.bedrijfswagenCataloguswaarde,
+    profiel.bedrijfswagenDatumEersteInschrijving,
+    profiel.bedrijfswagenBrandstof,
+    profiel.bedrijfswagenCo2,
+    profiel.vaaPcLaptopActief,
+    profiel.vaaGsmSmartphoneActief,
+    profiel.vaaInternetActief,
+    profiel.vaaGsmAbonnementActief,
+  ]);
+
   return (
     <div className="home-layout">
-      <ProfileForm profiel={profiel} set={set} />
+      <ProfileForm
+        profiel={profiel}
+        set={set}
+        setBerekeningsRichting={setBerekeningsRichting}
+      />
       <ErrorBoundary
         fallbackRender={({ error, resetErrorBoundary }) => (
           <Banner kind="error" title="Onverwachte fout">
@@ -703,9 +811,11 @@ function baremaInlineStyle(ok: boolean): CSSProperties {
 function ProfileForm({
   profiel,
   set,
+  setBerekeningsRichting,
 }: {
   profiel: Profiel;
   set: ProfielSetter;
+  setBerekeningsRichting: (richting: BerekeningsRichting) => void;
 }) {
   function setBerekeningsMaand(maand: string) {
     set("berekeningsMaand", maand);
@@ -755,6 +865,11 @@ function ProfileForm({
       >
         Profiel
       </h2>
+
+      <BerekeningsRichtingToggle
+        value={profiel.berekeningsRichting}
+        onChange={setBerekeningsRichting}
+      />
 
       {profiel.statuut === "bediende" && (
         <TaxProfileFields profiel={profiel} set={set} />
@@ -854,14 +969,36 @@ function ProfileForm({
             />
           </FormField>
 
-          <FormField label="Brutoloon (€)">
-            <NumeriekeInput
-              className={inputClass}
-              step="0.01"
-              value={profiel.brutoloon}
-              onValueChange={(waarde) => set("brutoloon", waarde)}
-            />
-          </FormField>
+          {profiel.berekeningsRichting === "bruto_naar_netto" ? (
+            <FormField label="Brutoloon (€)">
+              <NumeriekeInput
+                className={inputClass}
+                step="0.01"
+                value={profiel.brutoloon}
+                onValueChange={(waarde) => set("brutoloon", waarde)}
+              />
+            </FormField>
+          ) : (
+            <>
+              <FormField label="Gewenst nettoloon (€)">
+                <NumeriekeInput
+                  className={inputClass}
+                  step="0.01"
+                  value={profiel.doelNettoloon}
+                  onValueChange={(waarde) => set("doelNettoloon", waarde)}
+                />
+              </FormField>
+              <FormField label="Berekend bruto (€)">
+                <NumeriekeInput
+                  className={inputClass}
+                  step="0.01"
+                  value={profiel.brutoloon}
+                  disabled
+                  onValueChange={() => {}}
+                />
+              </FormField>
+            </>
+          )}
 
           <BaremaInlineCheck profiel={profiel} />
 
@@ -2221,6 +2358,41 @@ function WerkgeverJaaroverzichtPanel({ jaaroverzicht }: { jaaroverzicht: Jaarove
   );
 }
 
+// ─── Centrale forward-berekening ─────────────────────────────────────────────
+
+function berekenNettoVoorProfiel(
+  p: Profiel,
+  refDatum: string,
+  brutoloonOverride?: number,
+): NettoResultaat {
+  const brutoloon = brutoloonOverride ?? p.brutoloon;
+  const heeftMaaltijdcheques = p.maaltijdchequeWerkgeversaandeelPerDag > 0;
+  const mobiliteit = berekenMobiliteitVoorProfiel(p, refDatum, brutoloon);
+  const vaaWerkmiddelen = berekenVaaWerkmiddelenVoorProfiel(p, refDatum);
+
+  return berekenNetto({
+    brutoloon,
+    refDatum,
+    bouwVlag: p.bouwVlag,
+    gezinstype: p.gezinstype,
+    kinderenTenLaste: p.kinderenTenLaste,
+    fiscaalAlleenstaandeMetKind: p.fiscaalAlleenstaandeMetKind,
+    groepsverzekeringEigenBijdrage: p.groepsverzekeringEigenBijdrage,
+    maaltijdchequeWerknemersbijdragePerDag: heeftMaaltijdcheques
+      ? p.maaltijdchequeWerknemersbijdragePerDag
+      : 0,
+    maaltijdchequeWerkdagen: heeftMaaltijdcheques ? p.arbeidsdagenPerMaand : 0,
+    hospitalisatieEigenBijdrage: p.hospitalisatieEigenBijdrage,
+    onkostenvergoedingPerMaand: p.onkostenvergoedingPerMaand,
+    woonwerkVrijgesteldPerMaand: berekenWoonwerkVrijgesteld(
+      mobiliteit.woonwerk,
+      p.woonwerkPrivewagenBeroepskostMethode,
+    ),
+    vaaRszPlichtigPerMaand: vaaWerkmiddelen.totaalPerMaand,
+    vaaBedrijfswagenPerMaand: mobiliteit.vaaBedrijfswagen?.vaaMaand ?? 0,
+  });
+}
+
 // ─── bouwResultaten ───────────────────────────────────────────────────────────
 
 function bouwResultaten(p: Profiel): BouwResultaten {
@@ -2238,30 +2410,9 @@ function bouwResultaten(p: Profiel): BouwResultaten {
       blocks: [
         safeRender(
           () => {
-            const heeftMaaltijdcheques = p.maaltijdchequeWerkgeversaandeelPerDag > 0;
             const mobiliteit = berekenMobiliteitVoorProfiel(p, refDatum);
             const vaaWerkmiddelen = berekenVaaWerkmiddelenVoorProfiel(p, refDatum);
-            const netto = berekenNetto({
-              brutoloon: p.brutoloon,
-              refDatum,
-              bouwVlag: p.bouwVlag,
-              gezinstype: p.gezinstype,
-              kinderenTenLaste: p.kinderenTenLaste,
-              fiscaalAlleenstaandeMetKind: p.fiscaalAlleenstaandeMetKind,
-              groepsverzekeringEigenBijdrage: p.groepsverzekeringEigenBijdrage,
-              maaltijdchequeWerknemersbijdragePerDag: heeftMaaltijdcheques
-                ? p.maaltijdchequeWerknemersbijdragePerDag
-                : 0,
-              maaltijdchequeWerkdagen: heeftMaaltijdcheques ? p.arbeidsdagenPerMaand : 0,
-              hospitalisatieEigenBijdrage: p.hospitalisatieEigenBijdrage,
-              onkostenvergoedingPerMaand: p.onkostenvergoedingPerMaand,
-              woonwerkVrijgesteldPerMaand: berekenWoonwerkVrijgesteld(
-                mobiliteit.woonwerk,
-                p.woonwerkPrivewagenBeroepskostMethode,
-              ),
-              vaaRszPlichtigPerMaand: vaaWerkmiddelen.totaalPerMaand,
-              vaaBedrijfswagenPerMaand: mobiliteit.vaaBedrijfswagen?.vaaMaand ?? 0,
-            });
+            const netto = berekenNettoVoorProfiel(p, refDatum);
             const wgk = werkgeverskost({
               brutoloon: p.brutoloon,
               refDatum,
@@ -2409,30 +2560,9 @@ function computeSummary(p: Profiel): ResultSummary {
     return { bruto: p.brutoloon, netto: null, werkgeverskost: null, loonwig: null };
   }
   try {
-    const heeftMaaltijdcheques = p.maaltijdchequeWerkgeversaandeelPerDag > 0;
     const mobiliteit = berekenMobiliteitVoorProfiel(p, refDatum);
     const vaaWerkmiddelen = berekenVaaWerkmiddelenVoorProfiel(p, refDatum);
-    const netto = berekenNetto({
-      brutoloon: p.brutoloon,
-      refDatum,
-      bouwVlag: p.bouwVlag,
-      gezinstype: p.gezinstype,
-      kinderenTenLaste: p.kinderenTenLaste,
-      fiscaalAlleenstaandeMetKind: p.fiscaalAlleenstaandeMetKind,
-      groepsverzekeringEigenBijdrage: p.groepsverzekeringEigenBijdrage,
-      maaltijdchequeWerknemersbijdragePerDag: heeftMaaltijdcheques
-        ? p.maaltijdchequeWerknemersbijdragePerDag
-        : 0,
-      maaltijdchequeWerkdagen: heeftMaaltijdcheques ? p.arbeidsdagenPerMaand : 0,
-      hospitalisatieEigenBijdrage: p.hospitalisatieEigenBijdrage,
-      onkostenvergoedingPerMaand: p.onkostenvergoedingPerMaand,
-      woonwerkVrijgesteldPerMaand: berekenWoonwerkVrijgesteld(
-        mobiliteit.woonwerk,
-        p.woonwerkPrivewagenBeroepskostMethode,
-      ),
-      vaaRszPlichtigPerMaand: vaaWerkmiddelen.totaalPerMaand,
-      vaaBedrijfswagenPerMaand: mobiliteit.vaaBedrijfswagen?.vaaMaand ?? 0,
-    });
+    const netto = berekenNettoVoorProfiel(p, refDatum);
     const wgk = werkgeverskost({
       brutoloon: p.brutoloon,
       refDatum,
