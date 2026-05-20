@@ -319,7 +319,8 @@
             "tabel_extractie",
             "bronverwijzing",
             "gestructureerde_overname",
-            "samenvattend_met_bronverwijzing"
+            "samenvattend_met_bronverwijzing",
+            "intern"
           ]
         },
         { "type": "null" }

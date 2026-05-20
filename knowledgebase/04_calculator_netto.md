@@ -472,4 +472,67 @@ Gedetailleerde JSON-voorbeelden: zie `dataset_uitbreiding_voorstel.md`.
 
 ---
 
-*Versie 2026-05-08. Sluit aan op `sources_guideline.md`, `dataset_uitbreiding_voorstel.md`, `gaps_en_pending.md`, `implementation_roadmap.md`. Te onderhouden volgens `_DEVELOPER.md` §8.2.*
+## 11. Omgekeerde berekening — Netto → Bruto
+
+### 11.1 Doel en werking
+
+Sinds 2026-05-19 ondersteunt Jaakie ook een **omgekeerde berekening**: de gebruiker voert een gewenst nettoloon in, en het systeem zoekt het bruto dat daar toe leidt. Dit gebeurt via een **numerieke inverse (binary search)** op de bestaande forward-functie `berekenNetto()`, zodat 100 % van de bestaande regelgeving, audit-trail en FOD Bijlage III-validatie automatisch wordt geërfd.
+
+### 11.2 Wiskundige basis
+
+De forward-functie `f(bruto) = netto` is **continu en strikt monotoon stijgend** voor alle realistische profielen:
+
+- Effectieve RSZ stijgt altijd als bruto stijgt (werkbonus-afbouw compenseert nooit volledig).
+- BV stijgt monotoon door progressieve PB-schijven.
+- BBSZ is niet-dalend.
+- De marginale netto-toename is altijd positief (minstens ~€0,16 per €1 bruto-verhoging).
+
+Daarom convergeert binary search gegarandeerd naar een unieke oplossing.
+
+### 11.3 Algoritme
+
+```
+lowerBound = doelNetto (centen)
+upperBound = doelNetto × 2,5 (centen) — dynamisch opschaalbaar
+tolerantie = 1 cent (0,01 EUR)
+maxIteraties = 80
+```
+
+De zoekruimte wordt in **hele centen** beheerd om floating-point-stagnatie te voorkomen. Bij elke iteratie wordt de volledige forward-keten (mobiliteit + VAA + `berekenNetto`) doorlopen.
+
+### 11.4 Implementatie
+
+| Module | Functie |
+|---|---|
+| `src/lib/nettoNaarBruto.ts` | `zoekBrutoVoorNetto(input)` — pure functie, geen React |
+| `src/lib/__tests__/nettoNaarBruto.test.ts` | 25 inverse golden tests (round-trip, gezinstypes, BV-grenzen, werkbonus-cliffs, audit-trail) |
+| `src/data/pc200_payroll_dataset_2026.json` | 2 virtuele datapunten: `berekeningsmethode_netto_naar_bruto` en `netto_naar_bruto_tolerantie_eur` |
+
+### 11.5 UI-gedrag
+
+- **Toggle** bovenaan het formulier: "Bruto → Netto" / "Netto → Bruto".
+- Bij omschakelen naar netto→bruto: het laatst berekende netto wordt overgenomen als default `doelNettoloon`.
+- In netto→bruto modus:
+  - **Gewenst nettoloon** = bewerkbaar invoerveld.
+  - **Berekend bruto** = read-only, geüpdatet door `useEffect` root-finder.
+  - Alle overige profielvelden (gezinstype, kinderen, mobiliteit, werkgeversbijdragen) blijven identiek.
+- De resultatenpanels tonen de **volledige forward-keten** op basis van het gevonden bruto.
+- De barema-check vergelijkt het gevonden bruto met het sectoraal minimum.
+
+### 11.6 Scope-beperkingen (Fase 1)
+
+- Netto → bruto is **alleen voor bedienden** (fase 2 breidt uit naar studenten).
+- Bij onrealistisch hoge doel-netto's (fysiek onmogelijk gegeven het profiel) toont het systeem een foutbanner.
+- De mobiliteit wordt berekend op basis van het huidige bruto; bij grote verschuivingen kan een tweede convergentiestap nodig zijn (de gebruiker ziet direct het nieuwe bruto en de bijbehorende resultaten).
+
+### 11.7 Audit-trail
+
+De inverse berekening draagt een eigen datapunt mee:
+- `berekeningsmethode_netto_naar_bruto` — methodologie: binary search
+- `netto_naar_bruto_tolerantie_eur` — 0,005 EUR (interne parameter)
+
+Alle onderliggende datapunten (RSZ, werkbonus, BV, BBSZ) blijven onveranderd; de inverse is louter een **wrapper** zonder eigen regelgeving.
+
+---
+
+*Versie 2026-05-19. Sluit aan op `sources_guideline.md`, `dataset_uitbreiding_voorstel.md`, `gaps_en_pending.md`, `implementation_roadmap.md`. Te onderhouden volgens `_DEVELOPER.md` §8.2.*

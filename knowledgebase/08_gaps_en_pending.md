@@ -125,6 +125,7 @@ Allemaal **buiten scope POC**, opnemen in roadmap voor productie.
 |---|-----|----------|-----|
 | G-01 | Extralegale voordelen werkgever (groepsverzekering, maaltijdcheques, hospitalisatieverzekering, ecocheques) waren hardgecodeerd op €0 | ✅ 12 mei 2026 | `Profiel`-interface uitgebreid met `arbeidsongevallenPct`, `extraGroepsverzekering`, `maaltijdchequeWerkgeversaandeelPerDag`, `arbeidsdagenPerMaand`, `extraHospitalisatie`; `extraEcocheques` automatisch afgeleid. Maaltijdcheques = dagbedrag × werkdagen, met max €8,91/dag vanaf 01/01/2026. Nieuwe "Werkgeversbijdragen" accordion in de sidebar. Itemized rows in `WerkgeverskostPanel`. Zowel `bouwResultaten` als `computeSummary` fully wired. |
 | G-02 | BV-module had geen expliciete sleutelformule-metadata of validatiestatus | ✅ 12 mei 2026, afgerond 19 mei 2026 | `berekenBV()` rapporteert nu methode, schaal en `fod_bijlage_iii_ok`; primaire broncommunicatie verwijst naar FOD Financiën / Bijlage III. Het 30-cases validatieregister staat in `src/lib/fodBvValidation.ts`. |
+| G-03 | Netto → Bruto calculatie ontbrak | ✅ 19 mei 2026 | Numerieke inverse via binary search in `src/lib/nettoNaarBruto.ts`. UI-toggle bovenaan formulier. 25 inverse golden tests in `src/lib/__tests__/nettoNaarBruto.test.ts`. Alleen bedienden in fase 1; studenten in fase 2. |
 
 ---
 
