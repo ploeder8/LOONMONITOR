@@ -1,6 +1,7 @@
 import { ArrowRightLeft } from "lucide-react";
 
-export type BerekeningsRichting = "bruto_naar_netto" | "netto_naar_bruto";
+import type { BerekeningsRichting } from "@/lib/profiel";
+export type { BerekeningsRichting };
 
 interface Props {
   value: BerekeningsRichting;

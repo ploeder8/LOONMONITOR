@@ -3,11 +3,10 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
 import { fietsvergoeding } from "@/lib/fietsvergoeding";
+import { aantalWeekdagenInMaand, refDatumVoorMaand } from "@/lib/profiel";
 import {
-  aantalWeekdagenInMaand,
   eindejaarspremieMaandenVoorCheckbox,
   percentageNaarTewerkstellingsbreuk,
-  refDatumVoorMaand,
   tewerkstellingsbreukNaarPercentage,
   HomePage,
   waardeUitNumeriekeInput,
