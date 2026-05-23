@@ -30,7 +30,7 @@
 
     "meta": {
       "type": "object",
-      "required": ["dataset", "pc", "pc_naam", "land", "taal", "laatste_update", "doeljaar", "dekking"],
+      "required": ["dataset", "pc", "pc_naam", "land", "taal", "laatste_update", "doeljaar", "datapunten_aantal", "dekking"],
       "properties": {
         "dataset":         { "type": "string" },
         "pc":              { "type": "string", "pattern": "^[0-9]{2,4}$" },
@@ -39,6 +39,7 @@
         "taal":            { "type": "string", "pattern": "^[a-z]{2}-[A-Z]{2}$" },
         "laatste_update":  { "type": "string", "format": "date" },
         "doeljaar":        { "type": "integer", "minimum": 2020, "maximum": 2099 },
+        "datapunten_aantal": { "type": "integer", "minimum": 0 },
         "dekking":         { "type": "array", "items": { "type": "string" } },
         "niet_gevonden": {
           "description": "Vrije lijst — entries zijn ofwel een tekstuele beschrijving (string) ofwel een gestructureerd object.",

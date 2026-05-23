@@ -11,6 +11,8 @@ Kort projectlogboek voor wijzigingen door coding agents.
 
 ## Log
 
+- 2026-05-23 — Data-release gate toegevoegd: actieve datapunten vereisen bron/status/tier/geldigheidsmetadata, Tier-3-records vereisen triangulatie en dataset-aantallen blijven synchroon met docs/ScopePage; reden: releases blokkeren bij incomplete datasetmetadata.
+- 2026-05-23 — Tijdelijk uitvoerplan `update_plan_23_05_2026.md` toegevoegd voor stappen 4 t/m 8 (data-release gate, bronronde, CI, browser/UX QA en productrichting); reden: resterende developmentstappen volgordelijk kunnen uitvoeren.
 - 2026-05-23 — HomePage Fase 3 componentextractie uitgevoerd: `HomePage.tsx` teruggebracht tot route-compositie en featurecomponenten onder `src/pages/home/` toegevoegd voor CSV, inputcockpit, mobiliteit, netto, werkgeverskost en jaaroverzicht; reden: calculator-UI beter onderhoudbaar maken zonder berekeningsgedrag te wijzigen.
 - 2026-05-23 — Profielmodel gecentraliseerd: `Profiel`, `DEFAULTS`, maandhelpers, profielnormalisatie, richtingtypes en profielberekeningen uit `HomePage.tsx` gehaald en ondergebracht/gebruikt via `src/lib/profiel.ts` en `src/lib/profielBerekeningen.ts`; reden: `HomePage` terugbrengen naar UI-compositie.
 - 2026-05-23 — SSOT-sync uitgevoerd: `README.md`, `AGENTS.md`, `ScopePage`, kennisbank en onderzoekspagina's gelijkgetrokken met huidige implementatiestatus (71 datapunten, FOD Bijlage III-corpus ok, BBSZ 2026-voorschot, Netto→Bruto, VAA en UI Fase 2); reden: documentatie liep achter op code.

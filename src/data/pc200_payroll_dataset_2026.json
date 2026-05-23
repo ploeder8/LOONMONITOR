@@ -7,6 +7,7 @@
     "taal": "nl-BE",
     "laatste_update": "2026-05-08",
     "doeljaar": 2026,
+    "datapunten_aantal": 71,
     "dekking": [
       "brutolonen",
       "rsz",
@@ -1747,7 +1748,7 @@
       "uitsluitingen": [
         "werkbonus voor lage lonen kan effectieve bijdrage verlagen"
       ],
-      "geldig_vanaf": null,
+      "geldig_vanaf": "2026-01-01",
       "geldig_tot": null,
       "laatst_bevestigd_op": "2026-05-08",
       "bron_organisatie": "Rijksdienst voor Sociale Zekerheid (RSZ)",
@@ -1830,7 +1831,7 @@
       "uitsluitingen": [
         "bedienden – PC 200 valt onder berekeningsbasis 100%"
       ],
-      "geldig_vanaf": null,
+      "geldig_vanaf": "2026-01-01",
       "geldig_tot": null,
       "laatst_bevestigd_op": "2026-05-08",
       "bron_organisatie": "RSZ",
@@ -1868,7 +1869,7 @@
       ],
       "voorwaarden": [],
       "uitsluitingen": [],
-      "geldig_vanaf": null,
+      "geldig_vanaf": "2025-01-01",
       "geldig_tot": null,
       "laatst_bevestigd_op": "2026-05-08",
       "bron_organisatie": "RSZ",
@@ -2033,6 +2034,26 @@
       "extractie_methode": "samenvattend_met_bronverwijzing",
       "normalisatie_toegepast": true,
       "normalisatie_opmerking": "0,30% genormaliseerd als decimale default 0.003; geen wettelijk of sectoraal tarief",
+      "triangulatie_bronnen": [
+        {
+          "bron": "Fedris – wettelijke verzekeringsplicht arbeidsongevallen",
+          "url": "https://www.fedris.be/nl/themas/definitie-en-verzekering-ao/wie-verzekerd-tegen-arbeidsongevallen",
+          "tier": "Tier 1",
+          "overeenstemming": "verwijzing geverifieerd"
+        },
+        {
+          "bron": "Liantis – premievoet arbeidsongevallenverzekering is functie- en activiteitafhankelijk",
+          "url": "https://www.liantis.be/nl/personeelsbeleid/arbeidsongevallenverzekering",
+          "tier": "Tier 2",
+          "overeenstemming": "gedeeltelijk"
+        },
+        {
+          "bron": "Securex – arbeidsongevallenverzekering en kostprijs afhankelijk van risico",
+          "url": "https://www.securex.be/nl/zelfstandigen/personeel/verzekeringen/arbeidsongevallenverzekering",
+          "tier": "Tier 2",
+          "overeenstemming": "gedeeltelijk"
+        }
+      ],
       "status": "actief",
       "conflict_opmerking": null,
       "opmerkingen": [
@@ -2249,7 +2270,7 @@
       ],
       "voorwaarden": [],
       "uitsluitingen": [],
-      "geldig_vanaf": null,
+      "geldig_vanaf": "2016-06-09",
       "geldig_tot": null,
       "laatst_bevestigd_op": "2026-05-08",
       "bron_organisatie": "FOD Financiën – Algemene Administratie voor Beleidsexpertise- en ondersteuning",
@@ -2325,7 +2346,7 @@
       "toepassingsgebied": [],
       "voorwaarden": [],
       "uitsluitingen": [],
-      "geldig_vanaf": null,
+      "geldig_vanaf": "2016-06-09",
       "geldig_tot": null,
       "laatst_bevestigd_op": "2026-05-08",
       "bron_organisatie": null,
@@ -3283,7 +3304,7 @@
         "indien premie omgezet in gelijkwaardig voordeel binnen onderneming",
         "in bepaalde gevallen indien werknemer niet meer in dienst op moment uitbetaling"
       ],
-      "geldig_vanaf": null,
+      "geldig_vanaf": "2016-06-09",
       "geldig_tot": null,
       "laatst_bevestigd_op": "2026-05-08",
       "bron_organisatie": "ACVBIE (vakbond – uitleg sectorale CAO)",
@@ -3297,6 +3318,14 @@
       "extractie_methode": "letterlijk",
       "normalisatie_toegepast": false,
       "normalisatie_opmerking": "Waarde is functie van individueel maandloon – niet generiek normaliseerbaar",
+      "triangulatie_bronnen": [
+        {
+          "bron": "Sociaal Fonds APCB – interpretatienota eindejaarspremie, CAO 9 juni 2016 nr. 134421/CO/200",
+          "url": "https://www.sfonds200.be/media/grbbqdvd/pc-200-sectorale-onderhandelingen-2023-2024-interpretatienota-eindejaarspremie-berekening.pdf",
+          "tier": "Tier 1",
+          "overeenstemming": "verwijzing geverifieerd"
+        }
+      ],
       "status": "actief",
       "conflict_opmerking": null,
       "opmerkingen": [
@@ -3374,6 +3403,14 @@
       "extractie_methode": "letterlijk",
       "normalisatie_toegepast": false,
       "normalisatie_opmerking": null,
+      "triangulatie_bronnen": [
+        {
+          "bron": "Sociaal Fonds APCB – sectorakkoord 2025-2026",
+          "url": "https://www.sfonds200.be/nl/",
+          "tier": "Tier 1",
+          "overeenstemming": "verwijzing geverifieerd"
+        }
+      ],
       "status": "actief",
       "conflict_opmerking": null,
       "opmerkingen": [
@@ -3448,7 +3485,7 @@
       "uitsluitingen": [
         "indien omgezet in gelijkwaardig voordeel vóór 31 oktober van het toekenningjaar (cao laat omzetting toe)"
       ],
-      "geldig_vanaf": null,
+      "geldig_vanaf": "2025-06-01",
       "geldig_tot": null,
       "laatst_bevestigd_op": "2026-05-08",
       "bron_organisatie": "ACLVB",
@@ -3462,6 +3499,26 @@
       "extractie_methode": "letterlijk",
       "normalisatie_toegepast": true,
       "normalisatie_opmerking": null,
+      "triangulatie_bronnen": [
+        {
+          "bron": "FOD WASO – ecocheques algemeen kader",
+          "url": "https://werk.belgie.be/nl/themas/verloning/maaltijdcheques-en-ecocheques/ecocheques",
+          "tier": "Tier 1",
+          "overeenstemming": "gedeeltelijk"
+        },
+        {
+          "bron": "Acerta – PC 200 ecocheques",
+          "url": "https://www.acerta.be/nl/insights/themas-en-dossiers/paritaire-comites/pc-200",
+          "tier": "Tier 2",
+          "overeenstemming": "100%"
+        },
+        {
+          "bron": "Bobex – PC 200 ecocheques",
+          "url": "https://www.bobex.be/nl-be/pc-200/",
+          "tier": "Tier 2",
+          "overeenstemming": "100%"
+        }
+      ],
       "status": "actief",
       "conflict_opmerking": null,
       "opmerkingen": [
@@ -3504,6 +3561,20 @@
       "extractie_methode": "tabel_extractie",
       "normalisatie_toegepast": false,
       "normalisatie_opmerking": "Pro-rata schaal vereist gestructureerde representatie als interval-array",
+      "triangulatie_bronnen": [
+        {
+          "bron": "Acerta – PC 200 ecocheques deeltijdse bedragen",
+          "url": "https://www.acerta.be/nl/insights/themas-en-dossiers/paritaire-comites/pc-200",
+          "tier": "Tier 2",
+          "overeenstemming": "100%"
+        },
+        {
+          "bron": "Bobex – PC 200 ecocheques deeltijdse bedragen",
+          "url": "https://www.bobex.be/nl-be/pc-200/",
+          "tier": "Tier 2",
+          "overeenstemming": "100%"
+        }
+      ],
       "status": "actief",
       "conflict_opmerking": null,
       "opmerkingen": [
@@ -3542,6 +3613,14 @@
       "extractie_methode": "letterlijk",
       "normalisatie_toegepast": true,
       "normalisatie_opmerking": null,
+      "triangulatie_bronnen": [
+        {
+          "bron": "Sociaal Fonds 200 – treinvervoer standaardabonnement 2026",
+          "url": "https://www.sfonds200.be/media/w3zamvtb/nl-trein-26-standaard.pdf",
+          "tier": "Tier 1",
+          "overeenstemming": "100%"
+        }
+      ],
       "status": "actief",
       "conflict_opmerking": null,
       "opmerkingen": [
@@ -3701,6 +3780,14 @@
       "extractie_methode": "letterlijk",
       "normalisatie_toegepast": true,
       "normalisatie_opmerking": null,
+      "triangulatie_bronnen": [
+        {
+          "bron": "Sociaal Fonds 200 – privévervoer 2026",
+          "url": "https://www.sfonds200.be/media/hnzjamml/nl-priv%C3%A9-26.pdf",
+          "tier": "Tier 1",
+          "overeenstemming": "100%"
+        }
+      ],
       "status": "actief",
       "conflict_opmerking": null,
       "opmerkingen": [
@@ -3899,6 +3986,14 @@
       "extractie_methode": "letterlijk",
       "normalisatie_toegepast": true,
       "normalisatie_opmerking": null,
+      "triangulatie_bronnen": [
+        {
+          "bron": "Sociaal Fonds APCB – sectorakkoord 2025-2026",
+          "url": "https://www.sfonds200.be/nl/",
+          "tier": "Tier 1",
+          "overeenstemming": "verwijzing geverifieerd"
+        }
+      ],
       "status": "actief",
       "conflict_opmerking": null,
       "opmerkingen": [
@@ -3923,7 +4018,7 @@
       ],
       "voorwaarden": [],
       "uitsluitingen": [],
-      "geldig_vanaf": null,
+      "geldig_vanaf": "2026-01-01",
       "geldig_tot": null,
       "laatst_bevestigd_op": "2026-05-17",
       "bron_organisatie": "RSZ / Sociale Zekerheid",
@@ -3980,6 +4075,14 @@
       "extractie_methode": "letterlijk",
       "normalisatie_toegepast": false,
       "normalisatie_opmerking": null,
+      "triangulatie_bronnen": [
+        {
+          "bron": "Sociaal Fonds APCB – sectorakkoord 2025-2026",
+          "url": "https://www.sfonds200.be/nl/",
+          "tier": "Tier 1",
+          "overeenstemming": "verwijzing geverifieerd"
+        }
+      ],
       "status": "actief",
       "conflict_opmerking": null,
       "opmerkingen": [

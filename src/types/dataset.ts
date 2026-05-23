@@ -152,6 +152,7 @@ export interface Meta {
   taal: string;
   laatste_update: string;
   doeljaar: number;
+  datapunten_aantal: number;
   dekking: string[];
   niet_gevonden?: Array<string | MetaNietGevondenObject>;
   conflicten?: Array<string | MetaConflictObject>;

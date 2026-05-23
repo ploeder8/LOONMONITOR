@@ -90,6 +90,7 @@ export function ScopePage() {
             <DefRow label="Paritair Comité" value={`${ds.meta.pc} — ${ds.meta.pc_naam}`} />
             <DefRow label="Land / taal" value={`${ds.meta.land} / ${ds.meta.taal}`} />
             <DefRow label="Doeljaar" value={String(ds.meta.doeljaar)} />
+            <DefRow label="Datapunten" value={String(ds.meta.datapunten_aantal)} />
             <DefRow label="Laatste update" value={ds.meta.laatste_update} />
             <DefRow label="Dekking" value={ds.meta.dekking.join(", ")} />
           </dl>
