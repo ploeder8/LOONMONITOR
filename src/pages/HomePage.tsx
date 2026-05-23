@@ -1208,7 +1208,7 @@ function ArbeidscontextCard({
 
 function BrutoloonCard({ profiel, set }: { profiel: Profiel; set: ProfielSetter }) {
   return (
-    <CockpitCard title="Brutoloon" icon={<Euro size={16} />} highlight>
+    <CockpitCard title="Brutoloon" icon={<Euro size={16} />}>
       <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
         {profiel.statuut === "bediende" && profiel.berekeningsRichting === "bruto_naar_netto" ? (
           <FormField label="Brutoloon (€)">
