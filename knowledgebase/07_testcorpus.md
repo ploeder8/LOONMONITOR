@@ -1598,12 +1598,12 @@ Originele kop van het corpus:
 
 ## Bronnen
 
-- **Sociale werkbonus 1/4/2026** — Partena Professional (snapshot 03), Securex Lex4you (snapshot 04)
-- **Belastingschalen AJ 2027 + belastingvrije som €11.180 + kostenforfait €6.070** — Practicali (snapshot 05), Wolters Kluwer Jef Wellens, Wet Diverse Bepalingen 18/12/2025 (BS 30/12/2025)
+- **Sociale werkbonus 1/4/2026** — RSZ Administratieve instructies 2026/1, met Partena Professional en Securex Lex4you als triangulatie
+- **Belastingschalen AJ 2027 + belastingvrije som €11.180 + kostenforfait €6.070** — FOD Financiën belastingtarieven en beroepsinkomen, met Practicali/Wolters Kluwer als triangulatie
 - **GGMMI €2.189,81 vanaf 1/4/2026** — Acerta (snapshot 06), CAO 43/18 NAR 24/3/2026
 - **BBSZ-banden** — Liantis (snapshot 07), gevalideerd tegen Groups
 - **PC 200 indexering 2,21% + jaarlijkse premie €330,84 + Sociaal Fonds 200 0,23%** — sfonds200.be (snapshot 08)
 - **RSZ werknemer 13,07% + werkgever ~25%** — RSZ instructies werkgevers
-- **VAA bedrijfswagen min. €1.690 / ref-CO₂ 58/70 g/km AJ 2027** — Practicali
+- **VAA bedrijfswagen min. €1.690 / ref-CO₂ 58/70 g/km AJ 2027** — FOD Financiën bedrijfswagens
 
 Volledige bronnenarchief: `bronnen_pc200_loonmotor_2026.zip`.

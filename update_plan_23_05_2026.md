@@ -67,16 +67,16 @@ De juridische en payrollparameters opnieuw extern verifiëren voordat verdere pr
 
 ### Concrete acties
 
-- [ ] Verifieer Arizona-scenario's via Belgisch Staatsblad/Justel, FOD Financiën en relevante parlementaire of officiële publicaties.
-- [ ] Verifieer fiscale werkbonuspercentages en grenzen voor inkomstenjaar 2026/AJ 2027.
-- [ ] Verifieer PB-schijven, belastingvrije som, forfaitaire beroepskosten en BV-parameters AJ 2027.
-- [ ] Verifieer PC 200-cao's voor barema's, eindejaarspremie, ecocheques, jaarpremie en woon-werk.
-- [ ] Verifieer Sociaal Fonds 200-bijdrage en toepassingsperiode.
-- [ ] Verifieer AO-default als configureerbare aanname, niet als harde sectorparameter.
-- [ ] Verifieer VAA-bronnen voor bedrijfswagen en forfaitaire werkmiddelen.
-- [ ] Noteer per bron: URL, raadpleegdatum, tier, status `bevestigd` / `gewijzigd` / `onzeker`, en impact op code/dataset/docs.
-- [ ] Werk dataset, kennisbank en tests alleen bij wanneer de bronronde een echt verschil oplevert.
-- [ ] Voeg een korte logregel toe aan `MEMORY.md`.
+- [x] Verifieer Arizona-scenario's via Belgisch Staatsblad/Justel, FOD Financiën en relevante parlementaire of officiële publicaties.
+- [x] Verifieer fiscale werkbonuspercentages en grenzen voor inkomstenjaar 2026/AJ 2027.
+- [x] Verifieer PB-schijven, belastingvrije som, forfaitaire beroepskosten en BV-parameters AJ 2027.
+- [x] Verifieer PC 200-cao's voor barema's, eindejaarspremie, ecocheques, jaarpremie en woon-werk.
+- [x] Verifieer Sociaal Fonds 200-bijdrage en toepassingsperiode.
+- [x] Verifieer AO-default als configureerbare aanname, niet als harde sectorparameter.
+- [x] Verifieer VAA-bronnen voor bedrijfswagen en forfaitaire werkmiddelen.
+- [x] Noteer per bron: URL, raadpleegdatum, tier, status `bevestigd` / `gewijzigd` / `onzeker`, en impact op code/dataset/docs.
+- [x] Werk dataset, kennisbank en tests alleen bij wanneer de bronronde een echt verschil oplevert.
+- [x] Voeg een korte logregel toe aan `MEMORY.md`.
 
 ### Te wijzigen bestanden
 
@@ -92,10 +92,10 @@ De juridische en payrollparameters opnieuw extern verifiëren voordat verdere pr
 
 ### Acceptatiecriteria
 
-- [ ] Elk genoemd juridisch domein heeft een recente bronstatus.
-- [ ] Onzekere claims blijven expliciet als onzeker/gap gemarkeerd.
-- [ ] Primaire bronnen krijgen voorrang op sociale-secretariaatbronnen.
-- [ ] Geen codewaarde wijzigt zonder corresponderende dataset/doc/test-update.
+- [x] Elk genoemd juridisch domein heeft een recente bronstatus.
+- [x] Onzekere claims blijven expliciet als onzeker/gap gemarkeerd.
+- [x] Primaire bronnen krijgen voorrang op sociale-secretariaatbronnen.
+- [x] Geen codewaarde wijzigt zonder corresponderende dataset/doc/test-update.
 
 ### Verificatiecommando's
 
@@ -107,7 +107,7 @@ git diff --check
 
 ### Commitmoment
 
-- [ ] Commit na bronronde en groene verificatie met: `docs: refresh legal source review`
+- [x] Commit na bronronde en groene verificatie met: `docs: refresh legal source review`
 
 ## Stap 6 — CI toevoegen
 

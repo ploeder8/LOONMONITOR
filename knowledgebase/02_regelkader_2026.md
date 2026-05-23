@@ -1,10 +1,10 @@
 # Belgisch Loonberekenings-regelkader 2026 — PC 200 Bedienden
 
-**Onderzoeksvraag:** Welke regels, formules, plafonds en bronnen zijn nodig om voor één werknemer onder Paritair Comité 200 (Aanvullend Paritair Comité voor Bedienden) van bruto naar netto te rekenen op peildatum 2026-05-08, en hoe wordt elke tussenstap geauditeerd vanuit primaire bronnen?
+**Onderzoeksvraag:** Welke regels, formules, plafonds en bronnen zijn nodig om voor één werknemer onder Paritair Comité 200 (Aanvullend Paritair Comité voor Bedienden) van bruto naar netto te rekenen op peildatum 2026-05-24, en hoe wordt elke tussenstap geauditeerd vanuit primaire bronnen?
 
-**Peildatum:** 2026-05-08 (inkomstenjaar 2026, aanslagjaar 2027)
+**Peildatum:** 2026-05-24 (inkomstenjaar 2026, aanslagjaar 2027)
 **Doelgebruik:** PC 200 Loonmotor POC (Vanhavermaet), roadmap-uitbreiding "BV-koppeling" en complete netto-calculator
-**Confidence overall:** MODERATE-to-HIGH — kernregels zijn gedekt door Tier-1 bronnen (FOD Financiën, RSZ, Belgisch Staatsblad, FOD WASO); enkele cijfers (BBSZ-banden, gemeentebelasting per gemeente) zijn alleen via Tier-2 sociaal-secretariaten beschikbaar en worden expliciet als WEAK of GAP gemarkeerd.
+**Confidence overall:** MODERATE-to-HIGH — kernregels zijn gedekt door Tier-1 bronnen (FOD Financiën, RSZ, Belgisch Staatsblad, FOD WASO, sfonds200); enkele cijfers (gemeentebelasting per gemeente, polisafhankelijke arbeidsongevallenpremie en VAA-verwarming/elektriciteit/woning buiten runtime) blijven expliciet als WEAK of GAP gemarkeerd.
 
 ---
 
@@ -126,7 +126,7 @@ Vanaf **1 april 2026** treden de aangepaste werkbonus-formules in werking voor b
 | Formule (S > S₀) | R = 168,62 − (0,2699 × (S − 2.255,50)) |
 | Wegval bij | S ≈ €2.880,16 |
 
-Bedragen en formules getrianguleerd door [Liantis](https://www.liantis.be/), [Daenens](https://www.daenens.be/), [Securex](https://www.securex.be/) en [Attentia](https://www.attentia.be/) — vier onafhankelijke Tier-2 sociaal-secretariaten convergeren op deze cijfers.
+Bedragen en formules bevestigd door [RSZ — Administratieve instructies 2026/1, tussentijdse instructie "Werkbonus - grensbedragen na verhoging GGMMI"](https://www.socialsecurity.be/employer/instructions/dmfa/nl/latest/intermediates) (Tier 1). [Securex](https://www.securex.be/) en [Partena Professional](https://www.partena-professional.be/) blijven Tier-2 triangulatie.
 
 **Mechaniek:** De werkbonus wordt afgetrokken van de **persoonlijke RSZ-bijdrage 13,07 %**. Een werknemer aan exact GGMMI krijgt dus de quasi-volledige RSZ kwijtgescholden binnen het Luik B-bereik.
 
@@ -136,12 +136,12 @@ Voor tooling-implementatie is [RSZ — Find My Bonus](https://www.socialsecurity
 
 ## 6. Fiscale werkbonus 2026
 
-- **Huidig regime (1/1/2026 t/m wijziging Arizona):**
+- **Huidig regime (runtime-default 2026):**
   - 33,14 % van Luik A-werkbonus = belastingkrediet op BV
   - 52,54 % van Luik B-werkbonus = belastingkrediet op BV
-  - Bron: [Partena Professional](https://www.partena-professional.be/), [Liantis](https://www.liantis.be/) (Tier 2). **Confidence:** SUPPORTED.
+  - Bron: [FOD Financiën — Berekening van de bedrijfsvoorheffing 2026](https://financien.belgium.be/nl/ondernemingen/personeel_en_loon/bedrijfsvoorheffing/berekening) (Tier 1). **Confidence:** HIGH.
 
-- **[hypothesis] Wetsontwerp Arizona — verhoging naar 35 % / 63 %:** vermeld in [STA Accountants — Arizona-akkoord fiscale hervormingen](https://www.sta-accountants.be/) (Tier 2, 1 source). Geen BS-publicatie op peildatum 2026-05-08 → markeer als WEAK / "voorgesteld, niet goedgekeurd".
+- **[hypothesis] Wetsontwerp Arizona — versterking fiscale werkbonus:** Kamerstuk [DOC 56 1243/001](https://www.dekamer.be/FLWB/PDF/56/1243/56K1243001.pdf) vermeldt een verhoging van Luik B naar 63 % voor AJ 2027 en 2028, en Luik A naar 35 % vanaf AJ 2029. Geen definitieve BS/Justel-publicatie vastgesteld op peildatum 2026-05-24 → markeer als "wetsontwerp, niet toepassen in runtime".
 
 ---
 
@@ -171,18 +171,18 @@ Voor tooling-implementatie is [RSZ — Find My Bonus](https://www.socialsecurity
 | €29.510 – €51.070 | 45 % |
 | > €51.070 | 50 % |
 
-Bron: [Wolters Kluwer (Jef Wellens)](https://www.wolterskluwer.com/), [Practicali](https://www.practicali.be/), [NCOI](https://www.ncoi.be/) — drievoudige Tier-2 triangulatie. **Confidence:** HIGH.
+Bron: [FOD Financiën — Belastingtarieven](https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/belastingtarieven) (Tier 1). [Wolters Kluwer](https://www.wolterskluwer.com/), [Practicali](https://www.practicali.be/) en [NCOI](https://www.ncoi.be/) blijven Tier-2 triangulatie. **Confidence:** HIGH.
 
 ### Forfaitaire beroepskosten werknemers AJ2027
 
 - **30 %** op bruto belastbaar (1 schijf sinds AJ2019)
 - **Plafond €6.070** (basis-indexbedrag €2.950, art. 51 WIB 92)
-- Bron: [Practicali AJ2027](https://www.practicali.be/), [Wolters Kluwer](https://www.wolterskluwer.com/), [NCOI](https://www.ncoi.be/). **Confidence:** HIGH.
+- Bron: [FOD Financiën — Beroepsinkomen](https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/beroepsinkomen) (Tier 1). [Practicali](https://www.practicali.be/), [Wolters Kluwer](https://www.wolterskluwer.com/) en [NCOI](https://www.ncoi.be/) blijven Tier-2 triangulatie. **Confidence:** HIGH.
 
 ### Belastingvrije som AJ2027
 
 - **€11.180** (basisbedrag voor PB-aangifte)
-- Bron: [Wolters Kluwer](https://www.wolterskluwer.com/), [Acerta](https://www.acerta.be/), [Practicali](https://www.practicali.be/). **Confidence:** HIGH.
+- Bron: [FOD Financiën — Belastingtarieven](https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/belastingtarieven) (Tier 1). [Wolters Kluwer](https://www.wolterskluwer.com/), [Acerta](https://www.acerta.be/) en [Practicali](https://www.practicali.be/) blijven Tier-2 triangulatie. **Confidence:** HIGH.
 
 ---
 
@@ -204,14 +204,14 @@ Bron: [Wolters Kluwer (Jef Wellens)](https://www.wolterskluwer.com/), [Practical
 
 | VAA | Waarde 2026 | Bron |
 |-----|-------------|------|
-| Bedrijfswagen referentie-CO2 Diesel | 58 g/km | [fibofin.be](https://www.fibofin.be/) |
-| Bedrijfswagen referentie-CO2 Benzine | 70 g/km | [fibofin.be](https://www.fibofin.be/) |
-| Bedrijfswagen minimum VAA | €1.690/jaar | [fibofin.be](https://www.fibofin.be/) |
+| Bedrijfswagen referentie-CO2 Diesel | 58 g/km | [FOD Financiën — Bedrijfswagens](https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/bedrijfswagens) |
+| Bedrijfswagen referentie-CO2 Benzine | 70 g/km | [FOD Financiën — Bedrijfswagens](https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/bedrijfswagens) |
+| Bedrijfswagen minimum VAA | €1.690/jaar | [FOD Financiën — Bedrijfswagens](https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/bedrijfswagens) |
 | Verwarming bedrijfsleider | €2.560/jaar | [fibofin.be](https://www.fibofin.be/) |
 | Verwarming andere werknemers | €1.150/jaar | [fibofin.be](https://www.fibofin.be/) |
 | Elektriciteit bedrijfsleider | €1.280/jaar | [fibofin.be](https://www.fibofin.be/) |
 | Elektriciteit andere | €580/jaar | [fibofin.be](https://www.fibofin.be/) |
-| PC ter beschikking | €72/jaar | KB-vastgesteld forfait |
+| PC ter beschikking | €72/jaar | [FOD Financiën — Voordelen alle aard](https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/voordelen-van-alle-aard) |
 | Internet ter beschikking | €60/jaar | idem |
 | Tablet/GSM-toestel | €36/jaar | idem |
 | GSM-abonnement | €48/jaar | idem |
@@ -219,7 +219,7 @@ Bron: [Wolters Kluwer (Jef Wellens)](https://www.wolterskluwer.com/), [Practical
 
 Bedrijfswagen-formule: **cataloguswaarde × 6/7 × CO2-percentage**. CO2-percentage = 5,5 % + 0,1 % per g/km verschil tussen werkelijke uitstoot en referentie-CO2 (min 4 %, max 18 %).
 
-**Confidence:** MODERATE (Tier-2 fibofin alleenstaand voor minimum + ref-CO2; FOD Fin AAFisc-circulaire-corroboratie pending — gemarkeerd als WEAK in source registry).
+**Confidence:** HIGH voor bedrijfswagenminimum, referentie-CO2 en forfaitaire werkmiddelen (Tier-1 FOD Financiën live bevestigd op 2026-05-24). MODERATE voor verwarming, elektriciteit en huisvesting buiten runtime zolang geen live FOD/KB-verificatie in deze sprint is vastgelegd.
 
 ---
 
@@ -234,10 +234,10 @@ Bedrijfswagen-formule: **cataloguswaarde × 6/7 × CO2-percentage**. CO2-percent
 | Maaltijdcheque-marge €2 (bovenop loonnorm 0%) | mogelijk via sectorale of ondernemings-CAO sinds Wet 19/11/2025, BS 15/12/2025 | [Sociare](https://www.sociare.be/) |
 | Woon-werk trein-vergoeding | 100 % NMBS-abonnement (KB 28/7/1962 + sectorale aanvulling PC 200) | PC 200 dataset |
 | Fietsvergoeding | KB-plafond € 0,36/km (2026 indexering) | [FOD WASO](https://werk.belgie.be/) |
-| Landingsbaan-supplement | €90,45/maand (sectoraal) | PC 200 sectorakkoord — **WEAK** (Tier-2, alleen sectorakkoord-aankondiging) |
-| Sociaal Fonds 200 bijdrage werkgever | 0,23 % (verlengd 1/1/2026 — 31/12/2027 per CAO 18/12/2025) | [sfonds200.be](https://www.sfonds200.be/), [SSN](https://www.ssn.be/), [CLB Group](https://www.clbgroup.be/) |
+| Landingsbaan-supplement | €92,45/maand (sectoraal, vanaf 1/6/2026) | [Sociaal Fonds 200 — Tijdskrediet](https://www.sfonds200.be/nl/sectormaatregelen/tijdskrediet/) |
+| Sociaal Fonds 200 bijdrage werkgever | 0,23 % tot 31/12/2027 | [Sociaal Fonds 200 — Sociaal fonds](https://www.sfonds200.be/nl/sociaal-fonds/) |
 
-**Confidence:** HIGH voor sectorale verplichtingen (Tier-1 sfonds200.be); MODERATE voor exacte bedragen aan landingsbaan-supplement en maaltijdcheque-uitvoering.
+**Confidence:** HIGH voor sectorale verplichtingen en landingsbaanbedrag (Tier-1 sfonds200.be). Maaltijdcheque-uitvoering blijft ondernemingsafhankelijk omdat PC 200 geen sectorale maaltijdchequeverplichting heeft.
 
 ---
 
@@ -332,16 +332,16 @@ Jaarloonkost = X                                       (brutomaandloon × 12)
 
 ## 15. Regering De Wever (Arizona) — wijzigingen 2026 e.v.
 
-| Maatregel | Status op 2026-05-08 | Bron |
+| Maatregel | Status op 2026-05-24 | Bron |
 |-----------|----------------------|------|
 | Sociale werkbonus aangepast vanaf 1/4/2026 (Luik A R=125,04 / Luik B R=168,62) | **VAN KRACHT** | Programmawet 18/7/2025, [RSZ](https://www.socialsecurity.be/) |
 | RSZ-loonplafond patronale heringevoerd 1/1/2026 = €86.700/kw | **VAN KRACHT** | KB 6/10/2025 (BS 10/10/2025) |
 | Auteursrechten IT-sector heringevoerd retroactief 1/1/2026 | **VAN KRACHT** (wetsontwerp goedgekeurd) | Wetsontwerp 56/1243 |
 | Maaltijdcheque-marge €2 bovenop loonnorm 0 % | **VAN KRACHT** (sectorale CAO vereist) | Wet 19/11/2025, BS 15/12/2025 |
 | BBSZ-topvoetje 4,22 % → 4,00 % | **PER 1/1/2028** | [Liantis](https://www.liantis.be/) |
-| Belastingvrije som ramp van €11.180 → €15.300 in 2029 | **[hypothesis] Wetsontwerp** — niet finaal in BS op peildatum | [STA Accountants](https://www.sta-accountants.be/) — Tier 2, 1 source, **WEAK** |
-| Fiscale werkbonus 33,14%/52,54% → 35 % / 63 % | **[hypothesis] Wetsontwerp** | [STA Accountants](https://www.sta-accountants.be/) — **WEAK** |
-| Forfaitaire beroepskosten optrekking | onder bespreking | [STA Accountants](https://www.sta-accountants.be/) — **WEAK** |
+| Belastingvrije som ramp richting 2029 | **[hypothesis] Wetsontwerp** — niet finaal in BS op peildatum | [DOC 56 1243/001](https://www.dekamer.be/FLWB/PDF/56/1243/56K1243001.pdf) |
+| Fiscale werkbonus 33,14%/52,54% → 35 % / 63 % | **[hypothesis] Wetsontwerp** — Kamerstuk, geen definitieve BS/Justel-publicatie op 2026-05-24 | [DOC 56 1243/001](https://www.dekamer.be/FLWB/PDF/56/1243/56K1243001.pdf) |
+| Forfaitaire beroepskosten optrekking | onzeker; FOD bevestigt huidige €6.070 voor AJ 2027 | [FOD Financiën — Beroepsinkomen](https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/beroepsinkomen) |
 
 > **POC-aanbeveling:** alleen "VAN KRACHT"-maatregelen implementeren. Wetsontwerp-maatregelen markeren als toekomstig regime in roadmap.
 
@@ -382,7 +382,7 @@ Het Belgische payroll-regelkader 2026 voor PC 200-bedienden steunt op **drie wet
 2. **Bedrijfsvoorheffing (KB 11/12/2025, BS 29/12/2025):** sleutelformule-paradigma sinds 2023, gekoppeld aan PB-tarieven 25/40/45/50 % (AJ 2027) en belastingvrije som €11.180. Verminderingen voor gezinslast (kinderen ten laste, andere personen) operationaliseren de fiscale draagkracht direct in de maandelijkse inhouding.
 3. **Sectorakkoord PC 200 (CAO 18/12/2025):** behoud Sociaal Fonds 200 0,23 %, eindejaarspremie 1 maandloon (anciënniteit verlaagd naar 3 jaar), jaarlijkse premie €330,84 — **maar geen** sectorale maaltijdcheque-verplichting. Maaltijdcheque-implementatie blijft een ondernemingskeuze, ook na de Wet van 19/11/2025 die een €2-marge toelaat bovenop de 0 % loonnorm.
 
-**Waarom deze drie pijlers samen kloppen:** de tax-shift component van het Arizona-akkoord (RSZ-plafond + werkbonus-aanpassing 1/4/2026 + voorgestelde BBSZ-reductie 2028) richt zich op netto-versterking voor lage- en middeninkomens, terwijl de PB-pijler grotendeels stabiel blijft (indexering KI 2,3000 + bestaande schalen). Voor PC 200-bedienden levert dit op peildatum 2026-05-08 een **moderate netto-stijging** voor lonen rond GGMMI op, en **stabiele netto's** voor middeninkomens waarvoor de werkbonus uitdooft.
+**Waarom deze drie pijlers samen kloppen:** de tax-shift component van het Arizona-akkoord (RSZ-plafond + werkbonus-aanpassing 1/4/2026 + voorgestelde BBSZ-reductie 2028) richt zich op netto-versterking voor lage- en middeninkomens, terwijl de PB-pijler voor de huidige runtime stabiel blijft (indexering KI 2,3000 + FOD Fin AJ 2027-schalen). Voor PC 200-bedienden levert dit op peildatum 2026-05-24 een **moderate netto-stijging** voor lonen rond GGMMI op, en **stabiele netto's** voor middeninkomens waarvoor de werkbonus uitdooft.
 
 **Implicatie voor de Loonmotor POC:** de huidige scope (RSZ + sectorale premies + audit-trail) blijft correct. Voor een echte netto-calculator-uitbreiding (roadmap-punt 1) is het **Tier-1 link-pad naar FOD Fin BV-simulator** verantwoorder dan een eigen sleutelformule-implementatie binnen POC-budget. BBSZ en aanvullende gemeentebelasting blijven info-velden tot Tier-1 tabellen worden gepubliceerd.
 
@@ -390,7 +390,7 @@ Het Belgische payroll-regelkader 2026 voor PC 200-bedienden steunt op **drie wet
 
 ## 19. Risks & Limitations
 
-- **WEAK claims (8 van 40 atomic):** BV-tabel per loonniveau (alleen sleutelformule + simulator publiek), BBSZ-banden 2026, landingsbaan-supplement exacte bedrag, fiscale werkbonus 35 %/63 % (wetsontwerp), belastingvrije som €15.300 ramp (wetsontwerp), arbeidsongevallenpremie sectorgemiddelde, VAA-bedrijfswagen min/ref-CO2 (Tier-2 alleenstaand), VAA verwarming/elektriciteit (Tier-2 alleenstaand).
+- **WEAK claims na bronronde 2026-05-24:** BV-tabel per loonniveau (alleen sleutelformule + simulator publiek), fiscale werkbonus 35 %/63 % (wetsontwerp), belastingvrije som-ramp richting 2029 (wetsontwerp), arbeidsongevallenpremie sectorgemiddelde, VAA verwarming/elektriciteit/woning buiten runtime, en aanvullende gemeentebelasting per gemeente.
 - **Centenindex 2026:** [Sociare-prognose spilindex juli 2026 → eerste centenindex toepassing september 2026](https://www.sociare.be/) is voorspelling, niet vaststaand.
 - **Open-source library GAP:** geen runnable npm/PyPI Belgisch payroll-pakket; eigen implementatie (TS module of FastAPI) is enige optie, met FOD Fin BV-simulator als audit-referentie.
 - **Aanvullende gemeentebelasting per gemeente:** geen Tier-1 machine-leesbare lijst publiek beschikbaar; gemiddelde 7,3 % is voldoende voor POC-disclaimer-aanpak.
@@ -447,7 +447,7 @@ Het Belgische payroll-regelkader 2026 voor PC 200-bedienden steunt op **drie wet
 40. [Practicali — Forfaitaire beroepskosten + belastingschalen AJ2027](https://www.practicali.be/)
 41. [NCOI — Belastingschalen + indexcoëfficiënt AJ2027](https://www.ncoi.be/)
 42. [BDO — Kerncijfers KI-indexatie AJ2027 = 2,3000](https://www.bdo.be/)
-43. [STA Accountants — Arizona-akkoord fiscale hervormingen](https://www.sta-accountants.be/)
+43. [Kamer DOC 56 1243/001 — Wetsontwerp hervorming personenbelasting](https://www.dekamer.be/FLWB/PDF/56/1243/56K1243001.pdf)
 44. [fibofin.be — VAA 2026 forfaits (bedrijfswagen, verwarming, elektriciteit, huisvesting)](https://www.fibofin.be/)
 45. [Eindejaarspremie.be — PC 200 CAO 26/1/2012, 1 maandloon](https://www.eindejaarspremie.be/)
 
@@ -462,4 +462,4 @@ Het Belgische payroll-regelkader 2026 voor PC 200-bedienden steunt op **drie wet
 
 ---
 
-*Onderzoeksdatum: 2026-05-08. Deze rapportage consolideert twee parallel-onderzoekssporen (BV/PB-deelstroom en netto-calculator-deelstroom). Source registries in `.memories/notes/sources-bv-2026.md` en `.memories/notes/sources-belgian-netto-calculator-2026.md`.*
+*Onderzoeksdatum: 2026-05-24. Deze rapportage consolideert de eerdere BV/PB- en netto-calculatoronderzoeken met de juridische bronronde van 2026-05-24.*

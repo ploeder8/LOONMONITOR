@@ -5,7 +5,7 @@
     "pc_naam": "Aanvullend Paritair Comité voor Bedienden (APCB)",
     "land": "BE",
     "taal": "nl-BE",
-    "laatste_update": "2026-05-08",
+    "laatste_update": "2026-05-24",
     "doeljaar": 2026,
     "datapunten_aantal": 71,
     "dekking": [
@@ -16,7 +16,6 @@
       "arbeidsvoorwaarden"
     ],
     "niet_gevonden": [
-      "Officiële personenbelastingschijven inkomstenjaar 2026 (AJ 2027) – nog niet gepubliceerd op peildatum",
       "Volledige bedrijfsvoorheffingsschalen 2026 in machineleesbare tabelvorm (enkel KB-tekst en sleutelformule beschikbaar)",
       "Sectorale verplichting maaltijdcheques in PC 200 (geen sectorale cao gevonden die maaltijdcheques verplicht maakt)",
       "Sectorale verplichting thuiswerkvergoeding PC 200",
@@ -28,7 +27,7 @@
       "Bedrijfsvoorheffingsregels 2026 gepubliceerd via KB 11/12/2025 in BS 29/12/2025 (Bijlage III)",
       "Volledige sectorale baremamatrix PC 200 (Schaal I, Schaal II, studenten × Cat A/B/C/D) opgenomen vanaf 2026-05-08; primaire bron SSN (Tier 2), getrianguleerd met ACV en ACLVB (Tier 3) — alle 228 cellen onderling bevestigd",
       "Sectorpensioen-onderzoek (2026-05-08): bevestigd dat er geen algemeen sectoraal aanvullend pensioen bestaat voor het volledige PC 200 — enkel voor de bouw-subset (1,80% solidariteitsluik vanaf 1/1/2026 via CAO 13/03/2025 nr. 192.922)",
-      "Sociaal Fonds 200 werkgeversbijdrage (0,23%) verlengd voor 1/1/2026–31/12/2027; bevestigd door 3 onafhankelijke Tier 2 bronnen (Partena Professional, Liantis, CLB Group)",
+      "Sociaal Fonds 200 werkgeversbijdrage (0,23%) verlengd voor 1/1/2026–31/12/2027; bevestigd via sfonds200.be op 2026-05-24, met Partena Professional, Liantis en CLB Group als triangulatie",
       "Aanvullende gemeentebelasting: geen Tier-1 machine-leesbare lijst per gemeente beschikbaar; behandeld als UI-parameter (default 7,3%) met disclaimer — niet opgenomen als dataset-datapunt"
     ]
   },
@@ -1911,19 +1910,25 @@
       "uitsluitingen": [],
       "geldig_vanaf": "2026-01-01",
       "geldig_tot": "2027-12-31",
-      "laatst_bevestigd_op": "2026-05-08",
-      "bron_organisatie": "Partena Professional (sociaal secretariaat)",
-      "bron_type": "sociaal_secretariaat",
-      "bron_titel": "PC 200 – Verlenging werkgeversbijdrage Sociaal Fonds 0,23% voor 2026-2027",
-      "bron_url": "https://www.partena-professional.be/nl/info-employers/",
-      "bron_publicatiedatum": "2025-12-15",
-      "bron_vindplaats": "Sectie 'Sectorale bijdragen PC 200'",
-      "bron_fragment": "De werkgeversbijdrage van 0,23% aan het Sociaal Fonds 200 wordt verlengd voor de periode 1/1/2026 t.e.m. 31/12/2027.",
-      "betrouwbaarheid": "Tier 2",
+      "laatst_bevestigd_op": "2026-05-24",
+      "bron_organisatie": "Sociaal Fonds 200",
+      "bron_type": "sector",
+      "bron_titel": "Sociaal fonds van het APCB — financiering",
+      "bron_url": "https://www.sfonds200.be/nl/sociaal-fonds/",
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": "Sectie 'Financiering'",
+      "bron_fragment": "De bijdragen werden vastgelegd op 0,23 % van de totale bruto loonmassa en dit alvast tot 31/12/2027.",
+      "betrouwbaarheid": "Tier 1",
       "extractie_methode": "letterlijk",
       "normalisatie_toegepast": true,
       "normalisatie_opmerking": "Percentage genormaliseerd als decimaal getal",
       "triangulatie_bronnen": [
+        {
+          "bron": "Partena Professional – PC 200 sectorale bijdragen 2026",
+          "url": "https://www.partena-professional.be/nl/info-employers/",
+          "tier": "Tier 2",
+          "overeenstemming": "100%"
+        },
         {
           "bron": "Liantis – PC 200 sectorale bijdragen 2026",
           "url": "https://www.liantis.be/nl/sociaal-secretariaat/pc-200",
@@ -1940,7 +1945,7 @@
       "status": "actief",
       "conflict_opmerking": null,
       "opmerkingen": [
-        "Drie onafhankelijke Tier 2 bronnen (Partena Professional, Liantis, CLB Group) bevestigen identiek tarief en geldigheidsperiode",
+        "Bronronde 2026-05-24: primaire sectorbron sfonds200.be bevestigt tarief en geldigheidsperiode; Partena Professional, Liantis en CLB Group blijven triangulatie",
         "Bestemd voor financiering opleidingen, risicogroepen, eindejaarspremie en aanvullende sectorale voordelen via FBZ APCB"
       ]
     },
@@ -2327,7 +2332,7 @@
       "opmerkingen": [
         "Belastingvrije som basis AJ 2026: €10.910",
         "Forfait beroepskosten werknemer: 30% met max €5.840",
-        "Tarieven inkomstenjaar 2026 (AJ 2027) op peildatum nog niet gepubliceerd via FOD Fin – te verifiëren bij volgende publicatie geïndexeerde bedragen"
+        "AJ 2027-tarieven zijn sinds bronronde 2026-05-24 gepubliceerd via FOD Financiën; zie canoniek datapunt pb_schijven_aj2027"
       ]
     },
     {
@@ -2336,7 +2341,7 @@
       "subcategorie": "personenbelasting_schijven_2026",
       "type": "parameter",
       "pc": "200",
-      "omschrijving": "Tarieven personenbelasting inkomstenjaar 2026 (AJ 2027)",
+      "omschrijving": "Legacy placeholder voor tarieven personenbelasting inkomstenjaar 2026 (AJ 2027); vervangen door pb_schijven_aj2027",
       "waarde_bron": null,
       "waarde_genormaliseerd": null,
       "eenheid": null,
@@ -2346,9 +2351,9 @@
       "toepassingsgebied": [],
       "voorwaarden": [],
       "uitsluitingen": [],
-      "geldig_vanaf": "2016-06-09",
+      "geldig_vanaf": "2026-01-01",
       "geldig_tot": null,
-      "laatst_bevestigd_op": "2026-05-08",
+      "laatst_bevestigd_op": "2026-05-24",
       "bron_organisatie": null,
       "bron_type": null,
       "bron_titel": null,
@@ -2360,11 +2365,11 @@
       "extractie_methode": null,
       "normalisatie_toegepast": false,
       "normalisatie_opmerking": null,
-      "status": "niet_gevonden",
+      "status": "gemarkeerd_voor_review",
       "conflict_opmerking": null,
       "opmerkingen": [
-        "Geïndexeerde bedragen voor inkomstenjaar 2026 (AJ 2027) zijn op peildatum 8/5/2026 nog niet officieel gepubliceerd door FOD Financiën",
-        "Voor lopende lonen 2026 zijn de bedrijfsvoorheffingsregels (Bijlage III, KB 11/12/2025) van toepassing – zie datapunt bv_2026_kb_bijlage_iii"
+        "Bronronde 2026-05-24: FOD Financiën publiceert AJ 2027-schijven; dit placeholderrecord wordt niet meer als niet_gevonden beschouwd",
+        "Canonieke actieve bronwaarde staat in pb_schijven_aj2027; voor lopende lonen 2026 blijven de bedrijfsvoorheffingsregels van Bijlage III gelden"
       ]
     },
     {
@@ -2392,7 +2397,7 @@
       ],
       "geldig_vanaf": "2026-01-01",
       "geldig_tot": null,
-      "laatst_bevestigd_op": "2026-05-08",
+      "laatst_bevestigd_op": "2026-05-24",
       "bron_organisatie": "FOD Financiën via Bijlage III KB/WIB 92",
       "bron_type": "overheid",
       "bron_titel": "Nieuwe regels bedrijfsvoorheffing voor 2026 (Bijlage III)",
@@ -2561,23 +2566,22 @@
       "uitsluitingen": [],
       "geldig_vanaf": "2026-01-01",
       "geldig_tot": "2026-12-31",
-      "laatst_bevestigd_op": "2026-05-08",
+      "laatst_bevestigd_op": "2026-05-24",
       "bron_organisatie": "FOD Financiën",
       "bron_type": "overheid",
-      "bron_titel": "Wet houdende diverse bepalingen 18/12/2025 (BS 30/12/2025) + automatische indexering AJ 2027",
-      "bron_url": "https://www.practicali.be/blog/geindexeerde-bedragen-aj-2027",
+      "bron_titel": "FOD Financiën — Belastingtarieven inkomstenjaar 2026 (aanslagjaar 2027)",
+      "bron_url": "https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/belastingtarieven",
       "bron_publicatiedatum": null,
       "bron_vindplaats": null,
-      "bron_fragment": "Schijven: 25% tot 16.720 / 40% tot 29.510 / 45% tot 51.070 / 50% boven 51.070",
-      "betrouwbaarheid": "Tier 2",
+      "bron_fragment": "Inkomstenjaar 2026: 25% tot 16.720; 40% tot 29.510; 45% tot 51.070; 50% boven 51.070.",
+      "betrouwbaarheid": "Tier 1",
       "extractie_methode": "gestructureerde_overname",
       "normalisatie_toegepast": true,
       "normalisatie_opmerking": null,
       "status": "actief",
       "conflict_opmerking": null,
       "opmerkingen": [
-        "Tier 1 onderbouwing: Wet diverse bepalingen 18/12/2025 BS 30/12/2025",
-        "Tier 2 verificatie: Practicali en Wolters Kluwer"
+        "Bronronde 2026-05-24: bevestigd via live FOD Financiën; Practicali en Wolters Kluwer blijven triangulatie"
       ]
     },
     {
@@ -2598,22 +2602,23 @@
       "uitsluitingen": [],
       "geldig_vanaf": "2026-01-01",
       "geldig_tot": "2026-12-31",
-      "laatst_bevestigd_op": "2026-05-08",
+      "laatst_bevestigd_op": "2026-05-24",
       "bron_organisatie": "FOD Financiën",
       "bron_type": "overheid",
-      "bron_titel": "Wet houdende diverse bepalingen 18/12/2025 (BS 30/12/2025)",
-      "bron_url": "https://www.practicali.be/blog/geindexeerde-bedragen-aj-2027",
+      "bron_titel": "FOD Financiën — Belastingtarieven: belastingvrije som inkomstenjaar 2026",
+      "bron_url": "https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/belastingtarieven",
       "bron_publicatiedatum": null,
       "bron_vindplaats": null,
-      "bron_fragment": "Belastingvrije som basis 11.180,00",
-      "betrouwbaarheid": "Tier 2",
+      "bron_fragment": "Basisbedrag belastingvrije som: 11.180 euro voor inkomstenjaar 2026 (aanslagjaar 2027).",
+      "betrouwbaarheid": "Tier 1",
       "extractie_methode": "gestructureerde_overname",
       "normalisatie_toegepast": true,
       "normalisatie_opmerking": null,
       "status": "actief",
       "conflict_opmerking": null,
       "opmerkingen": [
-        "Pending hervorming: BVS naar €11.550 (wetsontwerp, niet in BS) → houden op €11.180"
+        "Bronronde 2026-05-24: bevestigd via live FOD Financiën",
+        "Pending hervorming: BVS naar €11.550 blijft wetsontwerp/hypothese en wijzigt deze bronwaarde niet"
       ]
     },
     {
@@ -2634,14 +2639,14 @@
       "uitsluitingen": [],
       "geldig_vanaf": "2026-01-01",
       "geldig_tot": "2026-12-31",
-      "laatst_bevestigd_op": "2026-05-08",
+      "laatst_bevestigd_op": "2026-05-24",
       "bron_organisatie": "FOD Financiën",
       "bron_type": "overheid",
-      "bron_titel": "FOD Financiën — Automatische indexering AJ 2027 (indexcoëfficiënt 2,3000)",
-      "bron_url": "https://fin.belgium.be/nl/particulieren/belastingaangifte/tarieven-belastbaar-inkomen/automatische-indexering",
+      "bron_titel": "FOD Financiën — Beroepsinkomen: forfaitaire kosten inkomstenjaar 2026",
+      "bron_url": "https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/beroepsinkomen",
       "bron_publicatiedatum": null,
       "bron_vindplaats": null,
-      "bron_fragment": "Maximum forfait beroepskosten werknemer: €6.070 (AJ 2027)",
+      "bron_fragment": "Voor werknemers: forfaitaire kosten 30% met maximum 6.070 euro voor inkomstenjaar 2026 (aanslagjaar 2027).",
       "betrouwbaarheid": "Tier 1",
       "extractie_methode": "gestructureerde_overname",
       "normalisatie_toegepast": true,
@@ -2668,22 +2673,22 @@
       "uitsluitingen": [],
       "geldig_vanaf": "2026-04-01",
       "geldig_tot": "2026-12-31",
-      "laatst_bevestigd_op": "2026-05-08",
+      "laatst_bevestigd_op": "2026-05-24",
       "bron_organisatie": "RSZ / FOD Sociale Zekerheid",
       "bron_type": "overheid",
-      "bron_titel": "Sociale werkbonus — KB werkbonus + RSZ-instructies 2026/Q2",
-      "bron_url": "https://www.partena-professional.be/",
+      "bron_titel": "RSZ Administratieve instructies 2026/1 — Werkbonus grensbedragen na verhoging GGMMI",
+      "bron_url": "https://www.socialsecurity.be/employer/instructions/dmfa/nl/latest/intermediates",
       "bron_publicatiedatum": null,
       "bron_vindplaats": null,
       "bron_fragment": "Luik A: max €125,04 bij loon ≤ €2.880,32; helling 0,2738; cutoff €3.336,98",
-      "betrouwbaarheid": "Tier 2",
+      "betrouwbaarheid": "Tier 1",
       "extractie_methode": "gestructureerde_overname",
       "normalisatie_toegepast": true,
       "normalisatie_opmerking": null,
       "status": "actief",
       "conflict_opmerking": null,
       "opmerkingen": [
-        "Tier-2-bevestiging: Partena + Securex"
+        "Bronronde 2026-05-24: RSZ tussentijdse instructie 01/04/2026 bevestigt de bedragen; Securex en Partena blijven triangulatie"
       ]
     },
     {
@@ -2704,21 +2709,23 @@
       "uitsluitingen": [],
       "geldig_vanaf": "2026-04-01",
       "geldig_tot": "2026-12-31",
-      "laatst_bevestigd_op": "2026-05-08",
+      "laatst_bevestigd_op": "2026-05-24",
       "bron_organisatie": "RSZ / FOD Sociale Zekerheid",
       "bron_type": "overheid",
-      "bron_titel": "Sociale werkbonus — RSZ-instructies 2026/Q2",
-      "bron_url": "https://www.partena-professional.be/",
+      "bron_titel": "RSZ Administratieve instructies 2026/1 — Werkbonus grensbedragen na verhoging GGMMI",
+      "bron_url": "https://www.socialsecurity.be/employer/instructions/dmfa/nl/latest/intermediates",
       "bron_publicatiedatum": null,
       "bron_vindplaats": null,
       "bron_fragment": "Luik B: max €168,62 bij loon ≤ €2.255,50; helling 0,2699; cutoff €2.880,32",
-      "betrouwbaarheid": "Tier 2",
+      "betrouwbaarheid": "Tier 1",
       "extractie_methode": "gestructureerde_overname",
       "normalisatie_toegepast": true,
       "normalisatie_opmerking": null,
       "status": "actief",
       "conflict_opmerking": null,
-      "opmerkingen": []
+      "opmerkingen": [
+        "Bronronde 2026-05-24: RSZ tussentijdse instructie 01/04/2026 bevestigt de bedragen; Securex en Partena blijven triangulatie"
+      ]
     },
     {
       "id": "werkbonus_fiscaal_2026",
@@ -2738,7 +2745,7 @@
       "uitsluitingen": [],
       "geldig_vanaf": "2026-01-01",
       "geldig_tot": "2026-12-31",
-      "laatst_bevestigd_op": "2026-05-08",
+      "laatst_bevestigd_op": "2026-05-24",
       "bron_organisatie": "FOD Financiën",
       "bron_type": "overheid",
       "bron_titel": "Fiscale werkbonus — Programmawet + KB Bijlage III 2026",
@@ -2753,7 +2760,8 @@
       "status": "actief",
       "conflict_opmerking": null,
       "opmerkingen": [
-        "Pending Arizona-verhoging naar 35% / 63% — niet in BS op peildatum, niet toepassen"
+        "Bronronde 2026-05-24: huidig regime 33,14% / 52,54% blijft de runtime-default; Kamerstuk DOC 56 1243/001 bevat een wetsontwerp voor 63% luik B vanaf AJ 2027, maar geen definitieve BS-publicatie werd als runtimebron vastgesteld",
+        "Arizona-scenario 35% / 63% blijft feature-flag/hypothese tot definitieve publicatie"
       ]
     },
     {
@@ -2955,14 +2963,14 @@
       "uitsluitingen": [],
       "geldig_vanaf": "2026-01-01",
       "geldig_tot": "2026-12-31",
-      "laatst_bevestigd_op": "2026-05-13",
+      "laatst_bevestigd_op": "2026-05-24",
       "bron_organisatie": "FOD Financiën",
       "bron_type": "overheid",
-      "bron_titel": "Voordeel van alle aard bedrijfswagens 2026",
-      "bron_url": "https://financien.belgium.be/sites/default/files/downloads/121-faq-bedrijfswagens-2026.pdf",
+      "bron_titel": "FOD Financiën — Bedrijfswagens inkomsten 2026",
+      "bron_url": "https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/bedrijfswagens",
       "bron_publicatiedatum": null,
-      "bron_vindplaats": "FAQ bedrijfswagens 2026",
-      "bron_fragment": "Het voordeel kan nooit lager liggen dan 1.690 euro.",
+      "bron_vindplaats": "Berekening van het belastbaar voordeel van alle aard",
+      "bron_fragment": "Het voordeel mag nooit minder zijn dan 1.690 euro per jaar voor inkomsten 2026, aanslagjaar 2027.",
       "betrouwbaarheid": "Tier 1",
       "extractie_methode": "gestructureerde_overname",
       "normalisatie_toegepast": true,
@@ -2991,14 +2999,14 @@
       "uitsluitingen": [],
       "geldig_vanaf": "2026-01-01",
       "geldig_tot": "2026-12-31",
-      "laatst_bevestigd_op": "2026-05-13",
+      "laatst_bevestigd_op": "2026-05-24",
       "bron_organisatie": "FOD Financiën",
       "bron_type": "overheid",
-      "bron_titel": "Voordeel van alle aard bedrijfswagens 2026",
-      "bron_url": "https://financien.belgium.be/sites/default/files/downloads/121-faq-bedrijfswagens-2026.pdf",
+      "bron_titel": "FOD Financiën — Bedrijfswagens inkomsten 2026",
+      "bron_url": "https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/bedrijfswagens",
       "bron_publicatiedatum": null,
-      "bron_vindplaats": "FAQ bedrijfswagens 2026",
-      "bron_fragment": "Referentie-CO2-uitstoot diesel: 58 g/km.",
+      "bron_vindplaats": "CO2-uitstoot van de bedrijfswagen",
+      "bron_fragment": "Voor inkomsten 2026 bedraagt de referentie-CO2-uitstoot 58 g/km voor wagens met een dieselmotor.",
       "betrouwbaarheid": "Tier 1",
       "extractie_methode": "gestructureerde_overname",
       "normalisatie_toegepast": true,
@@ -3027,14 +3035,14 @@
       "uitsluitingen": [],
       "geldig_vanaf": "2026-01-01",
       "geldig_tot": "2026-12-31",
-      "laatst_bevestigd_op": "2026-05-13",
+      "laatst_bevestigd_op": "2026-05-24",
       "bron_organisatie": "FOD Financiën",
       "bron_type": "overheid",
-      "bron_titel": "Voordeel van alle aard bedrijfswagens 2026",
-      "bron_url": "https://financien.belgium.be/sites/default/files/downloads/121-faq-bedrijfswagens-2026.pdf",
+      "bron_titel": "FOD Financiën — Bedrijfswagens inkomsten 2026",
+      "bron_url": "https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/bedrijfswagens",
       "bron_publicatiedatum": null,
-      "bron_vindplaats": "FAQ bedrijfswagens 2026",
-      "bron_fragment": "Referentie-CO2-uitstoot benzine/LPG/aardgas: 70 g/km.",
+      "bron_vindplaats": "CO2-uitstoot van de bedrijfswagen",
+      "bron_fragment": "Voor inkomsten 2026 bedraagt de referentie-CO2-uitstoot 70 g/km voor wagens met een benzine-, LPG- of aardgasmotor.",
       "betrouwbaarheid": "Tier 1",
       "extractie_methode": "gestructureerde_overname",
       "normalisatie_toegepast": true,
@@ -3974,30 +3982,30 @@
       "uitsluitingen": [],
       "geldig_vanaf": "2026-06-01",
       "geldig_tot": "2029-06-30",
-      "laatst_bevestigd_op": "2026-05-08",
-      "bron_organisatie": "ACVBIE",
-      "bron_type": "vakbond",
-      "bron_titel": "Aanvullend Bedienden | PC 200 | Januari 2026 – Tijdskrediet",
-      "bron_url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-indexering-lonen-sectorakkoord-012026-lr.pdf",
-      "bron_publicatiedatum": "2026-01-01",
-      "bron_vindplaats": "Sectie 'Tijdskrediet'",
-      "bron_fragment": "Vanaf 1 juni 2026 bedraagt deze € 92,45.",
-      "betrouwbaarheid": "Tier 3",
+      "laatst_bevestigd_op": "2026-05-24",
+      "bron_organisatie": "Sociaal Fonds 200",
+      "bron_type": "sector",
+      "bron_titel": "Tijdskrediet — een aanvullende premie voor bedienden van PC 200",
+      "bron_url": "https://www.sfonds200.be/nl/sectormaatregelen/tijdskrediet/",
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": "Sectie 'Premie'",
+      "bron_fragment": "De premie bedraagt, na de indexering van januari 2026 € 92,45 per maand.",
+      "betrouwbaarheid": "Tier 1",
       "extractie_methode": "letterlijk",
       "normalisatie_toegepast": true,
       "normalisatie_opmerking": null,
       "triangulatie_bronnen": [
         {
-          "bron": "Sociaal Fonds APCB – sectorakkoord 2025-2026",
-          "url": "https://www.sfonds200.be/nl/",
-          "tier": "Tier 1",
-          "overeenstemming": "verwijzing geverifieerd"
+          "bron": "ACVBIE – kroniek PC 200 januari 2026 tijdskrediet",
+          "url": "https://www.hetacv.be/docs/default-source/acvbie-cscbie-document/sectoraal-sectoriel/aanvullend-bedienden-pc200/kroniek-pc200-indexering-lonen-sectorakkoord-012026-lr.pdf",
+          "tier": "Tier 3",
+          "overeenstemming": "100%"
         }
       ],
       "status": "actief",
       "conflict_opmerking": null,
       "opmerkingen": [
-        "Stelsels tijdskrediet en landingsbanen verlengd tot 30/06/2029 in PC 200"
+        "Bronronde 2026-05-24: exacte bedrag rechtstreeks bevestigd via sfonds200.be; stelsels tijdskrediet en landingsbanen verlengd tot 30/06/2029 in PC 200"
       ]
     },
     {

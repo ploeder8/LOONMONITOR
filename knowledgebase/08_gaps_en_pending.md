@@ -1,4 +1,4 @@
-# Gaps & pending — Jaakie PC 200 — peildatum 23 mei 2026
+# Gaps & pending — Jaakie PC 200 — peildatum 24 mei 2026
 
 **Doel:** een levend overzicht van wat de huidige rekenmodule **niet** dekt, welke wettelijke wijzigingen nog **pending** zijn, en welke datapunten aanvullende validatie vragen voordat de loonmotor naar productie kan.
 
@@ -8,11 +8,11 @@
 
 ## 1. Pending wettelijke wijzigingen 2026 die de netto-rekenmodule kunnen beïnvloeden
 
-| # | Item | Status op 9/5/2026 | Impact | Triage |
+| # | Item | Status op 24/05/2026 | Impact | Triage |
 |---|------|--------------------|--------|--------|
-| P-01 | **Fiscale werkbonus — Arizona-verhoging** naar 35,00% (luik A) en 63,00% (luik B) | Aangekondigd in begrotingsakkoord, **niet** in Programmawet 18/7/2025 of Wet Diverse Bepalingen 18/12/2025 | Hoog (raakt elke werkbonus-trekker rechtstreeks) | Modelleer **beide scenario's** (33,14/52,54 en 35/63) — implementeer als feature-flag zodra wettekst in BS verschijnt. |
-| P-02 | **Belastingvrije som hervorming** — basisbedrag €11.180 → €11.550 | Wetsontwerp PB-hervorming, niet gestemd | Hoog (raakt iedereen) | Houd huidige €11.180 als referentie; voeg `vrije_som_scenario_hervorming` toe als parameter. |
-| P-03 | **Plafond forfaitaire beroepskosten** verhoging boven €6.070 (AJ 2027) | Wetsontwerp PB-hervorming | Midden (alleen lonen >€20.233) | Behoud €6.070; trigger update zodra wijziging geïndexeerd. |
+| P-01 | **Fiscale werkbonus — Arizona-verhoging** naar 35,00% (luik A) en 63,00% (luik B) | Kamer DOC 56 1243/001 is een officieel wetsontwerp; geen definitieve BS/Justel-publicatie gevonden op 24/05/2026 | Hoog (raakt elke werkbonus-trekker rechtstreeks) | Modelleer **beide scenario's** (33,14/52,54 en 35/63) — implementeer als feature-flag zodra definitieve wettekst in BS/Justel verschijnt. |
+| P-02 | **Belastingvrije som hervorming** — huidig AJ 2027-bedrag €11.180, hervormingsscenario later | FOD Financiën bevestigt €11.180 voor inkomstenjaar 2026/AJ 2027; hervorming blijft wetsontwerp | Hoog (raakt iedereen) | Houd huidige €11.180 als runtime-referentie; geen scenario activeren zonder definitieve publicatie. |
+| P-03 | **Plafond forfaitaire beroepskosten** verhoging boven €6.070 (AJ 2027) | FOD Financiën bevestigt huidig maximum €6.070 voor inkomstenjaar 2026/AJ 2027 | Midden (alleen lonen >€20.233) | Behoud €6.070; trigger update zodra FOD/BS een latere wijziging publiceert. |
 | P-04 | **Niet-recurrente resultaatsgebonden voordelen (CAO 90)** plafond €3.701 — geen specifieke wijziging 2026 maar telt mee in totaalberekening | Stabiel | Laag | OK voor 2026, herevaluatie januari 2027. |
 | P-05 | **Verhoogde vrijstelling overuren** (Arizona) — fiscaal en RSZ | Programmawet 18/7/2025 — gedeeltelijk in werking | Midden (bij overuren >180 uur/jaar) | Buiten scope POC; opnemen in productieversie. |
 | P-06 | **PB-hervorming sleutelformule Bijlage III KB** — coëfficiënten 2026 | Definitief KB 11/12/2025 | Hoog (BV-rekenmotor) | **Opgelost 19/05/2026 voor corpusvalidatie:** TypeScript gebruikt een lokale Bijlage III-sleutelformule met FOD Financiën / Bijlage III als primaire bron; de 30 cases dragen FOD Bijlage III-validatievelden. Tax-Calc blijft alleen PB-ramingscheck. |
@@ -28,15 +28,15 @@
 | RSZ werknemer privé | 13,07% | ✅ Tier 1 RSZ | rsz.fgov.be | OK |
 | RSZ werkgever profitsector | ~25% (incl. loonmatigingsbijdrage) | ✅ Tier 1 RSZ | rsz.fgov.be | OK — sector-specifieke afwijking voor PC 200 nogmaals checken (loonmatigingsbijdrage 5,12%) |
 | GGMMI 1/4/2026 | €2.189,81 | ✅ Tier 2 Acerta + CAO 43/18 NAR | acerta.be | OK |
-| Sociale werkbonus luik A — R | €125,04 | ✅ Tier 2 Partena | partena-professional.be | OK |
-| Sociale werkbonus luik B — R | €168,62 | ✅ Tier 2 Partena | partena-professional.be | OK |
-| Sociale werkbonus hellingen | 0,2738 / 0,2699 | ✅ Tier 2 Securex | lex4you.be | OK |
-| Werkbonus cutoff loongrenzen | €2.880,32 / €3.336,98 | ⚠️ Tier 2-bevestiging | partena | **Triangulatie nodig** met SD Worx |
-| Fiscale werkbonus % luik A/B | 33,14% / 52,54% | ⚠️ Pending Arizona | KB-publicatie | Beide scenario's modelleren (zie P-01) |
+| Sociale werkbonus luik A — R | €125,04 | ✅ Tier 1 RSZ | socialsecurity.be | OK — bronronde 24/05/2026 |
+| Sociale werkbonus luik B — R | €168,62 | ✅ Tier 1 RSZ | socialsecurity.be | OK — bronronde 24/05/2026 |
+| Sociale werkbonus hellingen | 0,2738 / 0,2699 | ✅ Tier 1 RSZ + Tier 2 Securex | socialsecurity.be / securex.be | OK |
+| Werkbonus cutoff loongrenzen | €2.880,32 / €3.336,98 | ✅ Tier 1 RSZ | socialsecurity.be | OK |
+| Fiscale werkbonus % luik A/B | 33,14% / 52,54% | ✅ Tier 1 FOD Fin voor huidige runtime; ⚠️ DOC 56 1243/001 voor Arizona | FOD Fin / De Kamer | Beide scenario's documenteren; default blijft huidig regime (zie P-01) |
 | BBSZ-banden 2026 | 4,22% / 1,1% / 3,38% / 1,10% / cap €60,94 + gemeenschappelijke aanslag-scenario's | ✅ Tier 1 RSZ 2026/1 | socialsecurity.be | OK — scenario's expliciet in runtime; Partena/Liantis alleen triangulatie |
-| PB-schijven AJ 2027 | 16.720 / 29.510 / 51.070 | ✅ Tier 2 Practicali + Wolters Kluwer | practicali.be | OK |
-| Belastingvrije som AJ 2027 | €11.180 | ✅ Tier 2 Practicali + Wet Diverse Bepalingen 18/12/2025 | BS 30/12/2025 | OK |
-| Forfaitaire beroepskosten max | €6.070 (30%) | ✅ Tier 2 Practicali | practicali.be | OK |
+| PB-schijven AJ 2027 | 16.720 / 29.510 / 51.070 | ✅ Tier 1 FOD Fin | fin.belgium.be | OK — bronronde 24/05/2026 |
+| Belastingvrije som AJ 2027 | €11.180 | ✅ Tier 1 FOD Fin | fin.belgium.be | OK — bronronde 24/05/2026 |
+| Forfaitaire beroepskosten max | €6.070 (30%) | ✅ Tier 1 FOD Fin | fin.belgium.be | OK — bronronde 24/05/2026 |
 | Toeslag belastingvrije som per kind | €2.030 / €5.230 / €11.720 / €18.970 | ⚠️ Tier 2 | Practicali | **Verificatie via FOD Fin nuttig** — exacte indexatie 2026 |
 | Toeslag kind <3 jaar | niet actief in calculatorlogica | ⚠️ Pending officiële BV-validatie | FOD Fin / Bijlage III te herbevestigen | Bewust verwijderd uit runtime op 2026-05-15; later herintroduceren met officiële BV-validatie en tests |
 | Extra alleenstaande ouder | €2.030 | ⚠️ Tier 2 | Practicali | idem |
@@ -48,11 +48,12 @@
 |---|---|---|---|
 | Indexering 2026 | 2,21% (vanaf 1/1/2026) | sfonds200.be | OK — bevestigd |
 | Jaarlijkse premie 2026 | €330,84 | sfonds200.be | OK — bevestigd |
-| Arbeidsongevallenverzekering kantoorbedienden | default 0,30% | Fedris/Liantis/Securex + marktbenchmark | **Geen publiek sectoraal tarief** — 0,30% is lage configureerbare default; overweeg 0,50% als conservatieve benchmark |
-| Eindejaarspremie | 13e maand (formule herzien per akkoord 18/12/2025 + 15/1/2026) | cao PC 200 | **Cao-tekst rechtstreeks raadplegen** voor exacte formule (anciënniteit 5→3 jaar) |
+| Arbeidsongevallenverzekering kantoorbedienden | default 0,30% | Fedris bevestigt verzekeringsplicht; geen publiek sectoraal tarief | **Onzeker als tarief** — 0,30% blijft lage configureerbare default, geen harde sectorparameter |
+| Eindejaarspremie | 13e maand (formule herzien per akkoord 15/1/2026) | sfonds200.be + cao PC 200 | OK voor scope; exacte uitvoeringsnuances blijven auditpunt bij volgende cao-tekstupdate |
 | Dubbel vakantiegeld bedienden | 92% × maandloon incl. VAA; RSZ 13,07% op 85/92 | RSZ Administratieve instructies | Geïntegreerd in jaaroverzicht |
-| Fietsvergoeding (verhoogd akkoord 15/1/2026) | nog te kwantificeren | cao PC 200 + fiscale max €0,37/km × 3.700 km | **Triangulatie nodig** zodra cao-tekst beschikbaar |
-| Tussenkomst treinvervoer | aangepast in akkoord 15/1/2026 | cao PC 200 | idem |
+| Fietsvergoeding (akkoord 15/1/2026) | €0,27/km tot 30/09/2026; €0,32/km vanaf 01/10/2026 | sfonds200.be | OK — bronronde 24/05/2026 |
+| Tussenkomst treinvervoer | 100% prijs treinkaart 2e klasse vanaf eerste kilometer | sfonds200.be | OK — bronronde 24/05/2026 |
+| Landingsbaan-supplement | €92,45/maand vanaf 01/06/2026 | sfonds200.be | OK — bronmetadata opgewaardeerd naar Tier 1 |
 
 ---
 
@@ -91,6 +92,8 @@
 - Leeftijdscoëfficiënt: 100% (0–12m), 94% (13–24m), ..., 70% (>60m)
 
 Daarnaast berekent `src/lib/vaaForfaits.ts` de forfaitaire VAA voor PC/laptop, GSM, internet en GSM-abonnement.
+
+**Bronronde 24/05/2026:** FOD Financiën bevestigt live het minimum-VAA bedrijfswagen (€1.690/jaar), referentie-CO₂ (70/58) en de forfaits voor werkmiddelen (72/36/60/48 EUR per jaar). De runtimewaarden blijven ongewijzigd.
 
 **Nog niet gedekt:**
 - VAA verwarming (€1.150 werknemer, AJ 2027)
@@ -150,9 +153,9 @@ Allemaal **buiten scope POC**, opnemen in roadmap voor productie.
 
 | Onderwerp | Divergentie | Aanbeveling |
 |---|---|---|
-| Fiscale werkbonus % | 33,14/52,54 (huidig) vs 35/63 (Arizona pending) | Beide scenario's, default = huidig |
+| Fiscale werkbonus % | 33,14/52,54 (huidig) vs 35/63 (Arizona pending via DOC 56 1243/001) | Beide scenario's, default = huidig; geen runtimewijziging zonder BS/Justel |
 | BBSZ-hervorming 2028 | Kamerstuk DOC 56 1243/001 en Liantis kondigen individualisering, 4% en cap €30,47 aan vanaf inkomsten 2028 / AJ 2029; wetgeving opvolgen tot definitieve publicatie | Niet in 2026-runtime opnemen; pas implementeren met inkomstenjaar/regeljaar-schakelaar |
-| Eindejaarspremie PC 200 | "Lichte herziening" akkoord 15/1/2026 — exacte formule afhankelijk van anciënniteit (5→3 jaar) | **Cao-tekst rechtstreeks raadplegen** |
+| AO-default | 0,30% configureerbaar, maar geen publiek sectoraal tarief | UI-label als aanname behouden; nooit als PC 200-cao-waarde presenteren |
 
 ---
 

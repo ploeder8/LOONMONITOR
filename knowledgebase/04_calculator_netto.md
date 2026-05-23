@@ -379,7 +379,7 @@ Voor élke berekende waarde geldt het bestaande audit-trail-invariant:
 ```
 
 **Footer-banner verplicht:**
-> *Dataset versie 2026-05-08 — laatste verificatie per Datapunt zichtbaar in audit-paneel. Netto is indicatief; BV-eindafrekening via personenbelasting AJ 2027.*
+> *Dataset versie 2026-05-24 — laatste verificatie per Datapunt zichtbaar in audit-paneel. Netto is indicatief; BV-eindafrekening via personenbelasting AJ 2027.*
 
 ---
 

@@ -617,7 +617,7 @@
   "eenheid": "EUR/jaar",
   "wettelijke_basis": "Art. 131 WIB 92 + indexering art. 178 §3 WIB 92",
   "bron_organisatie": "FOD Financiën",
-  "bron_url": "https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten",
+  "bron_url": "https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/belastingtarieven",
   "bron_fragment": "Belastingvrije som AJ 2027 (inkomstenjaar 2026): €11.180.",
   "geldig_vanaf": "2026-01-01",
   "geldig_tot": "2026-12-31",
@@ -663,8 +663,8 @@
     {"organisatie": "Practicali", "url": "https://www.practicali.be/", "tier": 2},
     {"organisatie": "NCOI", "url": "https://www.ncoi.be/", "tier": 2}
   ],
-  "laatst_bevestigd_op": "2026-05-08",
-  "opmerkingen": "PROMOTIE: bestaande Datapunt `pb_schijven_inkomstenjaar_2026` heeft status `niet_gevonden` → kan op basis van Tier-1 + drievoudige Tier-2 corroboratie naar `actief` worden gepromoveerd onder ID `pb_schijven_aj2027`."
+  "laatst_bevestigd_op": "2026-05-24",
+  "opmerkingen": "UITGEVOERD: `pb_schijven_aj2027` is de actieve runtimebron. Legacy `pb_schijven_inkomstenjaar_2026` blijft alleen als gemarkeerde reviewverwijzing bestaan."
 }
 ```
 

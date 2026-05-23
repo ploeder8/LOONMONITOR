@@ -1,7 +1,7 @@
 # Project Scope — Jaakie
 
 **Versie:** 2026-05-23
-**Peildatum dataset:** 2026-05-08 (inkomstenjaar 2026 / aanslagjaar 2027)
+**Peildatum dataset:** 2026-05-24 (inkomstenjaar 2026 / aanslagjaar 2027)
 
 ---
 

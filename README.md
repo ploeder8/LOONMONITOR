@@ -7,7 +7,7 @@ Tool voor payroll-experts om lonen en kosten te verifiëren onder **Paritair Com
 - **Stack:** TypeScript + React 19 + Vite 8 + Tailwind v4
 - **Runtime:** browser-only — geen back-end, geen database, geen authenticatie
 - **Data:** bundled JSON dataset (`src/data/pc200_payroll_dataset_2026.json`),
-  schema-gevalideerd bij applicatiestart — **71 datapunten, 15 bronrecords, peildatum 2026-05-08**
+  schema-gevalideerd bij applicatiestart — **71 datapunten, 15 bronrecords, peildatum 2026-05-24**
 - **Audit-first:** elke berekening is gekoppeld aan datapunt-id, status,
   betrouwbaarheidstier (1/2/3) en primaire bron met fragment-citaat
 - **Kennisbank (SSOT):** zie `knowledgebase/` voor regelkader, calculator-specs, testcorpus, gaps & roadmap
@@ -50,7 +50,7 @@ Tool voor payroll-experts om lonen en kosten te verifiëren onder **Paritair Com
 - Fietsvergoeding (€0,32/km — CAO 164, vanaf 1/10/2026)
 - VAA bedrijfswagen en forfaitaire werkmiddelen (PC/laptop, GSM, internet, abonnement)
 
-¹ *AJ 2027 = inkomstenjaar 2026 (huidig kalenderjaar). Parameters: belastingvrije som €11.180, forfait max €6.070, schijven €16.720/€29.510/€51.070. Geverifieerd via Wet diverse bepalingen 18/12/2025 (BS 30/12/2025) + FOD Financiën. BV gebruikt lokaal de Bijlage III-sleutelformule met FOD Financiën / Bijlage III 2026 als primaire payrollbron; Tax-Calc is enkel een latere PB-raming.*
+¹ *AJ 2027 = inkomstenjaar 2026 (huidig kalenderjaar). Parameters: belastingvrije som €11.180, forfait max €6.070, schijven €16.720/€29.510/€51.070. Opnieuw bevestigd via FOD Financiën in de bronronde van 2026-05-24. BV gebruikt lokaal de Bijlage III-sleutelformule met FOD Financiën / Bijlage III 2026 als primaire payrollbron; Tax-Calc is enkel een latere PB-raming.*
 
 ## Gebruik
 

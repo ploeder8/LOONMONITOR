@@ -2,9 +2,9 @@
 
 **Wat is dit?** De **Single Source of Truth** voor de PC 200 Loonmotor: één coherente, expert-geverifieerde kennisbank die het wettelijk regelkader, de calculator-specificaties, het testcorpus, het bronnenarchief en de roadmap consolideert.
 
-**Peildatum:** 9 mei 2026 — **inkomstenjaar 2026 / aanslagjaar 2027**
+**Peildatum:** 24 mei 2026 — **inkomstenjaar 2026 / aanslagjaar 2027**
 **Geldt voor:** Belgische bedienden onder Paritair Comité 200 (Aanvullend Paritair Comité voor Bedienden)
-**Status van AJ 2027 parameters:** ✅ geverifieerd via Wet diverse bepalingen 18/12/2025 (BS 30/12/2025) + FOD Financiën
+**Status van AJ 2027 parameters:** ✅ herbevestigd via FOD Financiën en bronronde 2026-05-24; Arizona-scenario's blijven hypothese tot definitieve BS/Justel-publicatie.
 
 ---
 
@@ -43,7 +43,7 @@
 | 11 | `11_ui_ux_migratieplan.md` | Developer / UX (fasegewijze UI-migratie) |
 
 ### Mappen
-- **`bronnen/`** — Volledig bronnenarchief: 57 URLs + 8 PDF-snapshots, gerangschikt per Tier (1/2/3) + categorie
+- **`bronnen/`** — Volledig bronnenarchief: 57 URLs + 8 PDF-snapshots, gerangschikt per Tier (1/2/3) + categorie, plus het bronronde-log `bronnen/bronronde_2026-05-24.md`
 - **`tools/`** — Python referentie-implementatie: `calc_brutonetto_2026.py`, `genereer_corpus.py`, `validate_bijlage_iii_corpus.py`
 - **`Referenties/`** — Vergelijkende analyses van externe looncalculatoren (UX, invoervelden, featureset)
 - **`onderzoek/`** — HTML-onderzoeksdossier (15 pagina's): marktonderzoek, concurrentiematrix, wetgevend kader, Jaakie-specificatie, testcorpus, referentietools. Dit dossier is **secundair** ten opzichte van de markdown-kennisbank: alle cijfers, formules en test-golden-masters leven in de `.md`-bestanden hierboven.
@@ -74,8 +74,8 @@ De TypeScript-module gebruikt sinds 12/05/2026 een lokale Bijlage III-sleutelfor
 ### Pending wetgeving (regering-De Wever)
 Sommige parameters zijn **wetsontwerp**, nog niet in BS:
 - Fiscale werkbonus 33,14 %/52,54 % → 35 %/63 % (Arizona)
-- Belastingvrije som €11.180 → €11.550
-- Forfaitaire beroepskosten > €6.070
+- Belastingvrije som blijft in de runtime €11.180; €11.550 blijft Arizona-hypothese
+- Forfaitaire beroepskosten blijven in de runtime geplafonneerd op €6.070
 
 Implementeer als **feature-flags**, default = huidige waarden. Zie `08_gaps_en_pending.md` §1.
 
@@ -102,6 +102,7 @@ Implementeer als **feature-flags**, default = huidige waarden. Zie `08_gaps_en_p
 |---|---|
 | 2026-05-11 | Initiële SSOT-creatie. Consolidatie van `ProjectFiles/` (oude POC-kennisbank) + `ProjectFiles-CopilotCowork/` (expert-geverifieerde uitbreiding). |
 | 2026-05-12 | `Referenties/groups_be_salarysim.md` toegevoegd: geverifieerde UI/invoer/output-documentatie van Group S Salary Sim, incl. vergelijkingstabel en feature-prioriteitenlijst. |
+| 2026-05-24 | Juridische bronronde toegevoegd: AJ 2027, werkbonus, PC 200, Sociaal Fonds 200, AO en VAA opnieuw tegen live bronnen geklasseerd. |
 
 ---
 

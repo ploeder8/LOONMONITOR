@@ -1,9 +1,9 @@
 # Belgian Netto-Calculator Ingredients 2026 — Onderzoeksrapport
 
-**Doel:** Volledige set ingrediënten (buiten KB Bijlage III bedrijfsvoorheffing) voor een Belgische bruto-netto loonberekening voor PC 200-bedienden, inkomstenjaar 2026 / aanslagjaar 2027, peildatum 2026-05-08.
+**Doel:** Volledige set ingrediënten (buiten KB Bijlage III bedrijfsvoorheffing) voor een Belgische bruto-netto loonberekening voor PC 200-bedienden, inkomstenjaar 2026 / aanslagjaar 2027, peildatum 2026-05-24.
 **Scope:** Forfaitaire beroepskosten, VAA, maaltijd- en ecocheques, bijzondere regimes, KI-indexatiecoëfficiënt, step-by-step keten Bruto → Netto, werkgeverskost PC 200, bestaande simulatoren, open-source libraries.
 **Buiten scope:** KB Bijlage III bedrijfsvoorheffing detail (gedelegeerd aan parallel research-traject); gemeentebelasting AJ2027; vakantiegeld-finetuning per individuele werkgever.
-**Peildatum:** 2026-05-08.
+**Peildatum:** 2026-05-24.
 
 ---
 
@@ -14,7 +14,7 @@
 > **Action:** Deze waarde mag als hard-coded plafond in een netto-calculator voor IY2026.
 
 > **Key Finding 2:** Werkbonus-tabellen vanaf **1 april 2026** zijn herijkt op het verhoogde GGMMI van **€2.189,81** (CAO 43/18 NAR 24/3/2026). Voor bedienden: Luik A grens €2.880,32 → max-vermindering €125,04; Luik B grens €2.255,50 → max-vermindering €168,62.
-> **Confidence:** HIGH (twee onafhankelijke Tier-2-bronnen Partena + Securex bevestigen identiek; bron RSZ).
+> **Confidence:** HIGH (RSZ-intermediates en Find My Bonus als Tier-1-anker; Partena, Securex, Attentia en Liantis blijven triangulatie).
 > **Action:** Werkbonus-stap MOET na 31 maart 2026 deze nieuwe tabellen toepassen.
 
 > **Key Finding 3:** Patronale RSZ PC 200 = ~25% (basis 24,92% + loonmatiging 7,48%, met structurele vermindering); RSZ-loonplafond patronaal vanaf 1/1/2026 = **€86.700/kwartaal** (KB 6 oktober 2025, BS 10 oktober 2025; basis: Programmawet 18/7/2025).
@@ -74,7 +74,7 @@ CO2-coëfficiënt = 5,5% + (CO2-uitstoot - referentie-uitstoot) × 0,1%
 
 **Minimum VAA 2026:** **€1.690 per jaar**
 
-**Confidence:** MODERATE (Tier-2 fibofin bron; FOD Financiën AAFisc-circulaire is jaarlijks gepubliceerde primaire bron — niet rechtstreeks gefetcht in dit onderzoek). Verifieer via [FOD Financiën — Voordelen alle aard pagina](https://financien.belgium.be/nl/ondernemingen/personeel_en_loon/voordelen_alle_aard).
+**Confidence:** HIGH voor runtime-bedrijfswagenminimum en referentie-CO2 (live FOD Financiën-bedrijfswagenpagina herbevestigd op 2026-05-24). MODERATE voor verwarming, elektriciteit en huisvesting buiten de huidige runtime.
 
 ### 2.2 PC, GSM, internet, smartphone, tablet, abonnement (forfaitaire jaarbedragen)
 
@@ -125,10 +125,11 @@ Voor leningen > €0 met rentevoet < marktreferentierentevoet:
 - Indien werkgever-restaurant en de werknemer betaalt min €1,09 → geen VAA.
 
 **Bronnen sectie 2:**
+- [FOD Financiën — Bedrijfswagens](https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/bedrijfswagens) — Tier 1 voor bedrijfswagenminimum en referentie-CO2
+- [FOD Financiën — Voordelen van alle aard](https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/voordelen-van-alle-aard) — Tier 1 voor forfaitaire werkmiddelen
 - [fibofin.be — VAA-overzicht 2026](https://www.fibofin.be/) — Tier 2
-- [FOD Financiën — Voordelen alle aard portaal](https://financien.belgium.be/nl/ondernemingen/personeel_en_loon/voordelen_alle_aard) — Tier 1 (algemene autoritei­tspagina; jaarlijkse circulaire AAFisc)
 
-**Confidence sectie 2 globaal: MODERATE** — Tier-1 portaal is duidelijk maar exacte 2026-cijfers vereisen FOD-circulaire-fetch voor finale audit.
+**Confidence sectie 2 globaal: HIGH voor runtime-bedrijfswagen en werkmiddelen; MODERATE voor niet-geïmplementeerde forfaits zoals verwarming, elektriciteit en huisvesting.**
 
 ---
 
@@ -151,10 +152,10 @@ Voor leningen > €0 met rentevoet < marktreferentierentevoet:
 
 Indien één voorwaarde niet voldaan → **gehele werkgeverbijdrage** is RSZ- en BV-plichtig loon.
 
-### De Wever-akkoord verhoging (status 2026-05-08)
+### De Wever-akkoord verhoging (status 2026-05-24)
 
 - Federaal regeerakkoord De Wever (jan 2025) kondigde een verhoging van het maximumbedrag aan met **€2** (van €8 naar €10 per cheque, of werkgeveraandeel van €6,91 naar **€8,91**). De loonmotor past voor 2026 het verhoogde werkgevermaximum toe.
-- **Implementatiestatus 2026-05-08:** vereist federaal KB EN sectorale CAO-implementatie.
+- **Implementatiestatus 2026-05-24:** vereist definitieve BS/Justel-publicatie en eventuele sectorale/ondernemingsimplementatie; niet toepassen in de default-runtime.
 - **PC 200:** sectoraal akkoord 18 december 2025 bevat **GEEN** afspraak over maaltijdcheque-verhoging. Werkgevers in PC 200 kunnen via ondernemings-CAO de marge benutten, maar niet sectoraal.
 - **Loonnorm 2025-2026** (Wet 19 november 2025, BS 15 december 2025): legt 0% reële loonstijging vast met **expliciete €2 maaltijdcheque-uitzondering** = juridisch vehikel om verhoging mogelijk te maken zonder loonnorm-overschrijding.
 
@@ -448,7 +449,7 @@ Voor een **kompleet "totale werkgeverskost = bruto × X"** model is de volgende 
 
 ### 8.7 Landingsbaan-supplement (sectoraal PC 200, voor werknemers tijdskrediet eindeloopbaan)
 
-- **Bedrag:** ca. **€90,45/maand** (geïndexeerd; verifieer in sectoraal akkoord).
+- **Bedrag:** **€92,45/maand** vanaf 1 juni 2026, bevestigd via Sociaal Fonds 200 (bronronde 2026-05-24).
 - **Voorwaarde:** werknemer 55+ met tijdskrediet 1/2 of 1/5 eindeloopbaan.
 - **Bron:** PC 200 sectorakkoord (verlengd in CAO 18/12/2025).
 
@@ -552,7 +553,7 @@ Voor één maand bruto = €3.500:
 
 ## Risks & Limitations
 
-- **VAA bedrijfswagen / verwarming / elektriciteit 2026**: enkel Tier-2 bron (fibofin); FOD Financiën AAFisc-circulaire 2026 niet rechtstreeks geverifieerd. Risk: bedragen kunnen ±10 EUR afwijken.
+- **VAA verwarming / elektriciteit / huisvesting 2026**: buiten huidige runtime en nog niet met primaire 2026-circulaire uitgewerkt. Bedrijfswagenminimum en referentie-CO2 zijn op 2026-05-24 via FOD Financiën herbevestigd.
 - **Sportbeoefenaars + auteursrechten 2026 plafondbedragen**: alleen via Tier-2; FOD-circulaire niet rechtstreeks gefetcht.
 - **Renteloze lening 2026 referentie­rentevoet**: GAP — verifieer in BS-publicatie eind december 2025.
 - **PC 200 arbeidsongevallenverzekering**: geen openbaar sectorgemiddelde.
@@ -627,7 +628,7 @@ Voor één maand bruto = €3.500:
 
 ---
 
-**Datum afronding:** 2026-05-08
-**Peildatum dataset:** 2026-05-08
+**Datum afronding:** 2026-05-24
+**Peildatum dataset:** 2026-05-24
 **Onderzoeksmethode:** SIFT, Chain-of-Verification voor weak claims, ACH waar tegenstrijdige hypothesen, adversariële pass.
 **Verwijst naar:** parallel BV-onderzoek (separate deliverable) voor KB Bijlage III 2026 schalen.

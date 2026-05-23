@@ -1,6 +1,6 @@
 # Sources Guideline — PC 200 Loonmotor (uitbreiding netto-calculator)
 
-**Versie:** 2026-05-08
+**Versie:** 2026-05-24
 **Doel:** centrale gids voor alle bronnen die nodig zijn om de POC uit te breiden van *bruto + RSZ + sectorale premies* naar een **volledige netto-loonberekening** voor een PC 200-bediende (inkomstenjaar 2026 / aanslagjaar 2027).
 **Doelgebruik:** zowel de payroll-expert (verificatie) als de developer (implementatie). Sluit aan op de bestaande dataset (`pc200_payroll_dataset_2026.json`) en de drie referentiedocumenten `_CORE.md`, `_VERIFICATIE.md`, `_DEVELOPER.md`.
 
@@ -115,7 +115,7 @@
 - [KB 6 oktober 2025 (BS 10/10/2025)](https://www.ejustice.just.fgov.be/) — RSZ-loonplafond €86.700/kwartaal vanaf 1/1/2026.
 - [FOD WASO — GGMMI 1/4/2026 = €2.189,81](https://werk.belgie.be/) — basis voor werkbonus-grenzen.
 
-**Operationele tabellen sociale werkbonus bedienden vanaf 1/4/2026 (Tier-2 viervoudige triangulatie — Liantis, Daenens, Securex, Attentia):**
+**Operationele tabellen sociale werkbonus bedienden vanaf 1/4/2026 (Tier-1 RSZ-intermediates; Liantis, Securex, Partena en Attentia als triangulatie):**
 
 | Luik | Max R | Drempel S₀ | Formule |
 |---|---|---|---|
@@ -132,11 +132,11 @@
 - 33,14 % van Luik A-werkbonus = belastingkrediet op BV
 - 52,54 % van Luik B-werkbonus = belastingkrediet op BV
 
-**Bronnen (Tier 2):** [Partena Professional](https://www.partena-professional.be/), [Liantis](https://www.liantis.be/).
+**Bronnen:** FOD Financiën / KB Bijlage III voor het huidige regime; Partena Professional en Liantis blijven Tier-2-triangulatie.
 
-**Pending wijziging onder Arizona:** verhoging naar 35 % / 63 % (wetsontwerp, **NIET** in BS op peildatum) — markeer als `[hypothesis]` / `mogelijk_verouderd`.
+**Pending wijziging onder Arizona:** verhoging naar 35 % / 63 % (DOC 56 1243/001, **niet als definitieve wet in BS/Justel bevestigd op 2026-05-24**) — markeer als `[hypothesis]` / `mogelijk_verouderd`.
 
-**Confidence:** SUPPORTED (huidig regime) / WEAK (toekomstig regime).
+**Confidence:** HIGH (huidig regime) / WEAK (toekomstig regime).
 
 ---
 
@@ -158,11 +158,12 @@
 
 ### 3.6 Voordelen van alle aard (VAA) 2026
 
-**Tier-1 ankerbron:**
-- [FOD Financiën — Voordelen alle aard](https://financien.belgium.be/nl/ondernemingen/personeel_en_loon/voordelen_alle_aard) — landingspagina + jaarlijkse AAFisc-circulaire.
+**Tier-1 ankerbronnen:**
+- [FOD Financiën — Bedrijfswagens](https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/bedrijfswagens) — minimum VAA en referentie-CO2 2026.
+- [FOD Financiën — Voordelen van alle aard](https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/voordelen-van-alle-aard) — forfaits voor werkmiddelen.
 
 **Tier-2 cijferbronnen:**
-- [fibofin.be — VAA 2026 forfaits](https://www.fibofin.be/) — bedrijfswagen, verwarming, elektriciteit, huisvesting.
+- [fibofin.be — VAA 2026 forfaits](https://www.fibofin.be/) — triangulatie voor bedrijfswagen, verwarming, elektriciteit, huisvesting.
 - [BDO — Kerncijfers AJ 2027](https://www.bdo.be/) — KI-indexcoëfficiënt 2,3000.
 
 **Kerncijfers 2026:**
@@ -185,7 +186,7 @@
 | Huisvesting niet-bemeubeld | KI × 100/60 × 2 | Programmawet 27/12/2021 + KB 27/5/2022 |
 | Huisvesting bemeubeld | KI × 100/60 × 2 × 5/3 | idem |
 
-**Confidence:** MODERATE — Tier-2 fibofin alleenstaand voor minimum-VAA en ref-CO2 → markeer als WEAK in dataset tot AAFisc-circulaire 2026 rechtstreeks gefetcht.
+**Confidence:** HIGH voor bedrijfswagenminimum en referentie-CO2; MODERATE voor verwarming, elektriciteit en huisvesting zolang die niet in de runtime zitten.
 
 ---
 
@@ -193,6 +194,7 @@
 
 **Tier-1 ankerbron:**
 - [FOD Financiën — Beroepsinkomen, forfaitaire kosten](https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/beroepsinkomen) — €6.070 plafond AJ 2027 expliciet vermeld.
+- [FOD Financiën — Belastingtarieven](https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/belastingtarieven) — PB-schijven en belastingvrije som AJ 2027.
 
 **Tier-2 corroboratie (drievoudig):**
 - [Wolters Kluwer / Jef Wellens — Fiscale kerncijfers AJ 2027](https://www.wolterskluwer.com/)
@@ -211,7 +213,7 @@
 | PB-schijf 50 % | > €51.070 |
 | Indexcoëfficiënt KI (art. 178 §2 WIB 92) | **2,3000** |
 
-**Status in huidige dataset:** `pb_schijven_inkomstenjaar_2026` heeft `status: niet_gevonden` — kan op basis van bovenstaande Tier-1 + 3× Tier-2 corroboratie naar **`actief`** worden gepromoveerd.
+**Status in huidige dataset:** `pb_schijven_aj2027` is de actieve runtime-bron voor inkomstenjaar 2026/AJ 2027. Het legacy-record `pb_schijven_inkomstenjaar_2026` blijft enkel als gemarkeerde reviewverwijzing bestaan en mag geen runtime-bron worden.
 
 **Confidence:** HIGH.
 
@@ -257,7 +259,7 @@
 | Maaltijdcheque-marge €2 (loonnorm-uitzondering) | mogelijk via sectorale of ondernemings-CAO | [Wet 19/11/2025 (BS 15/12/2025)](https://www.ejustice.just.fgov.be/) |
 | Woon-werk trein | 100 % NMBS-abonnement | [KB 28/7/1962 + sectorale aanvulling](https://werk.belgie.be/) |
 | Fietsvergoeding | KB-plafond €0,36/km (2026) — sectoraal €0,32/km vanaf 1/10/2026 | [FOD WASO](https://werk.belgie.be/) |
-| Landingsbaan-supplement | €92,45/maand sectoraal vanaf 1/6/2026 (PC 200 dataset) | sectorakkoord — **WEAK** zonder Tier-1 |
+| Landingsbaan-supplement | €92,45/maand sectoraal vanaf 1/6/2026 (PC 200 dataset) | Sociaal Fonds 200 tijdskredietpagina — Tier 1 bevestigd op 2026-05-24 |
 | Rouwverlof uitbreiding | nieuwe regeling vanaf 1/1/2026 | sectorakkoord 15/01/2026 |
 
 **Status in huidige dataset:** alle bovenstaande premies zijn al opgenomen — uitbreiding nodig voor **eindejaarspremie-anciënniteit 5→3 jaar** (sectorakkoord 18/12/2025, niet meer 15/01/2026 als peildatum).
@@ -296,13 +298,13 @@
 | BV-verminderingen kinderen | ⚠️ alleen via KB-tekst (extractie pending) | mits ≥ 2 Tier-2 convergentie | ja, tot KB-extractie |
 | RSZ-werknemer 13,07 % | ✅ socialsecurity.be | n.v.t. | nee |
 | Sociale werkbonus 2026 | ✅ Programmawet + KB | n.v.t. | nee |
-| Fiscale werkbonus 33,14 % / 52,54 % | ⚠️ KB-tekst | ja, ≥ 2 Tier-2 | ja, voorlopig |
+| Fiscale werkbonus 33,14 % / 52,54 % | ✅ FOD Financiën / KB Bijlage III | ja, ≥ 2 Tier-2 als triangulatie | nee |
 | BBSZ-banden 2026 | ✅ RSZ Administratieve instructies 2026/1 | ja, Partena/Liantis als triangulatie | nee |
-| VAA-bedrijfswagen min/CO2 | ⚠️ AAFisc-circulaire 2026 nog te fetchen | nee (alleen fibofin) | **ja** |
+| VAA-bedrijfswagen min/CO2 | ✅ FOD Financiën bedrijfswagens | ja, alleen als triangulatie | nee |
 | VAA PC/internet/GSM | ✅ KB 25/11/2017 (statisch) | n.v.t. | nee |
 | Forfaitaire beroepskosten €6.070 | ✅ FOD Fin landingspagina | n.v.t. | nee |
-| Belastingvrije som €11.180 | ⚠️ via Wolters Kluwer + Practicali + Acerta | ja, drievoudig Tier-2 | nee (drievoudig volstaat) |
-| PB-schijven AJ 2027 | ⚠️ FOD Fin-publicatie geïndexeerde bedragen pending | ja, drievoudig Tier-2 | nee (drievoudig volstaat) |
+| Belastingvrije som €11.180 | ✅ FOD Financiën belastingtarieven | ja, alleen als triangulatie | nee |
+| PB-schijven AJ 2027 | ✅ FOD Financiën belastingtarieven | ja, alleen als triangulatie | nee |
 | Indexcoëfficiënt KI 2,3000 | ⚠️ FOD Fin-publicatie pending | ja, viervoudig Tier-2 | nee |
 | Gemeentebelasting per gemeente | ❌ geen Tier-1 lijst | ❌ geen volledige Tier-2 lijst | **gemiddelde 7,3 % als parameter** |
 | PC 200 eindejaarspremie 1 mnd | ✅ sectorakkoord 18/12/2025 (sfonds200) | n.v.t. | nee |
@@ -331,14 +333,14 @@
 
 > Volledige uitwerking met implementatie-impact: zie `gaps_en_pending.md` (apart geleverd document).
 
-**Top gaps op peildatum 2026-05-08:**
+**Top gaps op peildatum 2026-05-24:**
 
 1. **BBSZ-hervorming 2028** — aangekondigd via DOC 56 1243/001 en Tier-2 duiding; niet toepassen in 2026-runtime zonder inkomstenjaar/regeljaar-schakelaar.
-2. **AAFisc-circulaire VAA 2026** — bedrijfswagen min-VAA (€1.690) en ref-CO2 (58/70 g/km) alleen via fibofin Tier-2. Markeer `vaa_bedrijfswagen_*_2026` als `mogelijk_verouderd`.
+2. **VAA buiten bedrijfswagen/werkmiddelen** — bedrijfswagen min-VAA (€1.690) en ref-CO2 (58/70 g/km) zijn via FOD Financiën herbevestigd; verwarming, elektriciteit en huisvesting blijven buiten huidige runtime.
 3. **Eigen sleutelformule-implementatie** — divergentierisico met FOD Bijlage III. Mitigatie: corpusvalidatie via `validate_bijlage_iii_corpus.py` en release blokkeren bij `status_validatie = afwijking`.
 4. **Aanvullende gemeentebelasting per gemeente** — geen Tier-1 machine-leesbare lijst. Aanbevolen aanpak: parameter met default 7,3 % + UI-disclaimer. **Niet** als datapunt in de JSON opnemen.
-5. **`pb_schijven_inkomstenjaar_2026`** — huidige status `niet_gevonden`. Op basis van Tier-1 (FOD Fin geïndexeerde bedragen) + drievoudige Tier-2 (Wolters Kluwer, Practicali, NCOI) kan dit naar **`actief`** worden gepromoveerd.
-6. **Wetsontwerp Arizona (belastingvrije som €11.180 → €15.300; fiscale werkbonus 35/63 %)** — **NIET** in BS op peildatum. Markeer als `[hypothesis]` / niet implementeren.
+5. **Legacy `pb_schijven_inkomstenjaar_2026`** — niet promoten; `pb_schijven_aj2027` is de actieve runtime-bron.
+6. **Wetsontwerp Arizona (belastingvrije som-scenario en fiscale werkbonus 35/63 %)** — **niet definitief bevestigd in BS/Justel op 2026-05-24**. Markeer als `[hypothesis]` / niet implementeren.
 7. **Centenindex 2026** — Sociare-prognose: spilindex juli 2026 → eerste centenindex-toepassing september 2026. Voorspelling, niet vaststaand. Volgen via [Sociare](https://www.sociare.be/) en [FOD Economie indexcijfers](https://statbel.fgov.be/).
 8. **Auteursrechten IT-sector heringevoerd 1/1/2026** — Wetsontwerp 56/1243; finale BS-publicatie te verifiëren tegen Q3 2026.
 
@@ -360,4 +362,4 @@ Alles in `output/`:
 
 ---
 
-*Versie 2026-05-08. Bouwt voort op `pc200_payroll_dataset_2026.json`, `_CORE.md`, `_VERIFICATIE.md`, `_DEVELOPER.md` van diezelfde versie. Te onderhouden volgens cyclus §6.*
+*Versie 2026-05-24. Bouwt voort op `pc200_payroll_dataset_2026.json`, `_CORE.md`, `_VERIFICATIE.md`, `_DEVELOPER.md` en de bronronde `knowledgebase/bronnen/bronronde_2026-05-24.md`. Te onderhouden volgens cyclus §6.*

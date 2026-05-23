@@ -363,7 +363,7 @@ Voor het volledige overzicht: zie `knowledgebase/08_gaps_en_pending.md`.
 |---|---|---|
 | FOD Bijlage III BV-validatie | `fod_bijlage_iii_ok` | 30 cases dragen officiële BV/netto-validatievelden |
 | BBSZ 2026-voorschot | Actief | Maand-/kwartaalformules per scenario; 2028-hervorming blijft pending |
-| Arizona hervormingen | Wetsontwerp | Alleen feature-flag: fiscale werkbonus 35%/63%, belastingvrije som €11.550 |
+| Arizona hervormingen | Wetsontwerp/hypothese | Geen runtimewijziging zonder definitieve BS/Justel-publicatie; fiscale werkbonus 35%/63% blijft feature-flag |
 | VAA auto-berekening | Deels actief | Bedrijfswagen CO₂-formule en werkmiddelen actief; woonst/verwarming/elektriciteit buiten scope |
 | Netto → Bruto | Actief voor bedienden | Binary-search inverse; studentenmodus blijft fase 2 |
 

@@ -1,12 +1,20 @@
 # Bronnenindex — Loonmonitor PC 200 (inkomstenjaar 2026)
 
 Geconsolideerde lijst van alle bronnen geciteerd in de loonmonitor-deliverables.
-**Peildatum:** 9 mei 2026 — **57 unieke URLs**.
+**Peildatum:** 24 mei 2026 — basisarchief **57 unieke URLs**, aangevuld met bronronde `bronronde_2026-05-24.md`.
 
 Drie-tier-hiërarchie volgens `sources_guideline.md` §1:
 - **Tier 1** = primaire wetgeving en officiële overheidsbronnen (FOD, RSZ, Belgisch Staatsblad, Vlaamse Belastingdienst, sfonds200)
 - **Tier 2** = sociale secretariaten en Big Four (Securex, Acerta, Partena, SD Worx, Liantis, Attentia, KPMG, BDO, Wolters Kluwer)
 - **Tier 3** = vakbonden, blogs, Wikipedia, generieke calculators
+
+---
+
+## Bronrondes
+
+| Datum | Logbestand | Doel |
+|---|---|---|
+| 2026-05-24 | `knowledgebase/bronnen/bronronde_2026-05-24.md` | Juridische bronronde voor Arizona, werkbonus, PB/BV AJ 2027, PC 200-cao's, Sociaal Fonds 200, AO-default en VAA. |
 
 ---
 
@@ -24,6 +32,9 @@ Drie-tier-hiërarchie volgens `sources_guideline.md` §1:
 | Tax-Calc rekentool (PB-simulator) | https://eservices.minfin.fgov.be/taxcalc/ | `calculators/fod_fin_taxcalc_app.url` |
 | Belastingaangifte particulieren — overzicht | https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten | `tier1_overheid/fod_fin_aangifte_overzicht.url` |
 | Belastingaangifte — beroepsinkomen | https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/beroepsinkomen | `tier1_overheid/fod_fin_aangifte_beroepsinkomen.url` |
+| Belastingtarieven AJ 2027 | https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/belastingtarieven | live bronronde 2026-05-24 |
+| Bedrijfswagens — VAA inkomsten 2026 | https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/bedrijfswagens | live bronronde 2026-05-24 |
+| Voordelen alle aard — werkmiddelenforfaits | https://fin.belgium.be/nl/particulieren/belastingaangifte/inkomsten/voordelen-van-alle-aard | live bronronde 2026-05-24 |
 
 ### Federaal — RSZ / Sociale Zekerheid
 
@@ -32,6 +43,7 @@ Drie-tier-hiërarchie volgens `sources_guideline.md` §1:
 | socialsecurity.be — burgerportaal | https://www.socialsecurity.be/ | `tier1_overheid/rsz_socialsecurity_home.url` |
 | Werkgeversinstructies (admin instructies RSZ) | https://www.socialsecurity.be/employer/instructions/ | `tier1_overheid/rsz_employer_instructions.url` |
 | RSZ-bijdragen — overzicht werkgever | https://www.socialsecurity.be/site_nl/employer/infos/employers_nsso/which-contributions.htm | `tier1_overheid/rsz_which_contributions.url` |
+| RSZ Administratieve instructies 2026/1 — tussentijdse werkbonusinstructie | https://www.socialsecurity.be/employer/instructions/dmfa/nl/latest/intermediates | live bronronde 2026-05-24 |
 | Find My Bonus — werkbonus-rekentool | https://www.socialsecurity.be/citizen/nl/static/applics/findmybonus/ | `calculators/rsz_findmybonus.url` |
 
 ### Federaal — Belgisch Staatsblad / Justel
@@ -59,8 +71,12 @@ Drie-tier-hiërarchie volgens `sources_guideline.md` §1:
 | Onderwerp | URL | Snelkoppeling |
 |---|---|---|
 | Sociaal Fonds 200 — landingspagina | https://www.sfonds200.be/ | `tier1_overheid/sfonds200.url` |
+| Sociaal Fonds 200 — financiering 0,23% | https://www.sfonds200.be/nl/sociaal-fonds/ | live bronronde 2026-05-24 |
+| Sociaal Fonds 200 — tijdskrediet/landingsbaan | https://www.sfonds200.be/nl/sectormaatregelen/tijdskrediet/ | live bronronde 2026-05-24 |
+| Sociaal Fonds 200 — vervoerskosten PC 200 | https://www.sfonds200.be/nl/sectorinformatie/vervoerskosten/regeling-vervoerskosten/ | live bronronde 2026-05-24 |
+| Sociaal Fonds 200 — loonschalen PC 200 | https://www.sfonds200.be/nl/sectorinformatie/loonschalen/ | live bronronde 2026-05-24 |
 
-> **Te raadplegen op sfonds200.be:** sectorakkoord 18 december 2025 (PC 200 voor 2025-2026), bijdrage SF200 0,23%, eindejaarspremie-anciënniteitsregeling.
+> **Te raadplegen op sfonds200.be:** sectorakkoord 15 januari 2026 (PC 200 voor 2025-2026), bijdrage SF200 0,23%, eindejaarspremie-anciënniteitsregeling, vervoerskosten en tijdskrediet/landingsbaan.
 
 ### Vlaams
 
@@ -141,11 +157,11 @@ Drie-tier-hiërarchie volgens `sources_guideline.md` §1:
 |---|---|---|
 | **Bedrijfsvoorheffing 2026** | FOD Fin BV-berekening · KB 11/12/2025 (BS 29/12/2025) | Securex Bijlage III · CLB Group sleutelformule |
 | **RSZ werknemer 13,07%** | RSZ employer instructions · which-contributions | Acerta · Partena · SD Worx |
-| **Sociale werkbonus 1/4/2026** | Find My Bonus · Programmawet 18/7/2025 | Securex werkbonus bedragen · Partena · Attentia |
-| **Fiscale werkbonus** | KB 11/12/2025 — Bijlage III §3 | Securex · Acerta |
+| **Sociale werkbonus 1/4/2026** | RSZ tussentijdse instructies 2026/1 · Find My Bonus | Securex werkbonus bedragen · Partena · Attentia |
+| **Fiscale werkbonus** | FOD Fin BV-berekening 2026 · KB 11/12/2025 — Bijlage III §3 | Securex · Acerta |
 | **BBSZ banden** | Programmawet 18/7/2025 (Tier 1) | Liantis · Groups |
-| **VAA bedrijfswagen** | KB 6/10/2025 · FOD Fin VAA | Acerta · KPMG |
-| **AJ 2027 schijven & belastingvrije som** | FOD Fin aangifte beroepsinkomen | Wolters Kluwer (Jef Wellens) · Practicali · Acerta |
+| **VAA bedrijfswagen** | FOD Fin bedrijfswagens · KB 6/10/2025 | Acerta · KPMG |
+| **AJ 2027 schijven & belastingvrije som** | FOD Fin belastingtarieven · FOD Fin beroepsinkomen | Wolters Kluwer (Jef Wellens) · Practicali · Acerta |
 | **Aanvullende gemeentebelasting** | Statbel (lijst gemeenten) · gemeentewebsites | Wikipedia (overzicht) |
 | **PC 200 sectorakkoord 2025-2026** | sfonds200.be | Acerta sector-update |
 

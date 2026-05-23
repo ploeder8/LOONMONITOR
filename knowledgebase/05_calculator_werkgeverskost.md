@@ -2,7 +2,7 @@
 
 **Doel:** specificeer de berekening van de **totale loonkost werkgever** voor een PC 200-bediende (privé profitsector), inkomstenjaar 2026. Dit luik vult de bestaande netto-rekenmodule aan en levert de cijfers voor het "loonwig"-overzicht.
 
-**Peildatum:** 9 mei 2026.
+**Peildatum:** 24 mei 2026.
 
 ---
 
@@ -47,7 +47,7 @@ Samenstelling (RSZ-instructies werkgevers, peildatum 2026):
 
 **Tarief:** **0,23%** van bruto loon (werkgeversbijdrage).
 
-**Bron:** sectorakkoord PC 200 2025-2026 en sociaal-secretariaat-analyse. Securex en CLB bevestigen dat de werkgeversbijdrage aan het Sociaal Fonds van PC 200 op **0,23% van de brutolonen van de bedienden** blijft voor **1 januari 2026 t.e.m. 31 december 2027**.
+**Bron:** Sociaal Fonds 200 bevestigt op sfonds200.be dat de bijdrage **0,23% van de totale bruto loonmassa** bedraagt tot **31 december 2027**. Securex, Partena en CLB blijven Tier-2-triangulatie.
 
 Doel: financiering eindejaarspremie + collectieve voorzieningen + opleidingen.
 
@@ -213,8 +213,8 @@ Bv. twee bruto-loonniveaus naast elkaar voor cliëntgesprek.
 | WG-01 | RSZ wg basis 19,88% — exacte 2026 cijfers | Nog te bevestigen via RSZ-instructies | Q3 2026 |
 | WG-02 | Loonmatigingsbijdrage 5,12% — definitief 2026? | Beoordelen tegen Programmawet 18/7/2025 | Q3 2026 |
 | WG-03 | Structurele vermindering helling 0,1600 — werkbare formule | KB 2/7/2025 BS 15/7/2025 | Implementeren |
-| WG-04 | Sociaal Fonds 200 — kwartaal-specifieke bijdrage? | Cao-tekst raadplegen | Q3 2026 |
-| WG-05 | Werkgeverstussenkomst woon-werkverkeer (tarief 1/1/2026) | Cao 18/12/2025 + 15/1/2026 | Cao-tekst raadplegen |
+| WG-04 | Sociaal Fonds 200 — 0,23% tot 31/12/2027 | Bevestigd via sfonds200.be op 2026-05-24 | Geen actie |
+| WG-05 | Werkgeverstussenkomst woon-werkverkeer (tarief 1/1/2026) | Sociaal Fonds 200 vervoerskostenpagina bevestigd op 2026-05-24 | Opnieuw checken bij volgende sectorupdate |
 
 ---
 
@@ -224,8 +224,8 @@ Bv. twee bruto-loonniveaus naast elkaar voor cliëntgesprek.
 |-----------|----------|------|
 | RSZ werkgever 25% | rsz.fgov.be/nl/werkgevers/bijdragen | 1 |
 | Loonmatigingsbijdrage | rsz.fgov.be (instructies werkgevers) | 1 |
-| Sociaal Fonds 200 (0,23%) | Securex PC 200 analyse 2025-2026 + CLB sectorakkoord 2025-2026 | 2 |
-| Arbeidsongevallen-verzekering | Fedris verzekeringsplicht + Liantis/Securex kostprijsinformatie | 2 voor verplichting, 3 voor indicatief percentage |
+| Sociaal Fonds 200 (0,23%) | sfonds200.be financiering + Securex/Partena/CLB triangulatie | 1 |
+| Arbeidsongevallen-verzekering | Fedris verzekeringsplicht + Liantis/Securex kostprijsinformatie | 1 voor verplichting, geen tier voor indicatief tarief |
 | Eindejaarspremie PC 200 (cao 18/12/2025 + 15/1/2026) | sfonds200.be/cao | 1 |
 | Dubbel vakantiegeld bedienden (92%) | rva.fgov.be | 1 |
 | Structurele vermindering (helling 0,1600 vanaf 1/4/2026) | KB 2/7/2025, BS 15/7/2025 | 1 |

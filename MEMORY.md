@@ -11,6 +11,7 @@ Kort projectlogboek voor wijzigingen door coding agents.
 
 ## Log
 
+- 2026-05-24 — Juridische bronronde uitgevoerd en vastgelegd in `knowledgebase/bronnen/bronronde_2026-05-24.md`; datasetmetadata en SSOT bijgewerkt naar Tier-1-bronnen voor werkbonus, AJ 2027, Sociaal Fonds 200, VAA en landingsbaan; reden: stap 5 releasewaarheid herbevestigen zonder rekenwaarden te wijzigen.
 - 2026-05-23 — Data-release gate toegevoegd: actieve datapunten vereisen bron/status/tier/geldigheidsmetadata, Tier-3-records vereisen triangulatie en dataset-aantallen blijven synchroon met docs/ScopePage; reden: releases blokkeren bij incomplete datasetmetadata.
 - 2026-05-23 — Tijdelijk uitvoerplan `update_plan_23_05_2026.md` toegevoegd voor stappen 4 t/m 8 (data-release gate, bronronde, CI, browser/UX QA en productrichting); reden: resterende developmentstappen volgordelijk kunnen uitvoeren.
 - 2026-05-23 — HomePage Fase 3 componentextractie uitgevoerd: `HomePage.tsx` teruggebracht tot route-compositie en featurecomponenten onder `src/pages/home/` toegevoegd voor CSV, inputcockpit, mobiliteit, netto, werkgeverskost en jaaroverzicht; reden: calculator-UI beter onderhoudbaar maken zonder berekeningsgedrag te wijzigen.
