@@ -1,5 +1,5 @@
 import { ArrowLeftRight } from "lucide-react";
-import type { BerekeningsRichting } from "@/components/BerekeningsRichtingToggle";
+import type { BerekeningsRichting } from "@/lib/profiel";
 
 interface DirectionToggleProps {
   value: BerekeningsRichting;

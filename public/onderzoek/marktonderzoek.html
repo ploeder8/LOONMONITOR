@@ -155,8 +155,8 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 <thead><tr><th>Aspect</th><th>Group S Salary Sim</th><th>Jaakie (huidig)</th></tr></thead>
 <tbody>
 <tr><td>Scope PC's</td><td>Alle ±200 PC's</td><td>PC 200 only (bewust gespecialiseerd)</td></tr>
-<tr><td>Berekeningsrichting</td><td>Bruto→Netto én Netto→Bruto (vereenvoudigd)</td><td>Alleen Bruto→Netto</td></tr>
-<tr><td>Deeltijds</td><td>✅ Voltijds/deeltijds</td><td>❌ Nog niet</td></tr>
+<tr><td>Berekeningsrichting</td><td>Bruto→Netto én Netto→Bruto (vereenvoudigd)</td><td>Bruto→Netto én Netto→Bruto voor bedienden</td></tr>
+<tr><td>Deeltijds</td><td>✅ Voltijds/deeltijds</td><td>✅ Via tewerkstellingsbreuk en voltijdsequivalent barema-check</td></tr>
 <tr><td>Barema-lookup</td><td>❌ Geen sectorale baremas</td><td>✅ PC 200 Schaal I/II × Cat A–D</td></tr>
 <tr><td>Audit-trail / bronverificatie</td><td>❌ Black box</td><td>✅ <strong>Uniek: klikbare bronlinks + tier-1/2/3 hiërarchie</strong></td></tr>
 <tr><td>Ecocheques PC 200</td><td>❌ Geen apart veld</td><td>✅ €250/jaar voltijds</td></tr>
@@ -168,7 +168,7 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 </table>
 
 <div class="callout ok">
-<p><strong>Validatieresultaat:</strong> Bij bruto €2.276,51 (PC 200 bediende, ongehuwd, geen kinderen) geeft Group S: netto RSZ €9,55, BV €154,22, BBSZ €11,28, te ontvangen werknemer €2.101,46. Onze verwachte uitkomst ligt binnen ±€5 — dit is het primaire tier-2 anker voor de netto-module. <span class="badge feit">Feit</span> (geverifieerd via Playwright, geavanceerde modus, mei 2026)</p>
+<p><strong>Validatieresultaat:</strong> Bij bruto €2.276,51 (PC 200 bediende, ongehuwd, geen kinderen) geeft Group S: netto RSZ €9,55, BV €154,22, BBSZ €11,28, te ontvangen werknemer €2.101,46. Onze verwachte uitkomst ligt binnen ±€5 — dit is een secundair tier-2 anker; FOD Financiën / Bijlage III 2026 blijft het primaire BV-anker. <span class="badge feit">Feit</span> (geverifieerd via Playwright, geavanceerde modus, mei 2026)</p>
 </div>
 
 <p>Zie de volledige veld-voor-veld vergelijking in <code>knowledgebase/Referenties/groups_be_salarysim.md</code>. Zie <a href="concurrentiematrix.html">concurrentiematrix</a> voor de marktcontext.</p>

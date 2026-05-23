@@ -116,7 +116,7 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 <tr><td>Werkbonus (sociaal)</td><td><code>src/lib/werkbonus.ts</code></td><td>Luik A + Luik B; formule R = max − helling × (S − S₀)</td><td><code>04_calculator_netto.md §5.1</code></td></tr>
 <tr><td>BV (gewoon)</td><td><code>src/lib/bv.ts</code></td><td>Bijlage III sleutelformule 2026; Schaal I/II/III; verminderingen</td><td><code>04_calculator_netto.md §5.2-5.4</code></td></tr>
 <tr><td>BV (bijzonder)</td><td><code>src/lib/bvBijzonder.ts</code></td><td>Exceptionele bezoldiging: eindejaarspremie, jaarpremie, dubbel vakantiegeld</td><td><code>04_calculator_netto.md §5.4b</code></td></tr>
-<tr><td>BBSZ</td><td><code>src/lib/bbsz.ts</code></td><td>Bijzondere Bijdrage Sociale Zekerheid — info-band (pending exacte tabel)</td><td><code>04_calculator_netto.md §5.5</code></td></tr>
+<tr><td>BBSZ</td><td><code>src/lib/bbsz.ts</code></td><td>Bijzondere Bijdrage Sociale Zekerheid — actieve 2026-voorschotformules per gezinstype/scenario</td><td><code>04_calculator_netto.md §5.5</code></td></tr>
 <tr><td>Fiscale werkbonus</td><td><code>src/lib/netto.ts</code></td><td>Belastingkrediet: 33,14% × Luik A + 52,54% × Luik B</td><td><code>04_calculator_netto.md §5.3</code></td></tr>
 <tr><td>Netto-orchestratie</td><td><code>src/lib/netto.ts</code></td><td>Bruto → RSZ → werkbonus → BV → BBSZ → netto</td><td><code>04_calculator_netto.md §4</code></td></tr>
 <tr><td>Werkgeverskost</td><td><code>src/lib/werkgeverskost.ts</code></td><td>Totale loonkost + loonwig; provisies; extralegale voordelen</td><td><code>05_calculator_werkgeverskost.md</code></td></tr>
@@ -181,9 +181,9 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 <tr><td>BV-verminderingen</td><td>Kinderen, fiscaal alleenstaande, groepsverzekering (30%)</td></tr>
 <tr><td>Fiscale werkbonus</td><td>33,14% × Luik A + 52,54% × Luik B</td></tr>
 <tr><td>Bijzondere BV</td><td>Eindejaarspremie, jaarpremie, dubbel vakantiegeld</td></tr>
-<tr><td>BBSZ</td><td>Info-band (pending exacte tabel RSZ-instructie 2026)</td></tr>
-<tr><td>Werkgeverskost</td><td>Patronale RSZ, SF200, AO, provisies, structurele vermindering</td></tr>
-<tr><td>Premies &amp; voordelen</td><td>Ecocheques (€250), jaarpremie (€330,84), woon-werk trein, fiets</td></tr>
+<tr><td>BBSZ</td><td>Actieve 2026-voorschotformules per gezinstype/scenario; definitieve afrekening via PB-aangifte</td></tr>
+<tr><td>Werkgeverskost</td><td>Patronale RSZ, SF200, AO, provisies, optionele extralegale voordelen</td></tr>
+<tr><td>Premies &amp; voordelen</td><td>Ecocheques (€250), jaarpremie (€330,84), woon-werk alle modi, fiets, VAA bedrijfswagen en werkmiddelen</td></tr>
 <tr><td>Audit-trail</td><td>Klikbare bronlinks per waarde, tier-1/2/3 verificatie</td></tr>
 </tbody>
 </table>
@@ -195,13 +195,12 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 <tr><td>Volledige PB-aangifte AJ 2027</td><td>Alleen BV-niveau, geen eindafrekening</td></tr>
 <tr><td>Bedrijfsleiders</td><td>Kostenforfait 3%, max €3.030 — buiten PC 200-bedienede</td></tr>
 <tr><td>Grensarbeiders</td><td>Dubbelbelastingverdragen — te complex voor POC</td></tr>
-<tr><td>VAA bedrijfswagen</td><td>CO₂-formule — Golf 3 roadmap</td></tr>
-<tr><td>VAA PC/GSM/internet/woonst</td><td>Forfaits — uitgesteld</td></tr>
+<tr><td>VAA woonst/verwarming/elektriciteit/tablet</td><td>Niet gemodelleerd in de huidige POC</td></tr>
 <tr><td>Mobiliteitsbudget</td><td>Beperkte penetratie; complex regelkader</td></tr>
-<tr><td>Maaltijdcheques</td><td>Geen sectorale CAO-verplichting PC 200</td></tr>
+<tr><td>Maaltijdcheques als sectorale verplichting</td><td>Geen sectorale CAO-verplichting PC 200; bedrijfseigen toekenning is optioneel modelleerbaar</td></tr>
 <tr><td>Thuiswerkvergoeding</td><td>Geen sectorale verplichting</td></tr>
-<tr><td>Deeltijds regime</td><td>Nog niet geïmplementeerd</td></tr>
-<tr><td>Netto → Bruto</td><td>Roadmap-prioriteit, nog niet gebouwd</td></tr>
+<tr><td>Studenten netto/RSZ-flow</td><td>Studentenmodus is voorlopig barema-only</td></tr>
+<tr><td>Netto → Bruto studenten</td><td>Netto → bruto is actief voor bedienden; studentenmodus volgt later</td></tr>
 <tr><td>Loonbrief / SEPA / Dimona / DmfA / Belcotax / Finprof</td><td>POC is calculator, geen payroll-run</td></tr>
 </tbody>
 </table>
@@ -224,7 +223,7 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 <li>✅ <code>pnpm typecheck</code> / <code>bun run typecheck</code> slaagt</li>
 <li>✅ Alle 25 TC-cases + 15 NTC-cases groen</li>
 <li>✅ Geen <code>Datapunt</code> zonder <code>bron_url</code> of <code>status</code></li>
-<li>✅ Voor BV-implementatie: representatieve cases volgen FOD Financiën / Bijlage III 2026</li>
+<li>✅ Voor BV-implementatie: representatieve cases volgen FOD Financiën / Bijlage III 2026; Tax-Calc is geen primaire payrollbron</li>
 <li>✅ Disclaimers tonen ("Netto is indicatief", "BV-eindafrekening via PB-aangifte AJ 2027")</li>
 </ol>
 

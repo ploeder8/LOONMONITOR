@@ -1,6 +1,6 @@
 # Project Scope — Jaakie
 
-**Versie:** 2026-05-11
+**Versie:** 2026-05-23
 **Peildatum dataset:** 2026-05-08 (inkomstenjaar 2026 / aanslagjaar 2027)
 
 ---
@@ -33,29 +33,32 @@
 - **Tijdelijk niet actief:** kind <3 jaar is uit de calculatorlogica gehaald tot de BV-impact officieel gevalideerd is.
 - **Fiscale werkbonus** (belastingkrediet 33,14 % × Luik A + 52,54 % × Luik B)
 - **Bijzondere BV-schaal** voor variabel loon (eindejaarspremie, jaarpremie, dubbel vakantiegeld)
-- BBSZ (info-band, geen exacte inhouding zolang RSZ-instructie 2026 niet als tabel publiek is)
+- BBSZ 2026-voorschotformules per gezinstype/scenario; definitieve afrekening blijft via PB-aangifte
 - Netto-orchestration: bruto → RSZ → werkbonus → effectieve RSZ → BV → BBSZ-band → netto
+- Netto → bruto voor bediendenprofielen via numerieke inverse (`src/lib/nettoNaarBruto.ts`)
 
 ### Werkgeverskost-laag
 - Patronale RSZ (~25 %)
 - Sociaal Fonds 200 (0,23 %)
 - Arbeidsongevallenverzekering (~0,3 %, bureaupersoneel)
+- Optionele werkgeverscomponenten: groepsverzekering, hospitalisatieverzekering en maaltijdcheques
 - Maandelijkse loonkost zonder jaarlijkse componenten
 - Jaaroverzicht met eindejaarspremie, jaarpremie, ecocheques en dubbel vakantiegeld
-- Structurele vermindering laagloon (helling 0,16)
+- Dubbel vakantiegeld: runtime-berekening `(bruto + VAA) × 92 % / 12` in het maandbeeld
 - **Loonwig %** = (totale loonkost − netto) / totale loonkost
 
 ### Premies & voordelen (sectoraal PC 200)
 - Eindejaarspremie (anciënniteit 3 jaar sinds 1/1/2026)
 - Ecocheques (voltijds €250 / deeltijds 4-tier)
 - Jaarlijkse premie 2026 (€330,84)
-- Woon-werk trein (100 % CAO 19/9)
+- Woon-werk trein, bus/tram/metro, privéwagen en fiets
 - Fietsvergoeding (CAO 164 — €0,32/km vanaf 1/10/2026)
+- VAA bedrijfswagen via CO₂-formule en forfaitaire VAA voor PC/laptop, GSM, internet en GSM-abonnement
 
 ### Audit & validatie
 - Elke berekende waarde toont datapunt-id, status (`actief` / `mogelijk_verouderd` / `conflict` / `niet_gevonden`), tier (1/2/3), bron-URL, fragment-citaat
 - Schema-validatie van dataset bij applicatiestart (gate in `src/main.tsx`)
-- 25 bestaande golden testcases (TC-01..TC-25) + 15 NTC-cases voor netto-module (NTC-01..NTC-15)
+- Golden tests voor TC/NTC-cases, netto → bruto, CSV-profielen, UI-structuur en schema-validatie
 - 30 brutonetto-testprofielen met FOD Bijlage III-validatievelden (`tools/validate_bijlage_iii_corpus.py`)
 
 ---
@@ -72,9 +75,8 @@
 - Flexi-job / sportbeoefenaar
 - Loonbeslag
 
-### Voordelen van alle aard (VAA) — uitgesteld naar volgende golven
-- Bedrijfswagen (CO₂-formule)
-- PC / GSM / internet / tablet (forfaits)
+### Voordelen van alle aard (VAA) — resterend buiten scope
+- Tablet als apart forfaitair scenario
 - Huisvesting (KI × multiplier)
 - Verwarming / elektriciteit (forfaits)
 
@@ -86,7 +88,7 @@
 - Overuren-toeslag bijzonder fiscaal regime
 
 ### Sectoraal niet-gevonden in PC 200
-- Maaltijdcheques (geen sectorale CAO verplicht)
+- Maaltijdcheques als sectorale verplichting (geen sectorale CAO-verplichting; bedrijfseigen toekenning is optioneel in het profiel)
 - Thuiswerkvergoeding (geen sectorale verplichting)
 - Centenindex (regelgeving niet gefinaliseerd op peildatum)
 
@@ -115,7 +117,7 @@ Een datapunt is **klaar voor productie** wanneer:
 Een release is **deploybaar** wanneer:
 1. ✅ Schema-validatie bij start lukt (rode startup-scherm bij failure)
 2. ✅ `pnpm typecheck` / `bun run typecheck` slaagt
-3. ✅ Alle 25 TC-cases + 15 NTC-cases groen
+3. ✅ Regressietests groen (`bun test`): TC/NTC, netto → bruto, CSV, UI-structuur en schema-smoke
 4. ✅ Geen `Datapunt` zonder `bron_url` of `status`
 5. ✅ Voor BV-implementatie: representatieve cases volgen FOD Financiën / Bijlage III 2026; Tax-Calc is geen primaire payrollbron
 6. ✅ Disclaimers tonen ("Netto is indicatief", "BV-eindafrekening via PB-aangifte AJ 2027")

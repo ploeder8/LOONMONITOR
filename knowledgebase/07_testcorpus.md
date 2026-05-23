@@ -1,9 +1,9 @@
 # Testcorpus — PC 200 Loonmotor
 
-**Versie:** 2026-05-20
+**Versie:** 2026-05-23
 
-> **Wijziging 2026-05-20:** De maandelijkse provisie voor dubbel vakantiegeld is gewijzigd van een hardcoded 6,67% naar een **runtime-berekening**: `(bruto + VAA) × 92% / 12`. Alle testcases met een maandelijkse loonkost-weergave vertonen nu een hogere provisie (~7,67% van bruto i.p.v. 6,67%). De exacte bedragen in de tabellen hieronder zijn nog gedeeltelijk op basis van de oude 6,67% en worden bij de volgende volledige testcase-herberekening gesynchroniseerd.
-**Drie testlagen** (van groen naar pending validatie):
+> **Wijziging 2026-05-23:** Het corpus is gelijkgetrokken met de huidige code-status: BV-validatie gebruikt FOD Financiën / Bijlage III 2026 als primaire payrollbron, `TESTCASES.json` bevat 30 cases met `status_validatie: "ok"`, BBSZ gebruikt de 2026-voorschotformules en netto → bruto heeft een aparte regressiesuite. De tabel hieronder is een corpusweergave; de exacte runtime-waarheid blijft de test-suite.
+**Drie testlagen** (van regressie naar corpusvalidatie):
 
 | Laag | Naam | Aantal | Bestand | Status |
 |---|---|---|---|---|
@@ -29,7 +29,7 @@ Voor de actuele exacte waardes: zie `src/lib/__tests__/golden.test.ts`.
 
 ---
 
-## Laag 2 — NTC-01..NTC-15 (geïmplementeerd, FOD-validatie pending)
+## Laag 2 — NTC-01..NTC-15 (geïmplementeerd, FOD Bijlage III actief)
 
 Uit `04_calculator_netto.md §9`. Tolerantie: `expect(...).toBeCloseTo(..., 0)` (precisie ~€0,50). BV-tests moeten FOD Financiën / Bijlage III 2026 als primaire bron vermelden.
 
@@ -60,7 +60,7 @@ Uit `04_calculator_netto.md §9`. Tolerantie: `expect(...).toBeCloseTo(..., 0)` 
 
 ## Laag 3 — BNTC-001..BNTC-030 (Python referentie)
 
-Het volledige 30-cases bruto-netto corpus, **gegenereerd door `tools/calc_brutonetto_2026.py`** en gesynchroniseerd met `TESTCASES.json`.
+Het volledige 30-cases bruto-netto corpus, **gegenereerd door `tools/calc_brutonetto_2026.py`** en gesynchroniseerd met `TESTCASES.json`. Alle 30 cases dragen FOD Bijlage III 2026-validatievelden met `status_validatie: "ok"`.
 
 > Nota 2026-05-15: cases met `kinderen_jonger_dan_3` zijn documentair/pending. De kind-<3 BV-impact is tijdelijk uit de actieve calculatorlogica gehaald tot officiële BV-validatie beschikbaar is.
 
@@ -164,7 +164,7 @@ Originele kop van het corpus:
 **Notities:**
 - RSZ-vermindering geplafonneerd op 0
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -211,7 +211,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€3232.19** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -258,7 +258,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€3513.25** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -305,7 +305,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€3934.84** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -352,7 +352,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€4215.90** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -399,7 +399,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€4689.47** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -446,7 +446,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€4918.55** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -493,7 +493,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€5621.20** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -540,7 +540,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€6323.85** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -587,7 +587,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€7026.50** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -634,7 +634,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€7729.15** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -686,7 +686,7 @@ Originele kop van het corpus:
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -738,7 +738,7 @@ Originele kop van het corpus:
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -793,7 +793,7 @@ Originele kop van het corpus:
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -845,7 +845,7 @@ Originele kop van het corpus:
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -897,7 +897,7 @@ Originele kop van het corpus:
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -946,7 +946,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€4918.55** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -993,7 +993,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€8431.80** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -1044,7 +1044,7 @@ Originele kop van het corpus:
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -1091,7 +1091,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€9837.10** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -1138,7 +1138,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€10539.75** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -1190,7 +1190,7 @@ Originele kop van het corpus:
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -1238,7 +1238,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€5621.20** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -1291,7 +1291,7 @@ Originele kop van het corpus:
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -1340,7 +1340,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€9837.10** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -1388,7 +1388,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€4918.55** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -1435,7 +1435,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€14053.00** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -1482,7 +1482,7 @@ Originele kop van het corpus:
 | **Totale loonkost werkgever** | **€21079.50** |
 | Loonwig (totaal − bruto) / totaal | 28.8% |
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -1537,7 +1537,7 @@ Originele kop van het corpus:
 **Notities:**
 - RSZ-vermindering geplafonneerd op 0
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 
@@ -1592,7 +1592,7 @@ Originele kop van het corpus:
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
 
-**Status validatie:** `pending` (tolerantie ±€5.00)
+**Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
 ---
 

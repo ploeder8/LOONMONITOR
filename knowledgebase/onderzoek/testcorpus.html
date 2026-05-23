@@ -61,7 +61,7 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 
 <main>
 <h1>Testcorpus</h1>
-<p class="subtitle">Drie lagen van golden tests voor de PC 200 netto-calculator: geïmplementeerde cases, pending FOD-validatie, en triangulatie-ankers.</p>
+<p class="subtitle">Drie lagen van golden tests voor de PC 200 netto-calculator: geïmplementeerde cases, FOD Bijlage III-validatie en triangulatie-ankers.</p>
 
 <div class="meta">
 <strong>Versie:</strong> 2026-05-11 · <strong>Peildatum formules:</strong> 9 mei 2026 · <strong>Testbestand:</strong> <code>src/lib/__tests__/golden.test.ts</code> · <strong>Python referentie:</strong> <code>tools/calc_brutonetto_2026.py</code>
@@ -88,7 +88,7 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 <li><strong>TC-21..TC-25:</strong> Netto-module (werkbonus, BBSZ, BV, netto end-to-end)</li>
 </ul>
 
-<h2>3. Laag 2 — NTC-01..NTC-15 (pending FOD-validatie)</h2>
+<h2>3. Laag 2 — NTC-01..NTC-15 (FOD Bijlage III actief)</h2>
 <p>Tolerantie: <code>expect(...).toBeCloseTo(..., 0)</code> (precisie ~€0,50). BV volgt FOD Financiën / Bijlage III 2026.</p>
 <table class="compact">
 <thead><tr><th>#</th><th>Profiel</th><th>Bruto</th><th>Verwacht netto</th></tr></thead>

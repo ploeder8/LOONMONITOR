@@ -7,7 +7,7 @@ Tool voor payroll-experts om lonen en kosten te verifiëren onder **Paritair Com
 - **Stack:** TypeScript + React 19 + Vite 8 + Tailwind v4
 - **Runtime:** browser-only — geen back-end, geen database, geen authenticatie
 - **Data:** bundled JSON dataset (`src/data/pc200_payroll_dataset_2026.json`),
-  schema-gevalideerd bij applicatiestart — **60 datapunten, peildatum 2026-05-08**
+  schema-gevalideerd bij applicatiestart — **71 datapunten, 15 bronrecords, peildatum 2026-05-08**
 - **Audit-first:** elke berekening is gekoppeld aan datapunt-id, status,
   betrouwbaarheidstier (1/2/3) en primaire bron met fragment-citaat
 - **Kennisbank (SSOT):** zie `knowledgebase/` voor regelkader, calculator-specs, testcorpus, gaps & roadmap
@@ -26,26 +26,29 @@ Tool voor payroll-experts om lonen en kosten te verifiëren onder **Paritair Com
 **Nettoloon (volledige berekening, AJ 2027¹)**
 - Sociale werkbonus (RSZ-vermindering) — Luik A + B, vanaf 1/4/2026
 - **Fiscale werkbonus** (belastingkrediet op BV: 33,14 % × Luik A + 52,54 % × Luik B)
-- Bijzondere Bijdrage Sociale Zekerheid (BBSZ) — kwartaalschijven
-- Bedrijfsvoorheffing (BV) — AJ 2027 schijven + BV-vermindering kinderen ten laste (maandtabel) + kind <3 jaar + alleenstaande ouder + groepsverzekering
+- Bijzondere Bijdrage Sociale Zekerheid (BBSZ) — 2026-voorschotformules per gezinstype/scenario
+- Bedrijfsvoorheffing (BV) — AJ 2027 Bijlage III-sleutelformule + BV-vermindering kinderen ten laste, fiscaal alleenstaande met kind en groepsverzekering
 - **Bijzondere BV-schaal** voor variabel loon (eindejaarspremie, jaarpremie, dubbel vakantiegeld, bonus) — tarief op basis van refertejaarloon
 - Nettoloon = brutoloon − effectieve RSZ − BV (na gezinsvermindering) − BBSZ
+- Netto → bruto via numerieke inverse voor bediendenprofielen
 
 **Werkgeverskost (totale loonkost)**
 - RSZ werkgever (~25 %)
 - Sociaal Fonds 200 (0,23 %)
 - Bouw-aanvullend pensioen (1,80 %, opt-in)
 - Arbeidsongevallenverzekering (~0,3 %, bureaupersoneel)
-- Provisie eindejaarspremie (8,33 %)
-- Provisie dubbel vakantiegeld (6,67 %)
+- Maandelijkse loonkost inclusief optionele groepsverzekering, hospitalisatie en maaltijdcheques
+- Jaaroverzicht met eindejaarspremie, jaarpremie, ecocheques en dubbel vakantiegeld
+- Provisie dubbel vakantiegeld in maandbeeld: `(bruto + VAA) × 92 % / 12`
 - **Loonwig %** = (totale loonkost − netto) / totale loonkost
 
 **Premies & voordelen**
 - Eindejaarspremie (pro-rata, anciënniteit 3 jaar sinds 1/1/2026)
 - Ecocheques (voltijds €250 / deeltijds 4-tier)
 - Jaarlijkse premie 2026 (€330,84)
-- Woon-werk trein (100 % CAO 19/9)
+- Woon-werkverkeer: trein, bus/tram/metro, privéwagen en fiets
 - Fietsvergoeding (€0,32/km — CAO 164, vanaf 1/10/2026)
+- VAA bedrijfswagen en forfaitaire werkmiddelen (PC/laptop, GSM, internet, abonnement)
 
 ¹ *AJ 2027 = inkomstenjaar 2026 (huidig kalenderjaar). Parameters: belastingvrije som €11.180, forfait max €6.070, schijven €16.720/€29.510/€51.070. Geverifieerd via Wet diverse bepalingen 18/12/2025 (BS 30/12/2025) + FOD Financiën. BV gebruikt lokaal de Bijlage III-sleutelformule met FOD Financiën / Bijlage III 2026 als primaire payrollbron; Tax-Calc is enkel een latere PB-raming.*
 
@@ -82,12 +85,9 @@ pnpm preview
 ## Pagina's
 
 - **`/`** — Profiel + Resultaten.
-  - **Links (sidebar):** profiel-velden (modus, schaal, categorie, ervaring, brutoloon, referentiedatum) en accordion-secties voor eindejaarspremie, ecocheques, fietsvergoeding, woon-werk trein en netto-berekening. Geavanceerde secties staan standaard ingeklapt — alleen "Netto berekening" is bij het laden open.
-  - **Rechts (resultaten):** sticky **summary-strip** bovenaan met de vier kerncijfers (Bruto · Netto · Werkgeverskost · Loonwig %) + quick-jump-anchors + globale "Toon alle bronnen"-toggle. Daaronder vier logische bands:
-    1. *Loonkost & netto* — netto- en werkgeverskost-panelen, side-by-side op viewport ≥ 1280px
-    2. *Loonbasis* — sectoraal minimum + brutoloon-check
-    3. *Periodieke voordelen* — RSZ-bijdragen, eindejaarspremie, ecocheques, jaarlijkse premie
-    4. *Mobiliteit* — woon-werk trein, fietsvergoeding
+  - **Bovenaan:** CSV import/export, richting-toggle (bruto → netto / netto → bruto) en `HeroSummary` met vier kerncijfers.
+  - **Inputcockpit:** single-column pagina met 2×2 `CockpitCard`-grid voor identiteit, arbeidscontext, brutoloon en woon-werkverkeer. Extra looncomponenten, werkgeversbijdragen en eindejaarspremie staan in ingeklapte secties.
+  - **Resultaten:** `ResultBandsPanel` met netto, werkgeverskost, jaaroverzicht, barema-check en audit-panelen. Studentenmodus toont alleen de relevante barema-uitkomst.
   - Elke waarde heeft een audit-paneel met datapunt-id, status, tier en primaire bron.
 - **`/testcases`** — Representatieve testcases live herrekend tegen de bundled dataset.
 - **`/scope`** — Dataset-meta, beperkingen, niet-gevonden datapunten, bronconflicten en opmerkingen.
@@ -135,7 +135,7 @@ jaakie/
 │   │   ├── brand.ts                # centrale toolnaam, logo, copy en title
 │   │   └── brand.css               # centrale Jaakie design tokens
 │   ├── data/
-│   │   ├── pc200_payroll_dataset_2026.json   # 63 datapunten
+│   │   ├── pc200_payroll_dataset_2026.json   # 71 datapunten
 │   │   └── pc200_payroll_dataset.schema.json
 │   ├── types/dataset.ts
 │   ├── lib/
@@ -157,7 +157,10 @@ jaakie/
 │   │   ├── woonwerkTrein.ts
 │   │   ├── jaarpremie.ts           # incl. optionele bijzondere BV
 │   │   └── __tests__/
-│   │       ├── golden.test.ts      # TC-01..TC-16, TC-18..TC-25 + NTC-01..NTC-15
+│   │       ├── golden.test.ts      # TC/NTC golden tests + payroll-edgecases
+│   │       ├── nettoNaarBruto.test.ts
+│   │       ├── profielCsv.test.ts
+│   │       ├── fodBvValidation.test.ts
 │   │       └── schemaValidate.smoke.test.ts
 │   ├── components/                 # AuditPanel (+ AuditOpenProvider/Context), Banner, BronLink,
 │   │                               #   Field, ResultBand, ResultCard, ResultsSummaryStrip, StatusBadge

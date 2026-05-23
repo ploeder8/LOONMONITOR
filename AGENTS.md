@@ -9,7 +9,7 @@ Dit bestand geeft richtlijnen aan coding agents (Claude Code, Kimi Code, Codex, 
 **Jaakie** is een browser-only Single Page Application (SPA) die payroll-experts helpt om lonen en werkgeverskosten te verifiëren onder **Paritair Comité 200** (PC 200, het Aanvullend Paritair Comité voor de Bedienden). De tool berekent bruto → netto loon én totale loonkost voor werkgevers, met volledige audit-trail naar primaire bronnen.
 
 - **Actieve brand:** Jaakie (geen "VH", "PC 200" of "Van Havermaet" als toolnaam in de UI).
-- **Scope:** Sectorale baremas, RSZ, sociale werkbonus, bedrijfsvoorheffing (BV, AJ 2027), bijzondere BV-schaal, BBSZ, werkgeverskost, premies (eindejaarspremie, ecocheques, jaarpremie) en mobiliteitsvoordelen (trein, fiets).
+- **Scope:** Sectorale baremas, RSZ, sociale werkbonus, bedrijfsvoorheffing (BV, AJ 2027), bijzondere BV-schaal, BBSZ, bruto → netto, netto → bruto, werkgeverskost, premies (eindejaarspremie, ecocheques, jaarpremie), maaltijdcheques, VAA en mobiliteitsvoordelen.
 - **Technologie:** TypeScript 5.6, React 19, Vite 8, Tailwind CSS v4, HashRouter.
 - **Runtime:** Uitsluitend browser — geen backend, geen database, geen authenticatie.
 - **Taal:** Nederlandse interface en broncode; alle domein-documentatie staat in het Nederlands.
@@ -84,7 +84,7 @@ src/
 │   ├── brand.ts          # APP_BRAND: naam, logo, titels, footer-copy
 │   └── brand.css         # Design tokens: kleuren, fonts, radii, shadows
 ├── data/
-│   ├── pc200_payroll_dataset_2026.json       # ~60–63 datapunten
+│   ├── pc200_payroll_dataset_2026.json       # 71 datapunten
 │   └── pc200_payroll_dataset.schema.json     # JSON Schema Draft-07
 ├── types/
 │   ├── dataset.ts        # TypeScript interfaces: Datapunt, BronMaster, Meta, Dataset
@@ -351,10 +351,10 @@ Voor het volledige overzicht: zie `knowledgebase/08_gaps_en_pending.md`.
 | Item | Status | Impact |
 |---|---|---|
 | FOD Bijlage III BV-validatie | `fod_bijlage_iii_ok` | 30 cases dragen officiële BV/netto-validatievelden |
-| BBSZ exacte tabel | `mogelijk_verouderd` | Info-band €0–€60,94 tot RSZ-instructie 2026 bevestigd |
+| BBSZ 2026-voorschot | Actief | Maand-/kwartaalformules per scenario; 2028-hervorming blijft pending |
 | Arizona hervormingen | Wetsontwerp | Alleen feature-flag: fiscale werkbonus 35%/63%, belastingvrije som €11.550 |
-| VAA auto-berekening | Niet geïmplementeerd | Bedrijfswagen CO₂-formule, woonst, verwarming |
-| Netto → Bruto | Ontbreekt | Roadmap-prioriteit |
+| VAA auto-berekening | Deels actief | Bedrijfswagen CO₂-formule en werkmiddelen actief; woonst/verwarming/elektriciteit buiten scope |
+| Netto → Bruto | Actief voor bedienden | Binary-search inverse; studentenmodus blijft fase 2 |
 
 ---
 

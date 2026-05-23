@@ -4,11 +4,14 @@ import { renderToStaticMarkup } from "react-dom/server";
 
 import { headerContentLayout, mainMaxWidthForPath } from "@/App";
 import { fietsvergoeding } from "@/lib/fietsvergoeding";
-import { aantalWeekdagenInMaand, refDatumVoorMaand } from "@/lib/profiel";
 import {
+  aantalWeekdagenInMaand,
   eindejaarspremieMaandenVoorCheckbox,
   percentageNaarTewerkstellingsbreuk,
+  refDatumVoorMaand,
   tewerkstellingsbreukNaarPercentage,
+} from "@/lib/profiel";
+import {
   HomePage,
   waardeUitNumeriekeInput,
 } from "@/pages/HomePage";

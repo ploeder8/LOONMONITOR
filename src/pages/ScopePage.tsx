@@ -12,14 +12,14 @@ const opmerkingen = ds.meta.opmerkingen ?? [];
 
 const POC_LIMITATIONS: { titel: string; tekst: string }[] = [
   {
-    titel: "1. Netto validatie pending",
+    titel: "1. Netto validatie",
     tekst:
-      "De POC berekent netto met RSZ, werkbonus, BV, fiscale werkbonus en BBSZ. De BV-sleutelformule gebruikt FOD Financiën / Bijlage III 2026 als primaire payrollbron; Tax-Calc blijft enkel een latere PB-ramingscheck.",
+      "De calculator gebruikt RSZ, werkbonus, BV, fiscale werkbonus en BBSZ. De 30 corpuscases dragen FOD Bijlage III 2026-validatievelden met status ok; Tax-Calc blijft enkel een latere PB-ramingscheck.",
   },
   {
-    titel: "2. Geen maaltijdcheques",
+    titel: "2. Maaltijdcheques optioneel",
     tekst:
-      "PC 200 verplicht geen sectorale maaltijdcheques. Bedrijfseigen toekenning is buiten POC-scope.",
+      "PC 200 verplicht geen sectorale maaltijdcheques. Bedrijfseigen maaltijdcheques zijn wel optioneel modelleerbaar in het profiel en staan standaard uit.",
   },
   {
     titel: "3. Geen thuiswerkvergoeding",
@@ -42,17 +42,22 @@ const POC_LIMITATIONS: { titel: string; tekst: string }[] = [
       "Voor studenten toont de monitor enkel het maandloon volgens leeftijd/categorie. RSZ-Solidariteitsbijdrage (2,71 % wkn / 5,42 % wgr) en jaarpremies/eindejaar zijn niet berekend in de POC.",
   },
   {
-    titel: "7. Eén dataset-versie tegelijk",
+    titel: "7. VAA-dekking is beperkt",
+    tekst:
+      "Bedrijfswagen en forfaitaire werkmiddelen (PC/laptop, GSM, internet, abonnement) zijn actief. VAA woning, verwarming, elektriciteit en tablet zijn niet gemodelleerd.",
+  },
+  {
+    titel: "8. Eén dataset-versie tegelijk",
     tekst:
       "Geen historie of multi-jaar selector. De dataset 2026 is bundled; bij wissel naar een ander jaar moet de bundel worden vervangen.",
   },
   {
-    titel: "8. Browser-only, geen back-end",
+    titel: "9. Browser-only, geen back-end",
     tekst:
       "Geen authenticatie, geen DB, geen logging. Alles draait client-side en de dataset wordt bij build-tijd ingebakken.",
   },
   {
-    titel: "9. Audit, geen advies",
+    titel: "10. Audit, geen advies",
     tekst:
       "Elk getal komt met datapunt-id, status, betrouwbaarheids-tier en primaire bron. De monitor maakt geen juridisch oordeel — bij twijfel altijd de primaire bron raadplegen.",
   },
@@ -92,7 +97,7 @@ export function ScopePage() {
       </section>
 
       <section>
-        <h3 className="mb-3 text-base font-semibold">POC-beperkingen (§10 brief)</h3>
+        <h3 className="mb-3 text-base font-semibold">POC-beperkingen</h3>
         <ul className="grid grid-cols-1 gap-3 md:grid-cols-2">
           {POC_LIMITATIONS.map((l) => (
             <li

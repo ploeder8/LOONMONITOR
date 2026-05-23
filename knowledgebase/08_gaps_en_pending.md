@@ -1,4 +1,4 @@
-# Gaps & pending — Loonmotor PC 200 — peildatum 9 mei 2026
+# Gaps & pending — Jaakie PC 200 — peildatum 23 mei 2026
 
 **Doel:** een levend overzicht van wat de huidige rekenmodule **niet** dekt, welke wettelijke wijzigingen nog **pending** zijn, en welke datapunten aanvullende validatie vragen voordat de loonmotor naar productie kan.
 
@@ -82,20 +82,21 @@
 
 **Opgelost 17/05/2026:** de rekenmodule heeft een expliciete `bbszScenario`-parameter voor individuele aanslag, gemeenschappelijke aanslag met partner met beroepsinkomsten, en gemeenschappelijke aanslag met partner zonder beroepsinkomsten. De UI toont BBSZ als voorschot; de definitieve afrekening blijft via de PB-aangifte AJ 2027 lopen.
 
-### 3.3 VAA bedrijfswagen — formule niet geïmplementeerd
+### 3.3 VAA — huidige dekking en resterende gaps
 
-POC accepteert VAA als input maar berekent niet zelf. Productieversie moet:
-- CO₂-formule: `cataloguswaarde × 6/7 × (5,5 + (CO₂ − ref_CO₂) × 0,1) / 100 × leeftijdscoëfficient`
+**Opgelost 23/05/2026:** de POC berekent VAA bedrijfswagen via `src/lib/vaaBedrijfswagen.ts`:
+- CO₂-formule: `cataloguswaarde × 6/7 × CO₂-percentage × leeftijdscoëfficiënt`
 - Minimum-VAA AJ 2027: €1.690/jaar
 - Referentie-CO₂ AJ 2027: 70 g/km benzine/lpg/aardgas, 58 g/km diesel
 - Leeftijdscoëfficiënt: 100% (0–12m), 94% (13–24m), ..., 70% (>60m)
 
-### 3.4 Andere VAA niet gedekt
+Daarnaast berekent `src/lib/vaaForfaits.ts` de forfaitaire VAA voor PC/laptop, GSM, internet en GSM-abonnement.
 
+**Nog niet gedekt:**
 - VAA verwarming (€1.150 werknemer, AJ 2027)
 - VAA elektriciteit (€580 werknemer, AJ 2027)
-- VAA woning (cataloguswaarde × KI-formule)
-- VAA gsm/laptop/internet (forfaitair)
+- VAA woning / huisvesting
+- Tablet als apart forfaitair scenario
 
 ### 3.5 Verminderingen niet gedekt
 
@@ -125,9 +126,11 @@ Allemaal **buiten scope POC**, opnemen in roadmap voor productie.
 
 | # | Gap | Opgelost | Hoe |
 |---|-----|----------|-----|
-| G-01 | Extralegale voordelen werkgever (groepsverzekering, maaltijdcheques, hospitalisatieverzekering, ecocheques) waren hardgecodeerd op €0 | ✅ 12 mei 2026 | `Profiel`-interface uitgebreid met `arbeidsongevallenPct`, `extraGroepsverzekering`, `maaltijdchequeWerkgeversaandeelPerDag`, `arbeidsdagenPerMaand`, `extraHospitalisatie`; `extraEcocheques` automatisch afgeleid. Maaltijdcheques = dagbedrag × werkdagen, met max €8,91/dag vanaf 01/01/2026. Nieuwe "Werkgeversbijdragen" accordion in de sidebar. Itemized rows in `WerkgeverskostPanel`. Zowel `bouwResultaten` als `computeSummary` fully wired. |
+| G-01 | Extralegale voordelen werkgever (groepsverzekering, maaltijdcheques, hospitalisatieverzekering, ecocheques) waren hardgecodeerd op €0 | ✅ 12 mei 2026 | `Profiel`-interface uitgebreid met `arbeidsongevallenPct`, `extraGroepsverzekering`, `maaltijdchequeWerkgeversaandeelPerDag`, `arbeidsdagenPerMaand`, `extraHospitalisatie`; `extraEcocheques` automatisch afgeleid. Maaltijdcheques = dagbedrag × werkdagen, met max €8,91/dag vanaf 01/01/2026. De huidige UI groepeert dit in cockpit/accordionsecties. Itemized rows in `WerkgeverskostPanel`. Zowel `bouwResultaten` als `computeSummary` fully wired. |
 | G-02 | BV-module had geen expliciete sleutelformule-metadata of validatiestatus | ✅ 12 mei 2026, afgerond 19 mei 2026 | `berekenBV()` rapporteert nu methode, schaal en `fod_bijlage_iii_ok`; primaire broncommunicatie verwijst naar FOD Financiën / Bijlage III. Het 30-cases validatieregister staat in `src/lib/fodBvValidation.ts`. |
 | G-03 | Netto → Bruto calculatie ontbrak | ✅ 19 mei 2026 | Numerieke inverse via binary search in `src/lib/nettoNaarBruto.ts`. UI-toggle bovenaan formulier. 25 inverse golden tests in `src/lib/__tests__/nettoNaarBruto.test.ts`. Alleen bedienden in fase 1; studenten in fase 2. |
+| G-04 | VAA bedrijfswagen en forfaitaire werkmiddelen ontbraken | ✅ 23 mei 2026 | `src/lib/vaaBedrijfswagen.ts` en `src/lib/vaaForfaits.ts` zijn actief in netto, werkgeverskost en jaaroverzicht; resterende VAA-gaps staan in §3.3. |
+| G-05 | Fase-2 UI-migratie stond alleen als plan beschreven | ✅ 23 mei 2026 | `HomePage.tsx` gebruikt single-column layout met CSV-paneel, `DirectionToggle`, `HeroSummary`, `InputCockpit`, 2×2 `CockpitCard`-grid, `CockpitAccordion`s en `ResultBandsPanel`. |
 
 ---
 

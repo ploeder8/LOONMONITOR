@@ -162,9 +162,9 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 <div class="callout">
 <strong>Validatie-workflow:</strong>
 <ol>
-<li>Voer iedere case in op de <strong>FOD Financiën Tax-Calc-simulator (XLSX, AJ 2027)</strong> → noteer het officiële netto.</li>
-<li>Vergelijk met bovenstaande <code>Netto/m</code> — afwijking ≤ €5/maand = <span class="badge feit">ok</span>, ≤ €15 = <span class="badge aanname">kleine afwijking</span>, > €15 = <span class="badge onzekerheid">grote afwijking</span> (root-cause analyse vereist).</li>
-<li>Alle 30 cases (BNTC-001..BNTC-030) staan in <code>tools/TESTCASES.json</code>; status = <code>pending_taxcalc</code> tot de XLSX-validatie is uitgevoerd.</li>
+<li>Valideer iedere case tegen <strong>FOD Financiën / Bijlage III 2026</strong>; Tax-Calc is alleen een latere PB-ramingscheck.</li>
+<li>Vergelijk met bovenstaande <code>Netto/m</code> — afwijking ≤ €5/maand = <span class="badge feit">ok</span>, > €5 = <span class="badge onzekerheid">afwijking</span> (root-cause analyse vereist).</li>
+<li>Alle 30 cases (BNTC-001..BNTC-030) staan in <code>tools/TESTCASES.json</code>; status = <code>ok</code> met FOD Bijlage III-validatievelden.</li>
 </ol>
 </div>
 

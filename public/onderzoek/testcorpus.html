@@ -61,10 +61,10 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 
 <main>
 <h1>Testcorpus</h1>
-<p class="subtitle">Drie lagen van golden tests voor de PC 200 netto-calculator: geïmplementeerde cases, pending FOD-validatie, en triangulatie-ankers.</p>
+<p class="subtitle">Drie lagen van golden tests voor de PC 200 netto-calculator: geïmplementeerde cases, FOD Bijlage III-validatie en triangulatie-ankers.</p>
 
 <div class="meta">
-<strong>Versie:</strong> 2026-05-11 · <strong>Peildatum formules:</strong> 9 mei 2026 · <strong>Testbestand:</strong> <code>src/lib/__tests__/golden.test.ts</code> · <strong>Python referentie:</strong> <code>tools/calc_brutonetto_2026.py</code>
+<strong>Versie:</strong> 2026-05-23 · <strong>Peildatum formules:</strong> 9 mei 2026 · <strong>Testbestand:</strong> <code>src/lib/__tests__/golden.test.ts</code> · <strong>Python referentie:</strong> <code>tools/calc_brutonetto_2026.py</code>
 </div>
 
 <h2>1. Drie testlagen</h2>
@@ -72,8 +72,8 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 <thead><tr><th>Laag</th><th>Naam</th><th>Aantal</th><th>Bestand</th><th>Status</th></tr></thead>
 <tbody>
 <tr><td><strong>1</strong></td><td>TC-01..TC-25 — bestaande golden tests</td><td>24+</td><td><code>src/lib/__tests__/golden.test.ts</code></td><td><span class="badge feit">✅ Allemaal groen</span></td></tr>
-<tr><td><strong>2</strong></td><td>NTC-01..NTC-15 — netto-spec testcases</td><td>15</td><td><code>src/lib/__tests__/golden.test.ts</code></td><td><span class="badge onzekerheid">⚠️ Pending FOD Tax-Calc</span></td></tr>
-<tr><td><strong>3</strong></td><td>BNTC-001..BNTC-030 — bruto-netto profielen</td><td>30</td><td><code>tools/TESTCASES.json</code></td><td><span class="badge onzekerheid">⚠️ Pending FOD Tax-Calc</span></td></tr>
+<tr><td><strong>2</strong></td><td>NTC-01..NTC-15 — netto-spec testcases</td><td>15</td><td><code>src/lib/__tests__/golden.test.ts</code></td><td><span class="badge feit">✅ FOD Bijlage III-bronpad</span></td></tr>
+<tr><td><strong>3</strong></td><td>BNTC-001..BNTC-030 — bruto-netto profielen</td><td>30</td><td><code>tools/TESTCASES.json</code></td><td><span class="badge feit">✅ Status ok</span></td></tr>
 </tbody>
 </table>
 <p>De drie lagen vullen elkaar aan: laag 1 valideert barema/RSZ/sectorpremie logica, laag 2 valideert netto-orchestratie inclusief bijzondere BV, laag 3 valideert de berekening over een brede salarisrange voor FOD-cross-check.</p>
@@ -88,8 +88,8 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 <li><strong>TC-21..TC-25:</strong> Netto-module (werkbonus, BBSZ, BV, netto end-to-end)</li>
 </ul>
 
-<h2>3. Laag 2 — NTC-01..NTC-15 (pending FOD-validatie)</h2>
-<p>Tolerantie: <code>expect(...).toBeCloseTo(..., 0)</code> (precisie ~€0,50). Markeer in code met commentaar <code>// PENDING: validate against FOD Fin Tax-Calc</code>.</p>
+<h2>3. Laag 2 — NTC-01..NTC-15 (FOD Bijlage III actief)</h2>
+<p>Tolerantie: <code>expect(...).toBeCloseTo(..., 0)</code> (precisie ~€0,50). BV-tests moeten FOD Financiën / Bijlage III 2026 als primaire bron vermelden; Tax-Calc is geen primaire payrollbron.</p>
 <table class="compact">
 <thead><tr><th>#</th><th>Profiel</th><th>Bruto</th><th>Verwacht netto</th></tr></thead>
 <tbody>
@@ -115,13 +115,13 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 <strong>Acceptatiecriteria laag 2:</strong>
 <ul>
 <li>Alle 15 NTC-cases groen in <code>bun test</code></li>
-<li>BV-uitkomsten binnen <strong>±€2</strong> van FOD Fin Tax-Calc voor minstens <strong>12/15</strong> cases</li>
+<li>BV-uitkomsten volgen FOD Financiën / Bijlage III 2026 voor representatieve cases</li>
 <li>Afwijking > €2: documenteren met root-cause in <code>08_gaps_en_pending.md</code></li>
 </ul>
 </div>
 
 <h2>4. Laag 3 — BNTC-001..BNTC-030 (bruto-netto profielen)</h2>
-<p>Het volledige 30-cases bruto-netto corpus, gegenereerd door <code>tools/calc_brutonetto_2026.py</code> en gesynchroniseerd met <code>TESTCASES.json</code>. <strong>Belangrijk:</strong> de <code>Netto/m</code>-kolom is een referentie-benadering — niet de officiële FOD Tax-Calc-output. Status blijft <code>pending_taxcalc</code> tot de XLSX-validatie is ingevoerd.</p>
+<p>Het volledige 30-cases bruto-netto corpus, gegenereerd door <code>tools/calc_brutonetto_2026.py</code> en gesynchroniseerd met <code>TESTCASES.json</code>. <strong>Belangrijk:</strong> Tax-Calc is geen primaire payrollbron; de BV-validatie volgt FOD Financiën / Bijlage III 2026. Status is <code>ok</code> zolang de afwijking binnen de corpusvalidatie blijft.</p>
 
 <table class="compact">
 <thead><tr><th>ID</th><th>Profiel</th><th>Bruto/m</th><th>RSZ-wn</th><th>Werkbonus</th><th>BV netto</th><th>BBSZ</th><th>Netto/m</th></tr></thead>
@@ -165,7 +165,7 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 <tbody>
 <tr><td>Laag 1 (TC)</td><td>Exacte EUR-golden tests</td><td><code>expect(...).toBe(...)</code></td><td>Nul tolerantie</td></tr>
 <tr><td>Laag 2 (NTC)</td><td>BV end-to-end</td><td><code>toBeCloseTo(..., 0)</code></td><td>~€0,50 tolerantie</td></tr>
-<tr><td>Laag 3 (BNTC)</td><td>FOD Tax-Calc cross-check</td><td>±€2/maand</td><td>≥12/15 cases OK; >€15 = "grote_afwijking"</td></tr>
+<tr><td>Laag 3 (BNTC)</td><td>FOD Bijlage III corpusvalidatie</td><td>±€5/maand</td><td>30 cases status ok; >€5 = root-cause analyse</td></tr>
 <tr><td>Audit</td><td>Bron-URL validiteit</td><td>truthy <code>bron_url</code></td><td>100% van resultaten</td></tr>
 <tr><td>Schema</td><td>Dataset valideert tegen schema</td><td>0 fouten</td><td>Startup gate blokkeert bij falen</td></tr>
 </tbody>

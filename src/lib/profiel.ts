@@ -3,6 +3,10 @@ import type { BrandstofBedrijfswagen } from "@/lib/vaaBedrijfswagen";
 import type { GezinsType } from "@/lib/netto";
 import { MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026 } from "@/lib/werkgeverskost";
 
+export type { BaremaCat, Schaal, StudentenCat } from "@/lib/baremas";
+export type { BrandstofBedrijfswagen } from "@/lib/vaaBedrijfswagen";
+export type { GezinsType } from "@/lib/netto";
+
 export type Statuut = "bediende" | "student";
 export type BeroepskostMethode = "forfaitair" | "reeel";
 export type BerekeningsRichting = "bruto_naar_netto" | "netto_naar_bruto";
@@ -134,4 +138,43 @@ export function refDatumVoorMaand(
     return `${berekeningsMaand}-01`;
   }
   return `${berekeningsJaar ?? DEFAULTS.berekeningsJaar}-${berekeningsMaand ?? DEFAULTS.berekeningsMaand}-01`;
+}
+
+export function normaliseerProfiel(profiel: Profiel): Profiel {
+  if (/^\d{4}-\d{2}$/.test(profiel.berekeningsMaand)) {
+    const [berekeningsJaar, berekeningsMaand] = profiel.berekeningsMaand.split("-");
+    return {
+      ...profiel,
+      berekeningsJaar: profiel.berekeningsJaar ?? berekeningsJaar,
+      berekeningsMaand,
+    };
+  }
+  if (!profiel.berekeningsJaar) {
+    return { ...profiel, berekeningsJaar: DEFAULTS.berekeningsJaar };
+  }
+  return profiel;
+}
+
+export function heeftMaaltijdcheques(
+  profiel: Pick<Profiel, "maaltijdchequesActief">,
+): boolean {
+  return profiel.maaltijdchequesActief;
+}
+
+export function eindejaarspremieMaandenVoorCheckbox(
+  eindejaarspremieAan: boolean,
+): Pick<Profiel, "ancienniteitMaanden" | "prestatieMaanden"> {
+  const maanden = eindejaarspremieAan ? 12 : 0;
+  return {
+    ancienniteitMaanden: maanden,
+    prestatieMaanden: maanden,
+  };
+}
+
+export function tewerkstellingsbreukNaarPercentage(tewerkstellingsbreuk: number): number {
+  return tewerkstellingsbreuk * 100;
+}
+
+export function percentageNaarTewerkstellingsbreuk(percentage: number): number {
+  return percentage / 100;
 }

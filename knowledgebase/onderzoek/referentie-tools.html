@@ -85,12 +85,12 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 <table class="compact">
 <thead><tr><th>Bouwsteen</th><th>Tier 1</th><th>Tier 2 fallback</th><th>Confidence</th></tr></thead>
 <tbody>
-<tr><td>Bedrijfsvoorheffing (BV)</td><td>KB 11/12/2025 (BS 29/12/2025); FOD Bijlage III</td><td>Securex, CLB Group, Partena</td><td><span class="badge feit">HIGH</span></td></tr>
+<tr><td>Bedrijfsvoorheffing (BV)</td><td>FOD Financiën / Bijlage III 2026; Tax-Calc alleen als PB-ramingscheck</td><td>Securex, CLB Group, Partena</td><td><span class="badge feit">HIGH</span></td></tr>
 <tr><td>BV-verminderingen</td><td>FOD Financiën (exclusief)</td><td>—</td><td><span class="badge feit">HIGH</span></td></tr>
 <tr><td>RSZ-werknemer</td><td>RSZ basisbijdragevoeten (13,07%)</td><td>—</td><td><span class="badge feit">HIGH</span></td></tr>
 <tr><td>Sociale werkbonus</td><td>Programmawet 18/7/2025; KB 6/10/2025</td><td>Liantis, Daenens, Securex, Attentia (viervoudig)</td><td><span class="badge feit">HIGH</span></td></tr>
 <tr><td>Fiscale werkbonus</td><td>—</td><td>Partena, Liantis</td><td><span class="badge aanname">SUPPORTED</span></td></tr>
-<tr><td>BBSZ</td><td>RSZ instructies Q1/2026 (pending)</td><td>SSN (alleenstaand — WEAK)</td><td><span class="badge onzekerheid">WEAK</span></td></tr>
+<tr><td>BBSZ</td><td>RSZ 2026-voorschotformules per scenario</td><td>Partena, Liantis</td><td><span class="badge feit">HIGH</span></td></tr>
 <tr><td>Belastingvrije som AJ 2027</td><td>KB 11/12/2025</td><td>—</td><td><span class="badge feit">HIGH</span></td></tr>
 <tr><td>Forfaitaire beroepskosten</td><td>KB 11/12/2025</td><td>—</td><td><span class="badge feit">HIGH</span></td></tr>
 <tr><td>Structurele vermindering</td><td>KB 2/7/2025 (BS 15/7/2025)</td><td>—</td><td><span class="badge feit">HIGH</span></td></tr>
@@ -117,8 +117,8 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 <tbody>
 <tr><td>Scope PC's</td><td>Alle ±200</td><td>PC 200 only (bewust gespecialiseerd)</td></tr>
 <tr><td>Bruto→Netto</td><td>✅</td><td>✅</td></tr>
-<tr><td>Netto→Bruto</td><td>✅ (vereenvoudigd) / ❌ (geavanceerd)</td><td>❌</td></tr>
-<tr><td>Deeltijds</td><td>✅</td><td>❌</td></tr>
+<tr><td>Netto→Bruto</td><td>✅ (vereenvoudigd) / ❌ (geavanceerd)</td><td>✅ bedienden</td></tr>
+<tr><td>Deeltijds</td><td>✅</td><td>✅ via tewerkstellingsbreuk en voltijdsequivalent barema-check</td></tr>
 <tr><td>Barema-lookup</td><td>❌</td><td>✅ PC 200 Schaal I/II × Cat A–D</td></tr>
 <tr><td>Audit-trail</td><td>❌ Black box</td><td>✅ <strong>Uniek: klikbare bronlinks + tier hiërarchie</strong></td></tr>
 <tr><td>Ecocheques / jaarpremie / fiets</td><td>❌ Geen aparte velden</td><td>✅ Sectorale PC 200 voordelen</td></tr>
@@ -179,11 +179,11 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 
 <h2>7. Gemarkeerde gaps &amp; pending bronnen</h2>
 <ul>
-<li><strong>BBSZ exacte tabel:</strong> Status <code>mogelijk_verouderd</code> — info-band €0–€60,94 tot RSZ-instructie 2026 bevestigd. <span class="badge onzekerheid">Onzekerheid</span></li>
+<li><strong>BBSZ 2026-voorschot:</strong> Actief per gezinstype/scenario; definitieve afrekening blijft PB-aangifte. <span class="badge feit">Actief</span></li>
 <li><strong>FOD Bijlage III BV-validatie:</strong> 30 cases dragen officiële Bijlage III-validatievelden. Status <code>ok</code>. <span class="badge feit">Feit</span></li>
 <li><strong>Arizona hervormingen:</strong> Wetsontwerp — fiscale werkbonus 35%/63%, belastingvrije som €11.550. Alleen feature-flag tot in werking. <span class="badge hypothese">Hypothese</span></li>
-<li><strong>VAA auto-berekening:</strong> Niet geïmplementeerd. Bedrijfswagen CO₂-formule, woonst, verwarming. <span class="badge later">Later</span></li>
-<li><strong>Netto → Bruto:</strong> Ontbreekt. Roadmap-prioriteit. <span class="badge later">Later</span></li>
+<li><strong>VAA auto-berekening:</strong> Bedrijfswagen en werkmiddelen actief; woonst/verwarming/elektriciteit blijven later. <span class="badge later">Deels actief</span></li>
+<li><strong>Netto → Bruto:</strong> Actief voor bedienden; studentenmodus blijft later. <span class="badge feit">Actief</span></li>
 </ul>
 
 <p>Zie <a href="jaakie-specificatie.html">Jaakie-specificatie</a> voor de POC-scope, <a href="testcorpus.html">testcorpus</a> voor de validatie-cases, en <a href="wetgevend-kader.html">wetgevend kader</a> voor de juridische basis.</p>

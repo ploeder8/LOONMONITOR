@@ -1,4 +1,12 @@
 import {
+  brutolocheck,
+  lookupBarema,
+  lookupStudentenbarema,
+  type BaremaLookupResult,
+  type BrutolocheckResult,
+  type StudentenLookupResult,
+} from "@/lib/baremas";
+import {
   berekenWoonwerkVerkeer,
   type WoonwerkVerkeerResultaat,
 } from "@/lib/woonwerkVerkeer";
@@ -14,8 +22,13 @@ import {
   berekenJaaroverzicht,
   type JaaroverzichtResultaat,
 } from "@/lib/jaaroverzicht";
-import { berekenNetto, type NettoResultaat } from "@/lib/netto";
+import { berekenNetto, type NettoInput, type NettoResultaat } from "@/lib/netto";
 import {
+  zoekBrutoVoorNetto,
+  type NettoNaarBrutoResultaat,
+} from "@/lib/nettoNaarBruto";
+import {
+  MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026,
   werkgeverskost,
   loonwig,
   type WerkgeverskostResultaat,
@@ -23,14 +36,25 @@ import {
 import { round2 } from "@/lib/money";
 import {
   aantalWeekdagenInMaand,
+  heeftMaaltijdcheques,
   refDatumVoorMaand,
   type BeroepskostMethode,
   type Profiel,
 } from "@/lib/profiel";
 
+export type BaremaInlineResult =
+  | { kind: "checked"; check: BrutolocheckResult }
+  | { kind: "error"; message: string };
+
 export interface MobiliteitBerekening {
   woonwerk: WoonwerkVerkeerResultaat;
   vaaBedrijfswagen: VaaBedrijfswagenResultaat | null;
+}
+
+export interface MaaltijdchequeWaarde {
+  totaleWaardePerDag: number;
+  totaleWaarde: number;
+  werkdagen: number;
 }
 
 export interface ProfielKernOutputs {
@@ -40,6 +64,85 @@ export interface ProfielKernOutputs {
   loonwigPct: number | null;
   nettoJaar: number | null;
   werkgeverskostJaar: number | null;
+}
+
+export function berekenMaaltijdchequeWaarde({
+  werkgeversaandeelPerDag,
+  werknemersbijdragePerDag,
+  werkdagen,
+}: {
+  werkgeversaandeelPerDag: number;
+  werknemersbijdragePerDag: number;
+  werkdagen: number;
+}): MaaltijdchequeWaarde {
+  const werkgeversaandeel = Math.min(
+    werkgeversaandeelPerDag,
+    MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026,
+  );
+  const totaleWaardePerDag = round2(werkgeversaandeel + werknemersbijdragePerDag);
+  const totaleWaarde = round2(totaleWaardePerDag * Math.max(werkdagen, 0));
+
+  return {
+    totaleWaardePerDag,
+    totaleWaarde,
+    werkdagen: Math.max(werkdagen, 0),
+  };
+}
+
+export function berekenMaaltijdchequeWerkgeverskostVoorProfiel(p: Profiel): number {
+  if (!heeftMaaltijdcheques(p)) return 0;
+
+  return round2(
+    Math.min(
+      p.maaltijdchequeWerkgeversaandeelPerDag,
+      MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026,
+    ) * p.arbeidsdagenPerMaand,
+  );
+}
+
+export function berekenBaremaInlineCheck(profiel: Profiel): BaremaInlineResult {
+  const refDatum = refDatumVoorMaand(profiel.berekeningsJaar, profiel.berekeningsMaand);
+
+  try {
+    return {
+      kind: "checked",
+      check: brutolocheck(
+        profiel.schaal,
+        profiel.cat,
+        profiel.ervaringJaren,
+        profiel.brutoloon,
+        refDatum,
+        profiel.tewerkstellingsbreuk,
+      ),
+    };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Barema kon niet worden gecontroleerd.";
+    return { kind: "error", message };
+  }
+}
+
+export function berekenBediendeLoonbasisVoorProfiel(
+  p: Profiel,
+  refDatum: string,
+): { barema: BaremaLookupResult; check: BrutolocheckResult } {
+  return {
+    barema: lookupBarema(p.schaal, p.cat, p.ervaringJaren, refDatum),
+    check: brutolocheck(
+      p.schaal,
+      p.cat,
+      p.ervaringJaren,
+      p.brutoloon,
+      refDatum,
+      p.tewerkstellingsbreuk,
+    ),
+  };
+}
+
+export function berekenStudentenBaremaVoorProfiel(
+  p: Profiel,
+  refDatum: string,
+): StudentenLookupResult {
+  return lookupStudentenbarema(p.studentenCat, p.studentLeeftijd, refDatum);
 }
 
 export function berekenVaaWerkmiddelenVoorProfiel(
@@ -110,11 +213,35 @@ export function berekenNettoVoorProfiel(
   brutoloonOverride?: number,
 ): NettoResultaat {
   const brutoloon = brutoloonOverride ?? p.brutoloon;
-  const heeftMaaltijdcheques = p.maaltijdchequesActief;
+  return berekenNetto(bouwNettoInputVoorProfiel(p, refDatum, brutoloon));
+}
+
+export function zoekBrutoVoorProfielDoelNetto(
+  p: Profiel,
+  refDatum: string,
+): NettoNaarBrutoResultaat {
+  const { brutoloon: _brutoloon, ...nettoInput } = bouwNettoInputVoorProfiel(
+    p,
+    refDatum,
+    p.brutoloon,
+  );
+
+  return zoekBrutoVoorNetto({
+    ...nettoInput,
+    doelNettoloon: p.doelNettoloon,
+  });
+}
+
+function bouwNettoInputVoorProfiel(
+  p: Profiel,
+  refDatum: string,
+  brutoloon: number,
+): NettoInput {
+  const maaltijdchequesActief = heeftMaaltijdcheques(p);
   const mobiliteit = berekenMobiliteitVoorProfiel(p, refDatum, brutoloon);
   const vaaWerkmiddelen = berekenVaaWerkmiddelenVoorProfiel(p, refDatum);
 
-  return berekenNetto({
+  return {
     brutoloon,
     refDatum,
     bouwVlag: p.bouwVlag,
@@ -122,10 +249,10 @@ export function berekenNettoVoorProfiel(
     kinderenTenLaste: p.kinderenTenLaste,
     fiscaalAlleenstaandeMetKind: p.fiscaalAlleenstaandeMetKind,
     groepsverzekeringEigenBijdrage: p.groepsverzekeringEigenBijdrage,
-    maaltijdchequeWerknemersbijdragePerDag: heeftMaaltijdcheques
+    maaltijdchequeWerknemersbijdragePerDag: maaltijdchequesActief
       ? p.maaltijdchequeWerknemersbijdragePerDag
       : 0,
-    maaltijdchequeWerkdagen: heeftMaaltijdcheques ? p.arbeidsdagenPerMaand : 0,
+    maaltijdchequeWerkdagen: maaltijdchequesActief ? p.arbeidsdagenPerMaand : 0,
     hospitalisatieEigenBijdrage: p.hospitalisatieEigenBijdrage,
     onkostenvergoedingPerMaand: p.onkostenvergoedingPerMaand,
     woonwerkVrijgesteldPerMaand: berekenWoonwerkVrijgesteld(
@@ -134,7 +261,7 @@ export function berekenNettoVoorProfiel(
     ),
     vaaRszPlichtigPerMaand: vaaWerkmiddelen.totaalPerMaand,
     vaaBedrijfswagenPerMaand: mobiliteit.vaaBedrijfswagen?.vaaMaand ?? 0,
-  });
+  };
 }
 
 export function berekenWerkgeverskostVoorProfiel(
@@ -168,6 +295,13 @@ export function berekenWerkgeverskostVoorProfiel(
     onkostenvergoedingPerMaand: p.onkostenvergoedingPerMaand,
     woonwerkVergoedingPerMaand: resolvedMobiliteit.woonwerk.totaalVergoeding,
   });
+}
+
+export function berekenLoonwigVoorProfielResultaat(
+  wgk: WerkgeverskostResultaat,
+  netto: NettoResultaat,
+): number {
+  return loonwig(wgk.totaleLoonkostBreed, netto.nettoloon);
 }
 
 export function berekenJaaroverzichtVoorProfiel(
@@ -225,7 +359,7 @@ export function berekenProfielKernOutputs(p: Profiel): ProfielKernOutputs {
       bruto: p.brutoloon,
       netto: netto.nettoloon,
       werkgeverskostMaand: wgk.totaleLoonkostBreed,
-      loonwigPct: loonwig(wgk.totaleLoonkostBreed, netto.nettoloon),
+      loonwigPct: berekenLoonwigVoorProfielResultaat(wgk, netto),
       nettoJaar: jaaroverzicht.netto.totaalNettoJaarloon,
       werkgeverskostJaar: jaaroverzicht.werkgever.totaleLoonkostJaar,
     };

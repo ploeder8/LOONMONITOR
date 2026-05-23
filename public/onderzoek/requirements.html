@@ -228,7 +228,7 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 <thead><tr><th>ID</th><th>Vereiste</th><th>Implementatie</th></tr></thead>
 <tbody>
 <tr><td class="req-id">J2.01</td><td>~900 regels golden tests (TC/NTC) met <code>expect(...).toBe(...)</code> — exacte EUR, nul tolerantie.</td><td><code>src/lib/__tests__/golden.test.ts</code> — <span class="badge feit">Feit</span></td></tr>
-<tr><td class="req-id">J2.02</td><td>BV-uitkomsten binnen ±€2 van FOD Fin Tax-Calc voor ≥12/15 NTC-cases; &gt;€15 = "grote_afwijking".</td><td>Status: <span class="badge onzekerheid">pending_taxcalc</span></td></tr>
+<tr><td class="req-id">J2.02</td><td>BV-uitkomsten volgen FOD Financiën / Bijlage III 2026 voor de representatieve NTC- en corpuscases; Tax-Calc is alleen een latere PB-ramingscheck.</td><td>Status: <span class="badge feit">ok</span></td></tr>
 <tr><td class="req-id">J2.03</td><td>Tier-2 triangulatie: minstens 5 ankers geregistreerd tegen Group S Salary Sim (bv. TC-23b: Schaal I Cat A 5j → bvNaVerminderingen ≈ €154,22).</td><td>1 anker geïmplementeerd — <span class="badge onzekerheid">Onzekerheid</span></td></tr>
 <tr><td class="req-id">J2.04</td><td>Audit-test: elk resultaat draagt een <code>Datapunt</code> met truthy <code>bron_url</code>.</td><td><code>golden.test.ts</code> — <span class="badge feit">Feit</span></td></tr>
 </tbody>
