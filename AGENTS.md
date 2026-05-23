@@ -115,7 +115,7 @@ src/
 │   ├── woonwerkTrein.ts
 │   ├── woonwerkVerkeer.ts
 │   └── vaaBedrijfswagen.ts
-├── components/           # Presentational UI — géén berekeningslogica
+├── components/           # Generieke presentational UI — géén berekeningslogica
 │   ├── AuditPanel.tsx
 │   ├── AuditOpenContext.tsx   # force: "all" | "none" | null
 │   ├── Banner.tsx
@@ -125,8 +125,19 @@ src/
 │   ├── ResultCard.tsx
 │   ├── ResultsSummaryStrip.tsx
 │   └── StatusBadge.tsx
-└── pages/                # Compositie van components + lib-calls
-    ├── HomePage.tsx      # ~2100 regels; hart van de app (form + resultaten)
+└── pages/                # Routes + co-located featurecomponenten
+    ├── HomePage.tsx      # Route-entry: profielstate, CSV-state, richting-switch, compositie
+    ├── home/             # Calculator-featurecomponenten
+    │   ├── CsvPaneel.tsx
+    │   ├── InputCockpit.tsx
+    │   ├── MobiliteitPaneel.tsx
+    │   ├── NettoPanelen.tsx
+    │   ├── WerkgeverskostPanel.tsx
+    │   ├── JaaroverzichtPanelen.tsx
+    │   ├── ResultatenPanel.tsx
+    │   ├── ResultRows.tsx
+    │   ├── FormControls.tsx
+    │   └── types.ts
     ├── TestcasesPage.tsx
     └── ScopePage.tsx
 ```
@@ -252,7 +263,7 @@ De rechter resultatenkolom volgt een vast schema:
 
 ## Profiel — velden
 
-De `Profiel` interface (`src/pages/HomePage.tsx`) bevat alle user-inputs. Relevante werkgeverskost-velden:
+De `Profiel` interface (`src/lib/profiel.ts`) bevat alle user-inputs. Relevante werkgeverskost-velden:
 
 | Veld | Type | Default | Beschrijving |
 |---|---|---|---|
@@ -365,7 +376,7 @@ Voor het volledige overzicht: zie `knowledgebase/08_gaps_en_pending.md`.
 | Een nieuw datapunt toevoegen | `src/data/pc200_payroll_dataset_2026.json` + schema + `knowledgebase/DATASET_REFERENCE.md` |
 | Een berekening aanpassen | `src/lib/<module>.ts` + bijbehorende `knowledgebase/*.md` |
 | De UI van een resultaat wijzigen | `src/components/ResultCard.tsx`, `AuditPanel.tsx`, `ResultBand.tsx` |
-| Formuliervelden toevoegen/verwijderen | `src/pages/HomePage.tsx` (zoek naar `Profiel` interface en `FormSection`) |
+| Formuliervelden toevoegen/verwijderen | `src/lib/profiel.ts` voor het model + `src/pages/home/InputCockpit.tsx` / `src/pages/home/MobiliteitPaneel.tsx` voor de UI |
 | Testcases toevoegen | `src/lib/__tests__/golden.test.ts` + `knowledgebase/07_testcorpus.md` |
 | Branding wijzigen | `src/branding/brand.ts` en/of `src/branding/brand.css` |
 | Een nieuwe pagina toevoegen | `src/pages/<Naam>Page.tsx` + route in `src/App.tsx` |

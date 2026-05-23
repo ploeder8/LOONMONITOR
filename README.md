@@ -86,8 +86,8 @@ pnpm preview
 
 - **`/`** — Profiel + Resultaten.
   - **Bovenaan:** CSV import/export, richting-toggle (bruto → netto / netto → bruto) en `HeroSummary` met vier kerncijfers.
-  - **Inputcockpit:** single-column pagina met 2×2 `CockpitCard`-grid voor identiteit, arbeidscontext, brutoloon en woon-werkverkeer. Extra looncomponenten, werkgeversbijdragen en eindejaarspremie staan in ingeklapte secties.
-  - **Resultaten:** `ResultBandsPanel` met netto, werkgeverskost, jaaroverzicht, barema-check en audit-panelen. Studentenmodus toont alleen de relevante barema-uitkomst.
+  - **Inputcockpit:** `src/pages/home/InputCockpit.tsx` met 2×2 `CockpitCard`-grid voor identiteit, arbeidscontext, brutoloon en woon-werkverkeer. Extra looncomponenten, werkgeversbijdragen en eindejaarspremie staan in ingeklapte secties.
+  - **Resultaten:** `src/pages/home/ResultatenPanel.tsx` met netto, werkgeverskost, jaaroverzicht, barema-check en audit-panelen. Studentenmodus toont alleen de relevante barema-uitkomst.
   - Elke waarde heeft een audit-paneel met datapunt-id, status, tier en primaire bron.
 - **`/testcases`** — Representatieve testcases live herrekend tegen de bundled dataset.
 - **`/scope`** — Dataset-meta, beperkingen, niet-gevonden datapunten, bronconflicten en opmerkingen.
@@ -162,9 +162,22 @@ jaakie/
 │   │       ├── profielCsv.test.ts
 │   │       ├── fodBvValidation.test.ts
 │   │       └── schemaValidate.smoke.test.ts
-│   ├── components/                 # AuditPanel (+ AuditOpenProvider/Context), Banner, BronLink,
-│   │                               #   Field, ResultBand, ResultCard, ResultsSummaryStrip, StatusBadge
-│   └── pages/                      # HomePage, TestcasesPage, ScopePage
+│   ├── components/                 # Generieke UI-primitives: AuditPanel, Banner, Field, ResultCard, ...
+│   └── pages/
+│       ├── HomePage.tsx            # route-entry: state, CSV-acties, richting-switch, compositie
+│       ├── home/                   # co-located calculator-featurecomponenten
+│       │   ├── CsvPaneel.tsx
+│       │   ├── InputCockpit.tsx
+│       │   ├── MobiliteitPaneel.tsx
+│       │   ├── NettoPanelen.tsx
+│       │   ├── WerkgeverskostPanel.tsx
+│       │   ├── JaaroverzichtPanelen.tsx
+│       │   ├── ResultatenPanel.tsx
+│       │   ├── ResultRows.tsx
+│       │   ├── FormControls.tsx
+│       │   └── types.ts
+│       ├── TestcasesPage.tsx
+│       └── ScopePage.tsx
 ├── public/
 │   ├── Jaakie Logo.png
 │   ├── jaakie-designsysteem.md

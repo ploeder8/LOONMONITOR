@@ -1,15 +1,15 @@
 # UI/UX migratieplan — Jaakie
 
 **Versie:** 2026-05-23
-**Status:** Fase 1 en Fase 2 zijn geïmplementeerd in de huidige code. Dit document is vanaf nu het status- en vervolgstappenoverzicht, niet langer een open implementatiechecklist.
+**Status:** Fase 1, Fase 2 en Fase 3 zijn geïmplementeerd in de huidige code. Dit document is vanaf nu het status- en vervolgstappenoverzicht, niet langer een open implementatiechecklist.
 
 ---
 
 ## 1. Huidige UI-architectuur
 
-`src/pages/HomePage.tsx` rendert de calculator als single-column cockpit:
+`src/pages/HomePage.tsx` is de route-entry voor de calculator en rendert de single-column cockpit via featurecomponenten onder `src/pages/home/`:
 
-1. CSV import/export-paneel voor één profielsnapshot.
+1. `CsvPaneel` voor één profielsnapshot.
 2. `DirectionToggle` voor bruto → netto en netto → bruto.
 3. `HeroSummary` met Bruto, Netto, Werkgeverskost en Loonwig.
 4. `InputCockpit` met 2×2 `CockpitCard`-grid:
@@ -21,6 +21,15 @@
 6. `EindejaarspremieCard`.
 7. `ResultBandsPanel` met netto, werkgeverskost, jaaroverzicht, barema-check en audit.
 
+De zware subcomponenten staan niet langer lokaal in `HomePage.tsx`. De belangrijkste featurebestanden zijn:
+
+- `CsvPaneel.tsx` — import/export UI.
+- `InputCockpit.tsx` — profielinvoer, arbeidscontext, brutoloon, extra componenten, werkgeversbijdragen en eindejaarspremie.
+- `MobiliteitPaneel.tsx` — woon-werkverkeer en VAA bedrijfswagen.
+- `NettoPanelen.tsx`, `WerkgeverskostPanel.tsx`, `JaaroverzichtPanelen.tsx` — resultatenweergave.
+- `ResultatenPanel.tsx` — resultaatbanden, audit-toggle en UI-orchestratie rond `src/lib/profielBerekeningen.ts`.
+- `FormControls.tsx`, `ResultRows.tsx`, `types.ts` — gedeelde UI-primitives en featuretypes.
+
 De oude linker-sidebar is verwijderd. De calculator gebruikt geen split left/right layout meer.
 
 ---
@@ -31,7 +40,7 @@ De oude linker-sidebar is verwijderd. De calculator gebruikt geen split left/rig
 |---|---|---|
 | Fase 1 — topflow | Done | `DirectionToggle` en `HeroSummary` staan boven de cockpit; oude summarystrip is niet meer de primaire topflow. |
 | Fase 2 — inputcockpit | Done | Single-column layout, 2×2 cockpitgrid, woon-werk split, accordions en eindejaarspremiekaart zijn actief. |
-| Fase 3 — componentextractie | Pending | `HomePage.tsx` bevat nog veel lokale subcomponenten en kan verder opgesplitst worden rond profiel, berekeningen en panels. |
+| Fase 3 — componentextractie | Done | `HomePage.tsx` is teruggebracht tot route-compositie en state; featurecomponenten staan onder `src/pages/home/`. |
 | Fase 4 — polish & QA | Pending | Responsieve visuele QA, keyboard-flow, focusstates en eventuele contrastdetails moeten nog doelgericht worden geverifieerd. |
 
 ---
@@ -59,15 +68,15 @@ De oude linker-sidebar is verwijderd. De calculator gebruikt geen split left/rig
 
 ## 5. Verdere developmentstappen
 
-### Fase 3 — componentextractie
+### Fase 3 — gerealiseerd
 
 Doel: `HomePage.tsx` kleiner en beter testbaar maken zonder rekenlogica te verplaatsen naar componenten.
 
-Aanpak:
-- Verplaats profieltypes/defaults verder naar `src/lib/profiel.ts` waar dat nog niet gebeurd is.
-- Houd rekenorkestratie in `src/lib/profielBerekeningen.ts` en pure modules in `src/lib/`.
-- Extraheer lokale UI-blokken uit `HomePage.tsx` naar `src/components/` wanneer ze geen calculatorlogica bevatten.
-- Laat `HomePage.tsx` vooral compositie, state en routingcontext bevatten.
+Gerealiseerd:
+- Profieltypes/defaults staan in `src/lib/profiel.ts`.
+- Rekenorkestratie staat in `src/lib/profielBerekeningen.ts` en pure modules in `src/lib/`.
+- Lokale UI-blokken uit `HomePage.tsx` zijn verplaatst naar `src/pages/home/`.
+- `HomePage.tsx` bevat alleen route-compositie, profielstate, CSV-state, richting-switch en netto → bruto root-finding.
 
 ### Fase 4 — polish & QA
 
