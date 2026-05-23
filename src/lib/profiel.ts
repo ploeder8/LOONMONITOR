@@ -50,6 +50,7 @@ export interface Profiel {
   woonwerkBedrijfswagenBeroepskostMethode: BeroepskostMethode;
   arbeidsongevallenPct: number;
   extraGroepsverzekering: number;
+  maaltijdchequesActief: boolean;
   maaltijdchequeWerkgeversaandeelPerDag: number;
   maaltijdchequeWerknemersbijdragePerDag: number;
   extraHospitalisatie: number;
@@ -101,6 +102,7 @@ export const DEFAULTS: Profiel = {
   woonwerkBedrijfswagenBeroepskostMethode: "forfaitair",
   arbeidsongevallenPct: 0.003,
   extraGroepsverzekering: 0,
+  maaltijdchequesActief: false,
   maaltijdchequeWerkgeversaandeelPerDag: MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026,
   maaltijdchequeWerknemersbijdragePerDag: 1.09,
   extraHospitalisatie: 0,

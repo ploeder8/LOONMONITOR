@@ -35,7 +35,7 @@
 | **Fiscale werkbonus** | belastingkrediet op BV (33,14 % Luik A / 52,54 % Luik B) |
 | **BBSZ** | exacte 2026-inhouding volgens RSZ-scenario; voorschot op PB-eindafrekening |
 | **VAA** | bedrijfswagen, PC, GSM, internet, huisvesting, verwarming, elektriciteit |
-| **Aanvullende gemeentebelasting** | parameter (default 7,3 %) — info-only |
+| **Aanvullende gemeentebelasting** | vaste interne parameter 7,3 % (gewogen landelijk gemiddelde) — info-only |
 | **Eindejaarspremie / dubbel vakantiegeld** | bijzondere BV-schaal met aparte kolommen voor vakantiegeld en andere exceptionele vergoedingen |
 
 ### Niet in scope (bewust)
@@ -61,7 +61,7 @@ Aanvullingen op het huidige POC-input-formulier:
 | `fiscaal_alleenstaande_met_kinderen` | boolean | nee | enkel indien `gezinscategorie = alleenstaande` AND `kinderen_ten_laste > 0` | false |
 | `bbsz_scenario` | enum: `individuele_aanslag`, `gemeenschappelijke_aanslag_partner_met_beroepsinkomsten`, `gemeenschappelijke_aanslag_partner_zonder_beroepsinkomsten` | ✓ | bepaalt de BBSZ-kwartaalschijf; los van BV-schaal gekozen omdat BBSZ een eigen RSZ-regime heeft | `individuele_aanslag` |
 | `groepsverzekering_eigen_bijdrage_eur` | decimaal ≥ 0 | nee | maandbijdrage werknemer | 0 |
-| `gemeentebelasting_pct` | decimaal 0–10 | nee | informatief — buiten BV | 7.3 |
+| `gemeentebelasting_pct` | decimaal 0–10 | nee | interne parameter voor later stadium, niet zichtbaar in UI — buiten BV | 7.3 |
 | `vaa_bedrijfswagen_eur_jaar` | decimaal ≥ 0 | nee | jaarbedrag (UI: aparte sub-form met cataloguswaarde + CO2 + brandstof + leeftijd) | 0 |
 | `vaa_pc_internet_gsm_eur_jaar` | decimaal ≥ 0 | nee | som forfaits | 0 |
 | `vaa_huisvesting_eur_jaar` | decimaal ≥ 0 | nee | KI × 2,3000 × 100/60 × 2 (bemeubeld × 5/3) | 0 |
@@ -161,7 +161,7 @@ function werkbonusSociaal(S: number, refDatum: Date): { luik_A: number, luik_B: 
 
 ### 5.2 Bedrijfsvoorheffing — sleutelformule KB Bijlage III 2026
 
-> **Huidige status (19/05/2026):** eigen TS-implementatie in `src/lib/bv.ts` gebruikt FOD Financiën / Bijlage III 2026 als primaire payrollbron. Tax-Calc is alleen een latere PB-ramingscheck, niet de bron voor maandelijkse BV.
+> **Huidige status (23/05/2026):** eigen TS-implementatie in `src/lib/bv.ts` gebruikt FOD Financiën / Bijlage III 2026 als primaire payrollbron. Tax-Calc is alleen een latere PB-ramingscheck, niet de bron voor maandelijkse BV. De gewone maand-BV gebruikt de Bijlage III-basisschaal 26,75% / 42,80% / 48,15% / 53,50%, niet de gewone PB-schijven 25% / 40% / 45% / 50%.
 
 **Formule-skelet:**
 
@@ -174,14 +174,22 @@ function bvBijlageIII2026(
   // 1. Annualiseer belastbaar maandloon
   const jaarbasis = belastbaarMaand * 12;
 
-  // 2. Pas schaal-tarief toe volgens FOD Bijlage III 2026
-  const bvJaar = applySchaalTarief(jaarbasis, schaal);
+  // 2. Trek forfaitaire beroepskosten af: 30%, max €6.070
+  const nettoJaar = jaarbasis - Math.min(jaarbasis * 0.30, 6070);
 
-  // 3. Maand-afronding
-  const bvMaand = bvJaar / 12;
+  // 3. Pas Bijlage III-basisschaal toe:
+  // tot €16.710: 26,75%;
+  // €16.710,01-€29.500: €4.469,93 + 42,80% boven €16.710;
+  // €29.500,01-€51.050: €9.944,05 + 48,15% boven €29.500;
+  // boven €51.050: €20.320,38 + 53,50% boven €51.050.
+  const basisbelasting = applyBijlageIIIBasisschaal(nettoJaar);
 
-  // 4. Geen tussentijdse afronding — alleen eindwaarde
-  return round2(Math.max(0, bvMaand));
+  // 4. Verminder met belastingvrije-som-equivalent:
+  // Schaal I: €2.987,98; Schaal II: huwelijksquotiënt + €5.975,96.
+  const naVrijeSom = applySchaalIofII(basisbelasting, nettoJaar, schaal);
+
+  // 5. Deel door 12 en pas maandelijkse bijkomende verminderingen toe.
+  return round2(Math.max(0, naVrijeSom / 12));
 }
 ```
 
@@ -338,7 +346,7 @@ Voor élke berekende waarde geldt het bestaande audit-trail-invariant:
 
 **Speciale gevallen:**
 
-- **BV via FOD Bijlage III:** Datapunt `bv_2026_kb_bijlage_iii` is de primaire bron voor de lokale BV-berekening. UI toont dat Tax-Calc enkel een latere PB-ramingscheck is.
+- **BV via FOD Bijlage III:** Datapunt `bv_2026_kb_bijlage_iii` is de primaire bron voor de lokale BV-berekening. De technische toelichting dat Tax-Calc enkel een latere PB-ramingscheck is, blijft beschikbaar in code/auditcontext en wordt niet als vaste tekst in het netto-paneel getoond.
 - **BBSZ:** Datapunt `bv_bbsz_schijven_2026`; scenario verplicht in runtime. UI toont gekozen scenario en voorschot-disclaimer.
 
 ---
@@ -517,7 +525,7 @@ De zoekruimte wordt in **hele centen** beheerd om floating-point-stagnatie te vo
   - **Berekend bruto** = read-only, geüpdatet door `useEffect` root-finder.
   - Alle overige profielvelden (gezinstype, kinderen, mobiliteit, werkgeversbijdragen) blijven identiek.
 - De resultatenpanels tonen de **volledige forward-keten** op basis van het gevonden bruto.
-- De barema-check vergelijkt het gevonden bruto met het sectoraal minimum.
+- De barema-check vergelijkt voltijds met voltijds: PC 200-barema's zijn voltijdse maandlonen. Bij deeltijdse tewerkstelling blijft het ingegeven bruto het werkelijke deeltijdse maandloon voor netto/RSZ/BV/werkgeverskost, maar de minimumcontrole rekent dit loon om naar een voltijds equivalent (`bruto / tewerkstellingsbreuk`) en toont daarnaast het pro-rata minimum.
 
 ### 11.6 Scope-beperkingen (Fase 1)
 

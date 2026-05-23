@@ -60,17 +60,19 @@
 
 ### 3.1 Bedrijfsvoorheffing — sleutelformule en validatie
 
-**Huidige aanpak (Golf 2, 19/05/2026):**
+**Huidige aanpak (Golf 2, bijgewerkt 23/05/2026):**
 - `src/lib/bv.ts` retourneert `methode = bijlage_iii_sleutelformule_2026`, `schaal` en `validatieStatus = fod_bijlage_iii_ok`.
-- De lokale formule verwijst primair naar FOD Financiën / Bijlage III 2026.
+- De lokale formule verwijst primair naar FOD Financiën / Bijlage III 2026 en gebruikt de wettelijke basisschaal 26,75% / 42,80% / 48,15% / 53,50%.
+- Schaal I trekt €2.987,98 af als belastingvrije-som-equivalent; Schaal II gebruikt huwelijksquotiënt `min(30%, €13.790)` en trekt €5.975,96 af.
+- Regressiecase uit experttool: bruto €2.300, belastbare BV-basis €2.281,04, fiscale werkbonus €123,72 → BV €163,57 en netto €2.122,35.
 - `knowledgebase/TESTCASES.json` bevat per case `officiele_bv_voor_verminderingen`, `officiele_bv_netto`, `officieel_netto_maand` en `bron_validatie = "FOD Bijlage III 2026"`.
 - Group S en andere sociale-secretariaat-tools blijven bruikbaar als Tier-2 triangulatie, maar mogen geen primaire bron of officieel anker zijn.
 
-**Verschil met de officiële sleutelformule (Bijlage III KB 11/12/2025):**
+**Wettelijke aandachtspunten bij toekomstige wijzigingen:**
 - De BV gebruikt schaalcoëfficiënten **per loonschijf** (niet de progressieve PB-schijven verondersteld via × 12).
 - Sinds 2023 gebruikt BV glijdende schalen; geen oude afronding op veelvouden van €15 toepassen.
 - Aparte tarieven voor "wedde" vs "uitkering" vs "vakantiegeld" vs "eindejaarspremie".
-- Verminderingen voor gezinslasten zijn **forfaitaire bedragen per maand**, niet via belastingvrije som geannualiseerd.
+- Verminderingen voor gezinslasten komen uit Bijlage III-jaarbedragen en worden als maandbedragen getoond.
 
 **Verwachte afwijking:** de 30 corpuscases staan op `ok`; iedere toekomstige afwijking > €5 krijgt een root-cause (`rsz`, `werkbonus`, `bv`, `bbsz`, `afronding`).
 

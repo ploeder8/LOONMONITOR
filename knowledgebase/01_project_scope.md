@@ -94,7 +94,7 @@
 - Multi-jaar simulatie (één referentiedatum per berekening)
 - Multi-PC-ondersteuning (alleen PC 200 in deze versie)
 - Vakantiegeld berekening (alleen provisie aan werkgeverszijde)
-- Gemeentebelasting (info-only parameter, default 7,3 %)
+- Gemeentebelasting (info-only, vast op gewogen landelijk gemiddelde 7,3 %; interne parameter behouden voor later)
 
 ---
 

@@ -1,12 +1,34 @@
-import { HashRouter, NavLink, Route, Routes } from "react-router-dom";
+import { HashRouter, NavLink, Route, Routes, useLocation } from "react-router-dom";
 import { HomePage } from "@/pages/HomePage";
 import { ScopePage } from "@/pages/ScopePage";
 import { TestcasesPage } from "@/pages/TestcasesPage";
 import { APP_BRAND } from "@/branding/brand";
 
+const DEFAULT_CONTENT_MAX_WIDTH = 1180;
+const CALCULATOR_CONTENT_MAX_WIDTH = 1520;
+
+export const headerContentLayout = {
+  maxWidth: "none",
+  margin: "0",
+} as const;
+
+export function mainMaxWidthForPath(pathname: string): number {
+  return pathname === "/" ? CALCULATOR_CONTENT_MAX_WIDTH : DEFAULT_CONTENT_MAX_WIDTH;
+}
+
 export function App() {
   return (
     <HashRouter>
+      <AppShell />
+    </HashRouter>
+  );
+}
+
+function AppShell() {
+  const location = useLocation();
+  const mainMaxWidth = mainMaxWidthForPath(location.pathname);
+
+  return (
       <div className="min-h-screen" style={{ background: "var(--color-background)", color: "var(--color-text)" }}>
         <header
           style={{
@@ -22,8 +44,7 @@ export function App() {
         >
           <div
             style={{
-              maxWidth: 1180,
-              margin: "0 auto",
+              ...headerContentLayout,
               display: "flex",
               alignItems: "center",
               flexWrap: "wrap",
@@ -87,7 +108,7 @@ export function App() {
           </div>
         </header>
 
-        <main className="app-main" style={{ maxWidth: 1180, width: "100%", boxSizing: "border-box", margin: "0 auto", padding: "28px 28px" }}>
+        <main className="app-main" style={{ maxWidth: mainMaxWidth, width: "100%", boxSizing: "border-box", margin: "0 auto", padding: "28px 28px" }}>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/testcases" element={<TestcasesPage />} />
@@ -102,12 +123,11 @@ export function App() {
             padding: "16px 28px",
           }}
         >
-          <div style={{ maxWidth: 1180, margin: "0 auto", fontSize: 12, color: "var(--color-text-muted)", fontFamily: "var(--font-body)" }}>
+          <div style={{ maxWidth: DEFAULT_CONTENT_MAX_WIDTH, margin: "0 auto", fontSize: 12, color: "var(--color-text-muted)", fontFamily: "var(--font-body)" }}>
             {APP_BRAND.footerCopy}
           </div>
         </footer>
       </div>
-    </HashRouter>
   );
 }
 

@@ -22,56 +22,30 @@
 
 ### Te controleren door Eline
 
-- [ ] Eline is niet zeker: Het lijkt er op dat de bijzondere bijdrage sociale zekerheid (BBSZ) niet correct berekend. 
-- [ ] Loonkost werkgever: sociaal fonds 200 (eline weet niet wat dit is)
-- [ ] Arbeidsongevallen, check of dit 0,30% is en van wat (eline weet niet wat dit is)
-
-- [ ] Bijzondere bijdrage Sociale Zekerheid (BBSZ): ga na of er nieuwe regels zijn betreffende de berekening van de BBSZ sinds 2026
-	-> codex://threads/019e3647-d79d-7fc0-888f-5bda17b79b72
-	-> zie codex output
-
-- [ ] Woonwerkverkeer: bij prive wagen en bij bedrijfswagen: hier toggle optie toevoegen: berekeningsmethode: forfaitaire of reeele beroepskost. Bij keuze voor forfaitair moet hij automatisch rekening houden met de vrijstelling die geld op het belastbaar woon werk verkeer (zoek dit op in de knowledge base en/of officiele bron). Bij keuze reeele dan is er geen vermindering op het belastbaar loon van toepassing want dan moet dit manueel op de fiscale fiche worden opgenomen. 
+- [e] Loonkost werkgever: sociaal fonds 200 (eline weet niet wat dit is)
+- [e] Arbeidsongevallen, check of dit 0,30% is en van wat (eline weet niet wat dit is)
+- [e] Woonwerkverkeer: bij prive wagen en bij bedrijfswagen: hier toggle optie toevoegen: berekeningsmethode: forfaitaire of reeele beroepskost. Bij keuze voor forfaitair moet hij automatisch rekening houden met de vrijstelling die geld op het belastbaar woon werk verkeer (zoek dit op in de knowledge base en/of officiele bron). Bij keuze reeele dan is er geen vermindering op het belastbaar loon van toepassing want dan moet dit manueel op de fiscale fiche worden opgenomen. 
 	-> check of hij dit correct heeft toegepast
 	
 
-## Feedback Eline - 15/05/2026
-
-- [x] Loonkost werkgever: De tool moet een duidelijk onderscheid maken (in afzonderlijke kaders) tussen loonkost op maandbasis en loonkost op jaarbasis. Voeg de loonkost op jaarbasis onderaan toe (hou hier rekening met de maandelijkse loonkost x12 en jaarlijkse componenten). Ook voor de netto berekening moet er een overzichtelijk kader komen met alle jaarcomponenten gegroepeerd en dus een overzicht van het netto jaarloon. Zie printscreen 'jaaroverzicht.png' in issues screenshots/ voor een voorbeeld hoe dit er uit moet zien. 
-- [x] bij de loonkost berekening op jaarbasis mag je niet vergeten rekening te houden met werkgeversRSZ (25%) over de eindejaarspremie en de jaarpremie ('jaaroverzicht.png' in issues screenshots/)
-- [x] Loonkost werkgever: zet hier ook "Loonkost werkgever (per maand)". Hier mag je ook nog niet de eindejaarspremie, jaarlijkse premie en Ecocheques in meenemen. Deze zaken moeten komen bij de loonkost op jaarbasis. 
-- [x] berekening van dubbel vakantiegeld is niet correct. dit moet zijn: Het totaal brutoloon (maandloon incl VAA) x 92%. Dit moet worden opgenomen in het jaaroverzicht. 
-- [x] Bij de netto jaarberekening van de werknemer geldt er op de eindejaarspremie, dubbeld vakantiegeld en de jaarpremie exceptionele BV (niet de gewone BV). controleer of dit in de knowledgebase zit, indien niet ga dit na via officele bron: https://teams.microsoft.com/l/message/19:298e1c83-33cd-4b85-ba0e-246bca2264c1_bbf1eaff-5aa1-4c60-a448-8d7257cb1004@unq.gbl.spaces/1778842002320?context=%7B%22contextType%22%3A%22chat%22%7D) 
-- [x] over het dubbel vakantiegeld moet er slechts op 85/92 rsz bijdrage (13,07%) gerekend worden. (controleer of dit in de knowledgebase zit)
 
 ## Feedback Eline - 18/05/2026
-- [x] Bij gezinstype "Gehuwd/wettelijk SAMENWONEND - partner met inkomen" van maken
-- [x] BBSZ-scenario is overbodig, op basis van het gezinstype dient hij af te leiden of de individuele of gemeenschappelijke aanslag van toepassing is
-- [x] Maaltijdcheques (werknemersbijdrage en werkgeversbijdrage)zetten onder bijkomende looncomponenten ipv werkgeversbijdragen
-- [e] Berekening bijzondere bijdrage RSZ loopt nog steeds niet correct. Bv bij een maandloon van 2658€ en partner zonder beroepsinkomen
-		Formule is (43.32/3)+((2658-2190.18)*1.10%)= 19,59 terwijl Jaakie 48.47/3=16,15 doet?
-		
-	=>	Fix volgens KIMI: Klaar! De BBSZ-maandberekening is gecorrigeerd.
 
-		Probleem: Jaakie berekende het maandbedrag als kwartaal / 3, maar volgens de officiële RSZ-instructies geldt voor de maandelijkse inhouding een aparte formule waarbij alleen het vaste kwartaaldeel door 3 wordt gedeeld en het percentage op maandloon ongewijzigd blijft.
+- [e] Berekent bij aanduiden privéwagen 3 km niets bij de netto berekening per maand terwijl in de sectorale het bedrag per maand voor privévervoer 3km (enkel) 23,75€ is. Hij zou dit bedrag dan moeten delen door 21.67 en dat bedrag (=1,096€) zou hij moeten doen x het aantal gewerkte dagen. Geeft dit wel weer onder loonkost werkgever. 
+- [e] Voor het bepalen van het percentage van de exceptionele bedrijfsvoorheffing op eindejaarspremie en vakantiegeld dient gekeken te worden naar jaarbedrag van de normale bruto bezoldigingen. Dit is het bedrag zonder de sociale zekerheidsbijdragen (13,07%). het perventage bij een eindejaarspremie bij een loon van 2658 zou dus 40,38% moeten zijn > ((2658 x 12) - ((2658 x 12) x 13,07%)))= 27727.19
+- [e] Er wordt geen bedrijfsvoorheffing berekend over de sectorale jaarpremie PC200. Jaakie rekent enkel RSZ.
+- [e] Bijdrage werkgever sociaal fonds 200 nog laten checken, alsook of 0,30% logische bijdrage arbeidsongevallenverzekering is voor een bediende in pc 200
 
-		Voorbeeld (€2.658, partner zonder inkomen):
+## Feedback Eline - 20/05/2026
 
-		Oud (fout): (43,32 + 0,011 × 467,82) / 3 = 48,47 / 3 = 16,16
-		Nieuw (correct): 43,32/3 + 0,011 × 467,82 = 14,44 + 5,15 = 19,59
-		Wijzigingen:
+- [ ] Momenteel wordt er uitgegaan van een voltijds bruto maandloon om het minimum na te gaan. kan er ook een optie zijn om aan te geven voltijds of deeltijds en indien deeltijds welk percentage zodat hij dit loon naar een voltijdse kan omrekenen om een check te doen voor het sectoraal minimum?
+- [ ] optie om maaltijdcheques aan te vinken EN dan werkgeversbijdrage en werknemersbijdrage voorstellen. Het kan namelijk ook zijn dat er geen maaltijdcheques van toepassing zijn
+- [ ] 'effectieve RSZ' is niet nodig om weer te geven in de bruto netto simulatie van de werknemer. Gewoon RSZ werknemer en indien van toepassing werkbonus weergeven, dit hoeft niet nog eens samengeteld te worden in de verùmelding 'efectieve RSZ' (is namelijk verwarrend als er geen werkbonus van toepassing is, dan staat er gewoon 2x RSZ inhouding)
+- [ ] berekening BV loopt nog niet correct. Check knip whatsapp. OOk houdt Jaakie nog geen rekening met vrijstelling BV wanneer forfait is aangeduid
+- [e] dubbel vakantiegeld = 92% van totaal bruto 
+- [ ] gemeentebelasting mag weg, gebruiken wij niet
 
-		src/lib/bbsz.ts — Aparte maandberekeningsfuncties toegevoegd (bbszMaandIndividueel, bbszMaandPartnerMetInkomen, bbszMaandPartnerZonderInkomen). De bbsz()-functie berekent nu kwartaal en maand apart.
-		src/lib/__tests__/golden.test.ts — 3 nieuwe tests toegevoegd die expliciet valideren dat het maandbedrag de officiële maandformule volgt (incl. het specifieke gebruikersvoorbeeld).
-		knowledgebase/04_calculator_netto.md — BBSZ-paragraaf geüpdatet met de correcte maandformule-beschrijving.
-		Verificatie: typecheck, bun test (111/111 pass) en build slagen allemaal.
-		
-- [ ] Berekent bij aanduiden privéwagen 3 km niets bij de netto berekening per maand terwijl in de sectorale het bedrag per maand voor privévervoer 3km (enkel) 23,75€ is. Hij zou dit bedrag dan moeten delen door 21.67 en dat bedrag (=1,096€) zou hij moeten doen x het aantal gewerkte dagen. Geeft dit wel weer onder loonkost werkgever. 
-- [ ] Graag ook onder het nettoloon per maand ook het "nettoloon per maand inclusief maaltijdcheques" weergeven. Hiervoor dient hij dus het aantal werkdagen x totale waarde maaltijdcheques (=werknemersbijdrage + werkgeversbijdrage) te doen
-- [ ] Voor het bepalen van het percentage van de exceptionele bedrijfsvoorheffing op eindejaarspremie en vakantiegeld dient gekeken te worden naar jaarbedrag van de normale bruto bezoldigingen. Dit is het bedrag zonder de sociale zekerheidsbijdragen (13,07%). het perventage bij een eindejaarspremie bij een loon van 2658 zou dus 40,38% moeten zijn > ((2658 x 12) - ((2658 x 12) x 13,07%)))= 27727.19
-- [ ] Er wordt geen bedrijfsvoorheffing berekend over de sectorale jaarpremie PC200. Jaakie rekent enkel RSZ.
-- [ ] Graag ook onder het netto jaarloon ook "netto jaarloon per maand inclusief maaltijdcheques" toevoegen. Hiervoor dient hij dus het aantal werkdagen per jaar x totale waarde maaltijdcheques (=werknemersbijdrage + werkgeversbijdrage) te doen
-- [ ] Bijdrage werkgever sociaal fonds 200 nog laten checken, alsook of 0,30% logische bijdrage arbeidsongevallenverzekering is voor een bediende in pc 200
-- [ ] De periodieke voordelen: eindejaarspremie, Ecocheques en jaarlijkse premie EN Mobiliteit onderaan worden al getoond bij de berekening van de loonkost op maand en jaarbasis, deze moeten onderaan dus niet nog eens getoond worden. 
+
 
 
 ### Afgerond
@@ -99,6 +73,25 @@
 17/05
 - [x] bij de invulvelden met cijfers is er steeds een "sticky" '0' die niet verdwijnt als ik de cijfers wil wegdoen, als ik dan iets wil invullen blijft de 0 ook staan, hoe lossen we dit op?
 - [x] Maak een checkbox voor VAA werkmiddelen want dit zijn vaste forfaits (de uitleg tekst mag hier achter een klein '?' gestoken worden bij de inputs dat als hover veld komt)
+- [x] Loonkost werkgever: De tool moet een duidelijk onderscheid maken (in afzonderlijke kaders) tussen loonkost op maandbasis en loonkost op jaarbasis. Voeg de loonkost op jaarbasis onderaan toe (hou hier rekening met de maandelijkse loonkost x12 en jaarlijkse componenten). Ook voor de netto berekening moet er een overzichtelijk kader komen met alle jaarcomponenten gegroepeerd en dus een overzicht van het netto jaarloon. Zie printscreen 'jaaroverzicht.png' in issues screenshots/ voor een voorbeeld hoe dit er uit moet zien. 
+- [x] bij de loonkost berekening op jaarbasis mag je niet vergeten rekening te houden met werkgeversRSZ (25%) over de eindejaarspremie en de jaarpremie ('jaaroverzicht.png' in issues screenshots/)
+- [x] Loonkost werkgever: zet hier ook "Loonkost werkgever (per maand)". Hier mag je ook nog niet de eindejaarspremie, jaarlijkse premie en Ecocheques in meenemen. Deze zaken moeten komen bij de loonkost op jaarbasis. 
+- [x] berekening van dubbel vakantiegeld is niet correct. dit moet zijn: Het totaal brutoloon (maandloon incl VAA) x 92%. Dit moet worden opgenomen in het jaaroverzicht. 
+- [x] Bij de netto jaarberekening van de werknemer geldt er op de eindejaarspremie, dubbeld vakantiegeld en de jaarpremie exceptionele BV (niet de gewone BV). controleer of dit in de knowledgebase zit, indien niet ga dit na via officele bron: https://teams.microsoft.com/l/message/19:298e1c83-33cd-4b85-ba0e-246bca2264c1_bbf1eaff-5aa1-4c60-a448-8d7257cb1004@unq.gbl.spaces/1778842002320?context=%7B%22contextType%22%3A%22chat%22%7D) 
+- [x] over het dubbel vakantiegeld moet er slechts op 85/92 rsz bijdrage (13,07%) gerekend worden. (controleer of dit in de knowledgebase zit)
+19/05
+- [x] Graag ook onder het nettoloon per maand ook het "nettoloon per maand inclusief maaltijdcheques" weergeven. Hiervoor dient hij dus het aantal werkdagen x totale waarde maaltijdcheques (=werknemersbijdrage + werkgeversbijdrage) te doen
+- [x] Graag ook onder het netto jaarloon ook "netto jaarloon per maand inclusief maaltijdcheques" toevoegen. Hiervoor dient hij dus het aantal werkdagen per jaar x totale waarde maaltijdcheques (=werknemersbijdrage + werkgeversbijdrage) te doen
+- [x] Bij gezinstype "Gehuwd/wettelijk SAMENWONEND - partner met inkomen" van maken
+- [x] BBSZ-scenario is overbodig, op basis van het gezinstype dient hij af te leiden of de individuele of gemeenschappelijke aanslag van toepassing is
+- [x] Maaltijdcheques (werknemersbijdrage en werkgeversbijdrage)zetten onder bijkomende looncomponenten ipv werkgeversbijdragen
+- [x] Berekening bijzondere bijdrage RSZ loopt nog steeds niet correct. Bv bij een maandloon van 2658€ en partner zonder beroepsinkomen
+- [x] De periodieke voordelen: eindejaarspremie, Ecocheques en jaarlijkse premie EN Mobiliteit onderaan worden al getoond bij de berekening van de loonkost op maand en jaarbasis, deze moeten onderaan dus niet nog eens getoond worden. 
+20/05
+- [x] bij woon-werk verkeer moet het duidelijk zijn dan de ingever bij de fietsvergoeding km's op en af doorgeeft en bij de andere voertuigen maar 'enkel' km's door geeft (dus enkel op)
+- [x] Eline is niet zeker: Het lijkt er op dat de bijzondere bijdrage sociale zekerheid (BBSZ) niet correct berekend. 
+- [x] Bijzondere bijdrage Sociale Zekerheid (BBSZ): ga na of er nieuwe regels zijn betreffende de berekening van de BBSZ sinds 2026
+
 
 
 
@@ -107,6 +100,8 @@
 - [ ] Eindejaarspremie neemt hij niet op in het maandloon. Is dit correct?
 - [ ] Check kind <3j: tekst staat bij het veld.
 
+
+
 ## Features / Later
 
-- [ ] Netto naar bruto ook.
+- [e] Netto naar bruto ook.

@@ -40,6 +40,7 @@
 | 8 | `08_gaps_en_pending.md` | Product owner (release-checklist) |
 | 9 | `09_implementation_roadmap.md` | Product owner (golf 1–6) |
 | 10 | `10_bronnen_guideline.md` | Iedereen (3-tier bronnenhiërarchie) |
+| 11 | `11_ui_ux_migratieplan.md` | Developer / UX (fasegewijze UI-migratie) |
 
 ### Mappen
 - **`bronnen/`** — Volledig bronnenarchief: 57 URLs + 8 PDF-snapshots, gerangschikt per Tier (1/2/3) + categorie
@@ -58,6 +59,7 @@
 5. **Welke testcases zijn er?** → `07_testcorpus.md`
 6. **Wat ontbreekt nog?** → `08_gaps_en_pending.md`
 7. **Hoe gaan we verder?** → `09_implementation_roadmap.md`
+8. **UI/UX migratieplan** → `11_ui_ux_migratieplan.md`
 
 ---
 

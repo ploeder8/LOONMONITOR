@@ -2,6 +2,7 @@ import { describe, expect, it } from "bun:test";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
+import { headerContentLayout, mainMaxWidthForPath } from "@/App";
 import { fietsvergoeding } from "@/lib/fietsvergoeding";
 import { aantalWeekdagenInMaand, refDatumVoorMaand } from "@/lib/profiel";
 import {
@@ -11,6 +12,19 @@ import {
   HomePage,
   waardeUitNumeriekeInput,
 } from "@/pages/HomePage";
+
+describe("App shell breedte", () => {
+  it("geeft alleen de calculatorroute extra desktopbreedte", () => {
+    expect(mainMaxWidthForPath("/")).toBe(1520);
+    expect(mainMaxWidthForPath("/scope")).toBe(1180);
+    expect(mainMaxWidthForPath("/testcases")).toBe(1180);
+  });
+
+  it("houdt logo en tooltitel links uitgelijnd in de header", () => {
+    expect(headerContentLayout.maxWidth).toBe("none");
+    expect(headerContentLayout.margin).toBe("0");
+  });
+});
 
 describe("Maand van berekening", () => {
   it("zet een berekeningsmaand om naar de eerste dag van die maand", () => {
@@ -106,6 +120,12 @@ describe("Profiel formulier", () => {
     expect(html).not.toContain("BBSZ-scenario");
   });
 
+  it("toont geen invoerveld meer voor gemeentebelasting", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+
+    expect(html).not.toContain("Gemeentebelasting (%)");
+  });
+
   it("plaatst de eigen bijdrage groepsverzekering onder bijkomende looncomponenten", () => {
     const html = renderToStaticMarkup(createElement(HomePage));
 
@@ -115,11 +135,27 @@ describe("Profiel formulier", () => {
     );
   });
 
+  it("toont maaltijdcheques als optie en verbergt bijdragevelden standaard", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+
+    expect(html).toContain("Maaltijdcheques toepassen");
+    expect(html).not.toContain("Maaltijdcheques — werkgeversaandeel (€/dag)");
+    expect(html).not.toContain("Maaltijdcheques — werknemersbijdrage (€/dag)");
+  });
+
   it("plaatst werkgeversbijdragen als laatste invulsectie", () => {
     const html = renderToStaticMarkup(createElement(HomePage));
 
     expect(html.indexOf("Woon-werk verkeer")).toBeGreaterThanOrEqual(0);
     expect(html.indexOf("Werkgeversbijdragen")).toBeGreaterThan(html.indexOf("Woon-werk verkeer"));
+  });
+
+  it("plaatst tewerkstelling direct onder ervaring in het profiel", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+
+    expect(html.indexOf("Ervaring (jaren)")).toBeGreaterThanOrEqual(0);
+    expect(html.indexOf("Tewerkstelling (%)")).toBeGreaterThan(html.indexOf("Ervaring (jaren)"));
+    expect(html.indexOf("Brutoloon (€)")).toBeGreaterThan(html.indexOf("Tewerkstelling (%)"));
   });
 });
 
@@ -154,6 +190,36 @@ describe("Netto-overzicht", () => {
     expect(html).toContain("Loonkost werkgever / maand");
   });
 
+  it("toont geen technische BV-validatiedisclaimer in het netto-paneel", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+
+    expect(html).not.toContain("Tax-Calc is alleen een latere PB-raming");
+    expect(html).not.toContain("FOD Bijlage III:");
+  });
+
+  it("houdt technische berekeningsdetails uit de zichtbare calculatorcopy", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+
+    expect(html).not.toContain("fod_bijlage_iii_ok");
+    expect(html).not.toContain("bijlage_iii_sleutelformule_2026");
+    expect(html).not.toContain("33,14% × A + 52,54% × B");
+    expect(html).not.toContain("÷ 3");
+    expect(html).not.toContain("Totale loonkost — smal");
+    expect(html).not.toContain("Effectieve RSZ");
+  });
+
+  it("behoudt de kernlabels in gebruikersgerichte taal", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+
+    expect(html).toContain("RSZ werknemer");
+    expect(html).toContain("Loon na RSZ en werkbonus");
+    expect(html).toContain("Bedrijfsvoorheffing");
+    expect(html).toContain("Bijzondere bijdrage sociale zekerheid");
+    expect(html).toContain("Aanvullende gemeentebelasting");
+    expect(html).toContain("Loonwig");
+    expect(html).toContain("Loonkost zonder voordelen");
+  });
+
   it("toont de VAA-werkmiddelen als bijkomende looncomponenten", () => {
     const html = renderToStaticMarkup(createElement(HomePage));
 
@@ -164,25 +230,17 @@ describe("Netto-overzicht", () => {
     expect(html).toContain("GSM-abonnement");
   });
 
-  it("toont nettoloon inclusief de totale waarde van maaltijdcheques", () => {
+  it("toont standaard geen nettoloon inclusief maaltijdcheques", () => {
     const html = renderToStaticMarkup(createElement(HomePage));
     const tekst = html.replace(/\u00a0/g, " ");
 
-    expect(tekst).toContain("Nettoloon incl. maaltijdcheques");
-    expect(tekst).toContain("totale waarde € 10,00 × 22 dagen");
-    expect(tekst.indexOf("Nettoloon")).toBeLessThan(
-      tekst.indexOf("Nettoloon incl. maaltijdcheques"),
-    );
+    expect(tekst).not.toContain("Nettoloon incl. maaltijdcheques");
   });
 
-  it("toont netto jaarloon inclusief maaltijdcheques op jaarbasis", () => {
+  it("toont standaard geen netto jaarloon inclusief maaltijdcheques", () => {
     const html = renderToStaticMarkup(createElement(HomePage));
     const tekst = html.replace(/\u00a0/g, " ");
 
-    expect(tekst).toContain("Netto jaarloon incl. maaltijdcheques");
-    expect(tekst).toContain("totale waarde € 10,00 × 264 werkdagen");
-    expect(tekst.indexOf("Netto jaarloon")).toBeLessThan(
-      tekst.indexOf("Netto jaarloon incl. maaltijdcheques"),
-    );
+    expect(tekst).not.toContain("Netto jaarloon incl. maaltijdcheques");
   });
 });

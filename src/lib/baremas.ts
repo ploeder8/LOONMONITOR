@@ -2,6 +2,7 @@ import type { Datapunt } from "@/types/dataset";
 import { allDatapunten } from "@/lib/dataset";
 import { safeGetValue } from "@/lib/periode";
 import { BaremaBuitenSchaalError, DatapuntOnbekend } from "@/lib/errors";
+import { round2 } from "@/lib/money";
 
 export type Schaal = "I" | "II";
 export type BaremaCat = "A" | "B" | "C" | "D";
@@ -107,6 +108,10 @@ export interface BrutolocheckResult {
   sectoraalMinimum: number;
   effectieveErvaring: number;
   opgegevenBruto: number;
+  tewerkstellingsbreuk: number;
+  voltijdsEquivalentBruto: number;
+  proRataMinimum: number;
+  vergelijkingsbasis: "voltijds" | "deeltijds_omgerekend";
   verschil: number;
   datapuntId: string;
   datapunt: Datapunt;
@@ -119,19 +124,32 @@ export function brutolocheck(
   ervaringJaren: number,
   opgegevenBruto: number,
   refDatum: string = DEFAULT_REF_DATUM,
+  tewerkstellingsbreuk: number = 1,
 ): BrutolocheckResult {
   const r = lookupBarema(schaal, categorie, ervaringJaren, refDatum);
   const minimum = r.maandloonEUR;
+  const effectieveBreuk = normaliseerTewerkstellingsbreuk(tewerkstellingsbreuk);
+  const voltijdsEquivalentBruto = round2(opgegevenBruto / effectieveBreuk);
+  const proRataMinimum = round2(minimum * effectieveBreuk);
   return {
-    ok: opgegevenBruto >= minimum,
+    ok: voltijdsEquivalentBruto >= minimum,
     sectoraalMinimum: minimum,
     effectieveErvaring: r.effectieveErvaring,
     opgegevenBruto,
-    verschil: Math.round((opgegevenBruto - minimum) * 100) / 100,
+    tewerkstellingsbreuk: effectieveBreuk,
+    voltijdsEquivalentBruto,
+    proRataMinimum,
+    vergelijkingsbasis: effectieveBreuk === 1 ? "voltijds" : "deeltijds_omgerekend",
+    verschil: round2(voltijdsEquivalentBruto - minimum),
     datapuntId: r.datapunt.id,
     datapunt: r.datapunt,
     geclampt: r.geclampt,
   };
+}
+
+function normaliseerTewerkstellingsbreuk(tewerkstellingsbreuk: number): number {
+  if (!Number.isFinite(tewerkstellingsbreuk) || tewerkstellingsbreuk <= 0) return 1;
+  return tewerkstellingsbreuk;
 }
 
 function selectBaremaDatapunt({

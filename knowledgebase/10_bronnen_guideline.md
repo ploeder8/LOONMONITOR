@@ -73,7 +73,7 @@
 - [Partena Professional — verminderingen BV 2026](https://www.partena-professional.be/).
 
 **Implementatieadvies:**
-- **Huidige aanpak:** lokale BV-berekening volgens FOD Financiën / Bijlage III 2026 + audit-banner *"BV berekend volgens FOD Financiën / Bijlage III 2026"*.
+- **Huidige aanpak:** lokale BV-berekening volgens FOD Financiën / Bijlage III 2026; broncontext blijft in code/auditgegevens beschikbaar zonder vaste technische disclaimer in het netto-paneel.
 - **POC-fase 2 / post-POC:** eigen TS-implementatie van de sleutelformule met de KB-coëfficiënten als constants in `src/lib/bv.ts`. **Verplicht** validatie tegen de FOD-simulator voor minstens 20 cijfermatige testcases (zie spec).
 
 **Confidence:** HIGH (Tier-1 KB + 4+ Tier-2 corroboratie).
