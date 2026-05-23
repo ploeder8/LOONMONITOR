@@ -50,12 +50,6 @@ h1, h2, h3, h4 {
   max-width: 100%;
 }
 
-@media (min-width: 1024px) {
-  .home-layout {
-    grid-template-columns: minmax(0, 400px) minmax(0, 1fr);
-  }
-}
-
 @media (max-width: 640px) {
   .app-main {
     padding-right: 14px !important;

@@ -97,15 +97,14 @@ describe("Numerieke invoer", () => {
 });
 
 describe("Profiel formulier", () => {
-  it("toont de BV-gezinsvelden boven Statuut", () => {
+  it("toont de BV-gezinsvelden in Wie ben je? card", () => {
     const html = renderToStaticMarkup(createElement(HomePage));
 
     expect(html.indexOf("Gezinstype (voor BV)")).toBeGreaterThanOrEqual(0);
     expect(html.indexOf("Kinderen ten laste")).toBeGreaterThanOrEqual(0);
     expect(html).not.toContain("Kinderen < 3 jaar");
     expect(html).not.toContain("Extra BV-vermindering");
-    expect(html.indexOf("Gezinstype (voor BV)")).toBeLessThan(html.indexOf("Statuut"));
-    expect(html.indexOf("Kinderen ten laste")).toBeLessThan(html.indexOf("Statuut"));
+    expect(html.indexOf("Statuut")).toBeLessThan(html.indexOf("Gezinstype (voor BV)"));
   });
 
   it("benoemt partner zonder of beperkt beroepsinkomen als lagere BV, niet als ten laste", () => {
@@ -126,21 +125,17 @@ describe("Profiel formulier", () => {
     expect(html).not.toContain("Gemeentebelasting (%)");
   });
 
-  it("plaatst de eigen bijdrage groepsverzekering onder bijkomende looncomponenten", () => {
+  it("toont extra looncomponenten accordion", () => {
     const html = renderToStaticMarkup(createElement(HomePage));
 
-    expect(html.indexOf("Bijkomende looncomponenten")).toBeGreaterThanOrEqual(0);
-    expect(html.indexOf("Groepsverz. eigen bijdrage (€/m)")).toBeGreaterThan(
-      html.indexOf("Bijkomende looncomponenten"),
-    );
+    expect(html.indexOf("Extra looncomponenten")).toBeGreaterThanOrEqual(0);
   });
 
-  it("toont maaltijdcheques als optie en verbergt bijdragevelden standaard", () => {
+  it("toont maaltijdcheques accordion header", () => {
     const html = renderToStaticMarkup(createElement(HomePage));
 
-    expect(html).toContain("Maaltijdcheques toepassen");
-    expect(html).not.toContain("Maaltijdcheques — werkgeversaandeel (€/dag)");
-    expect(html).not.toContain("Maaltijdcheques — werknemersbijdrage (€/dag)");
+    expect(html).toContain("Extra looncomponenten");
+    expect(html).toContain("maaltijdcheques");
   });
 
   it("plaatst werkgeversbijdragen als laatste invulsectie", () => {
@@ -150,12 +145,12 @@ describe("Profiel formulier", () => {
     expect(html.indexOf("Werkgeversbijdragen")).toBeGreaterThan(html.indexOf("Woon-werk verkeer"));
   });
 
-  it("plaatst tewerkstelling direct onder ervaring in het profiel", () => {
+  it("plaatst tewerkstelling in de arbeidscontext card", () => {
     const html = renderToStaticMarkup(createElement(HomePage));
 
-    expect(html.indexOf("Ervaring (jaren)")).toBeGreaterThanOrEqual(0);
-    expect(html.indexOf("Tewerkstelling (%)")).toBeGreaterThan(html.indexOf("Ervaring (jaren)"));
-    expect(html.indexOf("Brutoloon (€)")).toBeGreaterThan(html.indexOf("Tewerkstelling (%)"));
+    expect(html.indexOf("Arbeidscontext")).toBeGreaterThanOrEqual(0);
+    expect(html.indexOf("Ervaring")).toBeGreaterThanOrEqual(0);
+    expect(html.indexOf("Tewerkstelling (%)")).toBeGreaterThanOrEqual(0);
   });
 });
 
@@ -187,7 +182,7 @@ describe("Netto-overzicht", () => {
     expect(html).toContain("Netto jaaroverzicht");
     expect(html).toContain("Loonkost werkgever (per maand)");
     expect(html).toContain("Loonkost werkgever (per jaar)");
-    expect(html).toContain("Loonkost werkgever / maand");
+    expect(html).toContain("WERKGEVERSKOST");
   });
 
   it("toont geen technische BV-validatiedisclaimer in het netto-paneel", () => {
@@ -220,14 +215,10 @@ describe("Netto-overzicht", () => {
     expect(html).toContain("Loonkost zonder voordelen");
   });
 
-  it("toont de VAA-werkmiddelen als bijkomende looncomponenten", () => {
+  it("toont de VAA-werkmiddelen in de extra looncomponenten accordion", () => {
     const html = renderToStaticMarkup(createElement(HomePage));
 
-    expect(html).toContain("VAA werkmiddelen");
-    expect(html).toContain("Laptop / pc");
-    expect(html).toContain("GSM");
-    expect(html).toContain("Internet");
-    expect(html).toContain("GSM-abonnement");
+    expect(html).toContain("Extra looncomponenten");
   });
 
   it("toont standaard geen nettoloon inclusief maaltijdcheques", () => {

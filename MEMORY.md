@@ -11,6 +11,9 @@ Kort projectlogboek voor wijzigingen door coding agents.
 
 ## Log
 
+- 2026-05-23 — UI/UX Fase 1 geïmplementeerd: `DirectionToggle` + `HeroSummary` in rechterpaneel, oude `ResultsSummaryStrip` vervangen, jump anchors + audit-toggle behouden; bestanden: `src/components/DirectionToggle.tsx`, `src/components/HeroSummary.tsx`, `src/pages/HomePage.tsx`, `src/branding/brand.css`; 165/165 tests pass.
+- 2026-05-23 — UI/UX Fase 2 geïmplementeerd: `InputCockpit` met 2×2 grid (`WieBenJeCard`, `ArbeidscontextCard`, `BrutoloonCard`, `WoonWerkCard`), twee `CockpitAccordion`s (Extra looncomponenten + Werkgeversbijdragen), `EindejaarspremieCard`; `<aside>` linkerpaneel verwijderd, single-column layout; bestanden: `src/components/CockpitCard.tsx`, `src/components/CockpitAccordion.tsx`, `src/pages/HomePage.tsx`, `src/branding/brand.css`, `src/index.css`; 165/165 tests pass.
+- 2026-05-23 — `fase-2-migratie.md` geïntegreerd in `knowledgebase/11_ui_ux_migratieplan.md` als master-document; Fase 1 gemarkeerd als done, Fase 2 als pending.
 - 2026-05-23 — Gewone BV-berekening vervangen door Bijlage III 2026-basisschaal (26,75/42,80/48,15/53,50), Schaal II-huwelijksquotiënt en woonwerkvrijstelling met forfaitcaps; reden: expertcase €2.300 bruto moest BV €163,57 en netto €2.122,35 geven.
 - 2026-05-23 — `Effectieve RSZ` uit de zichtbare bruto-netto werknemerweergave verwijderd en subtotal hernoemd naar `Loon na RSZ en werkbonus`; reden: dubbele RSZ-vermelding was verwarrend wanneer geen werkbonus geldt.
 - 2026-05-23 — Header-logo en tooltitel links vastgezet door de header-inhoud niet langer in een gecentreerde max-width container te plaatsen; reden: logo mag niet meeschuiven wanneer de calculator op brede schermen meer ruimte krijgt.

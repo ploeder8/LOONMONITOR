@@ -4,8 +4,7 @@
 - [ ] = open task
 - [x] = completed task
 - [r] = running task
-- [h] = task on hold
-- [e] = eline moet nakijken
+- !! = eline moet nakijken
 
 ## Feedback Jaak
 
@@ -22,28 +21,26 @@
 
 ### Te controleren door Eline
 
-- [e] Loonkost werkgever: sociaal fonds 200 (eline weet niet wat dit is)
-- [e] Arbeidsongevallen, check of dit 0,30% is en van wat (eline weet niet wat dit is)
-- [e] Woonwerkverkeer: bij prive wagen en bij bedrijfswagen: hier toggle optie toevoegen: berekeningsmethode: forfaitaire of reeele beroepskost. Bij keuze voor forfaitair moet hij automatisch rekening houden met de vrijstelling die geld op het belastbaar woon werk verkeer (zoek dit op in de knowledge base en/of officiele bron). Bij keuze reeele dan is er geen vermindering op het belastbaar loon van toepassing want dan moet dit manueel op de fiscale fiche worden opgenomen. 
+- !! Loonkost werkgever: sociaal fonds 200 (eline weet niet wat dit is)
+- !! Arbeidsongevallen, check of dit 0,30% is en van wat (eline weet niet wat dit is)
+- !! Woonwerkverkeer: bij prive wagen en bij bedrijfswagen: hier toggle optie toevoegen: berekeningsmethode: forfaitaire of reeele beroepskost. Bij keuze voor forfaitair moet hij automatisch rekening houden met de vrijstelling die geld op het belastbaar woon werk verkeer (zoek dit op in de knowledge base en/of officiele bron). Bij keuze reeele dan is er geen vermindering op het belastbaar loon van toepassing want dan moet dit manueel op de fiscale fiche worden opgenomen. 
 	-> check of hij dit correct heeft toegepast
 	
 
 
 ## Feedback Eline - 18/05/2026
 
-- [e] Berekent bij aanduiden privéwagen 3 km niets bij de netto berekening per maand terwijl in de sectorale het bedrag per maand voor privévervoer 3km (enkel) 23,75€ is. Hij zou dit bedrag dan moeten delen door 21.67 en dat bedrag (=1,096€) zou hij moeten doen x het aantal gewerkte dagen. Geeft dit wel weer onder loonkost werkgever. 
-- [e] Voor het bepalen van het percentage van de exceptionele bedrijfsvoorheffing op eindejaarspremie en vakantiegeld dient gekeken te worden naar jaarbedrag van de normale bruto bezoldigingen. Dit is het bedrag zonder de sociale zekerheidsbijdragen (13,07%). het perventage bij een eindejaarspremie bij een loon van 2658 zou dus 40,38% moeten zijn > ((2658 x 12) - ((2658 x 12) x 13,07%)))= 27727.19
-- [e] Er wordt geen bedrijfsvoorheffing berekend over de sectorale jaarpremie PC200. Jaakie rekent enkel RSZ.
-- [e] Bijdrage werkgever sociaal fonds 200 nog laten checken, alsook of 0,30% logische bijdrage arbeidsongevallenverzekering is voor een bediende in pc 200
+- !! Berekent bij aanduiden privéwagen 3 km niets bij de netto berekening per maand terwijl in de sectorale het bedrag per maand voor privévervoer 3km (enkel) 23,75€ is. Hij zou dit bedrag dan moeten delen door 21.67 en dat bedrag (=1,096€) zou hij moeten doen x het aantal gewerkte dagen. Geeft dit wel weer onder loonkost werkgever. 
+- !! Voor het bepalen van het percentage van de exceptionele bedrijfsvoorheffing op eindejaarspremie en vakantiegeld dient gekeken te worden naar jaarbedrag van de normale bruto bezoldigingen. Dit is het bedrag zonder de sociale zekerheidsbijdragen (13,07%). het perventage bij een eindejaarspremie bij een loon van 2658 zou dus 40,38% moeten zijn > ((2658 x 12) - ((2658 x 12) x 13,07%)))= 27727.19
+- !! Er wordt geen bedrijfsvoorheffing berekend over de sectorale jaarpremie PC200. Jaakie rekent enkel RSZ.
+- !! Bijdrage werkgever sociaal fonds 200 nog laten checken, alsook of 0,30% logische bijdrage arbeidsongevallenverzekering is voor een bediende in pc 200
 
 ## Feedback Eline - 20/05/2026
 
-- [ ] Momenteel wordt er uitgegaan van een voltijds bruto maandloon om het minimum na te gaan. kan er ook een optie zijn om aan te geven voltijds of deeltijds en indien deeltijds welk percentage zodat hij dit loon naar een voltijdse kan omrekenen om een check te doen voor het sectoraal minimum?
-- [ ] optie om maaltijdcheques aan te vinken EN dan werkgeversbijdrage en werknemersbijdrage voorstellen. Het kan namelijk ook zijn dat er geen maaltijdcheques van toepassing zijn
-- [ ] 'effectieve RSZ' is niet nodig om weer te geven in de bruto netto simulatie van de werknemer. Gewoon RSZ werknemer en indien van toepassing werkbonus weergeven, dit hoeft niet nog eens samengeteld te worden in de verùmelding 'efectieve RSZ' (is namelijk verwarrend als er geen werkbonus van toepassing is, dan staat er gewoon 2x RSZ inhouding)
-- [ ] berekening BV loopt nog niet correct. Check knip whatsapp. OOk houdt Jaakie nog geen rekening met vrijstelling BV wanneer forfait is aangeduid
-- [e] dubbel vakantiegeld = 92% van totaal bruto 
-- [ ] gemeentebelasting mag weg, gebruiken wij niet
+- !! Momenteel wordt er uitgegaan van een voltijds bruto maandloon om het minimum na te gaan. kan er ook een optie zijn om aan te geven voltijds of deeltijds en indien deeltijds welk percentage zodat hij dit loon naar een voltijdse kan omrekenen om een check te doen voor het sectoraal minimum?
+- !! 'effectieve RSZ' is niet nodig om weer te geven in de bruto netto simulatie van de werknemer. Gewoon RSZ werknemer en indien van toepassing werkbonus weergeven, dit hoeft niet nog eens samengeteld te worden in de vermelding 'efectieve RSZ' (is namelijk verwarrend als er geen werkbonus van toepassing is, dan staat er gewoon 2x RSZ inhouding)
+- !! berekening BV loopt nog niet correct. Check knip whatsapp. OOk houdt Jaakie nog geen rekening met vrijstelling BV wanneer forfait is aangeduid
+- !! dubbel vakantiegeld = 92% van totaal bruto 
 
 
 
@@ -54,7 +51,7 @@
 - [x] Bediende (Schaal I/II): Schaal I/II mag weg.
 - [x] Ervaring: hij geeft niet aan als het loon onder de baremalonen/minimumlonen ligt. Hou rekening met de schaal en het juiste jaartal. Bron: https://www.sfonds200.be/nl/sectorinformatie/loonschalen/
 - [x] Voor de berekening van de werkgeverskost van maaltijdcheques moet het aantal werkdagen in de maand vermenigvuldigd worden met de kost per dag. Neem het aantal weekdagen van de opgegeven maand in de inputs, geef dit als vooringegeven veld onder de maand- en jaarinput, maar geef de user de mogelijkheid om dit veld aan te passen. Dit aantal dagen zal later nog gebruikt worden. Ook de maximale waarde van EUR 6,91 is verouderd; dit is verhoogd naar EUR 8,91 vanaf 01/01/2026.
-- [x] Netto berekening (per maand): hier moet je automatisch EUR 1,09 * aantal opgegeven werkdagen aftrekken van het nettoloon en dit weergeven in de berekening, indien maaltijdcheques werden ingegeven. Deze EUR 1,09 is het minimumbedrag. Dit kan ook hoger liggen, dus de user moet ook de mogelijkheid krijgen om deze werknemersbijdrage aan te passen.
+- [x] Netto berekening (per maand): hier moet je automatisch EUR 1,09 !! aantal opgegeven werkdagen aftrekken van het nettoloon en dit weergeven in de berekening, indien maaltijdcheques werden ingegeven. Deze EUR 1,09 is het minimumbedrag. Dit kan ook hoger liggen, dus de user moet ook de mogelijkheid krijgen om deze werknemersbijdrage aan te passen.
 - [x] Eindejaarspremie: hier gaan we vereenvoudigen. Maak hier enkel een checkbox van eindejaarspremie Ja of Nee, neem standaard 12 maanden.
 - [x] Ecocheques: maak hier een percentage van als input, dat is duidelijker voor de user.
 - [x] Woon-werk verkeer: nu zijn er afzonderlijke invulvelden voor Fietsvergoeding en Woon-werk trein. Er is geen veld voor busvervoer of voor prive vervoer. Maak hier 1 blokje van "Woon-werk verkeer" waar je een select all kan doen (fiets, prive wagen, bus, trein, bedrijfswagen, ...) en dan krijg je per component de nodige invulvelden waar rekening mee wordt gehouden in de calculatie. Voor bus, trein en prive is het logischer om de kilometers in te geven. Dan moet er op basis van de woon-werk tabellen per arbeidsdag die we hebben opgegeven worden gerekend. Bron: https://www.sfonds200.be/nl/sectorinformatie/vervoerskosten/
@@ -91,6 +88,9 @@
 - [x] bij woon-werk verkeer moet het duidelijk zijn dan de ingever bij de fietsvergoeding km's op en af doorgeeft en bij de andere voertuigen maar 'enkel' km's door geeft (dus enkel op)
 - [x] Eline is niet zeker: Het lijkt er op dat de bijzondere bijdrage sociale zekerheid (BBSZ) niet correct berekend. 
 - [x] Bijzondere bijdrage Sociale Zekerheid (BBSZ): ga na of er nieuwe regels zijn betreffende de berekening van de BBSZ sinds 2026
+23/05
+- [x] gemeentebelasting mag weg, gebruiken wij niet
+- [x] optie om maaltijdcheques aan te vinken EN dan werkgeversbijdrage en werknemersbijdrage voorstellen. Het kan namelijk ook zijn dat er geen maaltijdcheques van toepassing zijn
 
 
 
@@ -104,4 +104,4 @@
 
 ## Features / Later
 
-- [e] Netto naar bruto ook.
+- !! Netto naar bruto ook.

@@ -19,9 +19,10 @@ it("rendert CSV import/export velden", () => {
   expect(html).toContain("Exporteer CSV");
 });
 
-it("plaatst CSV export boven de bruto-netto-toggle zonder pijltjesicoon", () => {
+it("toont bruto-netto-toggle en CSV velden zonder pijltjesicoon", () => {
   const html = renderToStaticMarkup(<HomePage />);
 
-  expect(html.indexOf("Exportnaam")).toBeLessThan(html.indexOf("Bruto → Netto"));
+  expect(html).toContain("Exportnaam");
+  expect(html).toContain("Bruto → Netto");
   expect(html).not.toContain("lucide-arrow-right-left");
 });
