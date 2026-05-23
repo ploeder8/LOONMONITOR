@@ -1463,10 +1463,6 @@ function WoonWerkCard({
         <div style={{ fontSize: 12, fontWeight: 700, color: "var(--color-navy-500)", letterSpacing: 0.3, textTransform: "uppercase" }}>
           Voordeel Alle Aard
         </div>
-        <p style={{ fontSize: 11, color: "var(--color-text-muted)", marginTop: -6 }}>
-          Verhoogt de fiscale basis (BV) maar levert geen extra nettoloon op.
-        </p>
-
         {/* Bedrijfswagen */}
         <VervoersmiddelRij
           label="Bedrijfswagen"
