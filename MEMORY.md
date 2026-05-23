@@ -11,6 +11,15 @@ Kort projectlogboek voor wijzigingen door coding agents.
 
 ## Log
 
+- 2026-05-23 — Gewone BV-berekening vervangen door Bijlage III 2026-basisschaal (26,75/42,80/48,15/53,50), Schaal II-huwelijksquotiënt en woonwerkvrijstelling met forfaitcaps; reden: expertcase €2.300 bruto moest BV €163,57 en netto €2.122,35 geven.
+- 2026-05-23 — `Effectieve RSZ` uit de zichtbare bruto-netto werknemerweergave verwijderd en subtotal hernoemd naar `Loon na RSZ en werkbonus`; reden: dubbele RSZ-vermelding was verwarrend wanneer geen werkbonus geldt.
+- 2026-05-23 — Header-logo en tooltitel links vastgezet door de header-inhoud niet langer in een gecentreerde max-width container te plaatsen; reden: logo mag niet meeschuiven wanneer de calculator op brede schermen meer ruimte krijgt.
+- 2026-05-23 — Calculatorroute krijgt een bredere desktop-shell (`1520px`) en de netto/loonkost-panelen gebruiken responsieve minimumkolommen; reden: resultaatkaders krijgen op brede schermen meer leesruimte zonder Scope/Testcases uit te rekken.
+- 2026-05-23 — Calculatorcopy opgeschoond: technische BV-validatie, fiscale werkbonusformule, BBSZ-kwartaalformule, loonwigformule en smalle loonkostterminologie verplaatst naar gebruikersgerichte labels/tooltips; reden: hoofdflow leesbaarder zonder auditcontext te verliezen.
+- 2026-05-23 — Gemeentebelasting-invoer uit het profiel verwijderd maar interne `gemeentebelastingPct` op 7,3% behouden; reden: voorlopig vast gewogen landelijk gemiddelde, later opnieuw configureerbaar.
+- 2026-05-23 — Technische BV/BBSZ-disclaimer uit het netto-paneel verwijderd en vastgelegd met render-test; reden: broncontext blijft in code/kennisbank beschikbaar maar stoort de gebruiker niet in het resultaatpaneel.
+- 2026-05-23 — Maaltijdcheques expliciet optioneel gemaakt met checkbox en voorgestelde werkgever-/werknemersbijdragen; reden: PC 200 verplicht maaltijdcheques niet en sommige profielen hebben ze niet.
+- 2026-05-23 — Deeltijdse barema-check toegevoegd: `brutolocheck` rekent deeltijds bruto om naar voltijds equivalent en het profiel toont `Arbeidsregime`; reden: sectorale minimumcontrole moet voltijds barema correct toetsen bij deeltijdse input.
 - 2026-05-20 — CSV import/export-paneel boven de bruto/netto-toggle geplaatst en pijltjesicoon uit de toggle verwijderd; reden: gewenste formulierhiërarchie en rustiger toggle-UI.
 - 2026-05-20 — CSV import/export UI hersteld na latere `HomePage.tsx`-wijzigingen en CSV-defaults gelijkgetrokken met huidige profieldefaults (€3000, woon-werk uit); reden: import/export opnieuw beschikbaar zonder latere branchwijzigingen terug te draaien.
 - 2026-05-20 — Dubbel-vakantiegeld-provisie gewijzigd van hardcoded 6,67% naar runtime-berekening `(bruto + VAA) × 92% / 12`; bestanden: `werkgeverskost.ts`, `jaaroverzicht.ts`, `HomePage.tsx`, dataset (`vakantiegeld_dubbel_pct_2026` toegevoegd, `provisie_dubbel_vakantiegeld_2026` gemarkeerd als deprecated), knowledgebase; reden: 6,67% was wiskundig inconsistent met 92%/12 = 7,67% en gebruiker vroeg expliciek geen hardcoded provisie.

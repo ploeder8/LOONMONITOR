@@ -59,11 +59,17 @@ export function berekenWoonwerkVrijgesteld(
   woonwerk: WoonwerkVerkeerResultaat,
   privewagenMethode: BeroepskostMethode,
 ): number {
-  let vrijgesteld = woonwerk.totaalVergoeding;
-  if (privewagenMethode === "reeel" && woonwerk.componenten.privewagen) {
-    vrijgesteld -= woonwerk.componenten.privewagen.vergoeding;
-  }
-  return round2(Math.max(0, vrijgesteld));
+  const openbaarVervoer = round2(
+    (woonwerk.componenten.trein?.vergoeding ?? 0) +
+      (woonwerk.componenten.busTramMetro?.vergoeding ?? 0),
+  );
+  const fiets = Math.min(woonwerk.componenten.fiets?.vergoeding ?? 0, round2(3700 / 12));
+  const privewagen =
+    privewagenMethode === "forfaitair"
+      ? Math.min(woonwerk.componenten.privewagen?.vergoeding ?? 0, round2(500 / 12))
+      : 0;
+
+  return round2(Math.max(0, openbaarVervoer + fiets + privewagen));
 }
 
 export function berekenMobiliteitVoorProfiel(
@@ -104,7 +110,7 @@ export function berekenNettoVoorProfiel(
   brutoloonOverride?: number,
 ): NettoResultaat {
   const brutoloon = brutoloonOverride ?? p.brutoloon;
-  const heeftMaaltijdcheques = p.maaltijdchequeWerkgeversaandeelPerDag > 0;
+  const heeftMaaltijdcheques = p.maaltijdchequesActief;
   const mobiliteit = berekenMobiliteitVoorProfiel(p, refDatum, brutoloon);
   const vaaWerkmiddelen = berekenVaaWerkmiddelenVoorProfiel(p, refDatum);
 
@@ -151,8 +157,10 @@ export function berekenWerkgeverskostVoorProfiel(
     arbeidsongevallenPct: p.arbeidsongevallenPct,
     premieEjpPct: 0,
     extraGroepsverzekering: p.extraGroepsverzekering,
-    maaltijdchequeWerkgeversaandeelPerDag: p.maaltijdchequeWerkgeversaandeelPerDag,
-    maaltijdchequeWerkdagen: p.arbeidsdagenPerMaand,
+    maaltijdchequeWerkgeversaandeelPerDag: p.maaltijdchequesActief
+      ? p.maaltijdchequeWerkgeversaandeelPerDag
+      : 0,
+    maaltijdchequeWerkdagen: p.maaltijdchequesActief ? p.arbeidsdagenPerMaand : 0,
     extraHospitalisatie: p.extraHospitalisatie,
     extraEcocheques: 0,
     vaaRszPlichtigPerMaand: resolvedVaaWerkmiddelen.totaalPerMaand,

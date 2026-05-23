@@ -1,6 +1,6 @@
 # Jaakie
 
-Single-page tool voor payroll-experts om lonen en kosten te verifiëren onder **Paritair Comité 200**
+Tool voor payroll-experts om lonen en kosten te verifiëren onder **Paritair Comité 200**
 (Aanvullend Paritair Comité voor de Bedienden).
 
 - **Ontwikkeld voor en beheerd door:** Jaak Roggen

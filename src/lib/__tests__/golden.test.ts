@@ -15,6 +15,7 @@ import { ecocheques } from "@/lib/ecocheques";
 import { fietsvergoeding } from "@/lib/fietsvergoeding";
 import { woonwerkTrein } from "@/lib/woonwerkTrein";
 import { berekenWoonwerkVerkeer } from "@/lib/woonwerkVerkeer";
+import { berekenWoonwerkVrijgesteld } from "@/lib/profielBerekeningen";
 import { vaaBedrijfswagen } from "@/lib/vaaBedrijfswagen";
 import { vaaForfaitsWerkmiddelen } from "@/lib/vaaForfaits";
 import { jaarlijksePremie2026 } from "@/lib/jaarpremie";
@@ -125,6 +126,25 @@ describe("TC-07 — Brutoloon onder sectoraal minimum (faalpad)", () => {
     const c = brutolocheck("II", "C", 10, 2500, REF_2026);
     expect(c.datapunt.bron_url).toBeTruthy();
     expect(c.datapunt.bron_titel).toContain("01/2026");
+  });
+
+  it("brutoloon-check rekent deeltijds bruto om naar voltijds equivalent", () => {
+    const c = brutolocheck("II", "C", 10, 2300.38, REF_2026, 0.8);
+    expect(c.ok).toBe(true);
+    expect(c.vergelijkingsbasis).toBe("deeltijds_omgerekend");
+    expect(c.sectoraalMinimum).toBe(2875.48);
+    expect(c.proRataMinimum).toBe(2300.38);
+    expect(c.voltijdsEquivalentBruto).toBe(2875.48);
+    expect(c.verschil).toBe(0);
+  });
+
+  it("brutoloon-check meldt deeltijds tekort op voltijdse vergelijkingsbasis", () => {
+    const c = brutolocheck("II", "C", 10, 2200, REF_2026, 0.8);
+    expect(c.ok).toBe(false);
+    expect(c.vergelijkingsbasis).toBe("deeltijds_omgerekend");
+    expect(c.proRataMinimum).toBe(2300.38);
+    expect(c.voltijdsEquivalentBruto).toBe(2750);
+    expect(c.verschil).toBe(-125.48);
   });
 });
 
@@ -671,16 +691,14 @@ describe("TC-23 — BV: alleenstaand, 0 kinderen (AJ 2027)", () => {
     // AJ 2027: forfait max €6.070 (30% × 24000 = 7200 > 6070 → capped)
     expect(r.forfaitBeroepskosten).toBe(6070);
     expect(r.belastbaarNettoJaar).toBe(17930); // 24000 − 6070
-    expect(r.belastingvrijeSom).toBe(11180);
-    // PB AJ 2027: 16720 × 25% + (17930 − 16720) × 40% = 4180 + 484 = 4664
-    expect(r.pbBruto).toBe(4664);
-    // BVS-vermindering: 11180 × 25% = 2795.00
-    expect(r.bvsVermindering).toBe(2795);
-    // PB netto: 4664 − 2795 = 1869
-    expect(r.pbNetto).toBe(1869);
+    expect(r.belastingvrijeSomBv).toBe(11170);
+    // Bijlage III 2026: 4.469,93 + 42,80% × (17.930 − 16.710)
+    expect(r.basisbelastingBruto).toBe(4992.09);
+    expect(r.verminderingBelastingvrijeSom).toBe(2987.98);
+    expect(r.basisbelastingNaVerminderingen).toBe(2004.11);
     expect(r.methode).toBe("bijlage_iii_sleutelformule_2026");
     expect(r.schaal).toBe("I");
-    expect(r.bvPerMaand).toBe(155.75);
+    expect(r.bvPerMaand).toBe(167.01);
     expect(r.bvNaVerminderingen).toBe(r.bvPerMaand); // geen verminderingen
     expect("verminderingKindOnder3" in r).toBe(false);
     expect(r.isApproximatie).toBe(false);
@@ -690,6 +708,27 @@ describe("TC-23 — BV: alleenstaand, 0 kinderen (AJ 2027)", () => {
     expect(r.validatieOpmerking).not.toContain("pending");
     expect(r.validatieOpmerking).not.toContain("Group S");
     expect(r.datapunten.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("expertcase mei 2026: brutoloon € 2.300 geeft BV € 163,57 en netto € 2.122,35", () => {
+    const r = berekenNetto({
+      brutoloon: 2300,
+      refDatum: "2026-05-01",
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+      woonwerkVrijgesteldPerMaand: 16.42,
+    });
+
+    expect(r.belastbaarMaandloonVoorBV).toBe(2281.04);
+    expect(r.werkbonus.totaal).toBe(281.65);
+    expect(r.fiscaleWerkbonus).toBe(123.72);
+    expect(r.bv.belastbaarNettoJaar).toBe(21302.48);
+    expect(r.bv.basisbelastingBruto).toBe(6435.51);
+    expect(r.bv.verminderingBelastingvrijeSom).toBe(2987.98);
+    expect(r.bv.bvPerMaand).toBe(287.29);
+    expect(r.bv.bvNaVerminderingen).toBe(163.57);
+    expect(r.bbsz.maandelijksBedrag).toBe(11.54);
+    expect(r.nettoloon).toBe(2122.35);
   });
 });
 
@@ -709,15 +748,17 @@ describe("TC-23b — BV: Tier-2 triangulatie", () => {
 });
 
 describe("TC-24 — BV: gehuwd zonder inkomen, 2 kinderen (AJ 2027 maandtabel)", () => {
-  it("BVS = €22.360 (partner-overdracht); 2 kinderen → €138/m maandvermindering", () => {
+  it("past Schaal II toe met huwelijksquotiënt en 2 kinderen → €138/m maandvermindering", () => {
     const r = berekenBV({
       belastbaarMaandloon: 2500,
       gezinstype: "gehuwd_zonder_inkomen",
       kinderenTenLaste: 2,
     });
-    expect(r.belastingvrijeSom).toBe(22360); // 2 × 11180
+    expect(r.belastingvrijeSomBv).toBe(22340); // 2 × 11170
+    expect(r.huwelijksquotient).toBe(7179);
+    expect(r.verminderingBelastingvrijeSom).toBe(5975.96);
     expect(r.verminderingKinderen).toBe(138); // maandtabel: 2 kinderen
-    expect(r.pbNetto).toBeGreaterThanOrEqual(0);
+    expect(r.basisbelastingNaVerminderingen).toBeGreaterThanOrEqual(0);
     expect(r.bvPerMaand).toBeGreaterThanOrEqual(0);
     expect(r.bvNaVerminderingen).toBeLessThanOrEqual(r.bvPerMaand);
   });
@@ -857,6 +898,23 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
     expect(woonwerk.totaalVergoeding).toBe(10.96);
     expect(metPrivewagen.woonwerkVrijgesteldPerMaand).toBe(10.96);
     expect(metPrivewagen.nettoloon).toBe(basis.nettoloon + 10.96);
+  });
+
+  it("beperkt de vrijgestelde privéwagenvergoeding bij forfaitaire beroepskosten tot €41,67 per maand", () => {
+    const woonwerk = berekenWoonwerkVerkeer({
+      refDatum: REF_2026,
+      brutoloon: 3000,
+      arbeidsdagenPerMaand: 22,
+      werkdagenInMaand: 22,
+      fiets: { actief: false, kmPerDag: 0 },
+      trein: { actief: false, kmEnkel: 0 },
+      busTramMetro: { actief: false, kmEnkel: 0, prijsPerMaand: 0 },
+      privewagen: { actief: true, kmEnkel: 15 },
+    });
+
+    expect(woonwerk.componenten.privewagen?.vergoeding).toBe(46.7);
+    expect(berekenWoonwerkVrijgesteld(woonwerk, "forfaitair")).toBe(41.67);
+    expect(berekenWoonwerkVrijgesteld(woonwerk, "reeel")).toBe(0);
   });
 
   it("telt privéwagen 3 km en trein samen mee in het cash-nettoloon", () => {
@@ -1021,14 +1079,14 @@ describe("NTC-02 — Schaal I Cat C 10j, alleenstaand, 1 kind", () => {
 });
 
 describe("NTC-03 — Schaal II Cat B 8j, eenverdiener, 2 kinderen", () => {
-  it("BVS = €22.360 + verm 2 kind = €138/m", () => {
+  it("BV-belastingvrije som = €22.340 + verm 2 kind = €138/m", () => {
     const r = berekenNetto({
       brutoloon: 3000,
       refDatum: REF_2026,
       gezinstype: "gehuwd_zonder_inkomen",
       kinderenTenLaste: 2,
     });
-    expect(r.bv.belastingvrijeSom).toBe(22360);
+    expect(r.bv.belastingvrijeSomBv).toBe(22340);
     expect(r.bv.verminderingKinderen).toBe(138);
     expect(r.nettoloon).toBeGreaterThan(2200);
     expect(r.nettoloon).toBeLessThan(2700);
