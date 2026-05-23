@@ -16,6 +16,10 @@ import {
   HelpCircle,
   Download,
   Upload,
+  User,
+  Euro,
+  Receipt,
+  Shield,
 } from "lucide-react";
 
 import { Banner } from "@/components/Banner";
@@ -24,12 +28,13 @@ import { FormField, inputClass, selectClass } from "@/components/Field";
 import { AuditOpenProvider, AuditSourceGroup, type AuditForceState } from "@/components/AuditPanel";
 import { ResultBand } from "@/components/ResultBand";
 import {
-  ResultsSummaryStrip,
   type JumpAnchor,
-  type SummaryCell,
 } from "@/components/ResultsSummaryStrip";
-import { BerekeningsRichtingToggle } from "@/components/BerekeningsRichtingToggle";
 import type { BerekeningsRichting } from "@/components/BerekeningsRichtingToggle";
+import { DirectionToggle } from "@/components/DirectionToggle";
+import { HeroSummary } from "@/components/HeroSummary";
+import { CockpitCard } from "@/components/CockpitCard";
+import { CockpitAccordion } from "@/components/CockpitAccordion";
 import { brutolocheck, lookupBarema, lookupStudentenbarema } from "@/lib/baremas";
 import type { BaremaCat, Schaal, StudentenCat } from "@/lib/baremas";
 import {
@@ -569,25 +574,38 @@ export function HomePage() {
     profiel.vaaGsmAbonnementActief,
   ]);
 
+  const summary = useMemo(() => computeSummary(profiel), [profiel]);
+
   return (
-    <div className="home-layout">
-      <ProfileForm
-        profiel={profiel}
-        set={set}
-        setBerekeningsRichting={setBerekeningsRichting}
-        csvPanel={(
-          <CsvImportExportPanel
-            exportNaam={exportNaam}
-            setExportNaam={setExportNaam}
-            commentaar={commentaar}
-            setCommentaar={setCommentaar}
-            status={csvStatus}
-            fileInputRef={fileInputRef}
-            onImport={(file) => void importeerCsvBestand(file)}
-            onExport={exporteerCsv}
-          />
-        )}
+    <div
+      className="home-layout"
+      style={{ maxWidth: 1280, margin: "0 auto", padding: "1.5rem 1rem" }}
+    >
+      <CsvImportExportPanel
+        exportNaam={exportNaam}
+        setExportNaam={setExportNaam}
+        commentaar={commentaar}
+        setCommentaar={setCommentaar}
+        status={csvStatus}
+        fileInputRef={fileInputRef}
+        onImport={(file) => void importeerCsvBestand(file)}
+        onExport={exporteerCsv}
       />
+
+      <DirectionToggle
+        value={profiel.berekeningsRichting}
+        onChange={setBerekeningsRichting}
+      />
+
+      <HeroSummary
+        brutoloon={summary.bruto}
+        nettoloon={summary.netto}
+        werkgeverskost={summary.werkgeverskost}
+        loonwig={summary.loonwig}
+      />
+
+      <InputCockpit profiel={profiel} set={set} />
+
       <ErrorBoundary
         fallbackRender={({ error, resetErrorBoundary }) => (
           <Banner kind="error" title="Onverwachte fout">
@@ -611,7 +629,7 @@ export function HomePage() {
         )}
         resetKeys={[JSON.stringify(profiel)]}
       >
-        <ResultsPanel profiel={profiel} />
+        <ResultBandsPanel profiel={profiel} />
       </ErrorBoundary>
     </div>
   );
@@ -976,138 +994,120 @@ function CsvImportExportPanel({
   );
 }
 
-function ProfileForm({
+
+
+function WieBenJeCard({ profiel, set }: { profiel: Profiel; set: ProfielSetter }) {
+  return (
+    <CockpitCard title="Wie ben je?" icon={<User size={16} />}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+        <FormField label="Statuut">
+          <select
+            className={selectClass}
+            value={profiel.statuut}
+            onChange={(e) => set("statuut", e.target.value as Statuut)}
+          >
+            <option value="bediende">Bediende</option>
+            <option value="student">Student</option>
+          </select>
+        </FormField>
+
+        {profiel.statuut === "bediende" ? (
+          <>
+            <FormField
+              label={<>Gezinstype (voor BV) <HelpTooltip text="Een partner is fiscaal niet ten laste. Bij geen of beperkt beroepsinkomen past de BV-berekening Schaal II toe, wat de bedrijfsvoorheffing verlaagt en het geraamde nettoloon verhoogt." /></>}
+            >
+              <select
+                className={selectClass}
+                value={profiel.gezinstype}
+                onChange={(e) => set("gezinstype", e.target.value as GezinsType)}
+              >
+                <option value="alleenstaand">Alleenstaand / eenoudergezin</option>
+                <option value="gehuwd_met_inkomen">Gehuwd/wettelijk samenwonend - partner met inkomen</option>
+                <option value="gehuwd_zonder_inkomen">Gehuwd/wettelijk samenwonend - partner zonder of beperkt beroepsinkomen</option>
+              </select>
+            </FormField>
+
+            <div className="grid grid-cols-2 gap-3">
+              <FormField label="Kinderen ten laste">
+                <NumeriekeInput
+                  className={inputClass}
+                  min={0}
+                  max={12}
+                  value={profiel.kinderenTenLaste}
+                  modus="int"
+                  onValueChange={(waarde) => set("kinderenTenLaste", waarde)}
+                />
+              </FormField>
+            </div>
+
+            {profiel.gezinstype === "alleenstaand" && profiel.kinderenTenLaste > 0 && (
+              <label
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  fontSize: 13,
+                  color: "var(--color-navy-500)",
+                  cursor: "pointer",
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={profiel.fiscaalAlleenstaandeMetKind}
+                  onChange={(e) => set("fiscaalAlleenstaandeMetKind", e.target.checked)}
+                  style={{ accentColor: "var(--color-primary)", width: 15, height: 15 }}
+                />
+                Fiscaal alleenstaande ouder (+€52 BV-vermindering)
+              </label>
+            )}
+          </>
+        ) : (
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <FormField label="Categorie">
+              <select
+                className={selectClass}
+                value={profiel.studentenCat}
+                onChange={(e) => set("studentenCat", e.target.value as StudentenCat)}
+              >
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+              </select>
+            </FormField>
+            <FormField label="Leeftijd">
+              <NumeriekeInput
+                className={inputClass}
+                min={14}
+                max={30}
+                value={profiel.studentLeeftijd}
+                modus="int"
+                onValueChange={(waarde) => set("studentLeeftijd", waarde)}
+              />
+            </FormField>
+          </div>
+        )}
+      </div>
+    </CockpitCard>
+  );
+}
+
+function ArbeidscontextCard({
   profiel,
   set,
-  setBerekeningsRichting,
-  csvPanel,
+  setBerekeningsMaand,
+  setBerekeningsJaar,
 }: {
   profiel: Profiel;
   set: ProfielSetter;
-  setBerekeningsRichting: (richting: BerekeningsRichting) => void;
-  csvPanel: React.ReactNode;
+  setBerekeningsMaand: (maand: string) => void;
+  setBerekeningsJaar: (jaar: string) => void;
 }) {
-  function setBerekeningsMaand(maand: string) {
-    set("berekeningsMaand", maand);
-    set("arbeidsdagenPerMaand", aantalWeekdagenInMaand(profiel.berekeningsJaar, maand));
-  }
-
-  function setBerekeningsJaar(jaar: string) {
-    set("berekeningsJaar", jaar);
-    set("arbeidsdagenPerMaand", aantalWeekdagenInMaand(jaar, profiel.berekeningsMaand));
-  }
-
-  function setAlleWoonwerk(actief: boolean) {
-    set("woonwerkFiets", actief);
-    set("woonwerkPrivewagen", actief);
-    set("woonwerkBusTramMetro", actief);
-    set("woonwerkTrein", actief);
-    set("woonwerkBedrijfswagen", actief);
-  }
-
   return (
-    <aside
-      className="min-w-0 lg:sticky lg:self-start"
-      style={{
-        top: 73,
-        width: "100%",
-        boxSizing: "border-box",
-        maxHeight: "calc(100vh - 73px - 56px)",
-        overflowY: "auto",
-        display: "flex",
-        flexDirection: "column",
-        gap: 12,
-        borderRadius: 14,
-        border: "1px solid var(--color-border)",
-        background: "var(--color-surface)",
-        padding: "1.2rem 1.1rem",
-      }}
-    >
-      {csvPanel}
-
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <BerekeningsRichtingToggle
-          value={profiel.berekeningsRichting}
-          onChange={setBerekeningsRichting}
-        />
-      </div>
-
-      <h2
-        style={{
-          fontFamily: "var(--font-display)",
-          fontSize: 15,
-          fontWeight: 600,
-          color: "var(--color-text)",
-          letterSpacing: 0,
-          margin: 0,
-        }}
-      >
-        Profiel
-      </h2>
-
-      {profiel.statuut === "bediende" && (
-        <TaxProfileFields profiel={profiel} set={set} />
-      )}
-
-      <FormField label="Statuut">
-        <select
-          className={selectClass}
-          value={profiel.statuut}
-          onChange={(e) => set("statuut", e.target.value as Statuut)}
-        >
-          <option value="bediende">Bediende</option>
-          <option value="student">Student</option>
-        </select>
-      </FormField>
-
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <FormField label="Maand">
-          <select
-            className={selectClass}
-            value={profiel.berekeningsMaand}
-            onChange={(e) => setBerekeningsMaand(e.target.value)}
-          >
-            <option value="01">Januari</option>
-            <option value="02">Februari</option>
-            <option value="03">Maart</option>
-            <option value="04">April</option>
-            <option value="05">Mei</option>
-            <option value="06">Juni</option>
-            <option value="07">Juli</option>
-            <option value="08">Augustus</option>
-            <option value="09">September</option>
-            <option value="10">Oktober</option>
-            <option value="11">November</option>
-            <option value="12">December</option>
-          </select>
-        </FormField>
-        <FormField label="Jaar">
-          <select
-            className={selectClass}
-            value={profiel.berekeningsJaar}
-            onChange={(e) => setBerekeningsJaar(e.target.value)}
-          >
-            <option value="2026">2026</option>
-          </select>
-        </FormField>
-      </div>
-
-      <FormField
-        label={<>Werkdagen in maand <HelpTooltip text="Vooringevuld op basis van weekdagen in de gekozen maand. Aanpasbaar voor feestdagen, verlof of afwijkende prestaties." /></>}
-      >
-        <NumeriekeInput
-          className={inputClass}
-          min={0}
-          max={31}
-          value={profiel.arbeidsdagenPerMaand}
-          modus="int"
-          onValueChange={(waarde) => set("arbeidsdagenPerMaand", waarde)}
-        />
-      </FormField>
-
-      {profiel.statuut === "bediende" ? (
-        <>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+    <CockpitCard title="Arbeidscontext" icon={<Building2 size={16} />}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+        {profiel.statuut === "bediende" && (
+          <div className="grid grid-cols-3 gap-3">
             <FormField label="Schaal">
               <select
                 className={selectClass}
@@ -1130,19 +1130,64 @@ function ProfileForm({
                 <option value="D">D</option>
               </select>
             </FormField>
+            <FormField label="Ervaring">
+              <NumeriekeInput
+                className={inputClass}
+                min={0}
+                max={60}
+                value={profiel.ervaringJaren}
+                modus="int"
+                onValueChange={(waarde) => set("ervaringJaren", waarde)}
+              />
+            </FormField>
           </div>
+        )}
 
-          <FormField label="Ervaring (jaren)">
+        <div className="grid grid-cols-3 gap-3">
+          <FormField label="Maand">
+            <select
+              className={selectClass}
+              value={profiel.berekeningsMaand}
+              onChange={(e) => setBerekeningsMaand(e.target.value)}
+            >
+              <option value="01">Januari</option>
+              <option value="02">Februari</option>
+              <option value="03">Maart</option>
+              <option value="04">April</option>
+              <option value="05">Mei</option>
+              <option value="06">Juni</option>
+              <option value="07">Juli</option>
+              <option value="08">Augustus</option>
+              <option value="09">September</option>
+              <option value="10">Oktober</option>
+              <option value="11">November</option>
+              <option value="12">December</option>
+            </select>
+          </FormField>
+          <FormField label="Jaar">
+            <select
+              className={selectClass}
+              value={profiel.berekeningsJaar}
+              onChange={(e) => setBerekeningsJaar(e.target.value)}
+            >
+              <option value="2026">2026</option>
+            </select>
+          </FormField>
+          <FormField
+            label={<>Werkdagen <HelpTooltip text="Vooringevuld op basis van weekdagen in de gekozen maand. Aanpasbaar voor feestdagen, verlof of afwijkende prestaties." /></>}
+          >
             <NumeriekeInput
               className={inputClass}
               min={0}
-              max={60}
-              value={profiel.ervaringJaren}
+              max={31}
+              value={profiel.arbeidsdagenPerMaand}
               modus="int"
-              onValueChange={(waarde) => set("ervaringJaren", waarde)}
+              onValueChange={(waarde) => set("arbeidsdagenPerMaand", waarde)}
             />
           </FormField>
+        </div>
 
+        {profiel.statuut === "bediende" && (
           <FormField label="Tewerkstelling (%)">
             <NumeriekeInput
               className={inputClass}
@@ -1155,40 +1200,71 @@ function ProfileForm({
               }
             />
           </FormField>
+        )}
+      </div>
+    </CockpitCard>
+  );
+}
 
-          {profiel.berekeningsRichting === "bruto_naar_netto" ? (
-            <FormField label="Brutoloon (€)">
+function BrutoloonCard({ profiel, set }: { profiel: Profiel; set: ProfielSetter }) {
+  return (
+    <CockpitCard title="Brutoloon" icon={<Euro size={16} />} highlight>
+      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+        {profiel.statuut === "bediende" && profiel.berekeningsRichting === "bruto_naar_netto" ? (
+          <FormField label="Brutoloon (€)">
+            <NumeriekeInput
+              className={inputClass}
+              step="0.01"
+              value={profiel.brutoloon}
+              onValueChange={(waarde) => set("brutoloon", waarde)}
+            />
+          </FormField>
+        ) : profiel.statuut === "bediende" ? (
+          <>
+            <FormField label="Gewenst nettoloon (€)">
+              <NumeriekeInput
+                className={inputClass}
+                step="0.01"
+                value={profiel.doelNettoloon}
+                onValueChange={(waarde) => set("doelNettoloon", waarde)}
+              />
+            </FormField>
+            <FormField label="Berekend bruto (€)">
               <NumeriekeInput
                 className={inputClass}
                 step="0.01"
                 value={profiel.brutoloon}
-                onValueChange={(waarde) => set("brutoloon", waarde)}
+                disabled
+                onValueChange={() => {}}
               />
             </FormField>
-          ) : (
-            <>
-              <FormField label="Gewenst nettoloon (€)">
-                <NumeriekeInput
-                  className={inputClass}
-                  step="0.01"
-                  value={profiel.doelNettoloon}
-                  onValueChange={(waarde) => set("doelNettoloon", waarde)}
-                />
-              </FormField>
-              <FormField label="Berekend bruto (€)">
-                <NumeriekeInput
-                  className={inputClass}
-                  step="0.01"
-                  value={profiel.brutoloon}
-                  disabled
-                  onValueChange={() => {}}
-                />
-              </FormField>
-            </>
-          )}
+          </>
+        ) : (
+          <FormField label="Brutoloon (€)">
+            <NumeriekeInput
+              className={inputClass}
+              step="0.01"
+              value={profiel.brutoloon}
+              onValueChange={(waarde) => set("brutoloon", waarde)}
+            />
+          </FormField>
+        )}
 
-          <BaremaInlineCheck profiel={profiel} />
+        {profiel.statuut === "bediende" && <BaremaInlineCheck profiel={profiel} />}
 
+        <FormField
+          label={<>Onkostenvergoedingen (€/m) <HelpTooltip text="Vrijgestelde netto-vergoeding: verhoogt nettoloon en werkgeverskost, zonder RSZ/BV-basis te wijzigen." /></>}
+        >
+          <NumeriekeInput
+            className={inputClass}
+            step="0.01"
+            min={0}
+            value={profiel.onkostenvergoedingPerMaand}
+            onValueChange={(waarde) => set("onkostenvergoedingPerMaand", waarde)}
+          />
+        </FormField>
+
+        {profiel.statuut === "bediende" && (
           <label
             style={{
               display: "flex",
@@ -1205,197 +1281,529 @@ function ProfileForm({
               onChange={(e) => set("bouwVlag", e.target.checked)}
               style={{ accentColor: "var(--color-primary)", width: 15, height: 15 }}
             />
-            Bouw-subset (extra 1,80 % aanvullend pensioen)
+            Bouw-subset (+1,80% pensioen)
           </label>
+        )}
+      </div>
+    </CockpitCard>
+  );
+}
 
-          <FormSection label="Bijkomende looncomponenten" icon={<Wallet size={13} />} defaultOpen>
-            <FormField label="Groepsverz. eigen bijdrage (€/m)">
+function WoonWerkCard({
+  profiel,
+  set,
+  setAlleWoonwerk,
+}: {
+  profiel: Profiel;
+  set: ProfielSetter;
+  setAlleWoonwerk: (actief: boolean) => void;
+}) {
+  return (
+    <CockpitCard title="Woon-werk verkeer" icon={<Bike size={16} />}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <div style={{ display: "flex", gap: 8, marginBottom: 4 }}>
+          <button type="button" onClick={() => setAlleWoonwerk(true)} style={miniButtonStyle}>
+            Alles selecteren
+          </button>
+          <button type="button" onClick={() => setAlleWoonwerk(false)} style={miniButtonStyle}>
+            Alles wissen
+          </button>
+        </div>
+
+        {/* Fiets */}
+        <VervoersmiddelRij
+          label="Fiets"
+          icon={<Bike size={15} />}
+          actief={profiel.woonwerkFiets}
+          onChange={(v) => set("woonwerkFiets", v)}
+        >
+          {profiel.woonwerkFiets && (
+            <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
               <NumeriekeInput
                 className={inputClass}
-                step="0.01"
                 min={0}
-                value={profiel.groepsverzekeringEigenBijdrage}
-                onValueChange={(waarde) => set("groepsverzekeringEigenBijdrage", waarde)}
+                value={profiel.kmPerDag}
+                onValueChange={(waarde) => set("kmPerDag", waarde)}
+                style={{ width: 70, textAlign: "right" }}
               />
-            </FormField>
-            <div
-              style={{
-                border: "1px solid var(--color-border)",
-                borderRadius: "var(--radius-md)",
-                padding: "10px",
-                display: "grid",
-                gap: 10,
-              }}
-            >
-              <div style={{ fontSize: 13, fontWeight: 600, color: "var(--color-text)" }}>
-                VAA werkmiddelen
-                <HelpTooltip text="Forfaitaire jaarbedragen vastgelegd per KB: PC/laptop €72/jaar (€6/maand), internet €60/jaar (€5/maand), GSM €36/jaar (€3/maand), GSM-abonnement €48/jaar (€4/maand). Deze bedragen worden bij het brutoloon geteld voor RSZ én BV." />
-              </div>
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                <label
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    fontSize: 13,
-                    color: "var(--color-navy-500)",
-                    cursor: "pointer",
-                  }}
-                >
-                  <input
-                    type="checkbox"
-                    checked={profiel.vaaPcLaptopActief}
-                    onChange={(e) => set("vaaPcLaptopActief", e.target.checked)}
-                    style={{ accentColor: "var(--color-primary)", width: 15, height: 15 }}
-                  />
-                  Laptop / pc
-                </label>
-                <label
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    fontSize: 13,
-                    color: "var(--color-navy-500)",
-                    cursor: "pointer",
-                  }}
-                >
-                  <input
-                    type="checkbox"
-                    checked={profiel.vaaGsmSmartphoneActief}
-                    onChange={(e) => set("vaaGsmSmartphoneActief", e.target.checked)}
-                    style={{ accentColor: "var(--color-primary)", width: 15, height: 15 }}
-                  />
-                  GSM
-                </label>
-                <label
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    fontSize: 13,
-                    color: "var(--color-navy-500)",
-                    cursor: "pointer",
-                  }}
-                >
-                  <input
-                    type="checkbox"
-                    checked={profiel.vaaInternetActief}
-                    onChange={(e) => set("vaaInternetActief", e.target.checked)}
-                    style={{ accentColor: "var(--color-primary)", width: 15, height: 15 }}
-                  />
-                  Internet
-                </label>
-                <label
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    fontSize: 13,
-                    color: "var(--color-navy-500)",
-                    cursor: "pointer",
-                  }}
-                >
-                  <input
-                    type="checkbox"
-                    checked={profiel.vaaGsmAbonnementActief}
-                    onChange={(e) => set("vaaGsmAbonnementActief", e.target.checked)}
-                    style={{ accentColor: "var(--color-primary)", width: 15, height: 15 }}
-                  />
-                  GSM-abonnement
-                </label>
-              </div>
-
+              <span style={{ fontSize: 11, fontWeight: 600, color: "var(--color-text-muted)" }}>km/dag (totaal)</span>
             </div>
-            <FormField
-              label={<>Eigen bijdrage hospitalisatieverzekering (€/m) <HelpTooltip text="Werknemersbijdrage die rechtstreeks van het cash-nettoloon wordt afgehouden." /></>}
-            >
-              <NumeriekeInput
-                className={inputClass}
-                step="0.01"
-                min={0}
-                value={profiel.hospitalisatieEigenBijdrage}
-                onValueChange={(waarde) => set("hospitalisatieEigenBijdrage", waarde)}
-              />
-            </FormField>
-            <FormField
-              label={<>Onkostenvergoedingen (€/m) <HelpTooltip text="Vrijgestelde netto-vergoeding: verhoogt nettoloon en werkgeverskost, zonder RSZ/BV-basis te wijzigen." /></>}
-            >
-              <NumeriekeInput
-                className={inputClass}
-                step="0.01"
-                min={0}
-                value={profiel.onkostenvergoedingPerMaand}
-                onValueChange={(waarde) => set("onkostenvergoedingPerMaand", waarde)}
-              />
-            </FormField>
-            <label style={maaltijdchequeToggleStyle(profiel.maaltijdchequesActief)}>
-              <input
-                type="checkbox"
-                checked={profiel.maaltijdchequesActief}
-                onChange={(e) => set("maaltijdchequesActief", e.target.checked)}
-                style={{ accentColor: "var(--color-primary)", width: 15, height: 15 }}
-              />
-              <span style={{ fontWeight: 700 }}>Maaltijdcheques toepassen</span>
-            </label>
-            {profiel.maaltijdchequesActief && (
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <FormField
-                  label={<>Maaltijdcheques — werkgeversaandeel (€/dag) <HelpTooltip text={`Max €${MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026.toFixed(2).replace(".", ",")}/dag × ${profiel.arbeidsdagenPerMaand} werkdagen. Niet verplicht in PC 200.`} /></>}
-                >
-                  <NumeriekeInput
-                    className={inputClass}
-                    step="0.01"
-                    min={0}
-                    max={MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026}
-                    value={profiel.maaltijdchequeWerkgeversaandeelPerDag}
-                    onValueChange={(waarde) => set("maaltijdchequeWerkgeversaandeelPerDag", waarde)}
-                  />
-                </FormField>
-                <FormField
-                  label={<>Maaltijdcheques — werknemersbijdrage (€/dag) <HelpTooltip text={`Min €1,09/dag × ${profiel.arbeidsdagenPerMaand} werkdagen. Mag hoger liggen volgens de werkgeverregeling.`} /></>}
-                >
-                  <NumeriekeInput
-                    className={inputClass}
-                    step="0.01"
-                    min={0}
-                    value={profiel.maaltijdchequeWerknemersbijdragePerDag}
-                    onValueChange={(waarde) => set("maaltijdchequeWerknemersbijdragePerDag", waarde)}
-                  />
-                </FormField>
+          )}
+        </VervoersmiddelRij>
+
+        {/* Privéwagen */}
+        <VervoersmiddelRij
+          label="Privéwagen"
+          icon={<Car size={15} />}
+          actief={profiel.woonwerkPrivewagen}
+          onChange={(v) => set("woonwerkPrivewagen", v)}
+        >
+          {profiel.woonwerkPrivewagen && (
+            <>
+              <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                <NumeriekeInput
+                  className={inputClass}
+                  min={0}
+                  value={profiel.privewagenKm}
+                  onValueChange={(waarde) => set("privewagenKm", waarde)}
+                  style={{ width: 70, textAlign: "right" }}
+                />
+                <span style={{ fontSize: 11, fontWeight: 600, color: "var(--color-text-muted)" }}>km/dag (enkele rit)</span>
               </div>
+            </>
+          )}
+        </VervoersmiddelRij>
+        {profiel.woonwerkPrivewagen && (
+          <div className="flex items-center gap-3" style={{ paddingLeft: 32, marginTop: -4 }}>
+            <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>Beroepskost</span>
+            <label className="flex items-center gap-1 text-sm cursor-pointer">
+              <input
+                type="radio"
+                name="privewagen-beroepskost"
+                value="forfaitair"
+                checked={profiel.woonwerkPrivewagenBeroepskostMethode === "forfaitair"}
+                onChange={() => set("woonwerkPrivewagenBeroepskostMethode", "forfaitair")}
+              />
+              Forfaitair
+            </label>
+            <label className="flex items-center gap-1 text-sm cursor-pointer">
+              <input
+                type="radio"
+                name="privewagen-beroepskost"
+                value="reeel"
+                checked={profiel.woonwerkPrivewagenBeroepskostMethode === "reeel"}
+                onChange={() => set("woonwerkPrivewagenBeroepskostMethode", "reeel")}
+              />
+              Reëel
+            </label>
+            <HelpTooltip text="Forfaitair: de woon-werkvergoeding is vrijgesteld tot €500/jaar (automatisch verrekend). Reëel: geen automatische vrijstelling op het loon — werkelijke kosten worden manueel op de fiscale fiche opgenomen." />
+          </div>
+        )}
+
+        {/* Bus / tram / metro */}
+        <VervoersmiddelRij
+          label="Bus / tram / metro"
+          icon={<Bus size={15} />}
+          actief={profiel.woonwerkBusTramMetro}
+          onChange={(v) => set("woonwerkBusTramMetro", v)}
+        >
+          {profiel.woonwerkBusTramMetro && (
+            <>
+              <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                <NumeriekeInput
+                  className={inputClass}
+                  min={0}
+                  value={profiel.busTramMetroKm}
+                  onValueChange={(waarde) => set("busTramMetroKm", waarde)}
+                  style={{ width: 70, textAlign: "right" }}
+                />
+                <span style={{ fontSize: 11, fontWeight: 600, color: "var(--color-text-muted)" }}>km/dag (enkele rit)</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                <NumeriekeInput
+                  className={inputClass}
+                  step="0.01"
+                  min={0}
+                  value={profiel.busTramMetroPrijs}
+                  onValueChange={(waarde) => set("busTramMetroPrijs", waarde)}
+                  style={{ width: 70, textAlign: "right" }}
+                />
+                <span style={{ fontSize: 11, fontWeight: 600, color: "var(--color-text-muted)" }}>€/m</span>
+              </div>
+            </>
+          )}
+        </VervoersmiddelRij>
+
+        {/* Trein */}
+        <VervoersmiddelRij
+          label="Trein"
+          icon={<Train size={15} />}
+          actief={profiel.woonwerkTrein}
+          onChange={(v) => set("woonwerkTrein", v)}
+        >
+          {profiel.woonwerkTrein && (
+            <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+              <NumeriekeInput
+                className={inputClass}
+                min={0}
+                value={profiel.treinKm}
+                onValueChange={(waarde) => set("treinKm", waarde)}
+                style={{ width: 70, textAlign: "right" }}
+              />
+              <span style={{ fontSize: 11, fontWeight: 600, color: "var(--color-text-muted)" }}>km/dag (enkele rit)</span>
+            </div>
+          )}
+        </VervoersmiddelRij>
+
+        {/* Bedrijfswagen */}
+        <VervoersmiddelRij
+          label="Bedrijfswagen"
+          icon={<Car size={15} />}
+          actief={profiel.woonwerkBedrijfswagen}
+          onChange={(v) => set("woonwerkBedrijfswagen", v)}
+        />
+        {profiel.woonwerkBedrijfswagen && (
+          <div style={{ paddingLeft: 32, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+            <FormField label="Cataloguswaarde (€)">
+              <NumeriekeInput
+                className={inputClass}
+                step="0.01"
+                min={0}
+                value={profiel.bedrijfswagenCataloguswaarde}
+                onValueChange={(waarde) => set("bedrijfswagenCataloguswaarde", waarde)}
+              />
+            </FormField>
+            <FormField label="Eerste inschrijving">
+              <input
+                className={inputClass}
+                type="date"
+                value={profiel.bedrijfswagenDatumEersteInschrijving}
+                onChange={(e) => set("bedrijfswagenDatumEersteInschrijving", e.target.value)}
+              />
+            </FormField>
+            <FormField label="Brandstof">
+              <select
+                className={selectClass}
+                value={profiel.bedrijfswagenBrandstof}
+                onChange={(e) =>
+                  set("bedrijfswagenBrandstof", e.target.value as BrandstofBedrijfswagen)
+                }
+              >
+                <option value="diesel">Diesel</option>
+                <option value="benzine">Benzine</option>
+                <option value="elektriciteit">Elektriciteit</option>
+              </select>
+            </FormField>
+            {profiel.bedrijfswagenBrandstof !== "elektriciteit" && (
+              <FormField label="CO₂-waarde">
+                <NumeriekeInput
+                  className={inputClass}
+                  min={0}
+                  value={profiel.bedrijfswagenCo2}
+                  onValueChange={(waarde) => set("bedrijfswagenCo2", waarde)}
+                />
+              </FormField>
             )}
-          </FormSection>
-        </>
-      ) : (
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <FormField label="Categorie">
-            <select
-              className={selectClass}
-              value={profiel.studentenCat}
-              onChange={(e) => set("studentenCat", e.target.value as StudentenCat)}
-            >
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="C">C</option>
-              <option value="D">D</option>
-            </select>
-          </FormField>
-          <FormField label="Leeftijd">
+            <div className="flex items-center gap-3" style={{ gridColumn: "1 / -1", paddingLeft: 4 }}>
+              <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>Berekeningsmethode</span>
+              <label className="flex items-center gap-1 text-sm cursor-pointer">
+                <input
+                  type="radio"
+                  name="bw-beroepskost"
+                  value="forfaitair"
+                  checked={profiel.woonwerkBedrijfswagenBeroepskostMethode === "forfaitair"}
+                  onChange={() => set("woonwerkBedrijfswagenBeroepskostMethode", "forfaitair")}
+                />
+                Forfaitair
+              </label>
+              <label className="flex items-center gap-1 text-sm cursor-pointer">
+                <input
+                  type="radio"
+                  name="bw-beroepskost"
+                  value="reeel"
+                  checked={profiel.woonwerkBedrijfswagenBeroepskostMethode === "reeel"}
+                  onChange={() => set("woonwerkBedrijfswagenBeroepskostMethode", "reeel")}
+                />
+                Reëel
+              </label>
+              <HelpTooltip text="Forfaitair: de VAA bedrijfswagen wordt opgenomen in de belastbare basis volgens de CO₂-formule. Reëel: de VAA blijft van toepassing; werkelijke beroepskosten worden manueel op de fiscale fiche opgenomen." />
+            </div>
+          </div>
+        )}
+      </div>
+    </CockpitCard>
+  );
+}
+
+function VervoersmiddelRij({
+  label,
+  icon,
+  actief,
+  onChange,
+  children,
+}: {
+  label: string;
+  icon: React.ReactNode;
+  actief: boolean;
+  onChange: (v: boolean) => void;
+  children?: React.ReactNode;
+}) {
+  return (
+    <div>
+      <label
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 10,
+          padding: "10px 12px",
+          borderRadius: "var(--radius-md)",
+          border: `1px solid ${actief ? "var(--cockpit-toggle-active-border)" : "var(--cockpit-toggle-inactive-border)"}`,
+          background: actief ? "var(--cockpit-toggle-active-bg)" : "var(--cockpit-toggle-inactive-bg)",
+          cursor: "pointer",
+          transition: "all 0.15s ease",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <input
+            type="checkbox"
+            checked={actief}
+            onChange={(e) => onChange(e.target.checked)}
+            style={{ accentColor: "var(--color-primary)", width: 16, height: 16 }}
+          />
+          <span style={{ color: actief ? "var(--color-primary)" : "var(--color-text-muted)", display: "flex" }}>
+            {icon}
+          </span>
+          <span
+            style={{
+              fontSize: 13,
+              fontWeight: 600,
+              color: actief ? "var(--color-primary)" : "var(--color-navy-500)",
+            }}
+          >
+            {label}
+          </span>
+        </div>
+        {children}
+      </label>
+    </div>
+  );
+}
+
+function ExtraLooncomponentenContent({ profiel, set }: { profiel: Profiel; set: ProfielSetter }) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 16 }}>
+      <div
+        style={{
+          background: "var(--cockpit-subsection-bg)",
+          borderRadius: "var(--cockpit-subsection-radius)",
+          padding: 16,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            marginBottom: 12,
+            fontSize: 11,
+            fontWeight: 700,
+            letterSpacing: "0.05em",
+            textTransform: "uppercase",
+            color: "var(--color-text-muted)",
+          }}
+        >
+          <Shield size={14} /> Verzekeringen
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <FormField label="Groepsverz. eigen bijdr. (€/m)">
             <NumeriekeInput
               className={inputClass}
-              min={14}
-              max={30}
-              value={profiel.studentLeeftijd}
-              modus="int"
-              onValueChange={(waarde) => set("studentLeeftijd", waarde)}
+              step="0.01"
+              min={0}
+              value={profiel.groepsverzekeringEigenBijdrage}
+              onValueChange={(waarde) => set("groepsverzekeringEigenBijdrage", waarde)}
+            />
+          </FormField>
+          <FormField label="Hospitalisatie eigen bijdr. (€/m)">
+            <NumeriekeInput
+              className={inputClass}
+              step="0.01"
+              min={0}
+              value={profiel.hospitalisatieEigenBijdrage}
+              onValueChange={(waarde) => set("hospitalisatieEigenBijdrage", waarde)}
             />
           </FormField>
         </div>
-      )}
+      </div>
 
-      {/* ─── Accordion secties ─── */}
-      <FormSection label="Eindejaarspremie" icon={<Calendar size={13} />}>
+      <div
+        style={{
+          background: "var(--cockpit-subsection-bg)",
+          borderRadius: "var(--cockpit-subsection-radius)",
+          padding: 16,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            marginBottom: 12,
+            fontSize: 11,
+            fontWeight: 700,
+            letterSpacing: "0.05em",
+            textTransform: "uppercase",
+            color: "var(--color-text-muted)",
+          }}
+        >
+          <Receipt size={14} /> Maaltijdcheques
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <label
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              fontSize: 13,
+              color: "var(--color-navy-500)",
+              cursor: "pointer",
+              padding: "4px 0",
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={profiel.maaltijdchequesActief}
+              onChange={(e) => set("maaltijdchequesActief", e.target.checked)}
+              style={{ accentColor: "var(--color-primary)", width: 16, height: 16 }}
+            />
+            <span style={{ fontWeight: 600 }}>Maaltijdcheques toepassen</span>
+          </label>
+          {profiel.maaltijdchequesActief && (
+            <>
+              <FormField
+                label={<>WG-aandeel (€/dag) <HelpTooltip text={`Max €${MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026.toFixed(2).replace(".", ",")}/dag × ${profiel.arbeidsdagenPerMaand} werkdagen.`} /></>}
+              >
+                <NumeriekeInput
+                  className={inputClass}
+                  step="0.01"
+                  min={0}
+                  max={MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026}
+                  value={profiel.maaltijdchequeWerkgeversaandeelPerDag}
+                  onValueChange={(waarde) => set("maaltijdchequeWerkgeversaandeelPerDag", waarde)}
+                />
+              </FormField>
+              <FormField
+                label={<>WN-bijdrage (€/dag) <HelpTooltip text={`Min €1,09/dag × ${profiel.arbeidsdagenPerMaand} werkdagen.`} /></>}
+              >
+                <NumeriekeInput
+                  className={inputClass}
+                  step="0.01"
+                  min={0}
+                  value={profiel.maaltijdchequeWerknemersbijdragePerDag}
+                  onValueChange={(waarde) => set("maaltijdchequeWerknemersbijdragePerDag", waarde)}
+                />
+              </FormField>
+            </>
+          )}
+        </div>
+      </div>
+
+      <div
+        style={{
+          background: "var(--cockpit-subsection-bg)",
+          borderRadius: "var(--cockpit-subsection-radius)",
+          padding: 16,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            marginBottom: 12,
+            fontSize: 11,
+            fontWeight: 700,
+            letterSpacing: "0.05em",
+            textTransform: "uppercase",
+            color: "var(--color-text-muted)",
+          }}
+        >
+          <Car size={14} /> VAA werkmiddelen
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {[
+            {
+              label: "Laptop / pc",
+              checked: profiel.vaaPcLaptopActief,
+              onChange: (v: boolean) => set("vaaPcLaptopActief", v),
+            },
+            {
+              label: "GSM",
+              checked: profiel.vaaGsmSmartphoneActief,
+              onChange: (v: boolean) => set("vaaGsmSmartphoneActief", v),
+            },
+            {
+              label: "Internet",
+              checked: profiel.vaaInternetActief,
+              onChange: (v: boolean) => set("vaaInternetActief", v),
+            },
+            {
+              label: "GSM-abonnement",
+              checked: profiel.vaaGsmAbonnementActief,
+              onChange: (v: boolean) => set("vaaGsmAbonnementActief", v),
+            },
+          ].map((item) => (
+            <label
+              key={item.label}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "4px 0",
+                cursor: "pointer",
+                fontSize: 13,
+                color: "var(--color-navy-500)",
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={item.checked}
+                onChange={(e) => item.onChange(e.target.checked)}
+                style={{ accentColor: "var(--color-primary)", width: 16, height: 16 }}
+              />
+              {item.label}
+            </label>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function WerkgeversbijdragenContent({ profiel, set }: { profiel: Profiel; set: ProfielSetter }) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 16 }}>
+      <FormField
+        label={<>Arbeidsongevallen (%) <HelpTooltip text="Burelen: ~0,3%. Controleer uw polis." /></>}
+      >
+        <NumeriekeInput
+          className={inputClass}
+          step="0.01"
+          min={0}
+          max={10}
+          value={profiel.arbeidsongevallenPct * 100}
+          formatValue={(waarde) => waarde.toFixed(2)}
+          onValueChange={(waarde) => set("arbeidsongevallenPct", waarde / 100)}
+        />
+      </FormField>
+      <FormField label="Patronale groepsverzekering (€/m)">
+        <NumeriekeInput
+          className={inputClass}
+          step="0.01"
+          min={0}
+          value={profiel.extraGroepsverzekering}
+          onValueChange={(waarde) => set("extraGroepsverzekering", waarde)}
+        />
+      </FormField>
+      <FormField label="Hospitalisatieverzekering (€/m)">
+        <NumeriekeInput
+          className={inputClass}
+          step="0.01"
+          min={0}
+          value={profiel.extraHospitalisatie}
+          onValueChange={(waarde) => set("extraHospitalisatie", waarde)}
+        />
+      </FormField>
+    </div>
+  );
+}
+
+function EindejaarspremieCard({ profiel, set }: { profiel: Profiel; set: ProfielSetter }) {
+  const eindejaarspremieAan = profiel.prestatieMaanden > 0;
+  return (
+    <CockpitCard title="Eindejaarspremie" icon={<Calendar size={16} />}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
         <label
           style={{
             display: "flex",
@@ -1408,7 +1816,7 @@ function ProfileForm({
         >
           <input
             type="checkbox"
-            checked={profiel.prestatieMaanden > 0}
+            checked={eindejaarspremieAan}
             onChange={(e) => {
               const maanden = eindejaarspremieMaandenVoorCheckbox(e.target.checked);
               set("ancienniteitMaanden", maanden.ancienniteitMaanden);
@@ -1416,334 +1824,108 @@ function ProfileForm({
             }}
             style={{ accentColor: "var(--color-primary)", width: 15, height: 15 }}
           />
-          Eindejaarspremie
+          Eindejaarspremie toepassen
         </label>
-      </FormSection>
-
-      <FormSection label="Woon-werk verkeer" icon={<MapIcon size={13} />}>
-        <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
-          <button
-            type="button"
-            onClick={() => setAlleWoonwerk(true)}
-            style={miniButtonStyle}
-          >
-            Alles selecteren
-          </button>
-          <button
-            type="button"
-            onClick={() => setAlleWoonwerk(false)}
-            style={miniButtonStyle}
-          >
-            Alles wissen
-          </button>
-        </div>
-
-        <div style={{ display: "grid", gap: 8 }}>
-          <CheckboxLine
-            checked={profiel.woonwerkFiets}
-            label="Fiets"
-            icon={<Bike size={14} />}
-            onChange={(checked) => set("woonwerkFiets", checked)}
-          />
-          {profiel.woonwerkFiets && (
-            <FormField label="Fiets km per dag (heen + terug)">
+        {eindejaarspremieAan && (
+          <div className="grid grid-cols-2 gap-3">
+            <FormField label="Anciënniteit (maanden)">
               <NumeriekeInput
                 className={inputClass}
                 min={0}
-                value={profiel.kmPerDag}
-                onValueChange={(waarde) => set("kmPerDag", waarde)}
+                max={12}
+                value={profiel.ancienniteitMaanden}
+                modus="int"
+                onValueChange={(waarde) => set("ancienniteitMaanden", waarde)}
               />
             </FormField>
-          )}
-
-          <CheckboxLine
-            checked={profiel.woonwerkPrivewagen}
-            label="Privéwagen"
-            icon={<Car size={14} />}
-            onChange={(checked) => set("woonwerkPrivewagen", checked)}
-          />
-          {profiel.woonwerkPrivewagen && (
-            <>
-              <FormField label="Privéwagen afstand km (enkele rit)">
-                <NumeriekeInput
-                  className={inputClass}
-                  min={0}
-                  value={profiel.privewagenKm}
-                  onValueChange={(waarde) => set("privewagenKm", waarde)}
-                />
-              </FormField>
-              <div className="flex items-center gap-3" style={{ paddingLeft: 4 }}>
-                <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>
-                  Berekeningsmethode
-                </span>
-                <label className="flex items-center gap-1 text-sm cursor-pointer">
-                  <input
-                    type="radio"
-                    name="privewagen-beroepskost"
-                    value="forfaitair"
-                    checked={profiel.woonwerkPrivewagenBeroepskostMethode === "forfaitair"}
-                    onChange={() => set("woonwerkPrivewagenBeroepskostMethode", "forfaitair")}
-                  />
-                  Forfaitair
-                </label>
-                <label className="flex items-center gap-1 text-sm cursor-pointer">
-                  <input
-                    type="radio"
-                    name="privewagen-beroepskost"
-                    value="reeel"
-                    checked={profiel.woonwerkPrivewagenBeroepskostMethode === "reeel"}
-                    onChange={() => set("woonwerkPrivewagenBeroepskostMethode", "reeel")}
-                  />
-                  Reëel
-                </label>
-                <HelpTooltip text="Forfaitair: de woon-werkvergoeding is vrijgesteld tot €500/jaar (automatisch verrekend). Reëel: geen automatische vrijstelling op het loon — werkelijke kosten worden manueel op de fiscale fiche opgenomen." />
-              </div>
-            </>
-          )}
-
-          <CheckboxLine
-            checked={profiel.woonwerkBusTramMetro}
-            label="Bus / tram / metro"
-            icon={<Bus size={14} />}
-            onChange={(checked) => set("woonwerkBusTramMetro", checked)}
-          />
-          {profiel.woonwerkBusTramMetro && (
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <FormField label="Afstand km (enkele rit)">
-                <NumeriekeInput
-                  className={inputClass}
-                  min={0}
-                  value={profiel.busTramMetroKm}
-                  onValueChange={(waarde) => set("busTramMetroKm", waarde)}
-                />
-              </FormField>
-              <FormField label="Prijs / maand (€)">
-                <NumeriekeInput
-                  className={inputClass}
-                  step="0.01"
-                  min={0}
-                  value={profiel.busTramMetroPrijs}
-                  onValueChange={(waarde) => set("busTramMetroPrijs", waarde)}
-                />
-              </FormField>
-            </div>
-          )}
-
-          <CheckboxLine
-            checked={profiel.woonwerkTrein}
-            label="Trein"
-            icon={<Train size={14} />}
-            onChange={(checked) => set("woonwerkTrein", checked)}
-          />
-          {profiel.woonwerkTrein && (
-            <FormField label="Trein afstand km (enkele rit)">
+            <FormField label="Prestatie (maanden)">
               <NumeriekeInput
                 className={inputClass}
                 min={0}
-                value={profiel.treinKm}
-                onValueChange={(waarde) => set("treinKm", waarde)}
+                max={12}
+                value={profiel.prestatieMaanden}
+                modus="int"
+                onValueChange={(waarde) => set("prestatieMaanden", waarde)}
               />
             </FormField>
-          )}
-
-          <CheckboxLine
-            checked={profiel.woonwerkBedrijfswagen}
-            label="Bedrijfswagen"
-            icon={<Car size={14} />}
-            onChange={(checked) => set("woonwerkBedrijfswagen", checked)}
-          />
-          {profiel.woonwerkBedrijfswagen && (
-            <>
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <FormField label="Cataloguswaarde (€)">
-                  <NumeriekeInput
-                    className={inputClass}
-                    step="0.01"
-                    min={0}
-                    value={profiel.bedrijfswagenCataloguswaarde}
-                    onValueChange={(waarde) => set("bedrijfswagenCataloguswaarde", waarde)}
-                  />
-                </FormField>
-                <FormField label="Eerste inschrijving">
-                  <input
-                    className={inputClass}
-                    type="date"
-                    value={profiel.bedrijfswagenDatumEersteInschrijving}
-                    onChange={(e) => set("bedrijfswagenDatumEersteInschrijving", e.target.value)}
-                  />
-                </FormField>
-                <FormField label="Brandstof">
-                  <select
-                    className={selectClass}
-                    value={profiel.bedrijfswagenBrandstof}
-                    onChange={(e) =>
-                      set("bedrijfswagenBrandstof", e.target.value as BrandstofBedrijfswagen)
-                    }
-                  >
-                    <option value="diesel">Diesel</option>
-                    <option value="benzine">Benzine</option>
-                    <option value="elektriciteit">Elektriciteit</option>
-                  </select>
-                </FormField>
-                {profiel.bedrijfswagenBrandstof !== "elektriciteit" && (
-                  <FormField label="CO2-waarde">
-                    <NumeriekeInput
-                      className={inputClass}
-                      min={0}
-                      value={profiel.bedrijfswagenCo2}
-                      onValueChange={(waarde) => set("bedrijfswagenCo2", waarde)}
-                    />
-                  </FormField>
-                )}
-              </div>
-              <div className="flex items-center gap-3" style={{ paddingLeft: 4 }}>
-                <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>
-                  Berekeningsmethode
-                </span>
-                <label className="flex items-center gap-1 text-sm cursor-pointer">
-                  <input
-                    type="radio"
-                    name="bedrijfswagen-beroepskost"
-                    value="forfaitair"
-                    checked={profiel.woonwerkBedrijfswagenBeroepskostMethode === "forfaitair"}
-                    onChange={() => set("woonwerkBedrijfswagenBeroepskostMethode", "forfaitair")}
-                  />
-                  Forfaitair
-                </label>
-                <label className="flex items-center gap-1 text-sm cursor-pointer">
-                  <input
-                    type="radio"
-                    name="bedrijfswagen-beroepskost"
-                    value="reeel"
-                    checked={profiel.woonwerkBedrijfswagenBeroepskostMethode === "reeel"}
-                    onChange={() => set("woonwerkBedrijfswagenBeroepskostMethode", "reeel")}
-                  />
-                  Reëel
-                </label>
-                <HelpTooltip text="Forfaitair: de VAA bedrijfswagen wordt opgenomen in de belastbare basis volgens de CO₂-formule. Reëel: de VAA blijft van toepassing; werkelijke beroepskosten worden manueel op de fiscale fiche opgenomen." />
-              </div>
-            </>
-          )}
-        </div>
-      </FormSection>
-
-      {profiel.statuut !== "student" && (
-        <FormSection label="Werkgeversbijdragen" icon={<Building2 size={13} />}>
-          <FormField
-            label={<>Arbeidsongevallen-tarief (%) <HelpTooltip text="Burelen: ~0,3 %. Controleer uw polis." /></>}
-          >
-            <NumeriekeInput
-              className={inputClass}
-              step="0.01"
-              min={0}
-              max={10}
-              value={profiel.arbeidsongevallenPct * 100}
-              formatValue={(waarde) => waarde.toFixed(2)}
-              onValueChange={(waarde) => set("arbeidsongevallenPct", waarde / 100)}
-            />
-          </FormField>
-          <FormField label="Patronale groepsverzekering (€/m)">
-            <NumeriekeInput
-              className={inputClass}
-              step="0.01"
-              min={0}
-              value={profiel.extraGroepsverzekering}
-              onValueChange={(waarde) => set("extraGroepsverzekering", waarde)}
-            />
-          </FormField>
-          <FormField label="Hospitalisatieverzekering (€/m)">
-            <NumeriekeInput
-              className={inputClass}
-              step="0.01"
-              min={0}
-              value={profiel.extraHospitalisatie}
-              onValueChange={(waarde) => set("extraHospitalisatie", waarde)}
-            />
-          </FormField>
-        </FormSection>
-      )}
-
-    </aside>
+          </div>
+        )}
+      </div>
+    </CockpitCard>
   );
 }
 
-function TaxProfileFields({
+
+// ─── InputCockpit ────────────────────────────────────────────────────────────
+
+function InputCockpit({
   profiel,
   set,
+  csvPanel,
 }: {
   profiel: Profiel;
   set: ProfielSetter;
+  csvPanel?: React.ReactNode;
 }) {
-  return (
-    <>
-      <GezinstypeField profiel={profiel} set={set} />
-      <KinderenVoorheffingFields profiel={profiel} set={set} />
-      {profiel.gezinstype === "alleenstaand" && profiel.kinderenTenLaste > 0 && (
-        <AlleenstaandeOuderField profiel={profiel} set={set} />
-      )}
-    </>
-  );
-}
+  function setBerekeningsMaand(maand: string) {
+    set("berekeningsMaand", maand);
+    set("arbeidsdagenPerMaand", aantalWeekdagenInMaand(profiel.berekeningsJaar, maand));
+  }
 
-function GezinstypeField({ profiel, set }: { profiel: Profiel; set: ProfielSetter }) {
+  function setBerekeningsJaar(jaar: string) {
+    set("berekeningsJaar", jaar);
+    set("arbeidsdagenPerMaand", aantalWeekdagenInMaand(jaar, profiel.berekeningsMaand));
+  }
+
+  function setAlleWoonwerk(actief: boolean) {
+    set("woonwerkFiets", actief);
+    set("woonwerkPrivewagen", actief);
+    set("woonwerkBusTramMetro", actief);
+    set("woonwerkTrein", actief);
+    set("woonwerkBedrijfswagen", actief);
+  }
+
   return (
-    <FormField
-      label={<>Gezinstype (voor BV) <HelpTooltip text="Een partner is fiscaal niet ten laste. Bij geen of beperkt beroepsinkomen past de BV-berekening Schaal II toe, wat de bedrijfsvoorheffing verlaagt en het geraamde nettoloon verhoogt." /></>}
-    >
-      <select
-        className={selectClass}
-        value={profiel.gezinstype}
-        onChange={(e) => set("gezinstype", e.target.value as GezinsType)}
+    <div style={{ display: "flex", flexDirection: "column", gap: "var(--cockpit-grid-gap)" }}>
+      {csvPanel}
+
+      <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: "var(--cockpit-grid-gap)" }}>
+        <WieBenJeCard profiel={profiel} set={set} />
+        <ArbeidscontextCard
+          profiel={profiel}
+          set={set}
+          setBerekeningsMaand={setBerekeningsMaand}
+          setBerekeningsJaar={setBerekeningsJaar}
+        />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: "var(--cockpit-grid-gap)" }}>
+        <BrutoloonCard profiel={profiel} set={set} />
+        <WoonWerkCard profiel={profiel} set={set} setAlleWoonwerk={setAlleWoonwerk} />
+      </div>
+
+      <CockpitAccordion
+        title="Extra looncomponenten"
+        subtitle="Verzekeringen, maaltijdcheques, VAA"
+        icon={<Receipt size={16} />}
       >
-        <option value="alleenstaand">Alleenstaand / eenoudergezin</option>
-        <option value="gehuwd_met_inkomen">Gehuwd/wettelijk samenwonend - partner met inkomen</option>
-        <option value="gehuwd_zonder_inkomen">
-          Gehuwd/wettelijk samenwonend - partner zonder of beperkt beroepsinkomen
-        </option>
-      </select>
-    </FormField>
+        <ExtraLooncomponentenContent profiel={profiel} set={set} />
+      </CockpitAccordion>
+
+      <CockpitAccordion
+        title="Werkgeversbijdragen"
+        subtitle="Arbeidsongevallen, groepsverzekering, hospitalisatie"
+        icon={<Shield size={16} />}
+      >
+        <WerkgeversbijdragenContent profiel={profiel} set={set} />
+      </CockpitAccordion>
+
+      <EindejaarspremieCard profiel={profiel} set={set} />
+    </div>
   );
 }
 
-function KinderenVoorheffingFields({ profiel, set }: { profiel: Profiel; set: ProfielSetter }) {
-  return (
-    <FormField label="Kinderen ten laste">
-      <NumeriekeInput
-        className={inputClass}
-        min={0}
-        max={12}
-        value={profiel.kinderenTenLaste}
-        modus="int"
-        onValueChange={(waarde) => set("kinderenTenLaste", waarde)}
-      />
-    </FormField>
-  );
-}
-
-function AlleenstaandeOuderField({ profiel, set }: { profiel: Profiel; set: ProfielSetter }) {
-  return (
-    <label
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 8,
-        fontSize: 13,
-        color: "var(--color-navy-500)",
-        cursor: "pointer",
-      }}
-    >
-      <input
-        type="checkbox"
-        checked={profiel.fiscaalAlleenstaandeMetKind}
-        onChange={(e) => set("fiscaalAlleenstaandeMetKind", e.target.checked)}
-        style={{ accentColor: "var(--color-primary)", width: 15, height: 15 }}
-      />
-      Fiscaal alleenstaande ouder (+€52 BV-vermindering)
-    </label>
-  );
-}
-
-// ─── ResultsPanel ─────────────────────────────────────────────────────────────
+// ─── ResultBandsPanel ─────────────────────────────────────────────────────────
 
 interface ResultSummary {
   bruto: number;
@@ -1765,30 +1947,80 @@ interface BouwResultaten {
   bands: ResultBandSpec[];
 }
 
-function ResultsPanel({ profiel }: { profiel: Profiel }) {
+function ResultBandsPanel({
+  profiel,
+}: {
+  profiel: Profiel;
+}) {
   const [auditForce, setAuditForce] = useState<AuditForceState>(null);
-  const { summary, bands } = useMemo(() => bouwResultaten(profiel), [profiel]);
-
-  const cells: SummaryCell[] =
-    profiel.statuut === "bediende"
-      ? [
-          { label: "Bruto", bedrag: summary.bruto },
-          { label: "Netto", bedrag: summary.netto, highlight: true },
-          { label: "Loonkost werkgever / maand", bedrag: summary.werkgeverskost, highlight: true },
-          { label: "Loonwig", bedrag: summary.loonwig, format: "PCT" },
-        ]
-      : [{ label: "Bruto (student)", bedrag: summary.bruto, highlight: true }];
+  const { bands } = useMemo(() => bouwResultaten(profiel), [profiel]);
 
   const anchors: JumpAnchor[] = bands.map((b) => ({ id: b.id, label: b.shortLabel }));
 
   return (
     <section style={{ display: "flex", flexDirection: "column", gap: 16, minWidth: 0 }}>
-      <ResultsSummaryStrip
-        cells={cells}
-        anchors={anchors}
-        auditForce={auditForce}
-        onToggleAudit={() => setAuditForce(auditForce === "all" ? null : "all")}
-      />
+      {/* Compacte toolbar: spring-anchors + audit-toggle */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 10,
+          flexWrap: "wrap",
+          padding: "8px 10px",
+          borderRadius: "var(--radius-lg)",
+          background: "var(--color-surface)",
+          border: "1px solid var(--color-border)",
+          boxShadow: "var(--shadow-sm)",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 4, flexWrap: "wrap", fontSize: 12, color: "var(--color-navy-500)" }}>
+          <span style={{ color: "var(--color-text-muted)", marginRight: 4 }}>Springen:</span>
+          {anchors.map((a, i) => (
+            <span key={a.id} style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+              <a
+                href={`#${a.id}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  const el = document.getElementById(a.id);
+                  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
+                style={{
+                  color: "var(--color-primary)",
+                  textDecoration: "none",
+                  fontWeight: 600,
+                  padding: "1px 4px",
+                  borderRadius: "var(--radius-sm)",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "var(--color-primary-soft)")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+              >
+                {a.label}
+              </a>
+              {i < anchors.length - 1 && <span style={{ color: "var(--color-navy-300)" }}>·</span>}
+            </span>
+          ))}
+        </div>
+        <button
+          onClick={() => setAuditForce(auditForce === "all" ? null : "all")}
+          style={{
+            border: "1px solid var(--color-primary-border)",
+            background: auditForce === "all" ? "var(--color-primary)" : "var(--color-surface)",
+            color: auditForce === "all" ? "#ffffff" : "var(--color-primary)",
+            borderRadius: "var(--radius-md)",
+            fontSize: 11,
+            fontWeight: 600,
+            padding: "3px 9px",
+            cursor: "pointer",
+            fontFamily: "var(--font-body)",
+            letterSpacing: 0,
+            transition: "background 0.15s",
+          }}
+        >
+          {auditForce === "all" ? "Verberg alle bronnen" : "Toon alle bronnen"}
+        </button>
+      </div>
+
       <AuditOpenProvider force={auditForce}>
         {bands.map((b) => (
           <ResultBand key={b.id} id={b.id} title={b.title} icon={b.icon}>

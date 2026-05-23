@@ -70,4 +70,47 @@
   --brown-light:       var(--color-text-muted);
   --charcoal:          var(--color-text);
   --charcoal-light:    var(--color-navy-500);
+
+  /* ─── Fase 2: Cockpit Grid Tokens ─── */
+
+  --cockpit-card-bg: #FFFFFF;
+  --cockpit-card-border: #E5EAF2;
+  --cockpit-card-radius: var(--radius-lg);
+  --cockpit-card-padding: 20px;
+  --cockpit-card-shadow: var(--shadow-sm);
+  --cockpit-grid-gap: 16px;
+  --cockpit-section-icon-bg: #FFF3EF;
+  --cockpit-section-icon-color: #D83A18;
+  --cockpit-subsection-bg: #F3F6FA;
+  --cockpit-subsection-radius: var(--radius-md);
+  --cockpit-toggle-active-border: rgba(216, 58, 24, 0.2);
+  --cockpit-toggle-active-bg: #FFF3EF;
+  --cockpit-toggle-inactive-border: #E5EAF2;
+  --cockpit-toggle-inactive-bg: #FFFFFF;
+
+  /* ─── Fase 1: Hero & Toggle Tokens ─── */
+
+  /* Hero Cards */
+  --hero-bruto-bg: #FFFFFF;
+  --hero-bruto-border: #E5EAF2;
+  --hero-bruto-text: #131F37;
+
+  --hero-netto-bg: #EFFFFA;
+  --hero-netto-border: rgba(28, 210, 163, 0.2);
+  --hero-netto-text: #10A982;
+
+  --hero-kost-bg: #F3F6FA;
+  --hero-kost-border: #E5EAF2;
+  --hero-kost-text: #34425D;
+
+  --hero-loonwig-bg: #FFF3EF;
+  --hero-loonwig-border: #FFE0D6;
+  --hero-loonwig-text: #D83A18;
+
+  /* Toggle */
+  --toggle-active-bg: #D83A18;
+  --toggle-active-text: #FFFFFF;
+  --toggle-inactive-bg: transparent;
+  --toggle-inactive-text: #6B7280;
+  --toggle-bg: #F3F6FA;
 }
