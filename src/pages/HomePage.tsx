@@ -1298,24 +1298,32 @@ function WoonWerkCard({
   set: ProfielSetter;
   setAlleWoonwerk: (actief: boolean) => void;
 }) {
+  const toggleFiets = (v: boolean) => {
+    set("woonwerkFiets", v);
+    if (v) set("woonwerkPrivewagen", false);
+  };
+  const togglePrivewagen = (v: boolean) => {
+    set("woonwerkPrivewagen", v);
+    if (v) set("woonwerkFiets", false);
+  };
+
   return (
     <CockpitCard title="Woon-werk verkeer" icon={<Bike size={16} />}>
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        <div style={{ display: "flex", gap: 8, marginBottom: 4 }}>
-          <button type="button" onClick={() => setAlleWoonwerk(true)} style={miniButtonStyle}>
-            Alles selecteren
-          </button>
-          <button type="button" onClick={() => setAlleWoonwerk(false)} style={miniButtonStyle}>
-            Alles wissen
-          </button>
+        {/* ── Werkgeverstussenkomst (vergoeding) ── */}
+        <div style={{ fontSize: 12, fontWeight: 700, color: "var(--color-navy-500)", letterSpacing: 0.3, textTransform: "uppercase" }}>
+          Werkgeverstussenkomst
         </div>
+        <p style={{ fontSize: 11, color: "var(--color-text-muted)", marginTop: -6 }}>
+          Vrijgesteld van RSZ en bedrijfsvoorheffing binnen bepaalde grenzen. Telt mee in het nettoloon.
+        </p>
 
         {/* Fiets */}
         <VervoersmiddelRij
           label="Fiets"
           icon={<Bike size={15} />}
           actief={profiel.woonwerkFiets}
-          onChange={(v) => set("woonwerkFiets", v)}
+          onChange={toggleFiets}
         >
           {profiel.woonwerkFiets && (
             <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
@@ -1336,7 +1344,7 @@ function WoonWerkCard({
           label="Privéwagen"
           icon={<Car size={15} />}
           actief={profiel.woonwerkPrivewagen}
-          onChange={(v) => set("woonwerkPrivewagen", v)}
+          onChange={togglePrivewagen}
         >
           {profiel.woonwerkPrivewagen && (
             <>
@@ -1434,6 +1442,30 @@ function WoonWerkCard({
             </div>
           )}
         </VervoersmiddelRij>
+
+        <p style={{ fontSize: 11, color: "var(--color-primary)", fontWeight: 500, marginTop: -4 }}>
+          ℹ️ Trein, bus/tram/metro en privéwagen mogen samen als aparte trajectdelen.
+        </p>
+
+        <div style={{ display: "flex", gap: 8, marginTop: 2 }}>
+          <button type="button" onClick={() => setAlleWoonwerk(true)} style={miniButtonStyle}>
+            Selecteer alle vergoedingen
+          </button>
+          <button type="button" onClick={() => setAlleWoonwerk(false)} style={miniButtonStyle}>
+            Alles wissen
+          </button>
+        </div>
+
+        {/* Divider */}
+        <div style={{ borderTop: "1px solid var(--color-border)", margin: "6px 0" }} />
+
+        {/* ── Voordeel Alle Aard ── */}
+        <div style={{ fontSize: 12, fontWeight: 700, color: "var(--color-navy-500)", letterSpacing: 0.3, textTransform: "uppercase" }}>
+          Voordeel Alle Aard
+        </div>
+        <p style={{ fontSize: 11, color: "var(--color-text-muted)", marginTop: -6 }}>
+          Verhoogt de fiscale basis (BV) maar levert geen extra nettoloon op.
+        </p>
 
         {/* Bedrijfswagen */}
         <VervoersmiddelRij
@@ -1878,11 +1910,20 @@ function InputCockpit({
   }
 
   function setAlleWoonwerk(actief: boolean) {
-    set("woonwerkFiets", actief);
-    set("woonwerkPrivewagen", actief);
-    set("woonwerkBusTramMetro", actief);
-    set("woonwerkTrein", actief);
-    set("woonwerkBedrijfswagen", actief);
+    if (actief) {
+      // Fiets wint bij conflict met privéwagen (meest gunstig voor werknemer)
+      set("woonwerkFiets", true);
+      set("woonwerkPrivewagen", false);
+      set("woonwerkBusTramMetro", true);
+      set("woonwerkTrein", true);
+      // Bedrijfswagen (VAA) niet aanraken — is een aparte categorie
+    } else {
+      set("woonwerkFiets", false);
+      set("woonwerkPrivewagen", false);
+      set("woonwerkBusTramMetro", false);
+      set("woonwerkTrein", false);
+      set("woonwerkBedrijfswagen", false);
+    }
   }
 
   return (

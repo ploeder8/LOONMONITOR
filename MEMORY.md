@@ -11,6 +11,7 @@ Kort projectlogboek voor wijzigingen door coding agents.
 
 ## Log
 
+- 2026-05-23 — Woon-werk verkeer UI herzien: card opgesplitst in "Werkgeverstussenkomst" (fiets, privéwagen, bus/tram/metro, trein) en "Voordeel Alle Aard" (bedrijfswagen) met uitleg-teksten; mutual exclusion fiets↔privéwagen (toggle van de één schakelt de ander uit); "Alles selecteren" hernoemd naar "Selecteer alle vergoedingen" en slaat bedrijfswagen over + lost fiets/privewagen-conflict op (fiets wint); bestanden: `src/pages/HomePage.tsx`; 165/165 tests pass.
 - 2026-05-23 — UI/UX Fase 1 geïmplementeerd: `DirectionToggle` + `HeroSummary` in rechterpaneel, oude `ResultsSummaryStrip` vervangen, jump anchors + audit-toggle behouden; bestanden: `src/components/DirectionToggle.tsx`, `src/components/HeroSummary.tsx`, `src/pages/HomePage.tsx`, `src/branding/brand.css`; 165/165 tests pass.
 - 2026-05-23 — UI/UX Fase 2 geïmplementeerd: `InputCockpit` met 2×2 grid (`WieBenJeCard`, `ArbeidscontextCard`, `BrutoloonCard`, `WoonWerkCard`), twee `CockpitAccordion`s (Extra looncomponenten + Werkgeversbijdragen), `EindejaarspremieCard`; `<aside>` linkerpaneel verwijderd, single-column layout; bestanden: `src/components/CockpitCard.tsx`, `src/components/CockpitAccordion.tsx`, `src/pages/HomePage.tsx`, `src/branding/brand.css`, `src/index.css`; 165/165 tests pass.
 - 2026-05-23 — `fase-2-migratie.md` geïntegreerd in `knowledgebase/11_ui_ux_migratieplan.md` als master-document; Fase 1 gemarkeerd als done, Fase 2 als pending.
