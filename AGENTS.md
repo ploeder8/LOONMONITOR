@@ -11,7 +11,7 @@ Dit bestand geeft richtlijnen aan coding agents (Claude Code, Kimi Code, Codex, 
 - **Actieve brand:** Jaakie (geen "VH", "PC 200" of "Van Havermaet" als toolnaam in de UI).
 - **Scope:** Sectorale baremas, RSZ, sociale werkbonus, bedrijfsvoorheffing (BV, AJ 2027), bijzondere BV-schaal, BBSZ, bruto → netto, netto → bruto, werkgeverskost, premies (eindejaarspremie, ecocheques, jaarpremie), maaltijdcheques, VAA en mobiliteitsvoordelen.
 - **Technologie:** TypeScript 5.6, React 19, Vite 8, Tailwind CSS v4, HashRouter.
-- **Runtime:** Uitsluitend browser — geen backend, geen database, geen authenticatie.
+- **Runtime:** Payrollberekeningen blijven uitsluitend browser-only. De optionele AI-chat gebruikt een Vercel serverless endpoint met Supabase-rate-limiting en OpenAI file search; API-keys mogen nooit in de browserbundle terechtkomen.
 - **Taal:** Nederlandse interface en broncode; alle domein-documentatie staat in het Nederlands.
 
 ---
@@ -55,6 +55,7 @@ pnpm install
 
 # Development server
 pnpm dev            # http://localhost:5173 (strictPort)
+pnpm exec vercel dev # lokale Vercel-runtime voor /api/chat + Vite
 
 # Tests
 bun test                          # alle tests
@@ -156,6 +157,15 @@ src/
 
 **Schend nooit deze grenzen.** Berekeningslogica hoort thuis in `src/lib/`; componenten renderen alleen wat ze krijgen.
 
+### AI-chat laag
+
+De AI-chat is een aparte runtime-laag:
+
+- `api/chat.ts` is het Vercel serverless endpoint voor OpenAI Responses API + file search.
+- Supabase wordt alleen server-side gebruikt voor rate limiting en minimale eventlogging.
+- De frontend praat uitsluitend met `/api/chat`; OpenAI- en Supabase-secrets staan nooit in `VITE_*` env vars.
+- Chat-antwoorden mogen alleen steunen op de geïndexeerde corpusbestanden uit `knowledgebase/` en `knowledgebase/onderzoek/`.
+
 ---
 
 ## Single Source of Truth (SSOT)
@@ -164,6 +174,8 @@ Voor **alle inhoudelijke vragen** (regelkader, calculator-specs, datapunten, tes
 
 Wanneer in een chat nieuwe inhoudelijke kennis wordt besproken of wanneer een tegenspraak wordt vastgesteld tussen code, dataset, tests, documentatie of gebruikersinformatie, werk dan steeds de relevante bestanden in `knowledgebase/` bij met de nieuwste en juiste informatie. Doe dit in dezelfde wijziging als de inhoudelijke fix, zodat de kennisbank de actuele SSOT blijft.
 
+Wanneer UI, routes, inputs, outputs, berekeningsflow, chatbotgedrag of featurebeschikbaarheid wijzigen, werk dan ook `knowledgebase/12_toolfunctionaliteit.md` bij. Dit bestand is onderdeel van de chatbot-corpus en moet de actuele werking van Jaakie beschrijven.
+
 | Vraag | Bron |
 |---|---|
 | Wat doet de tool? Wat valt buiten scope? | `knowledgebase/01_project_scope.md` |
@@ -171,6 +183,7 @@ Wanneer in een chat nieuwe inhoudelijke kennis wordt besproken of wanneer een te
 | Hoe is de dataset gestructureerd? | `knowledgebase/03_datamodel.md` + `DATASET_REFERENCE.md` |
 | Hoe werkt de netto-berekening (RSZ, BV, werkbonus, bijzondere BV)? | `knowledgebase/04_calculator_netto.md` |
 | Hoe werkt de werkgeverskost-berekening? | `knowledgebase/05_calculator_werkgeverskost.md` |
+| Hoe werkt de tool functioneel voor gebruikers en chatbot? | `knowledgebase/12_toolfunctionaliteit.md` |
 | Welke testcases zijn er? | `knowledgebase/07_testcorpus.md` + `src/lib/__tests__/golden.test.ts` |
 | Wat is pending / wat ontbreekt nog? | `knowledgebase/08_gaps_en_pending.md` |
 | Hoe ziet een vergelijkende referentietool eruit? Welke features missen we? | `knowledgebase/Referenties/groups_be_salarysim.md` |
@@ -347,7 +360,8 @@ Wijzig toekomstige branding eerst in `src/branding/*` en pas componenten alleen 
 
 ## Security & privacy
 
-- **Geen backend calls:** de app doet geen netwerkverzoeken voor berekeningen; alle data zit in de bundle.
+- **Geen backend calls voor payrollberekeningen:** de calculator doet geen netwerkverzoeken voor berekeningen; alle payrolldata zit in de bundle.
+- **AI-chat endpoint:** `/api/chat` mag server-side OpenAI en Supabase gebruiken. Houd `OPENAI_API_KEY`, `SUPABASE_SECRET_KEY` en vergelijkbare secrets uitsluitend in Vercel/server-env.
 - **Geen auth / geen sessies:** er is geen inlog, geen cookies, geen localStorage-gebruik voor gevoelige data.
 - **Dataset:** de JSON-dataset bevat uitsluitend publiek beschikbare regelgeving en tarieven — geen persoonsgegevens.
 - **Schema-validatie:** de startup gate voorkomt dat een corrupte dataset stilzwijgend verkeerde resultaten produceert.

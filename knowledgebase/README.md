@@ -41,6 +41,7 @@
 | 9 | `09_implementation_roadmap.md` | Product owner (golf 1–6) |
 | 10 | `10_bronnen_guideline.md` | Iedereen (3-tier bronnenhiërarchie) |
 | 11 | `11_ui_ux_migratieplan.md` | Developer / UX (fasegewijze UI-migratie) |
+| 12 | `12_toolfunctionaliteit.md` | Chatbot-corpus / support (actuele toolwerking) |
 
 ### Mappen
 - **`bronnen/`** — Volledig bronnenarchief: 57 URLs + 8 PDF-snapshots, gerangschikt per Tier (1/2/3) + categorie, plus het bronronde-log `bronnen/bronronde_2026-05-24.md`
@@ -60,6 +61,7 @@
 6. **Wat ontbreekt nog?** → `08_gaps_en_pending.md`
 7. **Hoe gaan we verder?** → `09_implementation_roadmap.md`
 8. **UI/UX migratieplan** → `11_ui_ux_migratieplan.md`
+9. **Hoe werkt Jaakie als tool?** → `12_toolfunctionaliteit.md`
 
 ---
 
@@ -93,6 +95,7 @@ Implementeer als **feature-flags**, default = huidige waarden. Zie `08_gaps_en_p
 | `05_calculator_werkgeverskost.md` | `src/lib/werkgeverskost.ts` |
 | `07_testcorpus.md` NTC-01..NTC-15 | `src/lib/__tests__/golden.test.ts` |
 | `06_dataset_uitbreiding.md` + `06b_werkgeverskost_datapunten.md` | `src/data/pc200_payroll_dataset_2026.json` |
+| `12_toolfunctionaliteit.md` | `src/App.tsx`, `src/pages/HomePage.tsx`, `src/pages/home/*`, `api/chat.ts` |
 
 ---
 

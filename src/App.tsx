@@ -3,6 +3,7 @@ import { HomePage } from "@/pages/HomePage";
 import { ScopePage } from "@/pages/ScopePage";
 import { TestcasesPage } from "@/pages/TestcasesPage";
 import { APP_BRAND } from "@/branding/brand";
+import { AiChatWidget } from "@/components/AiChatWidget";
 
 const DEFAULT_CONTENT_MAX_WIDTH = 1180;
 const CALCULATOR_CONTENT_MAX_WIDTH = 1520;
@@ -127,6 +128,7 @@ function AppShell() {
             {APP_BRAND.footerCopy}
           </div>
         </footer>
+        <AiChatWidget />
       </div>
   );
 }

@@ -6,3 +6,6 @@ dist/
 feedback expert.txt
 docs/branding/van-havermaet-branding-snapshot.md
 00_Van Havermaet components/
+
+.vercel
+.env*
