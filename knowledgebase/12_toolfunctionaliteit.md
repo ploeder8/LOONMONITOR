@@ -57,12 +57,18 @@ De belangrijkste modules zijn:
 - `werkgeverskost.ts` voor totale werkgeverskost en loonwig;
 - voordeelmodules voor eindejaarspremie, jaarpremie, ecocheques, fietsvergoeding, woon-werkverkeer, trein en VAA.
 
+Voor jaarcomponenten gebruikt Jaakie de bijzondere BV-schaal van Bijlage III:
+eindejaarspremie en dubbel vakantiegeld krijgen een tarief op basis van het normale refertejaarloon, terwijl eventuele kindvrijstelling of kindvermindering de aparte regels voor exceptionele vergoedingen volgt. De gewone maandelijkse BV-kindvermindering wordt niet opnieuw rechtstreeks afgetrokken van deze jaarcomponenten. De sectorale PC 200-jaarpremie houdt wel werknemers-RSZ in, maar geen bedrijfsvoorheffing.
+
+De eindejaarspremie wordt in de gebruikersflow als volledig gewerkt jaar getoond: bruto eindejaarspremie = 1 brutomaandloon. Pro-rata anciënniteit- en prestatievelden zijn geen gebruikersinstelling meer; oude CSV-imports met afwijkende waarden worden voor actieve eindejaarspremie naar 12/12 genormaliseerd.
+
 ### Resultaten
 
 De resultaatkolom toont een samenvatting en detailbanden:
 
 - kerncijfers: bruto, netto, werkgeverskost en loonwig;
 - netto- en werkgeverskostpanelen;
+- het netto maandpaneel verbergt VAA-bedrijfswagen en terugname-VAA regels wanneer de bedragen nul zijn;
 - loonbasis met sectorale minimumcontrole;
 - voordelen en premies;
 - mobiliteit en VAA;

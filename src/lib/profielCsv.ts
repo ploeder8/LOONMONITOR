@@ -1,4 +1,4 @@
-import { DEFAULTS, type Profiel } from "@/lib/profiel";
+import { DEFAULTS, normaliseerProfiel, type Profiel } from "@/lib/profiel";
 import { berekenProfielKernOutputs } from "@/lib/profielBerekeningen";
 
 type CsvWaarde = string | number | boolean | null;
@@ -70,7 +70,7 @@ export function profielUitCsv(csv: string): { profiel: Profiel; commentaar: stri
     profiel[header] = parseProfielWaarde(header, waarde) as never;
   });
 
-  return { profiel, commentaar };
+  return { profiel: normaliseerProfiel(profiel), commentaar };
 }
 
 export function normaliseerCsvBestandsnaam(naam: string, vandaag: string): string {

@@ -10,6 +10,7 @@ import { formatEUR } from "@/lib/money";
 import {
   aantalWeekdagenInMaand,
   eindejaarspremieMaandenVoorCheckbox,
+  eindejaarspremieIsActief,
   percentageNaarTewerkstellingsbreuk,
   tewerkstellingsbreukNaarPercentage,
   type BaremaCat,
@@ -646,7 +647,7 @@ function WerkgeversbijdragenContent({ profiel, set }: { profiel: Profiel; set: P
 }
 
 function EindejaarspremieCard({ profiel, set }: { profiel: Profiel; set: ProfielSetter }) {
-  const eindejaarspremieAan = profiel.prestatieMaanden > 0;
+  const eindejaarspremieAan = eindejaarspremieIsActief(profiel);
   return (
     <CockpitCard title="Eindejaarspremie" icon={<Calendar size={16} />}>
       <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
@@ -673,27 +674,18 @@ function EindejaarspremieCard({ profiel, set }: { profiel: Profiel; set: Profiel
           Eindejaarspremie toepassen
         </label>
         {eindejaarspremieAan && (
-          <div className="grid grid-cols-2 gap-3">
-            <FormField label="Anciënniteit (maanden)">
-              <NumeriekeInput
-                className={inputClass}
-                min={0}
-                max={12}
-                value={profiel.ancienniteitMaanden}
-                modus="int"
-                onValueChange={(waarde) => set("ancienniteitMaanden", waarde)}
-              />
-            </FormField>
-            <FormField label="Prestatie (maanden)">
-              <NumeriekeInput
-                className={inputClass}
-                min={0}
-                max={12}
-                value={profiel.prestatieMaanden}
-                modus="int"
-                onValueChange={(waarde) => set("prestatieMaanden", waarde)}
-              />
-            </FormField>
+          <div
+            style={{
+              border: "1px solid var(--color-border)",
+              borderRadius: 8,
+              background: "var(--color-navy-50)",
+              color: "var(--color-navy-500)",
+              padding: "9px 10px",
+              fontSize: 12,
+              fontWeight: 600,
+            }}
+          >
+            Volledig gewerkt jaar: 12/12.
           </div>
         )}
       </div>

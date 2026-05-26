@@ -1,4 +1,8 @@
-import { berekenBvBijzonder, berekenRefertejaarloonBijzonder } from "@/lib/bvBijzonder";
+import {
+  berekenBvBijzonder,
+  berekenNormaalBrutoJaarloonBijzonder,
+  berekenRefertejaarloonBijzonder,
+} from "@/lib/bvBijzonder";
 import type { GezinsType } from "@/lib/bv";
 import { getDatapunt } from "@/lib/dataset";
 import { safeGetValue } from "@/lib/periode";
@@ -60,6 +64,7 @@ export interface JaaroverzichtResultaat {
 }
 
 export function berekenJaaroverzicht(input: JaaroverzichtInput): JaaroverzichtResultaat {
+  const normaalBrutoJaarloon = berekenNormaalBrutoJaarloonBijzonder(input.brutoloon);
   const refertejaarloon = berekenRefertejaarloonBijzonder(input.brutoloon);
   const eindejaar = eindejaarspremie({
     brutoloon: input.brutoloon,
@@ -74,12 +79,17 @@ export function berekenJaaroverzicht(input: JaaroverzichtInput): JaaroverzichtRe
 
   const eindejaarNetto = berekenAndereExceptioneleComponent(
     eindejaar.premie,
+    normaalBrutoJaarloon,
     refertejaarloon,
     input.gezinstype,
     input.kinderenTenLaste,
     eindejaar.datapunt,
   );
-  const dubbelVakantiegeld = berekenDubbelVakantiegeldComponent(input, refertejaarloon);
+  const dubbelVakantiegeld = berekenDubbelVakantiegeldComponent(
+    input,
+    normaalBrutoJaarloon,
+    refertejaarloon,
+  );
   const jaarpremieNetto = berekenJaarpremieComponent(jaarpremie.bedrag, jaarpremie.datapunt);
 
   const maandloonNettoX12 = round2(input.nettoloonPerMaand * 12);
@@ -130,6 +140,7 @@ export function berekenJaaroverzicht(input: JaaroverzichtInput): JaaroverzichtRe
 
 function berekenAndereExceptioneleComponent(
   bruto: number,
+  normaalBrutoJaarloon: number,
   refertejaarloon: number,
   gezinstype: GezinsType,
   kinderenTenLaste: number,
@@ -139,6 +150,7 @@ function berekenAndereExceptioneleComponent(
   const belastbaar = round2(bruto - rsz);
   const bv = berekenBvBijzonder({
     refertejaarloon,
+    normaalBrutoJaarloon,
     exceptioneelBruto: belastbaar,
     gezinstype,
     kinderenTenLaste,
@@ -176,6 +188,7 @@ function berekenJaarpremieComponent(
 
 function berekenDubbelVakantiegeldComponent(
   input: JaaroverzichtInput,
+  normaalBrutoJaarloon: number,
   refertejaarloon: number,
 ): JaarcomponentNetto {
   const vgPctRes = safeGetValue("vakantiegeld_dubbel_pct_2026", { refDatum: input.refDatum });
@@ -188,6 +201,7 @@ function berekenDubbelVakantiegeldComponent(
   const belastbaar = round2(bruto - rsz);
   const bv = berekenBvBijzonder({
     refertejaarloon,
+    normaalBrutoJaarloon,
     exceptioneelBruto: belastbaar,
     gezinstype: input.gezinstype,
     kinderenTenLaste: input.kinderenTenLaste,

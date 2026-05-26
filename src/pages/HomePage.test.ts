@@ -134,6 +134,15 @@ describe("Profiel formulier", () => {
     expect(html.indexOf("Extra looncomponenten")).toBeGreaterThanOrEqual(0);
   });
 
+  it("toont geen pro-rata velden voor de eindejaarspremie", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+
+    expect(html).toContain("Eindejaarspremie");
+    expect(html).toContain("Eindejaarspremie toepassen");
+    expect(html).not.toContain("Anciënniteit (maanden)");
+    expect(html).not.toContain("Prestatie (maanden)");
+  });
+
   it("toont maaltijdcheques accordion header", () => {
     const html = renderToStaticMarkup(createElement(HomePage));
 
@@ -166,7 +175,6 @@ describe("Netto-overzicht", () => {
       "Belastbaar loon",
       "Bedrijfsvoorheffing",
       "Onkostenvergoedingen en inhoudingen",
-      "Terugname VAA",
       "Nettoloon",
     ];
     const positions = labels.map((label) => html.indexOf(label));
@@ -176,6 +184,13 @@ describe("Netto-overzicht", () => {
     }
 
     expect(positions).toEqual([...positions].sort((a, b) => a - b));
+  });
+
+  it("verbergt nulregels voor VAA bedrijfswagen en terugname VAA", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+
+    expect(html).not.toContain("VAA bedrijfswagen");
+    expect(html).not.toContain("Terugname VAA");
   });
 
   it("toont aparte maand- en jaaroverzichtskaders voor netto en werkgeverskost", () => {

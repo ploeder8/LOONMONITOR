@@ -50,9 +50,10 @@ Uit `04_calculator_netto.md §9`. Tolerantie: `expect(...).toBeCloseTo(..., 0)` 
 | NTC-13 | Werkbonus-edge: bruto €2.880,32 (Luik A grens, B nul) | €2.880,32 | A = €125,04, B = 0 |
 | NTC-14 | **Eindejaarspremie 1 maandloon — bijzondere BV** | €3.000 (premie) | ≈ €2.310 (na ~23 % BV) |
 | NTC-15 | **Dubbel vakantiegeld 92 % maandloon — bijzondere BV** | €2.760 (= 92 % × 3000) | ≈ €2.110 |
+| NTC-16 | **ECL-profiel €4.000, 3 kinderen — exceptionele BV zonder maandvermindering** | EJP €4.000 / DVG €3.680 | BV EJP €1.614,81; BV DVG €1.371,58 |
 
 **Acceptatiecriteria:**
-- Alle 15 NTC-cases groen in `bun test`
+- Alle NTC-cases groen in `bun test`
 - BV-uitkomsten volgen FOD Financiën / Bijlage III 2026 voor de representatieve cases
 - Afwijking > €2: documenteren met root-cause in `08_gaps_en_pending.md`
 

@@ -5,7 +5,9 @@ Tool voor payroll-experts om lonen en kosten te verifiëren onder **Paritair Com
 
 - **Ontwikkeld voor en beheerd door:** Jaak Roggen
 - **Stack:** TypeScript + React 19 + Vite 8 + Tailwind v4
-- **Runtime:** browser-only — geen back-end, geen database, geen authenticatie
+- **Runtime:** payrollberekeningen zijn browser-only; de optionele AI-chat loopt via
+  Vercel `/api/chat` met server-side OpenAI file search en Supabase-rate-limiting.
+  Secrets blijven uitsluitend server-side en mogen nooit in `VITE_*` env vars staan.
 - **Data:** bundled JSON dataset (`src/data/pc200_payroll_dataset_2026.json`),
   schema-gevalideerd bij applicatiestart — **71 datapunten, 15 bronrecords, peildatum 2026-05-24**
 - **Audit-first:** elke berekening is gekoppeld aan datapunt-id, status,
@@ -43,7 +45,7 @@ Tool voor payroll-experts om lonen en kosten te verifiëren onder **Paritair Com
 - **Loonwig %** = (totale loonkost − netto) / totale loonkost
 
 **Premies & voordelen**
-- Eindejaarspremie (pro-rata, anciënniteit 3 jaar sinds 1/1/2026)
+- Eindejaarspremie voor een volledig gewerkt jaar
 - Ecocheques (voltijds €250 / deeltijds 4-tier)
 - Jaarlijkse premie 2026 (€330,84)
 - Woon-werkverkeer: trein, bus/tram/metro, privéwagen en fiets

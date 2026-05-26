@@ -229,8 +229,10 @@ function werkbonusFiscaal(luik_A: number, luik_B: number): number {
 1. `refertejaarloon = (brutomaandloon × 12) − werknemers-RSZ 13,07%` (normaal terugkerend loon, zonder premies)
 2. Trek op het exceptionele bedrag ook eerst toepasselijke werknemers-RSZ af om het belastbare bedrag te bepalen.
 3. Lookup tarief in tabel "bijzondere BV-schaal" (AJ 2027), met aparte kolom voor vakantiegeld versus andere exceptionele vergoedingen.
-4. `bvBijzonder = belastbaarExceptioneel × tarief`
-5. Trek toepasselijke verminderingen af (kinderen ten laste — zelfde maandbedragen × 12 of jaartabel)
+4. Pas de specifieke Bijlage III-kindregels voor exceptionele vergoedingen toe op basis van het normale brutojaarloon (`brutomaandloon × 12`): eerst eventuele vrijstelling van een deel van de exceptionele vergoeding, daarna eventuele procentuele vermindering op de BV.
+5. `bvBijzonder = belastbaarExceptioneelNaVrijstelling × tarief − exceptioneleKindvermindering`
+
+**Belangrijk:** de maandelijkse BV-kindvermindering uit de gewone loonberekening wordt **niet** rechtstreeks afgetrokken van eindejaarspremie of dubbel vakantiegeld. Voor exceptionele vergoedingen gelden aparte grenzen en percentages uit Bijlage III. Bij een normaal brutojaarloon van €48.000 en 3 kinderen is er geen vrijstelling of vermindering, dus de BV is gewoon `belastbaar exceptioneel loon × tarief`.
 
 **Tabel bijzondere BV-schaal 2026 (referte-jaarloon → tarief op exceptioneel inkomen):**
 
@@ -251,22 +253,23 @@ function werkbonusFiscaal(luik_A: number, luik_B: number): number {
 ```typescript
 function bvBijzonder(
   refertejaarloon: number,
+  normaalBrutoJaarloon: number,
   belastbaarExceptioneel: number,
   soort: 'vakantiegeld' | 'andere_exceptionele_vergoeding',
   gezinstype: GezinsType,
   kinderenTenLaste: number,
 ): { tarief: number; bvBruto: number; vermindering: number; bvNetto: number } {
   const tarief = lookupBijzondereSchaal(refertejaarloon, soort);
-  const bvBruto = round2(belastbaarExceptioneel * tarief);
-  // Verminderingen — zelfde maandtabel × 12 (eenmalig op de premie toepassen)
-  const vermindering = round2(bvVerminderingKinderenJaar(kinderenTenLaste));
+  const vrijgesteld = kindVrijstellingExceptioneel(normaalBrutoJaarloon, belastbaarExceptioneel, kinderenTenLaste);
+  const bvBruto = round2((belastbaarExceptioneel - vrijgesteld) * tarief);
+  const vermindering = kindVerminderingExceptioneel(normaalBrutoJaarloon, bvBruto, kinderenTenLaste);
   const bvNetto = Math.max(0, round2(bvBruto - vermindering));
   return { tarief, bvBruto, vermindering, bvNetto };
 }
 ```
 
 **Toepassing:**
-- `eindejaarspremie.ts` → bereken bruto premie via cao-formule, trek 13,07% RSZ af, daarna bijzondere BV met soort `andere_exceptionele_vergoeding`.
+- `eindejaarspremie.ts` → in de Jaakie-gebruikersflow wordt een volledig gewerkt jaar verondersteld: bruto premie = 1 brutomaandloon; trek 13,07% RSZ af, daarna bijzondere BV met soort `andere_exceptionele_vergoeding`. De pure functie behoudt pro-rata parameters voor juridische/testdekking, maar die zijn geen UI-invoer meer.
 - `jaarpremie.ts` → sectorale PC 200-jaarpremie: trek 13,07% RSZ af; geen bedrijfsvoorheffing.
 - Dubbel vakantiegeld → bruto = `92% × (maandloon incl. VAA)`, RSZ = `13,07% × (85/92 × dubbel vakantiegeld)`, daarna bijzondere BV met soort `vakantiegeld`.
 - Ad-hoc bonus → UI-input + `bvBijzonder` → netto bonus

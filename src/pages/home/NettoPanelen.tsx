@@ -22,6 +22,8 @@ export function NettoPanel({
   const [bvDetailOpen, setBvDetailOpen] = useState(false);
   const [vaaDetailOpen, setVaaDetailOpen] = useState(false);
   const totaalTerugnameVaa = r.vaaBedrijfswagenPerMaand + r.vaaRszPlichtigPerMaand;
+  const toontVaaBedrijfswagen = r.vaaBedrijfswagenPerMaand > 0;
+  const toontTerugnameVaa = totaalTerugnameVaa > 0;
   const gebruiktSchaalII = r.bv.schaal === "II";
   const maaltijdcheques = berekenMaaltijdchequeWaarde({
     werkgeversaandeelPerDag: maaltijdchequeWerkgeversaandeelPerDag,
@@ -75,12 +77,14 @@ export function NettoPanel({
             prefix=""
             variant="subtotal"
           />
-          <NettoRow
-            label="VAA bedrijfswagen"
-            bedrag={r.vaaBedrijfswagenPerMaand}
-            prefix="+"
-            dimmed
-          />
+          {toontVaaBedrijfswagen && (
+            <NettoRow
+              label="VAA bedrijfswagen"
+              bedrag={r.vaaBedrijfswagenPerMaand}
+              prefix="+"
+              dimmed
+            />
+          )}
           <NettoRow
             label="Belastbaar loon"
             bedrag={r.belastbaarMaandloonVoorBV}
@@ -207,13 +211,15 @@ export function NettoPanel({
               dimmed
             />
           )}
-          <NettoRow
-            label="Terugname VAA"
-            bedrag={totaalTerugnameVaa}
-            onToggle={() => setVaaDetailOpen(!vaaDetailOpen)}
-            open={vaaDetailOpen}
-          />
-          {vaaDetailOpen && (
+          {toontTerugnameVaa && (
+            <NettoRow
+              label="Terugname VAA"
+              bedrag={totaalTerugnameVaa}
+              onToggle={() => setVaaDetailOpen(!vaaDetailOpen)}
+              open={vaaDetailOpen}
+            />
+          )}
+          {toontTerugnameVaa && vaaDetailOpen && (
             <NettoDetailRow>
               <div style={{ display: "grid", gap: 5 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>

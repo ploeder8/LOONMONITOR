@@ -49,6 +49,31 @@ describe("profielCsv", () => {
     expect(parsed.profiel.gezinstype).toBe("gehuwd_zonder_inkomen");
   });
 
+  it("normaliseert oude pro-rata eindejaarspremievelden naar volledig jaar bij import", () => {
+    const csv = [
+      "brutoloon;ancienniteitMaanden;prestatieMaanden;commentaar",
+      "4000;4;6;oude pro-rata export",
+    ].join("\n");
+
+    const parsed = profielUitCsv(csv);
+
+    expect(parsed.profiel.brutoloon).toBe(4000);
+    expect(parsed.profiel.ancienniteitMaanden).toBe(12);
+    expect(parsed.profiel.prestatieMaanden).toBe(12);
+  });
+
+  it("behoudt eindejaarspremie uit bij oude CSV met nul prestaties", () => {
+    const csv = [
+      "brutoloon;ancienniteitMaanden;prestatieMaanden;commentaar",
+      "4000;0;0;geen eindejaarspremie",
+    ].join("\n");
+
+    const parsed = profielUitCsv(csv);
+
+    expect(parsed.profiel.ancienniteitMaanden).toBe(0);
+    expect(parsed.profiel.prestatieMaanden).toBe(0);
+  });
+
   it("schrijft kernoutputkolommen in de exportrij", () => {
     const rij = bouwCsvExportRij({ profiel: DEFAULTS, commentaar: "baseline" });
 

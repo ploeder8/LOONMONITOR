@@ -11,6 +11,9 @@ Kort projectlogboek voor wijzigingen door coding agents.
 
 ## Log
 
+- 2026-05-26 — Eindejaarspremie-invoer vereenvoudigd naar volledig gewerkt jaar: pro-rata velden anciënniteit/prestatie uit UI, actieve CSV-imports normaliseren naar 12/12; reden: payroll-expert vond de extra invoer niet nuttig voor Jaakie.
+- 2026-05-26 — Exceptionele BV voor eindejaarspremie en dubbel vakantiegeld gebruikt nu de aparte Bijlage III-kindregels in plaats van de maandelijkse kindvermindering; VAA-nulregels verborgen in nettofiche; reden: payroll-expertcase ECL €4.000 met 3 kinderen moest BV = belastbaar × tarief tonen.
+- 2026-05-26 — README-runtimeclaim gecorrigeerd naar browser-only payrollberekeningen plus optionele Vercel/OpenAI/Supabase-chatlaag; reden: P0 release-readiness blokkering door foutieve publieke architectuurcopy.
 - 2026-05-24 — Juridische bronronde uitgevoerd en vastgelegd in `knowledgebase/bronnen/bronronde_2026-05-24.md`; datasetmetadata en SSOT bijgewerkt naar Tier-1-bronnen voor werkbonus, AJ 2027, Sociaal Fonds 200, VAA en landingsbaan; reden: stap 5 releasewaarheid herbevestigen zonder rekenwaarden te wijzigen.
 - 2026-05-23 — Data-release gate toegevoegd: actieve datapunten vereisen bron/status/tier/geldigheidsmetadata, Tier-3-records vereisen triangulatie en dataset-aantallen blijven synchroon met docs/ScopePage; reden: releases blokkeren bij incomplete datasetmetadata.
 - 2026-05-23 — Tijdelijk uitvoerplan `update_plan_23_05_2026.md` toegevoegd voor stappen 4 t/m 8 (data-release gate, bronronde, CI, browser/UX QA en productrichting); reden: resterende developmentstappen volgordelijk kunnen uitvoeren.

@@ -7,11 +7,11 @@
 import { round2 } from "@/lib/money";
 import { getDatapunt } from "@/lib/dataset";
 import type { Datapunt } from "@/types/dataset";
-import { bvKinderen } from "@/lib/bv";
 import type { GezinsType } from "@/lib/bv";
 
 export interface BvBijzonderInput {
   refertejaarloon: number;          // 12 × normale bruto bezoldiging min werknemers-RSZ
+  normaalBrutoJaarloon: number;      // 12 × normale bruto bezoldiging, basis voor kindregels exceptionele BV
   exceptioneelBruto: number;         // het te belasten variabele inkomen
   gezinstype: GezinsType;
   kinderenTenLaste: number;
@@ -54,8 +54,35 @@ const SCHAAL_2026: SchaalRij[] = [
 
 const RSZ_WERKNEMER_PCT = 0.1307;
 
+const KINDVRIJSTELLING_GRENS: Record<number, number> = {
+  1: 18858,
+  2: 22470,
+  3: 28960,
+  4: 36200,
+  5: 43440,
+  6: 50680,
+  7: 57920,
+  8: 65160,
+  9: 72400,
+  10: 79640,
+  11: 86880,
+  12: 94120,
+};
+
+const KINDVERMINDERING_EXCEPTIONEEL: Record<number, { pct: number; grens: number }> = {
+  1: { pct: 0.075, grens: 28940 },
+  2: { pct: 0.20, grens: 28940 },
+  3: { pct: 0.35, grens: 31835 },
+  4: { pct: 0.55, grens: 37625 },
+  5: { pct: 0.75, grens: 40520 },
+};
+
+export function berekenNormaalBrutoJaarloonBijzonder(brutomaandloon: number): number {
+  return round2(brutomaandloon * 12);
+}
+
 export function berekenRefertejaarloonBijzonder(brutomaandloon: number): number {
-  const normaalBrutoJaarloon = round2(brutomaandloon * 12);
+  const normaalBrutoJaarloon = berekenNormaalBrutoJaarloonBijzonder(brutomaandloon);
   return round2(normaalBrutoJaarloon - normaalBrutoJaarloon * RSZ_WERKNEMER_PCT);
 }
 
@@ -79,6 +106,7 @@ function lookupTarief(
 export function berekenBvBijzonder(input: BvBijzonderInput): BvBijzonderResultaat {
   const {
     refertejaarloon,
+    normaalBrutoJaarloon,
     exceptioneelBruto,
     kinderenTenLaste,
     soort = "vakantiegeld",
@@ -88,9 +116,21 @@ export function berekenBvBijzonder(input: BvBijzonderInput): BvBijzonderResultaa
   if (!dp) throw new Error("Datapunt bv_bijzondere_schaal_eindejaar_2026 niet gevonden");
 
   const tarief = lookupTarief(refertejaarloon, soort);
-  const bvBruto = round2(exceptioneelBruto * tarief);
+  const belastbaarNaKindvrijstelling = round2(
+    exceptioneelBruto -
+      berekenKindvrijstellingExceptioneel(
+        normaalBrutoJaarloon,
+        exceptioneelBruto,
+        kinderenTenLaste,
+      ),
+  );
+  const bvBruto = round2(belastbaarNaKindvrijstelling * tarief);
 
-  const vermindering = bvKinderen(kinderenTenLaste);
+  const vermindering = berekenKindverminderingExceptioneel(
+    normaalBrutoJaarloon,
+    bvBruto,
+    kinderenTenLaste,
+  );
 
   const bvNetto = Math.max(0, round2(bvBruto - vermindering));
   const nettoBedrag = round2(exceptioneelBruto - bvNetto);
@@ -104,4 +144,24 @@ export function berekenBvBijzonder(input: BvBijzonderInput): BvBijzonderResultaa
     nettoBedrag,
     datapunt: dp,
   };
+}
+
+function berekenKindvrijstellingExceptioneel(
+  normaalBrutoJaarloon: number,
+  exceptioneelBruto: number,
+  kinderenTenLaste: number,
+): number {
+  const grens = KINDVRIJSTELLING_GRENS[kinderenTenLaste];
+  if (!grens || normaalBrutoJaarloon > grens) return 0;
+  return round2(Math.min(exceptioneelBruto, Math.max(grens - normaalBrutoJaarloon, 0)));
+}
+
+function berekenKindverminderingExceptioneel(
+  normaalBrutoJaarloon: number,
+  bvBruto: number,
+  kinderenTenLaste: number,
+): number {
+  const regel = KINDVERMINDERING_EXCEPTIONEEL[kinderenTenLaste];
+  if (!regel || normaalBrutoJaarloon > regel.grens) return 0;
+  return round2(bvBruto * regel.pct);
 }

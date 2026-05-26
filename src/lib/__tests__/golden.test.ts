@@ -1195,6 +1195,7 @@ describe("NTC-15 — Dubbel vakantiegeld 92% — bijzondere BV", () => {
   it("Bijzondere BV op €2.760 vakantiegeld gebruikt de vakantiegeldkolom", () => {
     const r = berekenBvBijzonder({
       refertejaarloon: 31294.8,
+      normaalBrutoJaarloon: 36000,
       exceptioneelBruto: 2426.71,
       gezinstype: "alleenstaand",
       kinderenTenLaste: 0,
@@ -1203,6 +1204,38 @@ describe("NTC-15 — Dubbel vakantiegeld 92% — bijzondere BV", () => {
     expect(r.tarief).toBeCloseTo(0.3634, 4);
     expect(r.bvBruto).toBeCloseTo(881.87, 1);
     expect(r.nettoBedrag).toBeCloseTo(1544.84, 1);
+  });
+
+  it("past geen kindvermindering toe boven de exceptionele BV-grens voor 3 kinderen", () => {
+    const r = berekenBvBijzonder({
+      refertejaarloon: 41726.4,
+      normaalBrutoJaarloon: 48000,
+      exceptioneelBruto: 3477.2,
+      gezinstype: "gehuwd_met_inkomen",
+      kinderenTenLaste: 3,
+      soort: "andere_exceptionele_vergoeding",
+    });
+
+    expect(r.tarief).toBe(0.4644);
+    expect(r.bvBruto).toBe(1614.81);
+    expect(r.vermindering).toBe(0);
+    expect(r.bvNetto).toBe(1614.81);
+  });
+
+  it("past kindvrijstelling en procentuele vermindering toe onder de exceptionele BV-grenzen", () => {
+    const r = berekenBvBijzonder({
+      refertejaarloon: 24340,
+      normaalBrutoJaarloon: 28000,
+      exceptioneelBruto: 3477.2,
+      gezinstype: "gehuwd_met_inkomen",
+      kinderenTenLaste: 3,
+      soort: "andere_exceptionele_vergoeding",
+    });
+
+    expect(r.tarief).toBe(0.3836);
+    expect(r.bvBruto).toBe(965.6);
+    expect(r.vermindering).toBe(337.96);
+    expect(r.bvNetto).toBe(627.64);
   });
 });
 
@@ -1237,6 +1270,32 @@ describe("Jaaroverzicht — netto en werkgeverskost", () => {
     expect(r.werkgever.rszOpEindejaarspremieEnJaarpremie).toBe(1207.71);
     expect(r.werkgever.dubbelVakantiegeld).toBe(4140);
     expect(r.werkgever.totaleLoonkostJaar).toBe(78214.75);
+  });
+
+  it("berekent exceptionele BV voor het ECL-profiel zonder maandelijkse kindvermindering", () => {
+    const r = berekenJaaroverzicht({
+      brutoloon: 4000,
+      nettoloonPerMaand: 3022.39,
+      loonkostWerkgeverPerMaand: 5327.87,
+      refDatum: "2026-05-01",
+      gezinstype: "gehuwd_met_inkomen",
+      kinderenTenLaste: 3,
+      ancienniteitMaanden: 12,
+      prestatieMaandenInRefertepériode: 12,
+      tewerkstellingsbreuk: 1,
+    });
+
+    expect(r.netto.eindejaarspremie.bruto).toBe(4000);
+    expect(r.netto.eindejaarspremie.rsz).toBe(522.8);
+    expect(r.netto.eindejaarspremie.belastbaar).toBe(3477.2);
+    expect(r.netto.eindejaarspremie.bvTarief).toBe(0.4644);
+    expect(r.netto.eindejaarspremie.bv).toBe(1614.81);
+    expect(r.netto.dubbelVakantiegeld.bruto).toBe(3680);
+    expect(r.netto.dubbelVakantiegeld.rsz).toBe(444.38);
+    expect(r.netto.dubbelVakantiegeld.belastbaar).toBe(3235.62);
+    expect(r.netto.dubbelVakantiegeld.bvTarief).toBe(0.4239);
+    expect(r.netto.dubbelVakantiegeld.bv).toBe(1371.58);
+    expect(r.netto.jaarpremie.bv).toBe(0);
   });
 });
 

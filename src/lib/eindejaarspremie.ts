@@ -7,6 +7,7 @@ import {
 import type { Datapunt } from "@/types/dataset";
 import {
   berekenBvBijzonder,
+  berekenNormaalBrutoJaarloonBijzonder,
   berekenRefertejaarloonBijzonder,
   type BvBijzonderResultaat,
 } from "@/lib/bvBijzonder";
@@ -76,6 +77,7 @@ export function eindejaarspremie(input: EindejaarsInput): EindejaarsResultaat {
     const belastbaar = round2(premie - rsz);
     const bv = berekenBvBijzonder({
       refertejaarloon: berekenRefertejaarloonBijzonder(input.brutoloon),
+      normaalBrutoJaarloon: berekenNormaalBrutoJaarloonBijzonder(input.brutoloon),
       exceptioneelBruto: belastbaar,
       gezinstype: input.gezinstype,
       kinderenTenLaste: input.kinderenTenLaste ?? 0,
