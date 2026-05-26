@@ -48,7 +48,7 @@
 - **Loonwig %** = (totale loonkost − netto) / totale loonkost
 
 ### Premies & voordelen (sectoraal PC 200)
-- Eindejaarspremie (anciënniteit 3 jaar sinds 1/1/2026)
+- Eindejaarspremie voor een volledig gewerkt jaar; pro-rata anciënniteit/prestatie blijft juridisch relevant maar is geen gebruikersinstelling in Jaakie
 - Ecocheques (voltijds €250 / deeltijds 4-tier)
 - Jaarlijkse premie 2026 (€330,84)
 - Woon-werk trein, bus/tram/metro, privéwagen en fiets

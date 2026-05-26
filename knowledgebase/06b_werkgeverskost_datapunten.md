@@ -383,9 +383,9 @@ type AuditEntry = {
 
 | ID | Status | Reden | Acceptatiecriterium |
 |---|---|---|---|
-| `eindejaarspremie_formule_pc200_2026` | pending | Cao-tekst 18/12/2025 + 15/1/2026 nog te ontleden voor exacte formule (anciënniteit 5→3 jaar, gewerkte dagen, prorata) | Formule + 3 testcases (1j, 5j, 15j anciënniteit) |
-| `tussenkomst_treinvervoer_pc200_2026` | pending | "Aangepast" in cao 15/1/2026 — exacte schaal nog te bevestigen | Tabel km-categorieën + werkgeverstussenkomst |
-| `werkgeverstussenkomst_woonwerk_alle_modi_2026` | pending | Algemene cao woon-werkverkeer 2026 | Stand-by tot definitieve cao-tekst |
+| `eindejaarspremie_formule_pc200_2026` | actief vereenvoudigd in Jaakie | Gebruikersflow rekent volledig gewerkt jaar: 1 × brutomaandloon. Juridische pro-rata blijft pure functie/testdekking, geen UI-invoer. | Geen extra UI-velden; alleen heropenen als product expliciet pro-rata wil tonen |
+| `tussenkomst_treinvervoer_pc200_2026` | actief | Jaakie gebruikt `pc200_woonwerk_trein_2026`; exacte bronstatus/tier blijft release-aandachtspunt. | Bronpromotie naar Tier 1/2 onderzoeken |
+| `werkgeverstussenkomst_woonwerk_alle_modi_2026` | deels actief | Fiets, privéwagen, bus/tram/metro en trein zitten in runtime; bronstatus/tier per datapunt blijven apart te valideren. | Tier 3-runtimepunten behandelen via data-review |
 | `structurele_vermindering_loongrenzen_2026_april` | pending | KB 2/7/2025 noemt helling 0,1600 maar exacte loongrenzen per band te valideren | RSZ-instructies werkgevers Q2 2026 |
 
 ---

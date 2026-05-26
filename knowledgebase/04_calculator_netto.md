@@ -34,7 +34,7 @@
 | **BV-verminderingen** | kinderen ten laste, andere personen, fiscaal alleenstaande, groepsverzekering |
 | **Fiscale werkbonus** | belastingkrediet op BV (33,14 % Luik A / 52,54 % Luik B) |
 | **BBSZ** | exacte 2026-inhouding volgens RSZ-scenario; voorschot op PB-eindafrekening |
-| **VAA** | bedrijfswagen, PC, GSM, internet, huisvesting, verwarming, elektriciteit |
+| **VAA** | bedrijfswagen en forfaitaire werkmiddelen (PC/laptop, GSM, internet, abonnement) actief; huisvesting, verwarming en elektriciteit buiten scope |
 | **Aanvullende gemeentebelasting** | vaste interne parameter 7,3 % (gewogen landelijk gemiddelde) — info-only |
 | **Eindejaarspremie / dubbel vakantiegeld** | bijzondere BV-schaal met aparte kolommen voor vakantiegeld en andere exceptionele vergoedingen |
 
@@ -61,7 +61,7 @@ Aanvullingen op het huidige POC-input-formulier:
 | `fiscaal_alleenstaande_met_kinderen` | boolean | nee | enkel indien `gezinscategorie = alleenstaande` AND `kinderen_ten_laste > 0` | false |
 | `bbsz_scenario` | enum: `individuele_aanslag`, `gemeenschappelijke_aanslag_partner_met_beroepsinkomsten`, `gemeenschappelijke_aanslag_partner_zonder_beroepsinkomsten` | ✓ | bepaalt de BBSZ-kwartaalschijf; los van BV-schaal gekozen omdat BBSZ een eigen RSZ-regime heeft | `individuele_aanslag` |
 | `groepsverzekering_eigen_bijdrage_eur` | decimaal ≥ 0 | nee | maandbijdrage werknemer | 0 |
-| `gemeentebelasting_pct` | decimaal 0–10 | nee | interne parameter voor later stadium, niet zichtbaar in UI — buiten BV | 7.3 |
+| `gemeentebelasting_pct` | decimaal 0–10 | nee | interne info-only parameter, niet zichtbaar als gebruikersinvoer — buiten BV | 7.3 |
 | `vaa_bedrijfswagen_eur_jaar` | decimaal ≥ 0 | nee | jaarbedrag (UI: aparte sub-form met cataloguswaarde + CO2 + brandstof + leeftijd) | 0 |
 | `vaa_pc_internet_gsm_eur_jaar` | decimaal ≥ 0 | nee | som forfaits | 0 |
 | `vaa_huisvesting_eur_jaar` | decimaal ≥ 0 | nee | KI × 2,3000 × 100/60 × 2 (bemeubeld × 5/3) | 0 |
@@ -396,7 +396,7 @@ Voor élke berekende waarde geldt het bestaande audit-trail-invariant:
 | `kinderen_gehandicapt > kinderen_ten_laste` | Hard error met UI-validatie |
 | `vaa_bedrijfswagen_eur_jaar < 1690` | Auto-correctie naar 1690 + info-icoon "Minimum VAA 2026 = €1.690" |
 | Netto < 0 | UI toont "Netto onder 0 — controleer input + VAA-bedragen" rode banner |
-| BBSZ-scenario niet gekozen | Default `individuele_aanslag` in UI; runtime-input blijft expliciet |
+| BBSZ-scenario | Geen aparte gebruikerskeuze; Jaakie leidt het scenario af uit `gezinstype` en toont de inhouding in het nettoresultaat |
 
 ---
 

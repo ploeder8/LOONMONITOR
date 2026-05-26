@@ -58,7 +58,7 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 <p class="subtitle">Modular monolith op Kotlin/Spring Boot 3, met decision tables, selectief event sourcing op de PayrollRun, en CQRS voor aangifte/loonbrief/boekhouding.</p>
 
 <div class="callout warn">
-<strong>Scope:</strong> deze architectuur beschrijft de <strong>volledige loonmotor</strong> (backend + database + aangiften). De <strong>Jaakie</strong> POC is een browser-only TypeScript/React/Vite SPA zonder backend — zie <a href="jaakie-specificatie.html">Jaakie-specificatie</a> voor de actuele POC-architectuur.
+<strong>Scope:</strong> deze architectuur beschrijft de <strong>volledige loonmotor</strong> (backend + database + aangiften). De <strong>Jaakie</strong> payrollcalculator rekent browser-only in TypeScript/React/Vite; de optionele AI-chat gebruikt een aparte Vercel serverless laag — zie <a href="jaakie-specificatie.html">Jaakie-specificatie</a> voor de actuele architectuur.
 </div>
 
 <h2>1. Architectuurprincipes</h2>

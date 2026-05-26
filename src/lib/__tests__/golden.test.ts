@@ -202,7 +202,7 @@ describe("TC-11 — Jaarlijkse premie 2026", () => {
   });
 });
 
-describe("TC-12 — Eindejaarspremie pro-rata", () => {
+describe("TC-12 — Eindejaarspremie pure pro-rata functie", () => {
   it("bij 9/12 maanden en € 2.875,48 brutoloon is de premie € 2.156,61", () => {
     const r = eindejaarspremie({
       brutoloon: 2875.48,

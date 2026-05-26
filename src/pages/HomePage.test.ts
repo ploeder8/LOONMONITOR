@@ -15,6 +15,8 @@ import {
   HomePage,
   waardeUitNumeriekeInput,
 } from "@/pages/HomePage";
+import { ScopePage } from "@/pages/ScopePage";
+import { TestcasesPage } from "@/pages/TestcasesPage";
 
 describe("App shell breedte", () => {
   it("geeft alleen de calculatorroute extra desktopbreedte", () => {
@@ -26,6 +28,25 @@ describe("App shell breedte", () => {
   it("houdt logo en tooltitel links uitgelijnd in de header", () => {
     expect(headerContentLayout.maxWidth).toBe("none");
     expect(headerContentLayout.margin).toBe("0");
+  });
+});
+
+describe("Publieke documentatiepagina's", () => {
+  it("beschrijft de actuele runtime-architectuur op de scopepagina", () => {
+    const html = renderToStaticMarkup(createElement(ScopePage));
+
+    expect(html).toContain("Payroll browser-only, chat serverless");
+    expect(html).toContain("Vercel serverless laag");
+    expect(html).not.toContain("Browser-only, geen back-end");
+    expect(html).not.toContain("Geen authenticatie, geen DB, geen logging");
+  });
+
+  it("toont de pro-rata eindejaarspremiecase als technische regressietest", () => {
+    const html = renderToStaticMarkup(createElement(TestcasesPage));
+
+    expect(html).toContain("Eindejaarspremie — pure pro-rata functie");
+    expect(html).toContain("De Jaakie-gebruikersflow toont eindejaarspremie als volledig gewerkt jaar");
+    expect(html).not.toContain("Eindejaarspremie pro-rata (6 mnd)");
   });
 });
 

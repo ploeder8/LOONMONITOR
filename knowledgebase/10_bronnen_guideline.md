@@ -262,7 +262,7 @@
 | Landingsbaan-supplement | €92,45/maand sectoraal vanaf 1/6/2026 (PC 200 dataset) | Sociaal Fonds 200 tijdskredietpagina — Tier 1 bevestigd op 2026-05-24 |
 | Rouwverlof uitbreiding | nieuwe regeling vanaf 1/1/2026 | sectorakkoord 15/01/2026 |
 
-**Status in huidige dataset:** alle bovenstaande premies zijn al opgenomen — uitbreiding nodig voor **eindejaarspremie-anciënniteit 5→3 jaar** (sectorakkoord 18/12/2025, niet meer 15/01/2026 als peildatum).
+**Status in huidige dataset:** alle bovenstaande premies zijn opgenomen. De eindejaarspremie wordt in de Jaakie-gebruikersflow als volledig gewerkt jaar berekend; de anciënniteits- en pro-rata context blijft broncontext/testdekking, geen zichtbare gebruikerinstelling.
 
 ---
 

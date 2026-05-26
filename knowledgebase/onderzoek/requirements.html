@@ -54,7 +54,7 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 <p class="subtitle">Wat de loonmotor moet kunnen — gestructureerd in functionele, niet-functionele en compliance-vereisten met fasering per categorie.</p>
 
 <div class="callout">
-<strong>Scope-afbakening:</strong> requirements gemarkeerd met <span class="scope-in">In Jaakie</span> zijn geïmplementeerd in de browser-only POC; <span class="scope-out">Niet in Jaakie</span> betreft de volledige loonmotor (backend, aangiften, ESS). Zie <a href="jaakie-specificatie.html">Jaakie-specificatie</a> §7 voor het volledige in/uit scope-overzicht.
+<strong>Scope-afbakening:</strong> requirements gemarkeerd met <span class="scope-in">In Jaakie</span> zijn geïmplementeerd in de Jaakie payrollcalculator; <span class="scope-out">Niet in Jaakie</span> betreft de volledige loonmotor (backend, aangiften, ESS). Payrollberekeningen zijn browser-only; de optionele AI-chat is een aparte serverless laag. Zie <a href="jaakie-specificatie.html">Jaakie-specificatie</a> §7 voor het volledige in/uit scope-overzicht.
 </div>
 
 <h2>Functionele requirements</h2>
@@ -211,7 +211,7 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 </table>
 
 <h2>Jaakie-specifieke requirements (uitgevoerd in POC)</h2>
-<p>Deze requirements zijn specifiek voor de <strong>Jaakie</strong> browser-only calculator (TypeScript/React/Vite) en vormen een aanvulling op de generieke loonmotor-requirements hierboven.</p>
+<p>Deze requirements zijn specifiek voor de <strong>Jaakie</strong> payrollcalculator (TypeScript/React/Vite, browser-only berekeningen plus optionele serverless AI-chat) en vormen een aanvulling op de generieke loonmotor-requirements hierboven.</p>
 
 <h3>J1. Data-integriteit &amp; startup gate</h3>
 <table>
@@ -248,7 +248,7 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 <table>
 <thead><tr><th>ID</th><th>Vereiste</th><th>Status</th></tr></thead>
 <tbody>
-<tr><td class="req-id">J4.01</td><td>Browser-only — geen backend, geen database, geen authenticatie, geen netwerkverzoeken voor berekeningen.</td><td><span class="badge feit">Feit</span></td></tr>
+<tr><td class="req-id">J4.01</td><td>Payrollberekeningen browser-only — geen netwerkverzoeken voor berekeningen. AI-chat apart via Vercel serverless endpoint met server-side secrets.</td><td><span class="badge feit">Feit</span></td></tr>
 <tr><td class="req-id">J4.02</td><td>PC 200 only — geen andere paritaire comités in de POC.</td><td><span class="badge feit">Feit</span></td></tr>
 <tr><td class="req-id">J4.03</td><td>Geen loonbrief-generatie, geen SEPA, geen Dimona/DmfA/Belcotax/Finprof-aangiften in de POC.</td><td><span class="badge feit">Feit</span></td></tr>
 <tr><td class="req-id">J4.04</td><td>HashRouter — geen server-side routing vereist.</td><td><span class="badge feit">Feit</span></td></tr>

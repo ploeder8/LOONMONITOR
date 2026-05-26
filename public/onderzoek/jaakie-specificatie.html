@@ -64,17 +64,17 @@ footer{border-top:1px solid var(--border);margin-top:48px;padding:24px;font-size
 
 <main>
 <h1>Jaakie-specificatie</h1>
-<p class="subtitle">Technische specificatie van de Jaakie browser-only calculator: scope, architectuur, berekeningsmodules, audit-trail en tier-1/2/3 bronverificatie.</p>
+<p class="subtitle">Technische specificatie van de Jaakie payrollcalculator: browser-only berekeningen, optionele serverless AI-chat, audit-trail en tier-1/2/3 bronverificatie.</p>
 
 <div class="meta">
 <strong>Versie:</strong> 1.1 · <strong>Peildatum:</strong> 2026-05-24 · <strong>Tech stack:</strong> TypeScript 5.6, React 19, Vite 8, Tailwind CSS v4 · <strong>Status POC:</strong> <span class="badge mvp">MVP</span>
 </div>
 
 <h2>1. Wat is Jaakie</h2>
-<p><strong>Jaakie</strong> is een browser-only Single Page Application (SPA) die payroll-experts helpt om lonen en werkgeverskosten te verifiëren onder <strong>Paritair Comité 200</strong> (PC 200, het Aanvullend Paritair Comité voor de Bedienden). <span class="badge feit">Feit</span></p>
+<p><strong>Jaakie</strong> is een Single Page Application (SPA) die payroll-experts helpt om lonen en werkgeverskosten te verifiëren onder <strong>Paritair Comité 200</strong> (PC 200, het Aanvullend Paritair Comité voor de Bedienden). De payrollberekeningen blijven browser-only; de optionele AI-chat loopt via een serverless endpoint. <span class="badge feit">Feit</span></p>
 <ul>
 <li><strong>Geen vervanging</strong> voor een sociaal secretariaat — wel een audit-traceerbare berekening tegen een Tier-1/2-gevalideerde dataset.</li>
-<li><strong>Single-tenant</strong> in de browser: geen backend, geen database, geen authenticatie.</li>
+<li><strong>Payroll single-tenant</strong> in de browser: geen netwerkverzoeken voor berekeningen. De AI-chat is apart en gebruikt Vercel/OpenAI/Supabase server-side.</li>
 <li><strong>Audit-trail per waarde:</strong> elke berekende regel toont datapunt-id, status, tier, bron-URL en fragment-citaat.</li>
 </ul>
 

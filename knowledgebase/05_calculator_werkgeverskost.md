@@ -61,9 +61,9 @@ Voor PC 200-bedienden in een typisch bureauomgeving is 0,30% verdedigbaar als la
 
 ### 2.4 Eindejaarspremie in jaaroverzicht
 
-**Bedrag:** brutomaandloon volgens de PC 200-formule, pro rata volgens anciënniteit/prestaties.
+**Bedrag in Jaakie:** 1 × brutomaandloon, alsof het profiel een volledig gewerkt jaar heeft.
 
-**Bron:** PC 200 cao 18/12/2025 — anciënniteit 5 jaar → **3 jaar** vanaf 2026. Lichte herziening 15/1/2026 akkoord.
+**Bron en juridische context:** PC 200 cao 18/12/2025 — anciënniteit 5 jaar → **3 jaar** vanaf 2026. Juridisch bestaan pro-rata regels volgens anciënniteit/prestaties, maar Jaakie toont die complexiteit niet langer als gebruikersinstelling. Oude CSV-imports met pro-rata kolommen worden bij actieve eindejaarspremie naar 12/12 genormaliseerd.
 
 **Werkgeverskost jaarbasis:** tel het brutobedrag op in het jaaroverzicht en bereken daarnaast 25% werkgevers-RSZ op de som van eindejaarspremie + jaarpremie.
 
@@ -82,8 +82,8 @@ Voor PC 200-bedienden in een typisch bureauomgeving is 0,30% verdedigbaar als la
 | Hospitalisatieverzekering | €30–€90/m per persoon | sectorbreed | ✅ Configureerbaar (€/m) |
 | ECO-cheques | tot €250/jaar | cao 98 nationale arbeidsraad | ✅ Automatisch afgeleid van tewerkstellingsbreuk (jaarcomponent) |
 | Mobiliteitsvergoeding | tot €0,37/km × max 3.700 km/jaar | fiscaal vrijgesteld AJ 2027 | ⏳ Buiten scope |
-| Bedrijfswagen | TCO autoleasing — verschilt sterk per model | apart luik | ⏳ Buiten scope |
-| GSM/laptop/internet | €4–€20/m forfaitair | KB BV-tabellen | ⏳ Buiten scope |
+| Bedrijfswagen | TCO autoleasing — verschilt sterk per model | apart VAA-luik | ✅ VAA-formule actief; leasing/TCO buiten scope |
+| GSM/laptop/internet | €4–€20/m forfaitair | KB BV-tabellen | ✅ Forfaitaire VAA werkmiddelen actief |
 
 Loonmotor accepteert groepsverzekering, maaltijdcheques en hospitalisatieverzekering als maandelijkse werkgeverskosten. Ecocheques worden automatisch afgeleid van de tewerkstellingsbreuk en alleen in het jaaroverzicht toegevoegd. Maaltijdcheques zijn een expliciete profieloptie omdat PC 200 geen sectorale verplichting kent; wanneer aangevinkt worden ze berekend als werkgeversaandeel per dag × werkdagen in de gekozen maand. Werkdagen wordt vooringevuld op basis van weekdagen en blijft aanpasbaar. De AO-verzekeringtarief (default 0,30%) is eveneens aanpasbaar per werkgever via de "Werkgeversbijdragen"-sectie in het profiel-formulier.
 

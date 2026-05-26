@@ -14,7 +14,7 @@
 >
 > **Confidence:** MODERATE-to-HIGH. Tier-1 dekking volledig voor wettelijk regime; specifieke 2026-bedragen die nog niet via FOD Fin als gestructureerde tabel zijn gepubliceerd (BBSZ-banden, BV-tabel per loonniveau) komen uit Tier-2 sociaal-secretariaten en zijn getrianguleerd.
 >
-> **Action:** De POC-Loonmotor moet (1) het bestaande RSZ + sectorale-premie-luik behouden, (2) de BV-laag toevoegen via de FOD-Financiën-sleutelformule (link óf eigen implementatie), (3) de werkbonus per 1/4/2026 implementeren met de twee luiken, (4) BBSZ alleen tonen als info-veld zolang de RSZ-instructie 2026 niet als tabel publiek beschikbaar is, en (5) gemeentebelasting als parameter laten of een vast gemiddelde van 7,3 % aanbieden met disclaimer.
+> **Actuele Jaakie-status:** de loonmotor behoudt RSZ + sectorale premies, gebruikt lokaal de FOD Bijlage III-sleutelformule voor BV, implementeert de sociale en fiscale werkbonus per 1/4/2026 en berekent BBSZ als maandvoorschot afgeleid uit het gezinstype. Aanvullende gemeentebelasting blijft alleen een interne info-parameter van 7,3 % en is geen gebruikersinvoer.
 
 ---
 
@@ -152,7 +152,7 @@ Voor tooling-implementatie is [RSZ — Find My Bonus](https://www.socialsecurity
 - Bron: [SSN BBSZ 2026 kwartaalbanden](https://www.ssn.be/) (Tier 2, 1 source) → **WEAK** — Tier-1 RSZ-instructie 2026/Q1 niet als gestructureerde tabel publiek geverifieerd.
 - **[hypothesis] Hervorming Arizona 2028:** topvoetje 4,22 % → 4,00 % vanaf 1/1/2028 ([Liantis](https://www.liantis.be/) — Tier 2). Buiten 2026-scope; vermelden als roadmap.
 
-> **Aanbeveling Loonmotor POC:** BBSZ alleen tonen als info-veld met range, niet als geprecíseerd bedrag, zolang de RSZ-instructie 2026 niet als gestructureerde tabel publiek beschikbaar is.
+> **Actuele Jaakie-status:** BBSZ wordt actief berekend als maandvoorschot op basis van het uit `gezinstype` afgeleide scenario. De bronstatus blijft een aandachtspunt in audit/release-review, maar de UI toont geen aparte BBSZ-scenario-invoer meer.
 
 ---
 
@@ -194,7 +194,7 @@ Bron: [FOD Financiën — Belastingtarieven](https://fin.belgium.be/nl/particuli
 - **Gemiddelde gewogen 2026 ≈ 7,3 %** (FOD Fin gemiddelde laatste publicatie).
 - Bron: [Wikipedia — Aanvullende gemeentebelasting](https://nl.wikipedia.org/wiki/Aanvullende_gemeentebelasting) (Tier 3, alleen voor regime + range; geen Tier-1 machine-leesbare lijst per gemeente publiek beschikbaar). **Confidence:** MODERATE voor regime, **LOW** voor exacte cijfers per gemeente.
 
-> **Aanbeveling Loonmotor POC:** parameter `gemeentebelasting_pct` met default 7,3 % en disclaimer in de UI. Geen veld in dataset.
+> **Actuele Jaakie-status:** `gemeentebelasting_pct` blijft een interne info-only parameter met default 7,3 %. Er is geen zichtbaar invoerveld en geen dataset-datapunt zolang geen Tier-1 machine-leesbare lijst beschikbaar is.
 
 ---
 
@@ -384,7 +384,7 @@ Het Belgische payroll-regelkader 2026 voor PC 200-bedienden steunt op **drie wet
 
 **Waarom deze drie pijlers samen kloppen:** de tax-shift component van het Arizona-akkoord (RSZ-plafond + werkbonus-aanpassing 1/4/2026 + voorgestelde BBSZ-reductie 2028) richt zich op netto-versterking voor lage- en middeninkomens, terwijl de PB-pijler voor de huidige runtime stabiel blijft (indexering KI 2,3000 + FOD Fin AJ 2027-schalen). Voor PC 200-bedienden levert dit op peildatum 2026-05-24 een **moderate netto-stijging** voor lonen rond GGMMI op, en **stabiele netto's** voor middeninkomens waarvoor de werkbonus uitdooft.
 
-**Implicatie voor de Loonmotor POC:** de huidige scope (RSZ + sectorale premies + audit-trail) blijft correct. Voor een echte netto-calculator-uitbreiding (roadmap-punt 1) is het **Tier-1 link-pad naar FOD Fin BV-simulator** verantwoorder dan een eigen sleutelformule-implementatie binnen POC-budget. BBSZ en aanvullende gemeentebelasting blijven info-velden tot Tier-1 tabellen worden gepubliceerd.
+**Implicatie voor Jaakie:** de huidige scope (RSZ + sectorale premies + audit-trail) blijft correct. De BV-laag gebruikt intussen een lokale Bijlage III-sleutelformule met FOD Financiën / Bijlage III als primaire payrollbron; Tax-Calc of simulatoren blijven enkel triangulatie/ramingscontext. BBSZ is actief als maandvoorschot; aanvullende gemeentebelasting blijft info-only.
 
 ---
 

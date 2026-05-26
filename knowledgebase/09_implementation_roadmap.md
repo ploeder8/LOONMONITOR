@@ -1,6 +1,6 @@
 # Implementation roadmap — Loonmotor PC 200
 
-**Doel:** een gefaseerd plan om van de huidige POC (TypeScript/React/Vite, browser-only, geverifieerd op een handvol gevallen) naar een productieklare loonmotor voor PC 200 bedienden — met audit-trail, validatie en uitbreidbaarheid naar andere paritaire comités.
+**Doel:** historisch gefaseerd plan om van de oorspronkelijke POC naar een productieklare loonmotor voor PC 200 bedienden te groeien. Let op: de actuele Jaakie-werking staat in `knowledgebase/12_toolfunctionaliteit.md`; payrollberekeningen zijn browser-only, maar de optionele AI-chat gebruikt intussen een Vercel serverless laag.
 
 **Peildatum:** 9 mei 2026 — inkomstenjaar 2026 / aanslagjaar 2027.
 
@@ -10,7 +10,7 @@
 
 1. **Schema-gevalideerde dataset.** Iedere parameter is een `Datapunt` met `id`, `bron_url`, `status`, `betrouwbaarheid`, `peildatum`, `geldig_van`, `geldig_tot`, `waarde_bron`, `waarde_canoniek`, en `audit_trail`. Geen runtime-arithmetic op `waarde_bron` — enkel canoniek.
 2. **3-tier bronnenhiërarchie.** Tier 1 (overheid) > Tier 2 (sociale secretariaten) > Tier 3 (vakbonden, vakbladen). Iedere conclusie is traceerbaar.
-3. **Browser-only POC.** Geen backend. Dataset als statische JSON, calculator als pure functies (TypeScript).
+3. **Browser-only payroll.** Dataset als statische JSON, calculator als pure functies (TypeScript). De later toegevoegde AI-chat is een aparte serverless laag en vervangt de calculator niet.
 4. **Productie = service.** Backend voor parameterbeheer, audit-trail-versionering, multi-PC-uitbreidbaarheid.
 5. **Testdriven.** Iedere wijziging passeert het testcorpus van 30 cases met tolerantie ±€5/maand.
 
@@ -70,7 +70,7 @@ De geannualiseerde benadering vervangen door de exacte sleutelformule uit Bijlag
 
 ---
 
-## Golf 3 — POC-uitbreiding browser-only (3 weken)
+## Golf 3 — POC-uitbreiding browser-only payroll (3 weken)
 
 **Doel:** de huidige POC verrijken met de gevalideerde rekenmodule en de werkgeverskost-luik.
 
@@ -133,8 +133,9 @@ De geannualiseerde benadering vervangen door de exacte sleutelformule uit Bijlag
 ## Golf 5 — Uitbreiding scope (lopend)
 
 Items uit `04_gaps_en_pending.md` §3 stelselmatig opnemen:
-- VAA bedrijfswagen-formule (CO₂-gebaseerd)
-- VAA verwarming / elektriciteit / woning / gsm / laptop
+- VAA bedrijfswagen-formule (CO₂-gebaseerd) — opgelost in runtime
+- VAA werkmiddelen (PC/laptop, GSM, internet, abonnement) — opgelost in runtime
+- VAA verwarming / elektriciteit / woning
 - CAO 90 bonus (€3.701 vrijgesteld)
 - Mobiliteitsbudget
 - Bedrijfsleidersregime

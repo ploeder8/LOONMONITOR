@@ -114,9 +114,9 @@ const TESTCASES: TC[] = [
   },
   {
     id: "TC-12",
-    titel: "Eindejaarspremie pro-rata (6 mnd)",
+    titel: "Eindejaarspremie — pure pro-rata functie",
     toelichting:
-      "Brutoloon € 3 000, anciënniteit 12 mnd, prestatie 6 mnd → factor 6/12 = 0,5.",
+      "Technische regressietest voor de juridische pro-rata functie. De Jaakie-gebruikersflow toont eindejaarspremie als volledig gewerkt jaar en biedt deze velden niet meer aan.",
     render: () => {
       const r = eindejaarspremie({
         brutoloon: 3000,

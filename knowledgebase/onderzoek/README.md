@@ -1,5 +1,7 @@
 # Loonmotor BE — Onderzoeksdossier (HTML)
 
+> **Let op:** dit dossier bevat historische onderzoeks- en POC-documenten. De actuele gebruikerswerking, routes, chatbotgedrag en runtime-architectuur staan in `../12_toolfunctionaliteit.md`.
+
 **Wat is dit?** Een set van 15 zelfstandige HTML-pagina's met inline CSS die samen het onderzoeksdossier vormen voor de Belgische loonmotor-markt en de **Jaakie** PC 200 calculator.
 
 **Relatie tot de kennisbank:** Dit dossier is een **presentatielaag**. De leading source voor alle cijfers, formules, testcases en datapunten blijft de markdown-kennisbank in de parent-map (`knowledgebase/*.md`). Bij een conflict tussen dit HTML-dossier en de markdown-SSOT geldt de markdown als leading.
@@ -23,7 +25,7 @@
 | 09 | `juridische-checklist.html` | ESS-erkenning, GDPR, bewaartermijnen |
 | 10 | `mvp-roadmap.html` | 6 fases van verkenning naar productie + ESS-erkenning |
 | 11 | `risicoregister.html` | 30 risico's met I×W-scoring |
-| 12 | `jaakie-specificatie.html` | Technische specificatie van de browser-only POC |
+| 12 | `jaakie-specificatie.html` | Technische specificatie van de Jaakie payrollcalculator en optionele AI-chat |
 | 13 | `testcorpus.html` | 30 BNTC + 15 NTC testcases + validatieregels |
 | 14 | `referentie-tools.html` | Tier-1/2/3 bronhiërarchie, Group S vergelijking, triangulatie |
 | 15 | `bronnen.html` | 50+ officiële bronnen |
@@ -33,7 +35,7 @@
 ## Scope-badges
 
 Doorheen het dossier worden twee badges gebruikt:
-- <span style="background:#d1fae5;color:#065f46;padding:2px 6px;border-radius:3px;font-weight:600;font-size:11px;">IN JAAKIE</span> — geïmplementeerd in de browser-only POC
+- <span style="background:#d1fae5;color:#065f46;padding:2px 6px;border-radius:3px;font-weight:600;font-size:11px;">IN JAAKIE</span> — geïmplementeerd in de Jaakie payrollcalculator; payrollberekeningen blijven browser-only
 - <span style="background:#fee2e2;color:#991b1b;padding:2px 6px;border-radius:3px;font-weight:600;font-size:11px;">NIET IN JAAKIE</span> — valt buiten de huidige POC-scope
 
 ---

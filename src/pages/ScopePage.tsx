@@ -52,9 +52,9 @@ const POC_LIMITATIONS: { titel: string; tekst: string }[] = [
       "Geen historie of multi-jaar selector. De dataset 2026 is bundled; bij wissel naar een ander jaar moet de bundel worden vervangen.",
   },
   {
-    titel: "9. Browser-only, geen back-end",
+    titel: "9. Payroll browser-only, chat serverless",
     tekst:
-      "Geen authenticatie, geen DB, geen logging. Alles draait client-side en de dataset wordt bij build-tijd ingebakken.",
+      "De payrollberekeningen draaien client-side en de dataset wordt bij build-tijd ingebakken. De optionele AI-chat is een aparte Vercel serverless laag met Supabase-rate-limiting en minimale eventlogging.",
   },
   {
     titel: "10. Audit, geen advies",
