@@ -248,7 +248,7 @@ h1, h2, h3, h4 {
   .home-layout > aside,
   .home-layout > section {
     width: 100% !important;
-    max-width: calc(100vw - 84px) !important;
+    max-width: 100% !important;
   }
 
   .app-nav {

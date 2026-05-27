@@ -1,4 +1,5 @@
 import { describe, expect, it } from "bun:test";
+import { readFileSync } from "node:fs";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
@@ -121,6 +122,24 @@ describe("Numerieke invoer", () => {
 });
 
 describe("Profiel formulier", () => {
+  it("houdt de mobiele layout binnen de viewport zonder hero-overflow", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+    const css = readFileSync("src/index.css", "utf8");
+
+    expect(html).toContain("grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4");
+    expect(html).toContain("text-2xl sm:text-3xl");
+    expect(css).toContain("max-width: 100% !important;");
+    expect(css).not.toContain("max-width: calc(100vw - 84px)");
+  });
+
+  it("markeert toggle- en accordionstate voor assistieve technologie", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+
+    expect(html).toContain('aria-pressed="true"');
+    expect(html).toContain('aria-pressed="false"');
+    expect(html).toContain('aria-expanded="false"');
+  });
+
   it("toont de BV-gezinsvelden in Wie ben je? card", () => {
     const html = renderToStaticMarkup(createElement(HomePage));
 

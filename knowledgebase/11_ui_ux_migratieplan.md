@@ -1,7 +1,7 @@
 # UI/UX migratieplan — Jaakie
 
 **Versie:** 2026-05-23
-**Status:** Fase 1, Fase 2 en Fase 3 zijn geïmplementeerd in de huidige code. Dit document is vanaf nu het status- en vervolgstappenoverzicht, niet langer een open implementatiechecklist.
+**Status:** Fase 1 t/m Fase 4 zijn geïmplementeerd in de huidige code. Dit document is vanaf nu het status- en vervolgstappenoverzicht, niet langer een open implementatiechecklist.
 
 ---
 
@@ -41,7 +41,7 @@ De oude linker-sidebar is verwijderd. De calculator gebruikt geen split left/rig
 | Fase 1 — topflow | Done | `DirectionToggle` en `HeroSummary` staan boven de cockpit; oude summarystrip is niet meer de primaire topflow. |
 | Fase 2 — inputcockpit | Done | Single-column layout, 2×2 cockpitgrid, woon-werk split, accordions en eindejaarspremiekaart zijn actief. |
 | Fase 3 — componentextractie | Done | `HomePage.tsx` is teruggebracht tot route-compositie en state; featurecomponenten staan onder `src/pages/home/`. |
-| Fase 4 — polish & QA | Pending | Responsieve visuele QA, keyboard-flow, focusstates en eventuele contrastdetails moeten nog doelgericht worden geverifieerd. |
+| Fase 4 — polish & QA | Done | Browser/UX QA uitgevoerd op desktop en mobiel; mobiele summary-overflow en ARIA-state-attributen zijn gecorrigeerd. |
 
 ---
 
@@ -78,15 +78,17 @@ Gerealiseerd:
 - Lokale UI-blokken uit `HomePage.tsx` zijn verplaatst naar `src/pages/home/`.
 - `HomePage.tsx` bevat alleen route-compositie, profielstate, CSV-state, richting-switch en netto → bruto root-finding.
 
-### Fase 4 — polish & QA
+### Fase 4 — gerealiseerd
 
 Doel: de huidige interface productie-vaster maken.
 
-Checklist:
-- Desktop, tablet en mobiel handmatig nakijken op tekstoverlap en inputbreedtes.
-- Keyboardnavigatie en focusstates van toggle, accordions en formuliervelden nalopen.
-- Auditpanelen controleren op lange bron-URL's en fragmentteksten.
-- Browser-smoke uitvoeren op `/`, `/testcases` en `/scope` wanneer de gebruiker brede UI-verificatie vraagt.
+Gerealiseerd:
+- Browser/UX QA-log toegevoegd in `knowledgebase/12_browser_ux_qa.md`.
+- Desktoproutes `/`, `/testcases` en `/scope` gecontroleerd op overlap en leesbaarheid.
+- Mobiele route `/` gecontroleerd op inputbreedtes, summary-cards, lange labels en chatlauncher.
+- Mobiele summary-overflow gefixt door de home-layout niet meer kunstmatig te versmallen en de hero-summary op mobiel éénkoloms te maken.
+- CSV export/import, audit-toggle, individuele auditpanelen, bruto → netto en netto → bruto interacties gevalideerd in browsercontext.
+- Toggle-, accordion- en auditstate toegankelijker gemaakt met `aria-pressed` en `aria-expanded`.
 
 ---
 
