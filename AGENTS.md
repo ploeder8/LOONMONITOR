@@ -20,7 +20,7 @@ Dit bestand geeft richtlijnen aan coding agents (Claude Code, Kimi Code, Codex, 
 
 | Laag | Technologie | Opmerking |
 |---|---|---|
-| Build tool | Vite 8 (`vite.config.ts`) | Dev-server op poort 5173 (`strictPort: true`) |
+| Build tool | Vite 8 (`vite.config.ts`) | Dev-server op poort 7000 (`strictPort: true`) |
 | Bundler | Vite (ESM) | `type: "module"` in `package.json` |
 | Framework | React 19 + `react-dom` | JSX-transform: `react-jsx` |
 | Router | `react-router-dom` 7.8.2 | `HashRouter` — geen server-side routing nodig |
@@ -36,7 +36,7 @@ Dit bestand geeft richtlijnen aan coding agents (Claude Code, Kimi Code, Codex, 
 | Bestand | Doel |
 |---|---|
 | `package.json` | Dependencies, scripts (ESM) |
-| `vite.config.ts` | Plugins (`react()`, `tailwindcss()`), alias `@` → `./src`, poort 5173 |
+| `vite.config.ts` | Plugins (`react()`, `tailwindcss()`), alias `@` → `./src`, poort 7000 |
 | `tsconfig.json` | Project-references naar `tsconfig.app.json`, path alias `@/*` |
 | `tsconfig.app.json` | Target `ES2022`, `strict: true`, types `bun`, include `src` |
 | `index.html` | Entrypoint, taal `nl-BE`, font Inter (Google Fonts) |
@@ -54,7 +54,7 @@ Dit bestand geeft richtlijnen aan coding agents (Claude Code, Kimi Code, Codex, 
 pnpm install
 
 # Development server
-pnpm dev            # http://localhost:5173 (strictPort)
+pnpm dev            # http://localhost:7000 (strictPort)
 pnpm exec vercel dev # lokale Vercel-runtime voor /api/chat + Vite
 
 # Tests
@@ -341,7 +341,9 @@ Wijzig toekomstige branding eerst in `src/branding/*` en pas componenten alleen 
 ## Workflow-richtlijnen
 
 - Houd wijzigingen zo simpel en klein mogelijk. Kies de minst invasieve fix die het werkelijke probleem oplost.
+- Raadpleeg `LESSONS.md` aan het begin van gericht ontwikkelwerk, bugfixes en configuratiewijzigingen. Gebruik deze lessen om bekende valkuilen niet opnieuw te onderzoeken.
 - Werk na elke inhoudelijke wijziging `MEMORY.md` bij met een korte logregel: datum, wat is aangepast en waarom. Houd dit zeer summier maar concreet.
+- Werk `LESSONS.md` bij wanneer je tijdens het werk een duurzame les leert: een bugoorzaak, configuratievalkuil, domeinregel of werkwijze die toekomstige agents aantoonbaar sneller of veiliger laat werken. Noteer geen gewone changelog-items of tijdelijke observaties.
 - Rapporteer na een gefocuste wijziging kort wat er is veranderd en vraag de gebruiker om bevestiging voordat je extra of tijdrovende verificatiestappen uitvoert.
 - Minimale checks die rechtstreeks breuk beschermen zijn toegestaan zonder bevestiging: een gerichte test, `bun test`, `bun run typecheck`, of `bun run build` wanneer de wijziging compiled code raakt.
 - Besteed geen tijd aan brede handmatige verificatie, herhaalde dev-server pogingen, browser-automatisering of ongerelateerde checks tenzij de gebruiker dit expliciet vraagt of bevestigt.

@@ -63,7 +63,7 @@ Tool voor payroll-experts om lonen en kosten te verifiëren onder **Paritair Com
 ### Installeren & starten
 ```bash
 pnpm install
-pnpm dev          # http://localhost:5173
+pnpm dev          # http://localhost:7000
 ```
 
 ### Tests
