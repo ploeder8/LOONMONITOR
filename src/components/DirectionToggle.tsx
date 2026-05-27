@@ -14,6 +14,8 @@ export function DirectionToggle({ value, onChange }: DirectionToggleProps) {
         style={{ background: "var(--toggle-bg)" }}
       >
         <button
+          type="button"
+          aria-pressed={value === "bruto_naar_netto"}
           onClick={() => onChange("bruto_naar_netto")}
           className="flex items-center gap-2 px-4 py-2.5 sm:px-6 rounded-full text-sm font-bold transition-all duration-200"
           style={{
@@ -32,6 +34,8 @@ export function DirectionToggle({ value, onChange }: DirectionToggleProps) {
           Bruto → Netto
         </button>
         <button
+          type="button"
+          aria-pressed={value === "netto_naar_bruto"}
           onClick={() => onChange("netto_naar_bruto")}
           className="flex items-center gap-2 px-4 py-2.5 sm:px-6 rounded-full text-sm font-bold transition-all duration-200"
           style={{

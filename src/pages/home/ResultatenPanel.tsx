@@ -91,6 +91,8 @@ export function ResultBandsPanel({
           ))}
         </div>
         <button
+          type="button"
+          aria-pressed={auditForce === "all"}
           onClick={() => setAuditForce(auditForce === "all" ? null : "all")}
           style={{
             border: "1px solid var(--color-primary-border)",

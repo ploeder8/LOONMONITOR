@@ -164,16 +164,16 @@ De huidige calculatorflow gericht valideren in echte browsercontext op responsiv
 
 ### Concrete acties
 
-- [ ] Maak `knowledgebase/12_browser_ux_qa.md` als QA-log en checklist.
-- [ ] Test desktopweergave van `/`, `/scope` en `/testcases`.
-- [ ] Test mobiele weergave van `/`, inclusief inputcockpit, resultaatpanelen en lange labels.
-- [ ] Test audit-toggle: alle bronnen openen/sluiten en individuele panelen blijven bruikbaar.
-- [ ] Test CSV export/import roundtrip met een aangepast profiel.
-- [ ] Test bruto -> netto en netto -> bruto interacties, inclusief wijziging van gezinstype en maaltijdcheques.
-- [ ] Test fout- en waarschuwingstoestanden waar ze zonder datasetwijziging reproduceerbaar zijn.
-- [ ] Controleer keyboard-flow, focusstates, labels, contrast en tekstoverlap.
-- [ ] Voeg regressietests toe voor gevonden bugs; doe geen visuele redesign buiten concrete bevindingen.
-- [ ] Voeg een korte logregel toe aan `MEMORY.md`.
+- [x] Maak `knowledgebase/12_browser_ux_qa.md` als QA-log en checklist.
+- [x] Test desktopweergave van `/`, `/scope` en `/testcases`.
+- [x] Test mobiele weergave van `/`, inclusief inputcockpit, resultaatpanelen en lange labels.
+- [x] Test audit-toggle: alle bronnen openen/sluiten en individuele panelen blijven bruikbaar.
+- [x] Test CSV export/import roundtrip met een aangepast profiel.
+- [x] Test bruto -> netto en netto -> bruto interacties, inclusief wijziging van gezinstype en maaltijdcheques.
+- [x] Test fout- en waarschuwingstoestanden waar ze zonder datasetwijziging reproduceerbaar zijn.
+- [x] Controleer keyboard-flow, focusstates, labels, contrast en tekstoverlap.
+- [x] Voeg regressietests toe voor gevonden bugs; doe geen visuele redesign buiten concrete bevindingen.
+- [x] Voeg een korte logregel toe aan `MEMORY.md`.
 
 ### Te wijzigen bestanden
 
@@ -185,11 +185,11 @@ De huidige calculatorflow gericht valideren in echte browsercontext op responsiv
 
 ### Acceptatiecriteria
 
-- [ ] QA-log bevat datum, viewport, scenario, resultaat en eventuele opvolgactie.
-- [ ] Geen incoherente overlap op desktop of mobiel in de geteste flows.
-- [ ] CSV roundtrip blijft bruikbaar.
-- [ ] Netto -> bruto blijft interactief en verklaarbaar.
-- [ ] Auditbronnen blijven bereikbaar.
+- [x] QA-log bevat datum, viewport, scenario, resultaat en eventuele opvolgactie.
+- [x] Geen incoherente overlap op desktop of mobiel in de geteste flows.
+- [x] CSV roundtrip blijft bruikbaar.
+- [x] Netto -> bruto blijft interactief en verklaarbaar.
+- [x] Auditbronnen blijven bereikbaar.
 
 ### Verificatiecommando's
 
@@ -202,7 +202,7 @@ git diff --check
 
 ### Commitmoment
 
-- [ ] Commit na QA en eventuele fixes met: `test: document browser ux qa`
+- [x] Commit na QA en eventuele fixes met: `test: document browser ux qa`
 
 ## Stap 8 — Productrichting kiezen
 

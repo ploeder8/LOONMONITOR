@@ -29,6 +29,8 @@ export function CockpitAccordion({
       }}
     >
       <button
+        type="button"
+        aria-expanded={open}
         onClick={() => setOpen(!open)}
         style={{
           width: "100%",

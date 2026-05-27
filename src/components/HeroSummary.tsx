@@ -117,7 +117,7 @@ export function HeroSummary({
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
       {cards.map((card) => (
         <div
           key={card.label}
@@ -139,11 +139,11 @@ export function HeroSummary({
             </span>
           </div>
           <span
-            className="text-3xl font-extrabold tabular-nums"
+            className="text-2xl sm:text-3xl font-extrabold tabular-nums"
             style={{
               color: card.text,
               fontFamily: "var(--font-mono)",
-              letterSpacing: "-0.02em",
+              letterSpacing: 0,
             }}
           >
             <AnimatedNumber

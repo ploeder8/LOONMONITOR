@@ -133,6 +133,7 @@ export function AuditPanel({ datapunt, compact = false }: { datapunt: Datapunt; 
     >
       <button
         type="button"
+        aria-expanded={open}
         onClick={() => setLocalOpen(!open)}
         style={{
           display: "flex",
