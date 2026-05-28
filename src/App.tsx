@@ -1,5 +1,7 @@
 import { HashRouter, NavLink, Route, Routes, useLocation } from "react-router-dom";
 import { HomePage } from "@/pages/HomePage";
+import { LoonfichePage } from "@/pages/LoonfichePage";
+import { LoonrunPage } from "@/pages/LoonrunPage";
 import { ScopePage } from "@/pages/ScopePage";
 import { TestcasesPage } from "@/pages/TestcasesPage";
 import { APP_BRAND } from "@/branding/brand";
@@ -14,7 +16,8 @@ export const headerContentLayout = {
 } as const;
 
 export function mainMaxWidthForPath(pathname: string): number {
-  return pathname === "/" ? CALCULATOR_CONTENT_MAX_WIDTH : DEFAULT_CONTENT_MAX_WIDTH;
+  if (pathname === "/" || pathname === "/loonfiche" || pathname === "/loonrun") return CALCULATOR_CONTENT_MAX_WIDTH;
+  return DEFAULT_CONTENT_MAX_WIDTH;
 }
 
 export function App() {
@@ -72,7 +75,9 @@ function AppShell() {
               </div>
             </div>
             <nav className="app-nav" style={{ display: "flex", gap: 4, flexWrap: "wrap", maxWidth: "100%" }}>
-              <NavItem to="/" label="Profiel" />
+              <NavItem to="/" label="Calculator" />
+              <NavItem to="/loonfiche" label="Loonfiche" />
+              <NavItem to="/loonrun" label="Loonrun" />
               <NavItem to="/testcases" label="Testcases" />
               <NavItem to="/scope" label="Scope & bekend manco" />
               <a
@@ -112,6 +117,8 @@ function AppShell() {
         <main className="app-main" style={{ maxWidth: mainMaxWidth, width: "100%", boxSizing: "border-box", margin: "0 auto", padding: "28px 28px" }}>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/loonfiche" element={<LoonfichePage />} />
+            <Route path="/loonrun" element={<LoonrunPage />} />
             <Route path="/testcases" element={<TestcasesPage />} />
             <Route path="/scope" element={<ScopePage />} />
           </Routes>

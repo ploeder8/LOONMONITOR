@@ -57,6 +57,34 @@ export function profielUitCsv(csv: string): { profiel: Profiel; commentaar: stri
 
   const headers = rijen[0].map((header) => header.trim());
   const waarden = rijen[1];
+  return parseProfielRij(headers, waarden);
+}
+
+export interface ProfielUitCsvRij {
+  profiel: Profiel;
+  commentaar: string;
+  rijNummer: number;
+}
+
+export function profielenUitCsv(csv: string): ProfielUitCsvRij[] {
+  const rijen = parseCsv(csv);
+  if (rijen.length < 2) throw new Error("CSV bevat geen datarijen.");
+
+  const headers = rijen[0].map((header) => header.trim());
+  const resultaat: ProfielUitCsvRij[] = [];
+
+  for (let i = 1; i < rijen.length; i += 1) {
+    const { profiel, commentaar } = parseProfielRij(headers, rijen[i]);
+    resultaat.push({ profiel, commentaar, rijNummer: i });
+  }
+
+  return resultaat;
+}
+
+function parseProfielRij(
+  headers: string[],
+  waarden: string[],
+): { profiel: Profiel; commentaar: string } {
   const profiel: Profiel = { ...DEFAULTS };
   let commentaar = "";
 

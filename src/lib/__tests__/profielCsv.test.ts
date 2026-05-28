@@ -6,6 +6,7 @@ import {
   normaliseerCsvBestandsnaam,
   profielNaarCsv,
   profielUitCsv,
+  profielenUitCsv,
   standaardCsvNaamPrefix,
 } from "@/lib/profielCsv";
 
@@ -84,6 +85,86 @@ describe("profielCsv", () => {
     expect(typeof rij.output_loonwig_pct).toBe("number");
     expect(typeof rij.output_netto_jaar).toBe("number");
     expect(typeof rij.output_werkgeverskost_jaar).toBe("number");
+  });
+
+  it("exporteert identificatievelden als kolommen", () => {
+    const profiel = {
+      ...DEFAULTS,
+      werknemerNaam: "Jan Jansen",
+      werknemerReferentie: "W12345",
+      werkgeverNaam: "Acme BV",
+      werkgeverOndernemingsnummer: "0123.456.789",
+    };
+    const csv = profielNaarCsv({ profiel, commentaar: "" });
+
+    expect(csv).toContain("werknemerNaam");
+    expect(csv).toContain("werknemerReferentie");
+    expect(csv).toContain("werkgeverNaam");
+    expect(csv).toContain("werkgeverOndernemingsnummer");
+    expect(csv).toContain("Jan Jansen");
+    expect(csv).toContain("W12345");
+    expect(csv).toContain("Acme BV");
+    expect(csv).toContain("0123.456.789");
+  });
+
+  it("importeert oude CSV zonder identificatievelden als lege strings", () => {
+    // Een "oude" CSV bevat alleen de kolommen die vóór fase 2 bestonden
+    const csv = [
+      "brutoloon;statuut;commentaar",
+      "3000;bediende;oude export",
+    ].join("\n");
+
+    const parsed = profielUitCsv(csv);
+
+    expect(parsed.profiel.brutoloon).toBe(3000);
+    expect(parsed.profiel.statuut).toBe("bediende");
+    expect(parsed.profiel.werknemerNaam).toBe("");
+    expect(parsed.profiel.werknemerReferentie).toBe("");
+    expect(parsed.profiel.werkgeverNaam).toBe("");
+    expect(parsed.profiel.werkgeverOndernemingsnummer).toBe("");
+  });
+
+  it("roundtript identificatievelden via CSV", () => {
+    const profiel = {
+      ...DEFAULTS,
+      werknemerNaam: "Piet Peeters",
+      werkgeverNaam: "Betaalbaar BV",
+    };
+    const csv = profielNaarCsv({ profiel, commentaar: "" });
+    const parsed = profielUitCsv(csv);
+
+    expect(parsed.profiel.werknemerNaam).toBe("Piet Peeters");
+    expect(parsed.profiel.werknemerReferentie).toBe("");
+    expect(parsed.profiel.werkgeverNaam).toBe("Betaalbaar BV");
+    expect(parsed.profiel.werkgeverOndernemingsnummer).toBe("");
+  });
+
+  it("parset multi-row CSV naar meerdere profielen", () => {
+    const csv = [
+      "brutoloon;statuut;gezinstype;kinderenTenLaste;werknemerNaam",
+      "3000;bediende;alleenstaand;0;Jan Jansen",
+      "2500;bediende;gehuwd_met_inkomen;2;Piet Peeters",
+      "4000;student;alleenstaand;0;Sofie Student",
+    ].join("\n");
+
+    const parsed = profielenUitCsv(csv);
+
+    expect(parsed).toHaveLength(3);
+    expect(parsed[0].profiel.brutoloon).toBe(3000);
+    expect(parsed[0].profiel.statuut).toBe("bediende");
+    expect(parsed[0].profiel.werknemerNaam).toBe("Jan Jansen");
+    expect(parsed[0].rijNummer).toBe(1);
+
+    expect(parsed[1].profiel.brutoloon).toBe(2500);
+    expect(parsed[1].profiel.gezinstype).toBe("gehuwd_met_inkomen");
+    expect(parsed[1].profiel.kinderenTenLaste).toBe(2);
+
+    expect(parsed[2].profiel.statuut).toBe("student");
+    expect(parsed[2].profiel.brutoloon).toBe(4000);
+  });
+
+  it("geeft fout bij lege multi-row CSV", () => {
+    expect(() => profielenUitCsv("brutoloon\n")).toThrow("geen datarijen");
   });
 
   it("normaliseert CSV-bestandsnamen", () => {

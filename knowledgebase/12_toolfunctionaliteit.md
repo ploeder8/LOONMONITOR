@@ -20,6 +20,8 @@ Jaakie gebruikt een HashRouter met deze hoofdonderdelen:
 | Route | Functie |
 |---|---|
 | `/` | Profiel en calculator. Gebruikers voeren loon-, arbeids- en voordeelgegevens in en zien resultaten met audit-trail. |
+| `/loonfiche` | Pro-forma loonfiche voor één werknemer. Toont een document-achtige weergave van brutoloon → netto met alle tussenstappen, vergelijkbaar met een loonbrief maar expliciet gelabeld als pro-forma. Deelt profielstate met de calculator. Ondersteunt identificatievelden (werknemer-/werkgevernaam en -referentie), print en audit-toggle. |
+| `/loonrun` | Multi-werknemer loonrun. Importeert een multi-row CSV, berekent alle werknemers geïsoleerd, toont een overzichtstabel met totalen en laat individuele loonfiches bekijken per werknemer. |
 | `/testcases` | Overzicht van testcases en validatiecontext. |
 | `/scope` | Scope, bekende beperkingen en manco's. |
 | `/onderzoek/index.html` | Statisch HTML-onderzoeksdossier met markt-, juridische en technische analyse. |
@@ -75,6 +77,94 @@ De resultaatkolom toont een samenvatting en detailbanden:
 - auditpanelen met bronverwijzingen.
 
 Studentenmodus beperkt de samenvatting tot relevante studentencijfers.
+
+### Print overzicht
+
+De knop **"Print overzicht"** opent een estetisch, print-vriendelijk document voor de huidige werknemer:
+
+- **Header**: Jaakie brand, titel "Loonoverzicht", periode, statuut, werknemer-/werkgever-metadata.
+- **Executive summary**: 6 cards met bruto, netto (maand), werkgeverskost, loonwig, netto (jaar), werkgeverskost (jaar).
+- **Netto loon tabel**: bruto → RSZ → werkbonus → belastbaar loon → bedrijfsvoorheffing → BBSZ → netto te betalen.
+- **Werkgeverskost tabel**: brutoloon → RSZ werkgever → Sociaal Fonds 200 → provisies → totale werkgeverskost.
+- **Jaaroverzicht**: netto- en werkgeverskant met eindejaarspremie, vakantiegeld, jaarpremie, ecocheques.
+- **Footer**: pro-forma disclaimer.
+
+Het overzicht is **print-vriendelijk** (A4 via `@media print`) en bevat geen audit-trail. Studentenmodus toont een vereenvoudigde melding.
+
+---
+
+## Loonfiche
+
+De loonfiche-pagina (`#/loonfiche`) toont een pro-forma loonfiche per huidig profiel. De profielstate wordt gedeeld met de calculator via `localStorage`; wijzigingen op één pagina zijn zichtbaar op de andere.
+
+### Gedeelde profielstate
+
+- `HomePage` en `LoonfichePage` lezen/schrijven hetzelfde profiel via `useSharedProfiel()` → `localStorage` key `jaakie:profiel`.
+- Fallback naar `DEFAULTS` wanneer localStorage leeg is.
+
+### Loonfiche regels
+
+De loonfiche bevat gecodeerde regels (bv. `1000` Brutoloon, `2000` RSZ werknemer, `3000` Bedrijfsvoorheffing, `9000` Netto te betalen, `9500` Werkgeverskost). Subtotalen (`1090`, `2090`, `2190`, `3090`) en totaalregels worden altijd getoond; nulregels worden verborgen.
+
+### Modi
+
+- **Bediende:** volledige RSZ → BV → netto flow met alle verminderingen en inhoudingen.
+- **Student:** vereenvoudigde loonfiche zonder RSZ/BV/BBSZ; bruto komt uit het studentenbarema.
+- **Netto → Bruto:** toont het berekende bruto als "Berekend brutoloon" en het doelnetto als referentie.
+
+### Identificatie
+
+De loonfiche toont optionele Werknemer- en Werkgeverblokken boven de tabel:
+- Werknemer: naam en referentie
+- Werkgever: naam en ondernemingsnummer
+- Prestatie: periode, statuut, tewerkstellingsbreuk, arbeidsdagen
+
+Deze velden worden opgeslagen in het gedeelde profiel en meegenomen in CSV export/import.
+
+### Print
+
+De loonfiche is print-vriendelijk: `@media print` verbergt header, navigatie, footer, chat, de input-toolbar en de actieknoppen; toont de loonfiche op A4-breedte zonder schaduwen. De audit-sectie wordt bij print altijd getoond, ongeacht de toggle.
+
+### Acties
+
+- **Print loonfiche** — opent het systeem-printdialoog.
+- **Toon bronnen / Verberg bronnen** — toggelt de zichtbaarheid van de bronvermelding onder de loonfiche.
+
+---
+
+## Loonrun
+
+De loonrun-pagina (`#/loonrun`) laat gebruikers meerdere werknemers in één keer berekenen en controleren.
+
+### CSV-import
+
+Gebruikers uploaden een multi-row CSV met dezelfde kolommen als de single-row CSV van de calculator. Elke rij wordt als apart werknemerprofiel geïmporteerd. De header wordt één keer gelezen en toegepast op alle datarijen.
+
+### Berekening
+
+Per rij roept `bouwLoonrun()` `bouwLoonficheVoorProfiel()` aan. Fouten bij één werknemer blokkeren de andere werknemers niet; de betreffende werknemer krijgt status `fout` met een foutmelding, terwijl de rest normaal doorgerekend wordt.
+
+### Resultaatweergave
+
+- **Tabel** met kolommen: ID, Naam, Bruto, Netto, Werkgeverskost, Loonwig, Status.
+- **Totaalregel** onderaan: som van alle succesvol berekende werknemers plus loonwig op aggregaatniveau.
+- **Per werknemer**: klik op "Bekijk loonfiche" opent een modal met de volledige pro-forma loonfiche en audit-trail van die werknemer.
+
+### Export
+
+De summary CSV-export bevat één rij per werknemer (`id;naam;bruto;netto;werkgeverskost;loonwig;status`) plus een totaalregel.
+
+### Rapport voor werkgever
+
+De knop **"Rapport"** opent een estetisch overzicht dat de payroll-expert kan delen met de werkgever:
+
+- **Header**: Jaakie brand, titel "Loonkostoverzicht", periode, werkgevernaam (indien ingevuld in profiel), generatiedatum.
+- **Executive summary**: 4 cards met totaal bruto, totaal netto, totale werkgeverskost en loonwig.
+- **Tabel**: per werknemer de bruto, netto, werkgeverskost en loonwig; werknemers met berekeningsfouten worden getoond met "—" voor bedragen.
+- **Totalenrij**: onderaan de tabel met geaggregeerde bedragen.
+- **Footer**: pro-forma disclaimer en korte uitleg van loonwig.
+
+Het rapport is **print-vriendelijk** (A4 via `@media print`) en bevat geen audit-trail of technische details. De werkgever ontvangt een helder, zakelijk overzicht.
 
 ---
 

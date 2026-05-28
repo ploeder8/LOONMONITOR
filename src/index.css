@@ -238,6 +238,177 @@ h1, h2, h3, h4 {
   max-width: 100%;
 }
 
+@media print {
+  header,
+  footer,
+  .ai-chat,
+  .app-nav,
+  .loonfiche-toolbar,
+  .loonfiche-acties {
+    display: none !important;
+  }
+
+  main {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .loonfiche-document {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+    border-radius: 0 !important;
+    max-width: 210mm;
+    margin: 0 auto;
+  }
+
+  .loonfiche-audit {
+    display: block !important;
+  }
+
+  /* Wanneer een modal open is: verberg ALLES op body behalve de modal */
+  body.print-modal-open > * {
+    display: none !important;
+  }
+
+  body.print-modal-open > .print-modal-overlay {
+    display: flex !important;
+    position: static !important;
+    background: #fff !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  body.print-modal-open > .print-modal-overlay > div {
+    max-width: 100% !important;
+    width: 100% !important;
+    position: static !important;
+  }
+
+  /* Verberg actieknoppen (sluiten, print) binnen de modal bij print */
+  body.print-modal-open .print-modal-overlay button {
+    display: none !important;
+  }
+
+  /* Document styling voor alle print types */
+  .loonfiche-document,
+  .werknemer-overzicht-document,
+  .werkgever-rapport-document {
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    max-width: 210mm;
+    margin: 0 auto;
+  }
+
+  .werkgever-rapport-row {
+    page-break-inside: avoid;
+  }
+
+  /* ===== WerknemerOverzicht: compacte 1-A4 layout ===== */
+  body.print-modal-open .werknemer-overzicht-document .wo-banner {
+    padding: 5px 14px !important;
+    font-size: 9px !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-content {
+    padding: 10px 14px 10px !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-header {
+    margin-bottom: 8px !important;
+    gap: 8px !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-header [style*="font-size: 24px"] {
+    font-size: 15px !important;
+    margin-bottom: 1px !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-header [style*="font-size: 16px"] {
+    font-size: 12px !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-header [style*="font-size: 13px"],
+  body.print-modal-open .werknemer-overzicht-document .wo-header [style*="font-size: 12px"] {
+    font-size: 9px !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-metadata {
+    margin-bottom: 6px !important;
+    gap: 6px !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-metadata [style*="padding: 10px 12px"] {
+    padding: 5px 8px !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-metadata [style*="font-size: 10px"] {
+    font-size: 8px !important;
+    margin-bottom: 0 !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-metadata [style*="font-size: 13px"] {
+    font-size: 10px !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-summary {
+    margin-bottom: 8px !important;
+    gap: 6px !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-summary [style*="padding: 14px 16px"] {
+    padding: 6px 8px !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-summary [style*="font-size: 11px"] {
+    font-size: 8px !important;
+    margin-bottom: 2px !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-summary [style*="font-size: 16px"] {
+    font-size: 12px !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-section {
+    margin-bottom: 6px !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-section [style*="font-size: 14px"] {
+    font-size: 11px !important;
+    margin-bottom: 4px !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-section td,
+  body.print-modal-open .werknemer-overzicht-document .wo-section th {
+    padding: 3px 8px !important;
+    font-size: 10px !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-section [style*="padding: 6px 0"] {
+    padding: 2px 0 !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-section [style*="font-size: 13px"] {
+    font-size: 10px !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-footer {
+    margin-top: 6px !important;
+    padding-top: 6px !important;
+    font-size: 8px !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-footer [style*="margin-top: 4px"] {
+    margin-top: 2px !important;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+}
+
 @media (max-width: 640px) {
   .app-main {
     padding-right: 14px !important;
@@ -279,4 +450,9 @@ h1, h2, h3, h4 {
     max-height: calc(100vh - 84px);
     border-radius: var(--radius-md);
   }
+}
+
+/* WerknemerOverzicht summary grid */
+.wo-summary-grid {
+  grid-template-columns: repeat(4, 1fr);
 }
