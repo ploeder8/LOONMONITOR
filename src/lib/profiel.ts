@@ -61,6 +61,10 @@ export interface Profiel {
   hospitalisatieEigenBijdrage: number;
   onkostenvergoedingPerMaand: number;
   gemeentebelastingPct: number;
+  werknemerNaam: string;
+  werknemerReferentie: string;
+  werkgeverNaam: string;
+  werkgeverOndernemingsnummer: string;
 }
 
 export const DEFAULTS: Profiel = {
@@ -113,6 +117,10 @@ export const DEFAULTS: Profiel = {
   hospitalisatieEigenBijdrage: 0,
   onkostenvergoedingPerMaand: 0,
   gemeentebelastingPct: 7.3,
+  werknemerNaam: "",
+  werknemerReferentie: "",
+  werkgeverNaam: "",
+  werkgeverOndernemingsnummer: "",
 };
 
 export function aantalWeekdagenInMaand(berekeningsJaar: string, berekeningsMaand: string): number {
