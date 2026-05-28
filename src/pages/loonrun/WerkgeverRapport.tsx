@@ -17,7 +17,7 @@ export function WerkgeverRapport({ loonrun }: WerkgeverRapportProps) {
     year: "numeric",
   });
 
-  const berekend = loonrun.werknemers.filter((w) => w.status === "berekend");
+  const berekend = loonrun.werknemers.filter((w) => w.loonfiche);
 
   return (
     <div
@@ -125,8 +125,12 @@ export function WerkgeverRapport({ loonrun }: WerkgeverRapportProps) {
             }}
           >
             <SummaryCard
-              label="Totaal bruto"
-              bedrag={loonrun.totalen.bruto}
+              label="Totaal bruto cash"
+              bedrag={loonrun.totalen.cashBruto}
+            />
+            <SummaryCard
+              label="Totaal RSZ-basis"
+              bedrag={loonrun.totalen.brutoRszBasis}
             />
             <SummaryCard
               label="Totaal netto"
@@ -171,7 +175,8 @@ export function WerkgeverRapport({ loonrun }: WerkgeverRapportProps) {
                   }}
                 >
                   <Th>Werknemer</Th>
-                  <Th align="right">Bruto</Th>
+                  <Th align="right">Bruto cash</Th>
+                  <Th align="right">RSZ-basis</Th>
                   <Th align="right">Netto</Th>
                   <Th align="right">Werkgeverskost</Th>
                   <Th align="right">Loonwig</Th>
@@ -199,6 +204,11 @@ export function WerkgeverRapport({ loonrun }: WerkgeverRapportProps) {
                           {w.fout}
                         </div>
                       )}
+                    </Td>
+                    <Td align="right">
+                      {w.loonfiche
+                        ? formatEUR(w.loonfiche.totalen.cashBrutoloon)
+                        : "—"}
                     </Td>
                     <Td align="right">
                       {w.loonfiche
@@ -239,7 +249,10 @@ export function WerkgeverRapport({ loonrun }: WerkgeverRapportProps) {
                     <span style={{ fontWeight: 800 }}>TOTALEN</span>
                   </Td>
                   <Td align="right">
-                    {formatEUR(loonrun.totalen.bruto)}
+                    {formatEUR(loonrun.totalen.cashBruto)}
+                  </Td>
+                  <Td align="right">
+                    {formatEUR(loonrun.totalen.brutoRszBasis)}
                   </Td>
                   <Td align="right">
                     {formatEUR(loonrun.totalen.netto)}

@@ -134,6 +134,7 @@ Allemaal **buiten scope POC**, opnemen in roadmap voor productie.
 | G-03 | Netto → Bruto calculatie ontbrak | ✅ 19 mei 2026 | Numerieke inverse via binary search in `src/lib/nettoNaarBruto.ts`. UI-toggle bovenaan formulier. 25 inverse golden tests in `src/lib/__tests__/nettoNaarBruto.test.ts`. Alleen bedienden in fase 1; studenten in fase 2. |
 | G-04 | VAA bedrijfswagen en forfaitaire werkmiddelen ontbraken | ✅ 23 mei 2026 | `src/lib/vaaBedrijfswagen.ts` en `src/lib/vaaForfaits.ts` zijn actief in netto, werkgeverskost en jaaroverzicht; resterende VAA-gaps staan in §3.3. |
 | G-05 | Fase-2 UI-migratie stond alleen als plan beschreven | ✅ 23 mei 2026 | `HomePage.tsx` gebruikt single-column layout met CSV-paneel, `DirectionToggle`, `HeroSummary`, `InputCockpit`, 2×2 `CockpitCard`-grid, `CockpitAccordion`s en `ResultBandsPanel`. |
+| G-06 | Loonfiche/loonrun light had semantische risico's rond netto→bruto werkgeverskost, studenten-maaltijdcheques en bruto-labels | ✅ 29 mei 2026 | Netto→bruto gebruikt één effectief bruto doorheen loonfiche en werkgeverskost; studenten-maaltijdcheques trekken alleen werknemersbijdrage af; loonrun splitst bruto cash, RSZ-basis en belastbaar voor BV; gemengde run-context geeft blokkerende validatie. |
 
 ---
 

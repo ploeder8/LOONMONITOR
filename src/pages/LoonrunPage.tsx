@@ -98,6 +98,13 @@ export function LoonrunPage() {
   }
 
   function handleExport() {
+    if (loonrun.heeftBlokkeringen) {
+      setImportStatus({
+        kind: "error",
+        tekst: "Export geblokkeerd: los eerst de blokkerende loonrunvalidaties op.",
+      });
+      return;
+    }
     const csv = loonrunNaarCsv(loonrun);
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
@@ -115,7 +122,36 @@ export function LoonrunPage() {
     )
       return;
     setInputs([]);
+    try {
+      localStorage.removeItem(LOONRUN_STORAGE_KEY);
+    } catch {
+      // ignore
+    }
     setImportStatus(null);
+  }
+
+  function handleMarkeerGecontroleerd() {
+    if (loonrun.heeftBlokkeringen) {
+      setImportStatus({
+        kind: "error",
+        tekst: "Controle geblokkeerd: los eerst de blokkerende loonrunvalidaties op.",
+      });
+      return;
+    }
+    setInputs((prev) => prev.map((input) => ({ ...input, status: "gecontroleerd" })));
+    setImportStatus({ kind: "success", tekst: "Alle berekende werknemers zijn gemarkeerd als gecontroleerd." });
+  }
+
+  function handleVastzetten() {
+    if (loonrun.heeftBlokkeringen) {
+      setImportStatus({
+        kind: "error",
+        tekst: "Vastzetten geblokkeerd: los eerst de blokkerende loonrunvalidaties op.",
+      });
+      return;
+    }
+    setInputs((prev) => prev.map((input) => ({ ...input, status: "vastgezet" })));
+    setImportStatus({ kind: "success", tekst: "Loonrun lokaal vastgezet. Wijzigingen aan de import starten een nieuwe controle." });
   }
 
   return (
@@ -149,7 +185,7 @@ export function LoonrunPage() {
             <div style={{ fontSize: 12, color: "var(--color-text-muted)" }}>
               {loonrun.werknemers.length === 0
                 ? "Geen werknemers geladen"
-                : `${loonrun.periode} · ${loonrun.totalen.aantalBerekend} berekend` +
+                : `${loonrun.periode} · ${loonrun.totalen.aantalBerekend} te controleren` +
                   (loonrun.totalen.aantalFout > 0
                     ? ` · ${loonrun.totalen.aantalFout} fout`
                     : "")}
@@ -185,6 +221,20 @@ export function LoonrunPage() {
               </button>
               <button
                 type="button"
+                onClick={handleMarkeerGecontroleerd}
+                style={buttonStyle("secondary")}
+              >
+                Gecontroleerd
+              </button>
+              <button
+                type="button"
+                onClick={handleVastzetten}
+                style={buttonStyle("secondary")}
+              >
+                Vastzetten
+              </button>
+              <button
+                type="button"
                 onClick={handleExport}
                 style={buttonStyle("primary")}
               >
@@ -216,6 +266,19 @@ export function LoonrunPage() {
         </div>
       )}
 
+      {loonrun.werknemers.length > 0 && (
+        <div style={{ marginBottom: 16 }}>
+          <Banner
+            kind={loonrun.heeftBlokkeringen ? "error" : "info"}
+            title={loonrun.heeftBlokkeringen ? "Loonrunvalidaties blokkeren export" : "Lokale opslag actief"}
+          >
+            {loonrun.heeftBlokkeringen
+              ? `${loonrun.validaties.filter((v) => v.niveau === "blokkerend").length} blokkerende validatie(s). Deze run kan niet worden geëxporteerd tot ze opgelost zijn.`
+              : "Deze loonrun wordt lokaal in deze browser bewaard. Gebruik Wissen om de opgeslagen werknemers uit deze browser te verwijderen."}
+          </Banner>
+        </div>
+      )}
+
       {/* Totalen card */}
       {loonrun.werknemers.length > 0 && (
         <div
@@ -227,8 +290,12 @@ export function LoonrunPage() {
           }}
         >
           <TotalCard
-            label="Bruto"
-            bedrag={loonrun.totalen.bruto}
+            label="Bruto cash"
+            bedrag={loonrun.totalen.cashBruto}
+          />
+          <TotalCard
+            label="RSZ-basis"
+            bedrag={loonrun.totalen.brutoRszBasis}
           />
           <TotalCard
             label="Netto"
@@ -242,6 +309,16 @@ export function LoonrunPage() {
             label="Loonwig"
             bedrag={loonrun.totalen.loonwigPct}
             isPercentage
+          />
+          <TotalCard
+            label="Te controleren"
+            bedrag={loonrun.totalen.aantalTeControleren}
+            isCount
+          />
+          <TotalCard
+            label="Vastgezet"
+            bedrag={loonrun.totalen.aantalVastgezet}
+            isCount
           />
         </div>
       )}
@@ -275,9 +352,11 @@ export function LoonrunPage() {
                 }}
               >
                 <Th>Naam</Th>
-                <Th align="right">Bruto</Th>
+                <Th align="right">Bruto cash</Th>
+                <Th align="right">RSZ-basis</Th>
                 <Th align="right">Netto</Th>
                 <Th align="right">Werkgeverskost</Th>
+                <Th align="right">Loonwig</Th>
                 <Th>Status</Th>
                 <Th align="center">Actie</Th>
               </tr>
@@ -306,6 +385,11 @@ export function LoonrunPage() {
                   </Td>
                   <Td align="right">
                     {w.loonfiche
+                      ? formatEUR(w.loonfiche.totalen.cashBrutoloon)
+                      : "—"}
+                  </Td>
+                  <Td align="right">
+                    {w.loonfiche
                       ? formatEUR(w.loonfiche.totalen.brutoRszBasis)
                       : "—"}
                   </Td>
@@ -317,6 +401,11 @@ export function LoonrunPage() {
                   <Td align="right">
                     {w.loonfiche
                       ? formatEUR(w.loonfiche.totalen.werkgeverskostMaand)
+                      : "—"}
+                  </Td>
+                  <Td align="right">
+                    {w.loonfiche && w.loonfiche.totalen.werkgeverskostMaand > 0
+                      ? `${round2(((w.loonfiche.totalen.werkgeverskostMaand - w.loonfiche.totalen.nettoTeBetalen) / w.loonfiche.totalen.werkgeverskostMaand) * 100)} %`
                       : "—"}
                   </Td>
                   <Td>
@@ -441,15 +530,19 @@ function TotalCard({
   label,
   bedrag,
   isPercentage,
+  isCount,
 }: {
   label: string;
   bedrag: number | null;
   isPercentage?: boolean;
+  isCount?: boolean;
 }) {
   const value =
     bedrag === null
       ? "—"
-      : isPercentage
+      : isCount
+        ? String(bedrag)
+        : isPercentage
         ? `${bedrag.toFixed(2)} %`
         : formatEUR(bedrag);
 
@@ -496,6 +589,21 @@ function StatusBadge({ status }: { status: string }) {
       bg: "rgba(28,210,163,0.10)",
       text: "#047857",
       border: "rgba(28,210,163,0.35)",
+    },
+    te_controleren: {
+      bg: "#fff7ed",
+      text: "#9a3412",
+      border: "#fed7aa",
+    },
+    gecontroleerd: {
+      bg: "rgba(28,210,163,0.10)",
+      text: "#047857",
+      border: "rgba(28,210,163,0.35)",
+    },
+    vastgezet: {
+      bg: "var(--color-primary-soft)",
+      text: "var(--color-primary)",
+      border: "var(--color-primary-border)",
     },
     fout: {
       bg: "#fff1f2",
@@ -573,6 +681,10 @@ function Td({
       {children}
     </td>
   );
+}
+
+function round2(n: number): number {
+  return Math.round(n * 100) / 100;
 }
 
 function LegeState() {

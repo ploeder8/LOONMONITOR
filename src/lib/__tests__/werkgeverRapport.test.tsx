@@ -66,11 +66,13 @@ describe("WerkgeverRapport rendering", () => {
   it("toont de totalen in de summary cards", () => {
     const run = makeLoonrun();
     const html = renderToStaticMarkup(<WerkgeverRapport loonrun={run} />);
-    expect(html).toContain("Totaal bruto");
+    expect(html).toContain("Totaal bruto cash");
+    expect(html).toContain("Totaal RSZ-basis");
     expect(html).toContain("Totaal netto");
     expect(html).toContain("Werkgeverskost");
     expect(html).toContain("Loonwig");
-    expect(html).toContain(formatEUR(run.totalen.bruto));
+    expect(html).toContain(formatEUR(run.totalen.cashBruto));
+    expect(html).toContain(formatEUR(run.totalen.brutoRszBasis));
     expect(html).toContain(formatEUR(run.totalen.netto));
     expect(html).toContain(formatEUR(run.totalen.werkgeverskost));
   });
@@ -79,7 +81,8 @@ describe("WerkgeverRapport rendering", () => {
     const run = makeLoonrun();
     const html = renderToStaticMarkup(<WerkgeverRapport loonrun={run} />);
     expect(html).toContain("TOTALEN");
-    expect(html).toContain(formatEUR(run.totalen.bruto));
+    expect(html).toContain(formatEUR(run.totalen.cashBruto));
+    expect(html).toContain(formatEUR(run.totalen.brutoRszBasis));
     expect(html).toContain(formatEUR(run.totalen.netto));
     expect(html).toContain(formatEUR(run.totalen.werkgeverskost));
     if (run.totalen.loonwigPct !== null) {
@@ -124,6 +127,6 @@ describe("WerkgeverRapport rendering", () => {
     // Foutieve werknemer heeft "—" in bedragscellen
     // We checken indirect via het totaal: alleen 1 werknemer berekend
     expect(html).toContain("TOTALEN");
-    expect(html).toContain(formatEUR(run.totalen.bruto));
+    expect(html).toContain(formatEUR(run.totalen.cashBruto));
   });
 });

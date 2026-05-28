@@ -271,16 +271,18 @@ export function berekenWerkgeverskostVoorProfiel(
   refDatum: string,
   vaaWerkmiddelen?: VaaForfaitsWerkmiddelenResultaat,
   mobiliteit?: MobiliteitBerekening,
+  brutoloonOverride?: number,
 ): WerkgeverskostResultaat {
   const resolvedVaaWerkmiddelen = vaaWerkmiddelen ?? berekenVaaWerkmiddelenVoorProfiel(p, refDatum);
-  const resolvedMobiliteit = mobiliteit ?? berekenMobiliteitVoorProfiel(p, refDatum);
+  const brutoloon = brutoloonOverride ?? p.brutoloon;
+  const resolvedMobiliteit = mobiliteit ?? berekenMobiliteitVoorProfiel(p, refDatum, brutoloon);
 
   const vaaPerMaand =
     resolvedVaaWerkmiddelen.totaalPerMaand +
     (resolvedMobiliteit.vaaBedrijfswagen?.vaaMaand ?? 0);
 
   return werkgeverskost({
-    brutoloon: p.brutoloon,
+    brutoloon,
     refDatum,
     bouwVlag: p.bouwVlag,
     arbeidsongevallenPct: p.arbeidsongevallenPct,

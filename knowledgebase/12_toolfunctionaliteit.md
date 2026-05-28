@@ -104,26 +104,32 @@ De loonfiche-pagina (`#/loonfiche`) toont een pro-forma loonfiche per huidig pro
 
 ### Loonfiche regels
 
-De loonfiche bevat gecodeerde regels (bv. `1000` Brutoloon, `2000` RSZ werknemer, `3000` Bedrijfsvoorheffing, `9000` Netto te betalen, `9500` Werkgeverskost). Subtotalen (`1090`, `2090`, `2190`, `3090`) en totaalregels worden altijd getoond; nulregels worden verborgen.
+De loonfiche bevat gecodeerde regels (bv. `1000` Brutoloon, `2000` RSZ werknemer, `3000` Bedrijfsvoorheffing, `9000` Netto te betalen, `9500` Werkgeverskost). Subtotalen (`1090`, `2090`, `2190`, `3090`) en totaalregels worden altijd getoond; nulregels worden verborgen. De tabel rendert regels op globale sortering zodat subtotalen tussen de juiste stappen blijven staan.
 
 ### Modi
 
 - **Bediende:** volledige RSZ → BV → netto flow met alle verminderingen en inhoudingen.
-- **Student:** vereenvoudigde loonfiche zonder RSZ/BV/BBSZ; bruto komt uit het studentenbarema.
-- **Netto → Bruto:** toont het berekende bruto als "Berekend brutoloon" en het doelnetto als referentie.
+- **Student:** vereenvoudigde loonfiche zonder RSZ/BV/BBSZ; bruto komt uit het studentenbarema. Maaltijdcheques verminderen het cash-netto alleen met de werknemersbijdrage; de totale chequewaarde blijft informatief via "Netto inclusief maaltijdcheques".
+- **Netto → Bruto:** toont het berekende bruto als "Berekend brutoloon" en het doelnetto als referentie. Hetzelfde berekende bruto wordt gebruikt voor netto, werkgeverskost, loonfiche-totalen en loonrun-totalen.
 
-### Identificatie
+### Profiel bewerken en identificatie
 
-De loonfiche toont optionele Werknemer- en Werkgeverblokken boven de tabel:
+De loonfiche heeft geen aparte incomplete calculator-invoer meer. Boven het document staat een compacte **Profielsnapshot** met de belangrijkste actieve profielkeuzes: werknemer/werkgever, periode, loonrichting, statuut, tewerkstellingsbreuk, fiscale context, voordelen en mobiliteit. De actie **Profiel bewerken** opent een zijpaneel met dezelfde gedeelde profiel-editor als de calculator.
+
+De gedeelde profiel-editor bevat een aparte identificatiegroep:
+
 - Werknemer: naam en referentie
 - Werkgever: naam en ondernemingsnummer
-- Prestatie: periode, statuut, tewerkstellingsbreuk, arbeidsdagen
 
-Deze velden worden opgeslagen in het gedeelde profiel en meegenomen in CSV export/import.
+Deze velden worden opgeslagen in het gedeelde profiel, meegenomen in CSV export/import en getoond in de loonficheblokken boven de tabel. De loonfiche zelf blijft een document- en controleweergave; alle impactvolle berekeningsinputs worden via het gedeelde profiel aangepast.
+
+### Prestatieblok
+
+De loonfiche toont naast werknemer en werkgever ook een prestatieblok met periode, statuut, tewerkstellingsbreuk en arbeidsdagen.
 
 ### Print
 
-De loonfiche is print-vriendelijk: `@media print` verbergt header, navigatie, footer, chat, de input-toolbar en de actieknoppen; toont de loonfiche op A4-breedte zonder schaduwen. De audit-sectie wordt bij print altijd getoond, ongeacht de toggle.
+ De loonfiche is print-vriendelijk: `@media print` verbergt header, navigatie, footer, chat, de input-toolbar en de actieknoppen; toont de loonfiche compact op één A4-pagina zonder schaduwen. Wanneer bronnen zichtbaar zijn, starten ze op een aparte tweede pagina als samenhangend bronblok, zodat de loonfiche zelf niet over twee pagina's wordt gesplitst.
 
 ### Acties
 
@@ -142,25 +148,39 @@ Gebruikers uploaden een multi-row CSV met dezelfde kolommen als de single-row CS
 
 ### Berekening
 
-Per rij roept `bouwLoonrun()` `bouwLoonficheVoorProfiel()` aan. Fouten bij één werknemer blokkeren de andere werknemers niet; de betreffende werknemer krijgt status `fout` met een foutmelding, terwijl de rest normaal doorgerekend wordt.
+Per rij roept `bouwLoonrun()` `bouwLoonficheVoorProfiel()` aan. Fouten bij één werknemer blokkeren de andere werknemers niet; de betreffende werknemer krijgt status `fout` met een foutmelding, terwijl de rest normaal doorgerekend wordt. Geldige werknemers krijgen status `te_controleren`, tenzij de gebruiker ze lokaal markeert als `gecontroleerd` of `vastgezet`.
+
+De loonrun voert contextvalidaties uit. Meerdere periodes, referentiedatums, werkgevers of ondernemingsnummers in één run leveren een blokkerende validatie op. Een run met blokkeringen kan niet geëxporteerd worden.
+
+De knoppen **Gecontroleerd** en **Vastzetten** zetten alle berekende werknemers respectievelijk naar `gecontroleerd` of `vastgezet`. Dit kan alleen zonder blokkerende validaties. Omdat Jaakie browser-only is, is `vastgezet` een lokale workflowlock/status en geen officiële payrollfinalisatie.
 
 ### Resultaatweergave
 
-- **Tabel** met kolommen: ID, Naam, Bruto, Netto, Werkgeverskost, Loonwig, Status.
+- **Tabel** met kolommen: Naam, Bruto cash, RSZ-basis, Netto, Werkgeverskost, Loonwig, Status.
 - **Totaalregel** onderaan: som van alle succesvol berekende werknemers plus loonwig op aggregaatniveau.
 - **Per werknemer**: klik op "Bekijk loonfiche" opent een modal met de volledige pro-forma loonfiche en audit-trail van die werknemer.
 
+De loonrun maakt onderscheid tussen:
+
+- **Bruto cash:** het contractuele bruto loonbedrag.
+- **RSZ-basis:** bruto cash plus RSZ-plichtige voordelen zoals VAA werkmiddelen.
+- **Belastbaar voor BV:** basis voor bedrijfsvoorheffing na RSZ/werkbonus en belastbare VAA.
+
 ### Export
 
-De summary CSV-export bevat één rij per werknemer (`id;naam;bruto;netto;werkgeverskost;loonwig;status`) plus een totaalregel.
+De summary CSV-export bevat één rij per werknemer met expliciete kolommen (`id;naam;cash_bruto;bruto_rsz_basis;belastbaar_voor_bv;netto;werkgeverskost;loonwig_pct;status;validaties;fout`) plus een totaalregel. Export wordt geblokkeerd bij blokkerende loonrunvalidaties.
+
+### Lokale opslag
+
+De loonrun-inputs worden lokaal in de browser bewaard via `localStorage` key `jaakie:loonrun`, zodat een import niet verdwijnt bij navigatie of refresh. De UI toont hiervoor een melding. De actie **Wissen** verwijdert de werknemers uit de loonrun en wist de lokale opslagkey.
 
 ### Rapport voor werkgever
 
 De knop **"Rapport"** opent een estetisch overzicht dat de payroll-expert kan delen met de werkgever:
 
 - **Header**: Jaakie brand, titel "Loonkostoverzicht", periode, werkgevernaam (indien ingevuld in profiel), generatiedatum.
-- **Executive summary**: 4 cards met totaal bruto, totaal netto, totale werkgeverskost en loonwig.
-- **Tabel**: per werknemer de bruto, netto, werkgeverskost en loonwig; werknemers met berekeningsfouten worden getoond met "—" voor bedragen.
+- **Executive summary**: cards met totaal bruto cash, totaal RSZ-basis, totaal netto, totale werkgeverskost en loonwig.
+- **Tabel**: per werknemer bruto cash, RSZ-basis, netto, werkgeverskost en loonwig; werknemers met berekeningsfouten worden getoond met "—" voor bedragen.
 - **Totalenrij**: onderaan de tabel met geaggregeerde bedragen.
 - **Footer**: pro-forma disclaimer en korte uitleg van loonwig.
 

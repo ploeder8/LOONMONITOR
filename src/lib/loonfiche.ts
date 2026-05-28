@@ -45,6 +45,7 @@ export interface LoonficheRegel {
 }
 
 export interface LoonficheTotalen {
+  cashBrutoloon: number;
   brutoRszBasis: number;
   belastbaarVoorBV: number;
   nettoTeBetalen: number;
@@ -117,7 +118,13 @@ function bouwBediendeLoonfiche(
   const mobiliteit = berekenMobiliteitVoorProfiel(profiel, refDatum, effectiefBruto);
   const vaaWerkmiddelen = berekenVaaWerkmiddelenVoorProfiel(profiel, refDatum);
   const netto = berekenNettoVoorProfiel(profiel, refDatum, effectiefBruto);
-  const wgk = berekenWerkgeverskostVoorProfiel(profiel, refDatum, vaaWerkmiddelen, mobiliteit);
+  const wgk = berekenWerkgeverskostVoorProfiel(
+    profiel,
+    refDatum,
+    vaaWerkmiddelen,
+    mobiliteit,
+    effectiefBruto,
+  );
 
   // Maaltijdcheques
   const maaltijdchequesActief = heeftMaaltijdcheques(profiel);
@@ -259,6 +266,7 @@ function bouwBediendeLoonfiche(
         bedrag: netto.vaaBedrijfswagenPerMaand,
         teken: "plus",
         sortering: 300,
+        datapunten: mobiliteit.vaaBedrijfswagen?.datapunten,
       }),
     );
   }
@@ -343,6 +351,7 @@ function bouwBediendeLoonfiche(
         bedrag: netto.fiscaleWerkbonus,
         teken: "plus",
         sortering: 440,
+        datapunten: netto.werkbonus.totaal > 0 ? [netto.werkbonus.datapunt] : netto.bv.datapunten,
       }),
     );
   }
@@ -426,6 +435,7 @@ function bouwBediendeLoonfiche(
         bedrag: netto.woonwerkVrijgesteldPerMaand,
         teken: "plus",
         sortering: 600,
+        datapunten: mobiliteit.woonwerk.datapunten,
       }),
     );
   }
@@ -454,6 +464,7 @@ function bouwBediendeLoonfiche(
         bedrag: netto.vaaBedrijfswagenPerMaand,
         teken: "min",
         sortering: 700,
+        datapunten: mobiliteit.vaaBedrijfswagen?.datapunten,
       }),
     );
   }
@@ -468,6 +479,7 @@ function bouwBediendeLoonfiche(
         bedrag: netto.vaaRszPlichtigPerMaand,
         teken: "min",
         sortering: 710,
+        datapunten: vaaWerkmiddelen.lijnen.map((l) => l.datapunt),
       }),
     );
   }
@@ -516,6 +528,7 @@ function bouwBediendeLoonfiche(
     profielSnapshot: { ...profiel },
     regels: filterEnSorteerRegels(regels),
     totalen: {
+      cashBrutoloon: effectiefBruto,
       brutoRszBasis: netto.brutoRszBasis,
       belastbaarVoorBV: netto.belastbaarMaandloonVoorBV,
       nettoTeBetalen: netto.nettoloon,
@@ -556,11 +569,20 @@ function bouwStudentenLoonfiche(
   );
 
   const bruto = barema.maandloonEUR;
+  const maaltijdchequeWerknemersbijdrage = maaltijdcheques
+    ? round2(profiel.maaltijdchequeWerknemersbijdragePerDag * maaltijdcheques.werkdagen)
+    : 0;
+  const maaltijdchequeWerkgeverskost = maaltijdcheques
+    ? round2(
+        Math.min(profiel.maaltijdchequeWerkgeversaandeelPerDag, 8.91) *
+          maaltijdcheques.werkdagen,
+      )
+    : 0;
   const netto = round2(
     bruto +
       woonwerkVrijgesteld +
       profiel.onkostenvergoedingPerMaand -
-      (maaltijdcheques?.totaleWaarde ?? 0) -
+      maaltijdchequeWerknemersbijdrage -
       profiel.hospitalisatieEigenBijdrage,
   );
 
@@ -604,15 +626,16 @@ function bouwStudentenLoonfiche(
     );
   }
 
-  if (maaltijdcheques && maaltijdcheques.totaleWaarde > 0) {
+  if (maaltijdcheques && maaltijdchequeWerknemersbijdrage > 0) {
     regels.push(
       r({
         code: "4010",
         label: "Maaltijdcheques (werknemersbijdrage)",
         type: "inhouding",
-        bedrag: maaltijdcheques.totaleWaarde,
+        bedrag: maaltijdchequeWerknemersbijdrage,
         teken: "min",
         sortering: 510,
+        detail: `${maaltijdcheques.werkdagen} dagen`,
       }),
     );
   }
@@ -655,7 +678,9 @@ function bouwStudentenLoonfiche(
   }
 
   // Voor studenten: minimale werkgeverskost = bruto + mobiliteit vergoeding
-  const werkgeverskost = round2(bruto + (mobiliteit.woonwerk.totaalVergoeding ?? 0));
+  const werkgeverskost = round2(
+    bruto + (mobiliteit.woonwerk.totaalVergoeding ?? 0) + maaltijdchequeWerkgeverskost,
+  );
   regels.push(
     r({
       code: "9500",
@@ -672,6 +697,7 @@ function bouwStudentenLoonfiche(
     profielSnapshot: { ...profiel },
     regels: filterEnSorteerRegels(regels),
     totalen: {
+      cashBrutoloon: bruto,
       brutoRszBasis: bruto,
       belastbaarVoorBV: bruto,
       nettoTeBetalen: netto,
