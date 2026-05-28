@@ -91,6 +91,15 @@ pnpm preview
   - **Inputcockpit:** `src/pages/home/InputCockpit.tsx` met 2×2 `CockpitCard`-grid voor identiteit, arbeidscontext, brutoloon en woon-werkverkeer. Extra looncomponenten, werkgeversbijdragen en eindejaarspremie staan in ingeklapte secties.
   - **Resultaten:** `src/pages/home/ResultatenPanel.tsx` met netto, werkgeverskost, jaaroverzicht, barema-check en audit-panelen. Studentenmodus toont alleen de relevante barema-uitkomst.
   - Elke waarde heeft een audit-paneel met datapunt-id, status, tier en primaire bron.
+- **`/loonfiche`** — Pro-forma loonfiche voor één profiel.
+  - Toont bruto cash, RSZ-basis, belastbaar loon voor BV, inhoudingen, netto te betalen en werkgeverskost.
+  - Netto → bruto gebruikt hetzelfde berekende bruto voor netto, werkgeverskost, audit en loonrun.
+  - Studentenmodus is vereenvoudigd; maaltijdcheques verminderen cash-netto alleen met de werknemersbijdrage.
+- **`/loonrun`** — Multi-werknemer loonrun light.
+  - CSV-import van meerdere werknemers, berekening per werknemer en individuele loonfiche-modal.
+  - Totalen maken expliciet onderscheid tussen **bruto cash** en **RSZ-basis**.
+  - Gemengde werkgever/periode/referentiedatum wordt als blokkerende validatie gemeld en blokkeert export.
+  - De loonrun wordt lokaal in de browser bewaard; gebruik **Wissen** om de lokale loonrun te verwijderen.
 - **`/testcases`** — Representatieve testcases live herrekend tegen de bundled dataset.
 - **`/scope`** — Dataset-meta, beperkingen, niet-gevonden datapunten, bronconflicten en opmerkingen.
 

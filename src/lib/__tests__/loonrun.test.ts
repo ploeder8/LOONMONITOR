@@ -1,6 +1,7 @@
 import { describe, it, expect } from "bun:test";
 
 import { bouwLoonrun } from "@/lib/loonrun";
+import { loonrunNaarCsv } from "@/lib/loonrunExport";
 import { DEFAULTS } from "@/lib/profiel";
 
 describe("Loonrun — domeinlaag", () => {
@@ -19,7 +20,7 @@ describe("Loonrun — domeinlaag", () => {
 
     // Alle hebben status berekend
     for (const w of run.werknemers) {
-      expect(w.status).toBe("berekend");
+      expect(w.status).toBe("te_controleren");
       expect(w.loonfiche).toBeDefined();
     }
 
@@ -28,7 +29,7 @@ describe("Loonrun — domeinlaag", () => {
       (sum, w) => sum + (w.loonfiche?.totalen.brutoRszBasis ?? 0),
       0,
     );
-    expect(run.totalen.bruto).toBe(brutoSom);
+    expect(run.totalen.brutoRszBasis).toBe(brutoSom);
   });
 
   it("totalen zijn som van individuele loonfiches", () => {
@@ -75,8 +76,8 @@ describe("Loonrun — domeinlaag", () => {
     expect(run.totalen.aantalFout).toBeGreaterThanOrEqual(1);
 
     // Werknemer 1 en 3 zijn niet beïnvloed
-    expect(run.werknemers[0].status).toBe("berekend");
-    expect(run.werknemers[2].status).toBe("berekend");
+    expect(run.werknemers[0].status).toBe("te_controleren");
+    expect(run.werknemers[2].status).toBe("te_controleren");
 
     // Foutieve werknemer heeft foutstatus
     expect(run.werknemers[1].status).toBe("fout");
@@ -108,10 +109,59 @@ describe("Loonrun — domeinlaag", () => {
     expect(run.periode).toContain("2026");
   });
 
+  it("splitst cash bruto en RSZ-basis bij RSZ-plichtige VAA", () => {
+    const run = bouwLoonrun([
+      {
+        id: "1",
+        naam: "Werkmiddelen",
+        profiel: { ...DEFAULTS, brutoloon: 3000, vaaPcLaptopActief: true },
+      },
+    ]);
+
+    expect(run.totalen.cashBruto).toBe(3000);
+    expect(run.totalen.brutoRszBasis).toBeGreaterThan(run.totalen.cashBruto);
+  });
+
+  it("meldt gemengde periodes als blokkerende validatie", () => {
+    const run = bouwLoonrun([
+      { id: "1", naam: "Jan", profiel: { ...DEFAULTS, berekeningsMaand: "06" } },
+      { id: "2", naam: "Piet", profiel: { ...DEFAULTS, berekeningsMaand: "07" } },
+    ]);
+
+    expect(run.heeftBlokkeringen).toBe(true);
+    expect(run.validaties.some((v) => v.code === "gemengde_periode")).toBe(true);
+  });
+
+  it("telt gecontroleerde en vastgezette werknemers apart", () => {
+    const run = bouwLoonrun([
+      { id: "1", naam: "Jan", profiel: { ...DEFAULTS, brutoloon: 3000 }, status: "gecontroleerd" },
+      { id: "2", naam: "Piet", profiel: { ...DEFAULTS, brutoloon: 3200 }, status: "vastgezet" },
+    ]);
+
+    expect(run.totalen.aantalGecontroleerd).toBe(1);
+    expect(run.totalen.aantalVastgezet).toBe(1);
+    expect(run.totalen.aantalTeControleren).toBe(0);
+  });
+
+  it("export gebruikt expliciete bruto-definities", () => {
+    const run = bouwLoonrun([
+      {
+        id: "1",
+        naam: "Werkmiddelen",
+        profiel: { ...DEFAULTS, brutoloon: 3000, vaaPcLaptopActief: true },
+      },
+    ]);
+    const csv = loonrunNaarCsv(run);
+
+    expect(csv.split("\n")[0]).toContain("cash_bruto;bruto_rsz_basis;belastbaar_voor_bv");
+    expect(csv).toContain("te_controleren");
+  });
+
   it("geeft lege run bij lege inputs", () => {
     const run = bouwLoonrun([]);
     expect(run.werknemers).toHaveLength(0);
-    expect(run.totalen.bruto).toBe(0);
+    expect(run.totalen.cashBruto).toBe(0);
+    expect(run.totalen.brutoRszBasis).toBe(0);
     expect(run.totalen.netto).toBe(0);
     expect(run.totalen.werkgeverskost).toBe(0);
     expect(run.totalen.aantalBerekend).toBe(0);

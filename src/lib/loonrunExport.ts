@@ -6,11 +6,14 @@ type CsvWaarde = string | number | null;
 const KOLOMMEN = [
   "id",
   "naam",
-  "bruto",
+  "cash_bruto",
+  "bruto_rsz_basis",
+  "belastbaar_voor_bv",
   "netto",
   "werkgeverskost",
   "loonwig_pct",
   "status",
+  "validaties",
   "fout",
 ] as const;
 
@@ -31,11 +34,14 @@ export function loonrunNaarCsv(loonrun: Loonrun): string {
     const waarden: Record<(typeof KOLOMMEN)[number], CsvWaarde> = {
       id: w.id,
       naam: w.naam,
-      bruto: w.loonfiche ? w.loonfiche.totalen.brutoRszBasis : null,
+      cash_bruto: w.loonfiche ? w.loonfiche.totalen.cashBrutoloon : null,
+      bruto_rsz_basis: w.loonfiche ? w.loonfiche.totalen.brutoRszBasis : null,
+      belastbaar_voor_bv: w.loonfiche ? w.loonfiche.totalen.belastbaarVoorBV : null,
       netto: w.loonfiche ? w.loonfiche.totalen.nettoTeBetalen : null,
       werkgeverskost: w.loonfiche ? w.loonfiche.totalen.werkgeverskostMaand : null,
       loonwig_pct: loonwig,
       status: w.status,
+      validaties: w.validaties.map((v) => `${v.niveau}:${v.code}`).join("|"),
       fout: w.fout ?? "",
     };
 
@@ -46,11 +52,14 @@ export function loonrunNaarCsv(loonrun: Loonrun): string {
   const totalenRij = [
     "TOTALEN",
     "",
-    loonrun.totalen.bruto,
+    loonrun.totalen.cashBruto,
+    loonrun.totalen.brutoRszBasis,
+    loonrun.totalen.belastbaarVoorBV,
     loonrun.totalen.netto,
     loonrun.totalen.werkgeverskost,
     loonrun.totalen.loonwigPct,
     `${loonrun.totalen.aantalBerekend} berekend / ${loonrun.totalen.aantalFout} fout`,
+    loonrun.validaties.map((v) => `${v.niveau}:${v.code}`).join("|"),
     "",
   ].map(escapeCsvWaarde).join(";");
 

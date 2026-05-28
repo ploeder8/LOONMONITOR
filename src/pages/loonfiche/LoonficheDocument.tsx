@@ -28,6 +28,7 @@ export function LoonficheDocument({ loonfiche, toonBronnen = true }: LoonficheDo
     >
       {/* Pro-forma banner */}
       <div
+        className="loonfiche-banner"
         style={{
           background: "var(--color-primary-soft)",
           borderBottom: "1px solid var(--color-primary-border)",
@@ -45,9 +46,10 @@ export function LoonficheDocument({ loonfiche, toonBronnen = true }: LoonficheDo
         Pro-forma loonfiche — geen officiële loonbrief
       </div>
 
-      <div style={{ padding: "24px 28px 28px" }}>
+      <div className="loonfiche-content" style={{ padding: "24px 28px 28px" }}>
         {/* Document header */}
         <div
+          className="loonfiche-header"
           style={{
             display: "flex",
             justifyContent: "space-between",
@@ -93,6 +95,7 @@ export function LoonficheDocument({ loonfiche, toonBronnen = true }: LoonficheDo
 
         {/* Werknemer / Werkgever / Prestatie blokken */}
         <div
+          className="loonfiche-info-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
@@ -127,7 +130,7 @@ export function LoonficheDocument({ loonfiche, toonBronnen = true }: LoonficheDo
 
         {/* Waarschuwingen */}
         {loonfiche.waarschuwingen.length > 0 && (
-          <div style={{ marginBottom: 20 }}>
+          <div className="loonfiche-waarschuwingen" style={{ marginBottom: 20 }}>
             {loonfiche.waarschuwingen.map((w, i) => (
               <Banner key={i} kind="warning" title={i === 0 ? "Waarschuwing" : undefined}>
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -144,6 +147,7 @@ export function LoonficheDocument({ loonfiche, toonBronnen = true }: LoonficheDo
 
         {/* Totalenblok */}
         <div
+          className="loonfiche-totalen"
           style={{
             marginTop: 24,
             paddingTop: 16,
@@ -226,6 +230,7 @@ function InfoBlock({
 }) {
   return (
     <div
+      className="loonfiche-info-block"
       style={{
         background: "var(--color-navy-50)",
         borderRadius: "var(--radius-lg)",
@@ -271,6 +276,7 @@ function AuditRegelBlock({ regel }: { regel: LoonficheRegel }) {
   if (!regel.datapunten || regel.datapunten.length === 0) return null;
   return (
     <div
+      className="loonfiche-audit-regel"
       style={{
         borderLeft: "2px solid var(--color-primary-border)",
         paddingLeft: 10,

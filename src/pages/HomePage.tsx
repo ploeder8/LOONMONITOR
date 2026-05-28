@@ -24,9 +24,9 @@ import {
   zoekBrutoVoorProfielDoelNetto,
 } from "@/lib/profielBerekeningen";
 import { CsvPaneel } from "@/pages/home/CsvPaneel";
-import { InputCockpit } from "@/pages/home/InputCockpit";
 import { WerknemerOverzicht } from "@/pages/home/WerknemerOverzicht";
 import { computeSummary, ResultBandsPanel } from "@/pages/home/ResultatenPanel";
+import { ProfielEditor } from "@/pages/profiel/ProfielEditor";
 
 export { waardeUitNumeriekeInput } from "@/pages/home/FormControls";
 
@@ -203,7 +203,7 @@ export function HomePage() {
         </button>
       </div>
 
-      <InputCockpit profiel={profiel} set={set} />
+      <ProfielEditor profiel={profiel} set={set} />
 
       <ErrorBoundary
         fallbackRender={({ error, resetErrorBoundary }) => (

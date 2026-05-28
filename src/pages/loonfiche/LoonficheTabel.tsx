@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 import type { LoonficheRegel, LoonficheRegelType } from "@/lib/loonfiche";
 import { formatEUR } from "@/lib/money";
 
@@ -21,24 +23,12 @@ function tekenPrefix(teken: string): string {
   }
 }
 
-function groepeerPerType(regels: LoonficheRegel[]): Map<LoonficheRegelType, LoonficheRegel[]> {
-  const map = new Map<LoonficheRegelType, LoonficheRegel[]>();
-  for (const regel of regels) {
-    const arr = map.get(regel.type) ?? [];
-    arr.push(regel);
-    map.set(regel.type, arr);
-  }
-  return map;
-}
-
 export function LoonficheTabel({ regels }: { regels: LoonficheRegel[] }) {
-  const groepen = groepeerPerType(regels);
-  const typeVolgorde: LoonficheRegelType[] = [
-    "bruto", "rsz", "belastbaar", "bv", "inhouding", "netto", "werkgever", "informatief",
-  ];
+  let vorigeHeader = "";
 
   return (
     <table
+      className="loonfiche-tabel"
       style={{
         width: "100%",
         borderCollapse: "collapse",
@@ -47,43 +37,34 @@ export function LoonficheTabel({ regels }: { regels: LoonficheRegel[] }) {
       }}
     >
       <tbody>
-        {typeVolgorde.map((type) => {
-          const items = groepen.get(type);
-          if (!items || items.length === 0) return null;
-          const header = TYPE_HEADERS[type];
-          const showHeader = header && type !== "informatief" && type !== "subtotaal";
+        {regels.map((regel) => {
+          const header = regel.type === "subtotaal" ? "" : TYPE_HEADERS[regel.type];
+          const showHeader = Boolean(header && header !== vorigeHeader);
+          if (header) vorigeHeader = header;
 
           return (
-            <tr key={type}>
-              <td colSpan={3} style={{ padding: 0 }}>
-                <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                  <tbody>
-                    {showHeader && (
-                      <tr>
-                        <td
-                          colSpan={3}
-                          style={{
-                            padding: "16px 0 6px",
-                            color: "var(--color-text-muted)",
-                            fontFamily: "var(--font-display)",
-                            fontSize: 11,
-                            fontWeight: 800,
-                            letterSpacing: "0.04em",
-                            textTransform: "uppercase",
-                            borderBottom: "1px solid var(--color-border)",
-                          }}
-                        >
-                          {header}
-                        </td>
-                      </tr>
-                    )}
-                    {items.map((regel) => (
-                      <LoonficheRow key={regel.code} regel={regel} />
-                    ))}
-                  </tbody>
-                </table>
-              </td>
-            </tr>
+            <Fragment key={regel.code}>
+              {showHeader && (
+                <tr key={`${regel.code}-header`}>
+                  <td
+                    colSpan={3}
+                    style={{
+                      padding: "16px 0 6px",
+                      color: "var(--color-text-muted)",
+                      fontFamily: "var(--font-display)",
+                      fontSize: 11,
+                      fontWeight: 800,
+                      letterSpacing: "0.04em",
+                      textTransform: "uppercase",
+                      borderBottom: "1px solid var(--color-border)",
+                    }}
+                  >
+                    {header}
+                  </td>
+                </tr>
+              )}
+              <LoonficheRow regel={regel} />
+            </Fragment>
           );
         })}
       </tbody>

@@ -2,6 +2,7 @@ import { describe, it, expect } from "bun:test";
 import { renderToStaticMarkup } from "react-dom/server";
 
 import { LoonficheDocument } from "@/pages/loonfiche/LoonficheDocument";
+import { LoonficheTabel } from "@/pages/loonfiche/LoonficheTabel";
 import { bouwLoonficheVoorProfiel } from "@/lib/loonfiche";
 import { DEFAULTS } from "@/lib/profiel";
 
@@ -74,5 +75,15 @@ describe("LoonficheDocument rendering", () => {
       <LoonficheDocument loonfiche={loonfiche} toonBronnen={false} />,
     );
     expect(html).not.toContain("Bronvermelding");
+  });
+
+  it("toont subtotalen in de loonfichetabel", () => {
+    const html = renderToStaticMarkup(
+      <LoonficheTabel regels={loonfiche.regels} />,
+    );
+    expect(html).toContain("Totaal bruto RSZ-basis");
+    expect(html).toContain("Loon na RSZ en werkbonus");
+    expect(html).toContain("Belastbaar loon voor BV");
+    expect(html).toContain("BV na verminderingen");
   });
 });

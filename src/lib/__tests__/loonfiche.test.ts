@@ -103,6 +103,31 @@ describe("Loonfiche — met maaltijdcheques", () => {
   });
 });
 
+describe("Loonfiche — studenten met maaltijdcheques", () => {
+  const profiel = {
+    ...DEFAULTS,
+    statuut: "student" as const,
+    studentenCat: "A" as const,
+    studentLeeftijd: 20,
+    maaltijdchequesActief: true,
+    maaltijdchequeWerkgeversaandeelPerDag: 8.91,
+    maaltijdchequeWerknemersbijdragePerDag: 1.09,
+    arbeidsdagenPerMaand: 20,
+    hospitalisatieEigenBijdrage: 0,
+    onkostenvergoedingPerMaand: 0,
+  };
+  const loonfiche = bouwLoonficheVoorProfiel(profiel);
+
+  it("trekt enkel de werknemersbijdrage af van het cash-netto", () => {
+    const r4010 = assertRegelBestaat(loonfiche.regels, "4010");
+    const r9000 = assertRegelBestaat(loonfiche.regels, "9000");
+    const r9010 = assertRegelBestaat(loonfiche.regels, "9010");
+
+    expect(r4010.bedrag).toBe(21.8);
+    expect(r9010.bedrag - r9000.bedrag).toBe(200);
+  });
+});
+
 describe("Loonfiche — studentenmodus", () => {
   const profiel = {
     ...DEFAULTS,
@@ -153,6 +178,23 @@ describe("Loonfiche — netto naar bruto", () => {
   it("netto te betalen is ongeveer gelijk aan doelnettoloon", () => {
     const r = assertRegelBestaat(loonfiche.regels, "9000");
     expect(r.bedrag).toBeCloseTo(profiel.doelNettoloon, 0);
+  });
+
+  it("werkgeverskost gebruikt het berekende bruto, niet DEFAULTS brutoloon", () => {
+    const r1000 = assertRegelBestaat(loonfiche.regels, "1000");
+    const refDatum = refDatumVoorMaand(profiel.berekeningsJaar, profiel.berekeningsMaand);
+    const mobiliteit = berekenMobiliteitVoorProfiel(profiel, refDatum, r1000.bedrag);
+    const vaaWerkmiddelen = berekenVaaWerkmiddelenVoorProfiel(profiel, refDatum);
+    const wgkMetEffectiefBruto = berekenWerkgeverskostVoorProfiel(
+      profiel,
+      refDatum,
+      vaaWerkmiddelen,
+      mobiliteit,
+      r1000.bedrag,
+    );
+
+    expect(loonfiche.totalen.cashBrutoloon).toBe(r1000.bedrag);
+    expect(loonfiche.totalen.werkgeverskostMaand).toBe(wgkMetEffectiefBruto.totaleLoonkostBreed);
   });
 });
 
