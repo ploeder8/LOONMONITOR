@@ -25,7 +25,6 @@ import { safeGetValue } from "@/lib/periode";
 import { werkgeverskost } from "@/lib/werkgeverskost";
 import {
   BaremaBuitenSchaalError,
-  DatapuntNietBruikbaar,
   DatapuntNietGeldigOpDatum,
 } from "@/lib/errors";
 
@@ -149,7 +148,7 @@ describe("TC-07 — Brutoloon onder sectoraal minimum (faalpad)", () => {
 });
 
 describe("TC-08 — Bouw-subset", () => {
-  it("voegt € 42,30 bouw-aanvullend pensioen toe op € 2.350,00", () => {
+  it("rekent geen aparte bouw-pensioenbijdrage meer bovenop de werkgevers-RSZ", () => {
     const r = rszBijdragen({
       brutoloon: 2350,
       refDatum: REF_2026,
@@ -158,8 +157,8 @@ describe("TC-08 — Bouw-subset", () => {
     expect(r.werknemerBijdrage).toBe(307.15); // 2350 × 0.1307 = 307.145
     expect(r.werkgeverBasisbijdrage).toBe(587.50);
     expect(r.sociaalFonds200).toBe(5.41); // 2350 × 0.0023 = 5.405 → 5.41 (TC verwacht € 5,41)
-    expect(r.bouwAanvullendPensioen).toBe(42.30);
-    expect(r.totaalWerkgever).toBe(635.21);
+    expect(r.bouwAanvullendPensioen).toBeNull();
+    expect(r.totaalWerkgever).toBe(592.91);
   });
 
   it("zonder bouw-vlag is geen bouw-bijdrage berekend", () => {
@@ -526,17 +525,12 @@ describe("TC-18 — Niet-gevonden datapunt: maaltijdcheques", () => {
 });
 
 describe("TC-19 — Datapunt status mogelijk_verouderd", () => {
-  it("rsz_bijzondere_bijdragen_verwijzing weigert default, maar levert een waarschuwing met expliciete toelating", () => {
-    expect(() =>
-      safeGetValue("rsz_bijzondere_bijdragen_verwijzing", { refDatum: REF_2026 }),
-    ).toThrow(DatapuntNietBruikbaar);
+  it("rsz_bijzondere_bijdragen_verwijzing gebruikt de officiële RSZ-BBSZ-pagina zonder verouderd-blokkering", () => {
+    const r = safeGetValue("rsz_bijzondere_bijdragen_verwijzing", { refDatum: REF_2026 });
 
-    const r = safeGetValue("rsz_bijzondere_bijdragen_verwijzing", {
-      refDatum: REF_2026,
-      toelatenMogelijkVerouderd: true,
-    });
-    expect(r.waarschuwing).toContain("mogelijk_verouderd");
+    expect(r.waarschuwing).toBeNull();
     expect(r.datapunt.id).toBe("rsz_bijzondere_bijdragen_verwijzing");
+    expect(r.datapunt.bron_url).toContain("specialsocialsecuritycontribution");
   });
 });
 

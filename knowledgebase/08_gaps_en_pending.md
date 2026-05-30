@@ -1,4 +1,4 @@
-# Gaps & pending — Jaakie PC 200 — peildatum 24 mei 2026
+# Gaps & pending — Jaakie PC 200 — peildatum 30 mei 2026
 
 **Doel:** een levend overzicht van wat de huidige rekenmodule **niet** dekt, welke wettelijke wijzigingen nog **pending** zijn, en welke datapunten aanvullende validatie vragen voordat de loonmotor naar productie kan.
 
@@ -51,9 +51,22 @@
 | Arbeidsongevallenverzekering kantoorbedienden | default 0,30% | Fedris bevestigt verzekeringsplicht; geen publiek sectoraal tarief | **Onzeker als tarief** — 0,30% blijft lage configureerbare default, geen harde sectorparameter |
 | Eindejaarspremie | 13e maand (formule herzien per akkoord 15/1/2026) | sfonds200.be + cao PC 200 | OK voor scope; exacte uitvoeringsnuances blijven auditpunt bij volgende cao-tekstupdate |
 | Dubbel vakantiegeld bedienden | 92% × maandloon incl. VAA; RSZ 13,07% op 85/92 | RSZ Administratieve instructies | Geïntegreerd in jaaroverzicht |
+| Bouw-subset aanvullend pensioen | niet actief | oude Tier-3-publicatie onvoldoende voor runtime | Verwijderd uit runtime en UI; niet apart bovenop globale werkgevers-RSZ ramen zonder primaire CAO-parameterextractie |
 | Fietsvergoeding (akkoord 15/1/2026) | €0,27/km tot 30/09/2026; €0,32/km vanaf 01/10/2026 | sfonds200.be | OK — bronronde 24/05/2026 |
 | Tussenkomst treinvervoer | 100% prijs treinkaart 2e klasse vanaf eerste kilometer | sfonds200.be | OK — bronronde 24/05/2026 |
 | Landingsbaan-supplement | €92,45/maand vanaf 01/06/2026 | sfonds200.be | OK — bronmetadata opgewaardeerd naar Tier 1 |
+
+### 2.3 Payroll-expertreview 30/05/2026
+
+De ingevulde review `jaakie-payrolldata-review-2026-05-27 (1).xlsx` is verwerkt als release-input:
+
+- `rsz_pc200_bouw_aanvullend_pensioen_2026`: niet meer in runtime of UI; record blijft enkel reviewspoor met status `gemarkeerd_voor_review`.
+- `arbeidsongevallen_bedienden_2026`: behouden als Tier 3, maar expliciet als geverifieerde indicatieve default en niet als wettelijke sectorparameter.
+- `rsz_bijzondere_bijdragen_verwijzing`: primaire bron vervangen door officiële RSZ-DmfA-pagina voor BBSZ.
+- `structurele_vermindering_laagloon_2026`: primaire bron vervangen door officiële RSZ-DmfA-pagina; nog niet toegepast in runtime.
+- `pc200_maaltijdcheques_sectoraal`: expert bevestigt geen sectorale verplichting PC 200; maaltijdcheques blijven enkel ondernemingsspecifieke optie.
+- PC 200 eindejaarspremie, ecocheques, woon-werk trein/privévervoer en klein verlet: inhoudelijk plausibel, maar bij volgende release verifiëren tegen officiële nieuwe wetteksten of uitvoerings-cao's; vakbondssites niet als eindanker gebruiken.
+- `pc200_arbeidsduur` en `pc200_overuren_toeslagen`: buiten scope/verbergen voor Jaakie.
 
 ---
 

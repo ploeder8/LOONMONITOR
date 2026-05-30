@@ -45,6 +45,8 @@ Samenstelling (RSZ-instructies werkgevers, peildatum 2026):
 
 **Sectoraal correctief PC 200:** geen aparte werkgevers-RSZ-toeslag voor PC 200 (geldt het profitsector-standaardtarief).
 
+**Bouw-subset aanvullend pensioen:** sinds payroll-expertreview 2026-05-30 rekent Jaakie geen aparte 1,80%-bijdrage meer bovenop de globale werkgevers-RSZ. De vroegere bron was onvoldoende betrouwbaar voor runtimegebruik en de globale 25%-raming blijft het praktische werkgevers-RSZ-anker.
+
 ### 2.2 Sociaal Fonds 200
 
 **Tarief:** **0,23%** van bruto loon (werkgeversbijdrage).

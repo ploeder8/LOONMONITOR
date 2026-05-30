@@ -46,6 +46,8 @@ Gebruikers kunnen onder meer invullen of aanpassen:
 - woon-werkcomponenten: fiets, privewagen, openbaar vervoer, trein en bedrijfswagen/VAA;
 - werkgeverskostparameters zoals arbeidsongevallenpercentage, groepsverzekering en hospitalisatie.
 
+De vroegere bouw-subsetoptie voor een aparte 1,80% aanvullende pensioenbijdrage is niet langer zichtbaar of actief. Oude CSV-profielen met `bouwVlag` blijven inleesbaar, maar Jaakie telt geen aparte bouwbijdrage bovenop de globale werkgevers-RSZ.
+
 ### Berekening
 
 De berekeningslogica zit in `src/lib/` en gebruikt de dataset via `getDatapunt`, `indexById` en `safeGetValue`. De runtime rekent niet op `waarde_bron`, maar op genormaliseerde waarden en tabellen. Elke datasetafhankelijke berekening moet een audit-datapunt meedragen.

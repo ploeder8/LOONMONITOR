@@ -67,7 +67,7 @@ Aanvullingen op het huidige POC-input-formulier:
 | `vaa_huisvesting_eur_jaar` | decimaal ≥ 0 | nee | KI × 2,3000 × 100/60 × 2 (bemeubeld × 5/3) | 0 |
 | `vaa_verwarming_elek_eur_jaar` | decimaal ≥ 0 | nee | forfaits | 0 |
 
-**Bestaande velden behouden:** `referentiedatum`, `schaal`, `categorie`, `ervaring_jaren`, `leeftijd_jaren`, `brutoloon_eur`, `bouw_vlag`, `tewerkstellingsbreuk`, `prestaties_refertepériode_maanden`.
+**Bestaande velden behouden:** `referentiedatum`, `schaal`, `categorie`, `ervaring_jaren`, `leeftijd_jaren`, `brutoloon_eur`, `bouw_vlag` (legacy, geen runtime-effect meer sinds 30/05/2026), `tewerkstellingsbreuk`, `prestaties_refertepériode_maanden`.
 
 ---
 

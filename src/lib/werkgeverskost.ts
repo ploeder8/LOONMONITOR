@@ -10,6 +10,7 @@ import type { Datapunt } from "@/types/dataset";
 export interface WerkgeverskostInput {
   brutoloon: number;
   refDatum: string;
+  // Legacy CSV/profile flag. Jaakie rekent geen aparte bouwpensioenbijdrage meer.
   bouwVlag?: boolean;
   // Aanpasbaar (defaults uit dataset of fallback):
   arbeidsongevallenPct?: number;        // default 0.003 (bureaupersoneel)
@@ -32,7 +33,7 @@ export interface WerkgeverskostResultaat {
   // Verplichte componenten
   rszWerkgever: number;                  // ~25% basis + loonmatiging
   sociaalFonds200: number;               // 0,23%
-  bouwAanvullendPensioen: number | null; // 1,80% indien bouw-subset
+  bouwAanvullendPensioen: number | null; // legacy veld, blijft null
   arbeidsongevallen: number;             // ~0,3%
   provisieEindejaarspremie: number;      // 8,33%
   provisieVakantiegeld: number;          // berekend: (bruto + VAA) × 92% / 12

@@ -96,7 +96,7 @@ Belastingvrije som €11.180 voor AJ2027: cijfer afkomstig uit de [FOD Financië
 | Loonmatigingsbijdrage | 7,48 % (op subset) | [FOD WASO](https://werk.belgie.be/) (Tier 1) |
 | **Effectief faciaal totaal** | **~25,00 %** (gecombineerd) | [RSZ](https://www.socialsecurity.be/) |
 | Sociaal Fonds 200 | 0,23 % | [sfonds200.be](https://www.sfonds200.be/) (Tier 1) |
-| Bouw-aanvullend pensioen (subset PC 200) | 1,80 % | PC 200 dataset (alleen bij `bouw_vlag = true`) |
+| Bouw-aanvullend pensioen (subset PC 200) | Niet actief in runtime | Payroll-expertreview 2026-05-30: niet apart bovenop de globale werkgevers-RSZ ramen zonder sterkere primaire parameterbron |
 
 **RSZ-loonplafond patronale 2026** = **€86.700/kwartaal** vanaf 1/1/2026.
 

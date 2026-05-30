@@ -1,7 +1,6 @@
 import { ResultCard } from "@/components/ResultCard";
 import { Banner } from "@/components/Banner";
 import { lookupBarema, lookupStudentenbarema, brutolocheck } from "@/lib/baremas";
-import { rszBijdragen } from "@/lib/rsz";
 import { eindejaarspremie } from "@/lib/eindejaarspremie";
 import { ecocheques } from "@/lib/ecocheques";
 import { fietsvergoeding } from "@/lib/fietsvergoeding";
@@ -45,40 +44,6 @@ const TESTCASES: TC[] = [
           amountEUR={r.maandloonEUR}
           datapunten={[r.datapunt]}
         />
-      );
-    },
-  },
-  {
-    id: "TC-08",
-    titel: "Bouw-subset (extra 1,80 % aanvullend pensioen)",
-    toelichting:
-      "Dezelfde RSZ-rekening als TC-1 maar met extra werkgeversbijdrage van 1,80 % bouw.",
-    render: () => {
-      const r = rszBijdragen({ brutoloon: 3000, refDatum: "2026-06-01", bouwVlag: true });
-      return (
-        <div style={{ borderRadius: "var(--radius-lg)", border: "1px solid var(--color-border)", background: "var(--color-surface)", padding: "1rem", boxShadow: "var(--shadow-sm)" }}>
-          <div className="mb-2 text-sm font-medium" style={{ color: "var(--color-navy-700)" }}>
-            RSZ — bouw-subset, brutoloon € 3 000
-          </div>
-          <table className="w-full border-collapse text-sm">
-            <tbody>
-              {r.bronnen.map((b) => (
-                <tr key={b.datapunt.id} style={{ borderBottom: "1px solid var(--color-navy-100)" }}>
-                  <td className="py-2 pr-2" style={{ color: "var(--color-navy-500)" }}>{b.label}</td>
-                  <td className="py-2 pr-2 text-right tabular-nums font-semibold">
-                    {formatEUR(b.bedrag)}
-                  </td>
-                </tr>
-              ))}
-              <tr className="font-semibold" style={{ borderTop: "2px solid var(--color-border)" }}>
-                <td className="py-2 pr-2">Totaal werkgever</td>
-                <td className="py-2 pr-2 text-right tabular-nums" style={{ color: "var(--color-primary)" }}>
-                  {formatEUR(r.totaalWerkgever)}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       );
     },
   },

@@ -24,7 +24,7 @@
 - Werknemer 13,07 %
 - Werkgever ~25 % (basis + loonmatigingsbijdrage)
 - Sociaal Fonds 200 (0,23 %)
-- Bouw-subset (opt-in 1,80 %)
+- Geen aparte bouw-subsetbijdrage meer: de vroegere 1,80 %-opt-in wordt niet als runtimekost berekend; werkgevers-RSZ blijft een globale raming.
 
 ### Netto-laag (uitgebreid)
 - **Sociale werkbonus** (RSZ-vermindering) — Luik A + B, vanaf 1/4/2026
