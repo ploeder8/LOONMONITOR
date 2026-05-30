@@ -1240,6 +1240,74 @@ describe("NTC-15 — Dubbel vakantiegeld 92% — bijzondere BV", () => {
 });
 
 describe("Jaaroverzicht — netto en werkgeverskost", () => {
+  it("rekent een jaarbonus als exceptionele vergoeding met RSZ en bijzondere BV", () => {
+    const basis = berekenJaaroverzicht({
+      brutoloon: 3000,
+      nettoloonPerMaand: 2000,
+      loonkostWerkgeverPerMaand: 3900,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+      ancienniteitMaanden: 0,
+      prestatieMaandenInRefertepériode: 0,
+      tewerkstellingsbreuk: 1,
+    });
+    const metBonus = berekenJaaroverzicht({
+      brutoloon: 3000,
+      nettoloonPerMaand: 2000,
+      loonkostWerkgeverPerMaand: 3900,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+      ancienniteitMaanden: 0,
+      prestatieMaandenInRefertepériode: 0,
+      tewerkstellingsbreuk: 1,
+      bonusJaarbedrag: 1200,
+    });
+
+    expect(metBonus.netto.bonus.bruto).toBe(1200);
+    expect(metBonus.netto.bonus.rsz).toBe(156.84);
+    expect(metBonus.netto.bonus.belastbaar).toBe(1043.16);
+    expect(metBonus.netto.bonus.bvTarief).toBe(0.4038);
+    expect(metBonus.netto.bonus.bv).toBe(421.23);
+    expect(metBonus.netto.bonus.netto).toBe(621.93);
+    expect(metBonus.werkgever.bonusBruto).toBe(1200);
+    expect(metBonus.werkgever.rszOpBonus).toBe(300);
+    expect(metBonus.werkgever.totaleLoonkostJaar - basis.werkgever.totaleLoonkostJaar).toBe(1500);
+  });
+
+  it("laat bonus nul de bestaande jaaroverzichttotalen ongemoeid", () => {
+    const basis = berekenJaaroverzicht({
+      brutoloon: 3000,
+      nettoloonPerMaand: 2000,
+      loonkostWerkgeverPerMaand: 3900,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+      ancienniteitMaanden: 0,
+      prestatieMaandenInRefertepériode: 0,
+      tewerkstellingsbreuk: 1,
+    });
+    const nulBonus = berekenJaaroverzicht({
+      brutoloon: 3000,
+      nettoloonPerMaand: 2000,
+      loonkostWerkgeverPerMaand: 3900,
+      refDatum: REF_2026,
+      gezinstype: "alleenstaand",
+      kinderenTenLaste: 0,
+      ancienniteitMaanden: 0,
+      prestatieMaandenInRefertepériode: 0,
+      tewerkstellingsbreuk: 1,
+      bonusJaarbedrag: 0,
+    });
+
+    expect(nulBonus.netto.bonus.bruto).toBe(0);
+    expect(nulBonus.werkgever.bonusBruto).toBe(0);
+    expect(nulBonus.werkgever.rszOpBonus).toBe(0);
+    expect(nulBonus.netto.totaalNettoJaarloon).toBe(basis.netto.totaalNettoJaarloon);
+    expect(nulBonus.werkgever.totaleLoonkostJaar).toBe(basis.werkgever.totaleLoonkostJaar);
+  });
+
   it("berekent de jaarcomponenten voor €4.500 bruto volgens het voorbeeld jaaroverzicht", () => {
     const r = berekenJaaroverzicht({
       brutoloon: 4500,

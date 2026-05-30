@@ -27,6 +27,7 @@ export interface JaaroverzichtInput {
   ancienniteitMaanden: number;
   prestatieMaandenInRefertepériode: number;
   tewerkstellingsbreuk: number;
+  bonusJaarbedrag?: number;
   vaaPerMaand?: number;
 }
 
@@ -45,6 +46,7 @@ export interface NettoJaaroverzicht {
   eindejaarspremie: JaarcomponentNetto;
   dubbelVakantiegeld: JaarcomponentNetto;
   jaarpremie: JaarcomponentNetto;
+  bonus: JaarcomponentNetto;
   ecocheques: number;
   totaalNettoJaarloon: number;
 }
@@ -53,6 +55,8 @@ export interface WerkgeverJaaroverzicht {
   maandbasisX12: number;
   jaarpremiesEnEcocheques: number;
   rszOpEindejaarspremieEnJaarpremie: number;
+  bonusBruto: number;
+  rszOpBonus: number;
   dubbelVakantiegeld: number;
   totaleLoonkostJaar: number;
   datapunten: Datapunt[];
@@ -91,6 +95,14 @@ export function berekenJaaroverzicht(input: JaaroverzichtInput): JaaroverzichtRe
     refertejaarloon,
   );
   const jaarpremieNetto = berekenJaarpremieComponent(jaarpremie.bedrag, jaarpremie.datapunt);
+  const bonusJaarbedrag = round2(Math.max(input.bonusJaarbedrag ?? 0, 0));
+  const bonusNetto = berekenAndereExceptioneleComponent(
+    bonusJaarbedrag,
+    normaalBrutoJaarloon,
+    refertejaarloon,
+    input.gezinstype,
+    input.kinderenTenLaste,
+  );
 
   const maandloonNettoX12 = round2(input.nettoloonPerMaand * 12);
   const totaalNettoJaarloon = round2(
@@ -98,6 +110,7 @@ export function berekenJaaroverzicht(input: JaaroverzichtInput): JaaroverzichtRe
       eindejaarNetto.netto +
       dubbelVakantiegeld.netto +
       jaarpremieNetto.netto +
+      bonusNetto.netto +
       eco.bedrag,
   );
 
@@ -106,10 +119,13 @@ export function berekenJaaroverzicht(input: JaaroverzichtInput): JaaroverzichtRe
   const rszOpEindejaarspremieEnJaarpremie = round2(
     (eindejaar.premie + jaarpremie.bedrag) * RSZ_WERKGEVER_JAARPREMIES_PCT,
   );
+  const rszOpBonus = round2(bonusJaarbedrag * RSZ_WERKGEVER_JAARPREMIES_PCT);
   const totaleLoonkostJaar = round2(
     maandbasisX12 +
       jaarpremiesEnEcocheques +
       rszOpEindejaarspremieEnJaarpremie +
+      bonusJaarbedrag +
+      rszOpBonus +
       dubbelVakantiegeld.bruto,
   );
 
@@ -119,6 +135,7 @@ export function berekenJaaroverzicht(input: JaaroverzichtInput): JaaroverzichtRe
       eindejaarspremie: eindejaarNetto,
       dubbelVakantiegeld,
       jaarpremie: jaarpremieNetto,
+      bonus: bonusNetto,
       ecocheques: eco.bedrag,
       totaalNettoJaarloon,
     },
@@ -126,12 +143,15 @@ export function berekenJaaroverzicht(input: JaaroverzichtInput): JaaroverzichtRe
       maandbasisX12,
       jaarpremiesEnEcocheques,
       rszOpEindejaarspremieEnJaarpremie,
+      bonusBruto: bonusJaarbedrag,
+      rszOpBonus,
       dubbelVakantiegeld: dubbelVakantiegeld.bruto,
       totaleLoonkostJaar,
       datapunten: uniekeDatapunten([
         eindejaar.datapunt,
         jaarpremie.datapunt,
         eco.datapunt,
+        ...(bonusJaarbedrag > 0 ? bonusNetto.datapunten : []),
         ...dubbelVakantiegeld.datapunten,
       ]),
     },
@@ -144,7 +164,7 @@ function berekenAndereExceptioneleComponent(
   refertejaarloon: number,
   gezinstype: GezinsType,
   kinderenTenLaste: number,
-  datapunt: Datapunt,
+  datapunt?: Datapunt,
 ): JaarcomponentNetto {
   const rsz = round2(bruto * RSZ_WERKNEMER_PCT);
   const belastbaar = round2(bruto - rsz);

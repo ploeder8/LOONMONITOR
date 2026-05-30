@@ -1,6 +1,7 @@
 import { describe, expect, it } from "bun:test";
 
 import { DEFAULTS } from "@/lib/profiel";
+import { bonusJaarbedragVoorProfiel } from "@/lib/profielBerekeningen";
 import {
   bouwCsvExportRij,
   normaliseerCsvBestandsnaam,
@@ -137,6 +138,25 @@ describe("profielCsv", () => {
     expect(parsed.profiel.werknemerReferentie).toBe("");
     expect(parsed.profiel.werkgeverNaam).toBe("Betaalbaar BV");
     expect(parsed.profiel.werkgeverOndernemingsnummer).toBe("");
+  });
+
+  it("roundtript bonusvelden via CSV", () => {
+    const profiel = {
+      ...DEFAULTS,
+      bonusBedrag: 100,
+      bonusPeriode: "maand" as const,
+    };
+    const csv = profielNaarCsv({ profiel, commentaar: "" });
+    const parsed = profielUitCsv(csv);
+
+    expect(parsed.profiel.bonusBedrag).toBe(100);
+    expect(parsed.profiel.bonusPeriode).toBe("maand");
+    expect(bonusJaarbedragVoorProfiel(parsed.profiel)).toBe(1200);
+  });
+
+  it("rekent een jaarbonus en maandbonus naar hetzelfde jaarbedrag om", () => {
+    expect(bonusJaarbedragVoorProfiel({ ...DEFAULTS, bonusBedrag: 1200, bonusPeriode: "jaar" })).toBe(1200);
+    expect(bonusJaarbedragVoorProfiel({ ...DEFAULTS, bonusBedrag: 100, bonusPeriode: "maand" })).toBe(1200);
   });
 
   it("parset multi-row CSV naar meerdere profielen", () => {

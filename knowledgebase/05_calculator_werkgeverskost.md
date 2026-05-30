@@ -21,10 +21,12 @@ loonkost_jaar = loonkost_maand × 12
               + jaarlijkse_premie_pc200
               + ecocheques
               + RSZ_werkgever_25pct_op_eindejaarspremie_en_jaarpremie
+              + bonus
+              + RSZ_werkgever_25pct_op_bonus
               + dubbel_vakantiegeld
 ```
 
-De loonmotor toont de maandelijkse loonkost en de jaarlijkse loonkost in aparte kaders. Eindejaarspremie, jaarpremie, ecocheques en dubbel vakantiegeld horen niet in het maandtotaal; ze worden expliciet in het jaaroverzicht getoond.
+De loonmotor toont de maandelijkse loonkost en de jaarlijkse loonkost in aparte kaders. Eindejaarspremie, jaarpremie, ecocheques, bonus en dubbel vakantiegeld horen niet in het maandtotaal; ze worden expliciet in het jaaroverzicht getoond.
 
 ---
 
@@ -86,6 +88,10 @@ Voor PC 200-bedienden in een typisch bureauomgeving is 0,30% verdedigbaar als la
 | GSM/laptop/internet | €4–€20/m forfaitair | KB BV-tabellen | ✅ Forfaitaire VAA werkmiddelen actief |
 
 Loonmotor accepteert groepsverzekering, maaltijdcheques en hospitalisatieverzekering als maandelijkse werkgeverskosten. Ecocheques worden automatisch afgeleid van de tewerkstellingsbreuk en alleen in het jaaroverzicht toegevoegd. Maaltijdcheques zijn een expliciete profieloptie omdat PC 200 geen sectorale verplichting kent; wanneer aangevinkt worden ze berekend als werkgeversaandeel per dag × werkdagen in de gekozen maand. Werkdagen wordt vooringevuld op basis van weekdagen en blijft aanpasbaar. De AO-verzekeringtarief (default 0,30%) is eveneens aanpasbaar per werkgever via de "Werkgeversbijdragen"-sectie in het profiel-formulier.
+
+### 2.6b Bonus in jaaroverzicht
+
+Een bonus kan in Jaakie als maandbedrag of jaarbedrag worden ingevoerd. De calculator zet dit altijd om naar één jaarbonus (`maandbedrag × 12` of jaarbedrag ongewijzigd). De bonus verhoogt de maandelijkse loonkost niet, maar wel de jaarloonkost met het brutobedrag plus 25% patronale RSZ op bonus. Aan werknemerszijde wordt de bonus als andere exceptionele vergoeding behandeld: 13,07% werknemers-RSZ en daarna bijzondere BV volgens Bijlage III.
 
 ### 2.7 Structurele vermindering werkgever
 

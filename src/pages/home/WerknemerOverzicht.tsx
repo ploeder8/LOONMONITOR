@@ -294,6 +294,9 @@ export function WerknemerOverzicht({ profiel }: WerknemerOverzichtProps) {
                 <YearRow label="Eindejaarspremie" bedrag={jaaroverzicht.netto.eindejaarspremie.netto} />
                 <YearRow label="Dubbel vakantiegeld" bedrag={jaaroverzicht.netto.dubbelVakantiegeld.netto} />
                 <YearRow label="Jaarpremie PC 200" bedrag={jaaroverzicht.netto.jaarpremie.netto} />
+                {jaaroverzicht.netto.bonus.bruto > 0 && (
+                  <YearRow label="Bonus" bedrag={jaaroverzicht.netto.bonus.netto} />
+                )}
                 <YearRow label="Ecocheques" bedrag={jaaroverzicht.netto.ecocheques} />
                 <YearRow label="Totaal netto jaar" bedrag={jaaroverzicht.netto.totaalNettoJaarloon} bold />
               </div>
@@ -314,6 +317,12 @@ export function WerknemerOverzicht({ profiel }: WerknemerOverzichtProps) {
                 <YearRow label="Maandbasis × 12" bedrag={jaaroverzicht.werkgever.maandbasisX12} />
                 <YearRow label="Jaarpremies + ecocheques" bedrag={jaaroverzicht.werkgever.jaarpremiesEnEcocheques} />
                 <YearRow label="RSZ op premies" bedrag={jaaroverzicht.werkgever.rszOpEindejaarspremieEnJaarpremie} />
+                {jaaroverzicht.werkgever.bonusBruto > 0 && (
+                  <>
+                    <YearRow label="Bonus" bedrag={jaaroverzicht.werkgever.bonusBruto} />
+                    <YearRow label="RSZ op bonus" bedrag={jaaroverzicht.werkgever.rszOpBonus} />
+                  </>
+                )}
                 <YearRow label="Dubbel vakantiegeld" bedrag={jaaroverzicht.werkgever.dubbelVakantiegeld} />
                 {/* Spacer om totalen uit te lijnen met linker kolom */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid transparent' }}>

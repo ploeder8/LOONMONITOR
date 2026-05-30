@@ -42,7 +42,7 @@ Gebruikers kunnen onder meer invullen of aanpassen:
 - leeftijd, ervaring, baremacategorie en functiecontext;
 - arbeidsregime, tewerkstellingsbreuk en arbeidsdagen per maand;
 - gezinstype en kinderen ten laste;
-- maaltijdcheques en andere voordelen;
+- maaltijdcheques, bonus en andere voordelen;
 - woon-werkcomponenten: fiets, privewagen, openbaar vervoer, trein;
 - bedrijfswagen/VAA en werkgeverskostparameters zoals arbeidsongevallenpercentage, groepsverzekering en hospitalisatie.
 
@@ -61,6 +61,8 @@ De belangrijkste modules zijn:
 
 Voor jaarcomponenten gebruikt Jaakie de bijzondere BV-schaal van Bijlage III:
 eindejaarspremie en dubbel vakantiegeld krijgen een tarief op basis van het normale refertejaarloon, terwijl eventuele kindvrijstelling of kindvermindering de aparte regels voor exceptionele vergoedingen volgt. De gewone maandelijkse BV-kindvermindering wordt niet opnieuw rechtstreeks afgetrokken van deze jaarcomponenten. De sectorale PC 200-jaarpremie houdt wel werknemers-RSZ in, maar geen bedrijfsvoorheffing.
+
+De bonusinvoer hoort bij de extra looncomponenten. Gebruikers kiezen of het ingevoerde bedrag per maand of per jaar is; Jaakie rekent dit altijd om naar een eenmalige jaarbonus. De bonus telt niet mee in het gewone maandnetto, netto-bruto, barema, werkbonus, BBSZ of maandelijkse werkgeverskost. In het jaaroverzicht wordt de bonus behandeld als andere exceptionele vergoeding: 13,07% werknemers-RSZ, bijzondere BV volgens Bijlage III en 25% patronale RSZ in de werkgeversjaarcomponent.
 
 De eindejaarspremie wordt in de gebruikersflow als volledig gewerkt jaar getoond: bruto eindejaarspremie = 1 brutomaandloon. Pro-rata anciënniteit- en prestatievelden zijn geen gebruikersinstelling meer; oude CSV-imports met afwijkende waarden worden voor actieve eindejaarspremie naar 12/12 genormaliseerd.
 
@@ -86,7 +88,7 @@ De knop **"Print overzicht"** opent een estetisch, print-vriendelijk document vo
 - **Executive summary**: 6 cards met bruto, netto (maand), werkgeverskost, loonwig, netto (jaar), werkgeverskost (jaar).
 - **Netto loon tabel**: bruto → RSZ → werkbonus → belastbaar loon → bedrijfsvoorheffing → BBSZ → netto te betalen.
 - **Werkgeverskost tabel**: brutoloon → RSZ werkgever → Sociaal Fonds 200 → provisies → totale werkgeverskost.
-- **Jaaroverzicht**: netto- en werkgeverskant met eindejaarspremie, vakantiegeld, jaarpremie, ecocheques.
+- **Jaaroverzicht**: netto- en werkgeverskant met eindejaarspremie, vakantiegeld, jaarpremie, bonus en ecocheques.
 - **Footer**: pro-forma disclaimer.
 
 Het overzicht is **print-vriendelijk** (A4 via `@media print`) en bevat geen audit-trail. Studentenmodus toont een vereenvoudigde melding.

@@ -28,6 +28,7 @@ export function NettoJaaroverzichtPanel({
     ...r.eindejaarspremie.datapunten,
     ...r.dubbelVakantiegeld.datapunten,
     ...r.jaarpremie.datapunten,
+    ...(r.bonus.bruto > 0 ? r.bonus.datapunten : []),
   ].filter((dp, index, all) => all.findIndex((item) => item.id === dp.id) === index);
 
   return (
@@ -57,6 +58,7 @@ export function NettoJaaroverzichtPanel({
           <JaarComponentRows titel="Eindejaarspremie" component={r.eindejaarspremie} />
           <JaarComponentRows titel="Dubbel vakantiegeld" component={r.dubbelVakantiegeld} />
           <JaarComponentRows titel="Sectorale jaarpremie PC 200" component={r.jaarpremie} />
+          {r.bonus.bruto > 0 && <JaarComponentRows titel="Bonus" component={r.bonus} />}
           <NettoRow label="Ecocheques" bedrag={r.ecocheques} prefix="+" dimmed />
           <NettoRow label="Netto jaarloon" bedrag={r.totaalNettoJaarloon} prefix="" variant="total" />
           {maaltijdcheques.totaleWaarde > 0 && (
@@ -135,6 +137,12 @@ export function WerkgeverJaaroverzichtPanel({ jaaroverzicht }: { jaaroverzicht: 
             prefix="+"
             dimmed
           />
+          {r.bonusBruto > 0 && (
+            <>
+              <NettoRow label="Bonus" bedrag={r.bonusBruto} prefix="+" dimmed />
+              <NettoRow label="RSZ op bonus" bedrag={r.rszOpBonus} prefix="+" dimmed />
+            </>
+          )}
           <NettoRow label="Dubbel vakantiegeld" bedrag={r.dubbelVakantiegeld} prefix="+" dimmed />
           <NettoRow label="Loonkost werkgever per jaar" bedrag={r.totaleLoonkostJaar} prefix="" variant="total" />
         </tbody>

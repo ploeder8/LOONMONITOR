@@ -74,6 +74,20 @@ describe("WerknemerOverzicht rendering", () => {
     expect(html).toContain("Totaal loonkost jaar");
   });
 
+  it("toont de jaarbonus in het printoverzicht wanneer die actief is", () => {
+    const profiel = {
+      ...DEFAULTS,
+      bonusBedrag: 1200,
+      bonusPeriode: "jaar" as const,
+    };
+    const html = renderToStaticMarkup(<WerknemerOverzicht profiel={profiel} />);
+
+    expect(html).toContain("Bonus");
+    expect(html).toContain(formatEUR(621.93));
+    expect(html).toContain(formatEUR(1200));
+    expect(html).toContain(formatEUR(300));
+  });
+
   it("toont de pro-forma disclaimer", () => {
     const html = renderToStaticMarkup(<WerknemerOverzicht profiel={DEFAULTS} />);
     expect(html).toContain("Pro-forma overzicht");

@@ -102,6 +102,11 @@ export function berekenMaaltijdchequeWerkgeverskostVoorProfiel(p: Profiel): numb
   );
 }
 
+export function bonusJaarbedragVoorProfiel(p: Profiel): number {
+  const bedrag = Math.max(0, p.bonusBedrag);
+  return round2(p.bonusPeriode === "maand" ? bedrag * 12 : bedrag);
+}
+
 export function berekenBaremaInlineCheck(profiel: Profiel): BaremaInlineResult {
   const refDatum = refDatumVoorMaand(profiel.berekeningsJaar, profiel.berekeningsMaand);
 
@@ -327,6 +332,7 @@ export function berekenJaaroverzichtVoorProfiel(
     ancienniteitMaanden: eindejaarsMaanden.ancienniteitMaanden,
     prestatieMaandenInRefertepériode: eindejaarsMaanden.prestatieMaanden,
     tewerkstellingsbreuk: p.tewerkstellingsbreuk,
+    bonusJaarbedrag: bonusJaarbedragVoorProfiel(p),
     vaaPerMaand:
       vaaWerkmiddelen.totaalPerMaand +
       (mobiliteit.vaaBedrijfswagen?.vaaMaand ?? 0),
