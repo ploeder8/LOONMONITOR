@@ -43,8 +43,8 @@ Gebruikers kunnen onder meer invullen of aanpassen:
 - arbeidsregime, tewerkstellingsbreuk en arbeidsdagen per maand;
 - gezinstype en kinderen ten laste;
 - maaltijdcheques, bonus en andere voordelen;
-- woon-werkcomponenten: fiets, privewagen, openbaar vervoer, trein;
-- bedrijfswagen/VAA en werkgeverskostparameters zoals arbeidsongevallenpercentage, groepsverzekering en hospitalisatie.
+- woon-werkcomponenten: fiets, privewagen, openbaar vervoer, trein en bedrijfswagen/VAA;
+- werkgeverskostparameters zoals arbeidsongevallenpercentage, groepsverzekering en hospitalisatie.
 
 ### Berekening
 

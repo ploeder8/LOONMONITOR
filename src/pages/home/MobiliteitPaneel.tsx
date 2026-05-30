@@ -161,26 +161,6 @@ export function MobiliteitPaneel({
           )}
         </VervoersmiddelRij>
 
-        <p style={{ fontSize: 11, color: "var(--color-primary)", fontWeight: 500, marginTop: -4 }}>
-          ℹ️ Trein, bus/tram/metro en privéwagen mogen samen als aparte trajectdelen.
-        </p>
-
-        <div style={{ display: "flex", gap: 8, marginTop: 2 }}>
-          <button type="button" onClick={() => setAlleWoonwerk(true)} style={miniButtonStyle}>
-            Selecteer alle vergoedingen
-          </button>
-          <button type="button" onClick={() => setAlleWoonwerk(false)} style={miniButtonStyle}>
-            Alles wissen
-          </button>
-        </div>
-
-        {/* Divider */}
-        <div style={{ borderTop: "1px solid var(--color-border)", margin: "6px 0" }} />
-
-        {/* ── Voordeel Alle Aard ── */}
-        <div style={{ fontSize: 12, fontWeight: 700, color: "var(--color-navy-500)", letterSpacing: 0.3, textTransform: "uppercase" }}>
-          Voordeel Alle Aard
-        </div>
         {/* Bedrijfswagen */}
         <VervoersmiddelRij
           label="Bedrijfswagen"
@@ -256,6 +236,19 @@ export function MobiliteitPaneel({
             </div>
           </div>
         )}
+
+        <p style={{ fontSize: 11, color: "var(--color-primary)", fontWeight: 500, marginTop: -4 }}>
+          ℹ️ Trein, bus/tram/metro en privéwagen mogen samen als aparte trajectdelen.
+        </p>
+
+        <div style={{ display: "flex", gap: 8, marginTop: 2 }}>
+          <button type="button" onClick={() => setAlleWoonwerk(true)} style={miniButtonStyle}>
+            Selecteer alle vergoedingen
+          </button>
+          <button type="button" onClick={() => setAlleWoonwerk(false)} style={miniButtonStyle}>
+            Alles wissen
+          </button>
+        </div>
       </div>
     </CockpitCard>
   );
