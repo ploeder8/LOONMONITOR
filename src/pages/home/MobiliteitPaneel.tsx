@@ -102,7 +102,7 @@ export function MobiliteitPaneel({
               />
               Reëel
             </label>
-            <HelpTooltip text="Forfaitair: de woon-werkvergoeding is vrijgesteld tot €500/jaar (automatisch verrekend). Reëel: geen automatische vrijstelling op het loon — werkelijke kosten worden manueel op de fiscale fiche opgenomen." />
+            <HelpTooltip text="Forfaitaire beroepskosten (= openbaar vervoer: volledig vrijgesteld) (= privévervoer: tussenkomst onderworpen aan bedrijfsvoorheffing boven het fiscaal vrijgestelde bedrag). Werkelijke beroepskosten (= volledig onderworpen aan bedrijfsvoorheffing). Er wordt gekozen voor werkelijke beroepskosten indien de werkelijke kosten hoger zijn dan de forfaitaire beroepskosten. Bijkomend komt bij deze keuze de fiscale vrijstelling voor woon-werkverkeer te vervallen." />
           </div>
         )}
 
@@ -232,7 +232,7 @@ export function MobiliteitPaneel({
                 />
                 Reëel
               </label>
-              <HelpTooltip text="Forfaitair: de VAA bedrijfswagen wordt opgenomen in de belastbare basis volgens de CO₂-formule. Reëel: de VAA blijft van toepassing; werkelijke beroepskosten worden manueel op de fiscale fiche opgenomen." />
+              <HelpTooltip text="Forfaitaire beroepskosten (= openbaar vervoer: volledig vrijgesteld) (= privévervoer: tussenkomst onderworpen aan bedrijfsvoorheffing boven het fiscaal vrijgestelde bedrag). Werkelijke beroepskosten (= volledig onderworpen aan bedrijfsvoorheffing). Er wordt gekozen voor werkelijke beroepskosten indien de werkelijke kosten hoger zijn dan de forfaitaire beroepskosten. Bijkomend komt bij deze keuze de fiscale vrijstelling voor woon-werkverkeer te vervallen." />
             </div>
           </div>
         )}
