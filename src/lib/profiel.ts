@@ -154,19 +154,18 @@ export function refDatumVoorMaand(
 }
 
 export function normaliseerProfiel(profiel: Profiel): Profiel {
-  const genormaliseerd = normaliseerEindejaarspremieProfiel(profiel);
-  if (/^\d{4}-\d{2}$/.test(genormaliseerd.berekeningsMaand)) {
-    const [berekeningsJaar, berekeningsMaand] = genormaliseerd.berekeningsMaand.split("-");
+  if (/^\d{4}-\d{2}$/.test(profiel.berekeningsMaand)) {
+    const [berekeningsJaar, berekeningsMaand] = profiel.berekeningsMaand.split("-");
     return {
-      ...genormaliseerd,
-      berekeningsJaar: genormaliseerd.berekeningsJaar ?? berekeningsJaar,
+      ...profiel,
+      berekeningsJaar: profiel.berekeningsJaar ?? berekeningsJaar,
       berekeningsMaand,
     };
   }
-  if (!genormaliseerd.berekeningsJaar) {
-    return { ...genormaliseerd, berekeningsJaar: DEFAULTS.berekeningsJaar };
+  if (!profiel.berekeningsJaar) {
+    return { ...profiel, berekeningsJaar: DEFAULTS.berekeningsJaar };
   }
-  return genormaliseerd;
+  return profiel;
 }
 
 export function heeftMaaltijdcheques(
@@ -189,14 +188,6 @@ export function eindejaarspremieIsActief(
   profiel: Pick<Profiel, "prestatieMaanden">,
 ): boolean {
   return profiel.prestatieMaanden > 0;
-}
-
-function normaliseerEindejaarspremieProfiel(profiel: Profiel): Profiel {
-  const maanden = eindejaarspremieMaandenVoorCheckbox(eindejaarspremieIsActief(profiel));
-  return {
-    ...profiel,
-    ...maanden,
-  };
 }
 
 export function tewerkstellingsbreukNaarPercentage(tewerkstellingsbreuk: number): number {

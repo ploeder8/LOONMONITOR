@@ -483,7 +483,7 @@ describe("TC-16c — VAA bedrijfswagen", () => {
     expect(r.co2Percentage).toBe(9.7);
   });
 
-  it("past voor elektriciteit geen CO2-input toe en dwingt het minimum af", () => {
+  it("past voor elektriciteit vast CO₂-percentage 4% toe (FOD-minimum)", () => {
     const r = vaaBedrijfswagen({
       cataloguswaarde: 30000,
       datumEersteInschrijving: "2026-01-01",
@@ -491,9 +491,37 @@ describe("TC-16c — VAA bedrijfswagen", () => {
       refDatum: REF_2026,
     });
 
-    expect(r.refCO2).toBe(0);
-    expect(r.co2Percentage).toBe(5.5);
+    expect(r.co2Percentage).toBe(4);
     expect(r.vaaJaar).toBe(1690);
+    expect(r.minimumToegepast).toBe(true);
+  });
+
+  it("berekent elektrisch-VAA zonder minimum voor hoge cataloguswaarde", () => {
+    const r = vaaBedrijfswagen({
+      cataloguswaarde: 100000,
+      datumEersteInschrijving: "2026-01-01",
+      brandstof: "elektriciteit",
+      refDatum: REF_2026,
+    });
+
+    expect(r.co2Percentage).toBe(4);
+    expect(r.leeftijdsCoefficient).toBe(1);
+    expect(r.vaaJaar).toBe(3428.57); // 100000 * 0.04 * 1 * 6/7
+    expect(r.minimumToegepast).toBe(false);
+  });
+
+  it("berekent elektrisch-VAA met leeftijdscorrectie en minimum (issue 2026-05-30)", () => {
+    const r = vaaBedrijfswagen({
+      cataloguswaarde: 54450,
+      datumEersteInschrijving: "2023-09-28",
+      brandstof: "elektriciteit",
+      refDatum: REF_2026,
+    });
+
+    expect(r.co2Percentage).toBe(4);
+    expect(r.leeftijdMaanden).toBe(33);
+    expect(r.leeftijdsCoefficient).toBe(0.88);
+    expect(r.vaaJaar).toBe(1690); // 54450 * 0.04 * 0.88 * 6/7 = 1642.83 < 1690 → minimum
     expect(r.minimumToegepast).toBe(true);
   });
 

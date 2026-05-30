@@ -37,8 +37,6 @@ import { round2 } from "@/lib/money";
 import {
   aantalWeekdagenInMaand,
   heeftMaaltijdcheques,
-  eindejaarspremieMaandenVoorCheckbox,
-  eindejaarspremieIsActief,
   refDatumVoorMaand,
   type BeroepskostMethode,
   type Profiel,
@@ -321,7 +319,7 @@ export function berekenJaaroverzichtVoorProfiel(
   vaaWerkmiddelen: VaaForfaitsWerkmiddelenResultaat,
   mobiliteit: MobiliteitBerekening,
 ): JaaroverzichtResultaat {
-  const eindejaarsMaanden = eindejaarspremieMaandenVoorCheckbox(eindejaarspremieIsActief(p));
+  const eindejaarsMaanden = { ancienniteitMaanden: 12, prestatieMaanden: 12 };
   return berekenJaaroverzicht({
     brutoloon: p.brutoloon,
     nettoloonPerMaand: netto.nettoloon,

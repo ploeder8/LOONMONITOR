@@ -43,13 +43,16 @@ export function vaaBedrijfswagen(input: VaaBedrijfswagenInput): VaaBedrijfswagen
 
   const refCO2 = ref?.waarde ?? 0;
   const co2 = input.brandstof === "elektriciteit" ? 0 : Math.max(input.co2 ?? 0, 0);
-  const co2Percentage = round2(
-    clamp(
-      CO2_BASIS_PERCENTAGE + (co2 - refCO2) * CO2_STAP_PERCENTAGE,
-      CO2_PERCENTAGE_MIN,
-      CO2_PERCENTAGE_MAX,
-    ),
-  );
+  const co2Percentage =
+    input.brandstof === "elektriciteit"
+      ? CO2_PERCENTAGE_MIN
+      : round2(
+          clamp(
+            CO2_BASIS_PERCENTAGE + (co2 - refCO2) * CO2_STAP_PERCENTAGE,
+            CO2_PERCENTAGE_MIN,
+            CO2_PERCENTAGE_MAX,
+          ),
+        );
   const leeftijdMaanden = maandenSindsEersteInschrijving(
     input.datumEersteInschrijving,
     input.refDatum,
