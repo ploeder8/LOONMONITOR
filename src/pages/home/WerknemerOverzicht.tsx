@@ -253,7 +253,6 @@ export function WerknemerOverzicht({ profiel }: WerknemerOverzichtProps) {
                 { label: "Brutoloon", bedrag: wgk.brutoloon },
                 { label: "RSZ werkgever", bedrag: wgk.rszWerkgever },
                 { label: "Sociaal Fonds 200", bedrag: wgk.sociaalFonds200 },
-                ...(wgk.bouwAanvullendPensioen ? [{ label: "Bouw-aanvullend pensioen", bedrag: wgk.bouwAanvullendPensioen }] : []),
                 { label: "Arbeidsongevallen", bedrag: wgk.arbeidsongevallen },
                 { label: "Provisie eindejaarspremie", bedrag: wgk.provisieEindejaarspremie },
                 { label: "Provisie vakantiegeld", bedrag: wgk.provisieVakantiegeld },

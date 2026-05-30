@@ -9,7 +9,7 @@ Tool voor payroll-experts om lonen en kosten te verifiëren onder **Paritair Com
   Vercel `/api/chat` met server-side OpenAI file search en Supabase-rate-limiting.
   Secrets blijven uitsluitend server-side en mogen nooit in `VITE_*` env vars staan.
 - **Data:** bundled JSON dataset (`src/data/pc200_payroll_dataset_2026.json`),
-  schema-gevalideerd bij applicatiestart — **71 datapunten, 15 bronrecords, peildatum 2026-05-24**
+  schema-gevalideerd bij applicatiestart — **71 datapunten, 15 bronrecords, peildatum 2026-05-30**
 - **Audit-first:** elke berekening is gekoppeld aan datapunt-id, status,
   betrouwbaarheidstier (1/2/3) en primaire bron met fragment-citaat
 - **Kennisbank (SSOT):** zie `knowledgebase/` voor regelkader, calculator-specs, testcorpus, gaps & roadmap
@@ -23,7 +23,6 @@ Tool voor payroll-experts om lonen en kosten te verifiëren onder **Paritair Com
 
 **RSZ**
 - Werknemer (13,07 %) / werkgever (~25 %) / Sociaal Fonds 200 (0,23 %)
-- Bouw-subset opt-in: aanvullend pensioen (1,80 %)
 
 **Nettoloon (volledige berekening, AJ 2027¹)**
 - Sociale werkbonus (RSZ-vermindering) — Luik A + B, vanaf 1/4/2026
@@ -37,7 +36,6 @@ Tool voor payroll-experts om lonen en kosten te verifiëren onder **Paritair Com
 **Werkgeverskost (totale loonkost)**
 - RSZ werkgever (~25 %)
 - Sociaal Fonds 200 (0,23 %)
-- Bouw-aanvullend pensioen (1,80 %, opt-in)
 - Arbeidsongevallenverzekering (~0,3 %, bureaupersoneel)
 - Maandelijkse loonkost inclusief optionele groepsverzekering, hospitalisatie en maaltijdcheques
 - Jaaroverzicht met eindejaarspremie, jaarpremie, ecocheques en dubbel vakantiegeld

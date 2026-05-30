@@ -12,5 +12,6 @@ Korte, herbruikbare lessen uit het bouwen van Jaakie.
 
 ## Lessen
 
+- 2026-05-30 — In payrolldata-reviewworkbooks kunnen expertreacties in de detailtabs staan terwijl de mastertab leeg blijft. Controleer bij verwerking altijd alle tabs en niet alleen `04 Alle issues`.
 - 2026-05-27 — Vite gebruikt `strictPort: true`; bij poortwijzigingen moeten `vite.config.ts`, `README.md` en `AGENTS.md` samen worden bijgewerkt. Anders starten gebruikers of agents met een oud localhost-adres.
 - 2026-05-27 — `MEMORY.md` is voor wijzigingshistoriek; duurzame werkwijze- of buglessen horen apart in `LESSONS.md`, zodat toekomstige agents sneller de relevante oplossing vinden zonder door een lange changelog te zoeken.

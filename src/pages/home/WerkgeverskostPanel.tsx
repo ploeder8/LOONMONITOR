@@ -43,9 +43,6 @@ export function WerkgeverskostPanel({
           <NettoRow label="Brutoloon" bedrag={r.brutoloon} prefix="" />
           <NettoRow label="RSZ werkgever (~25%)" bedrag={r.rszWerkgever} prefix="+" />
           <NettoRow label="Sociaal Fonds 200 (0,23%)" bedrag={r.sociaalFonds200} prefix="+" />
-          {r.bouwAanvullendPensioen !== null && r.bouwAanvullendPensioen > 0 && (
-            <NettoRow label="Bouw — aanvullend pensioen (1,80%)" bedrag={r.bouwAanvullendPensioen} prefix="+" />
-          )}
           <NettoRow label={`Arbeidsongevallen (${(extras.arbeidsongevallenPct * 100).toFixed(2)} %)`} bedrag={r.arbeidsongevallen} prefix="+" />
           <tr style={{ borderTop: "1px solid var(--color-border)" }}>
             <td style={{ padding: "8px 8px 4px 0", fontWeight: 600, color: "var(--color-navy-500)", fontSize: 13 }}>

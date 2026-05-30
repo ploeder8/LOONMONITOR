@@ -395,26 +395,6 @@ function BrutoloonCard({ profiel, set }: { profiel: Profiel; set: ProfielSetter 
           />
         </FormField>
 
-        {profiel.statuut === "bediende" && (
-          <label
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              fontSize: 13,
-              color: "var(--color-navy-500)",
-              cursor: "pointer",
-            }}
-          >
-            <input
-              type="checkbox"
-              checked={profiel.bouwVlag}
-              onChange={(e) => set("bouwVlag", e.target.checked)}
-              style={{ accentColor: "var(--color-primary)", width: 15, height: 15 }}
-            />
-            Bouw-subset (+1,80% pensioen)
-          </label>
-        )}
       </div>
     </CockpitCard>
   );

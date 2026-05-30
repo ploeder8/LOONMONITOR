@@ -162,6 +162,13 @@ describe("Profiel formulier", () => {
     expect(html).not.toContain("BBSZ-scenario");
   });
 
+  it("toont geen bouw-subset opt-in meer", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+
+    expect(html).not.toContain("Bouw-subset");
+    expect(html).not.toContain("+1,80% pensioen");
+  });
+
   it("toont geen invoerveld meer voor gemeentebelasting", () => {
     const html = renderToStaticMarkup(createElement(HomePage));
 

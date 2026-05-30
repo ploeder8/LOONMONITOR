@@ -1,7 +1,7 @@
 # Dataset Reference — pc200_payroll_dataset_2026.json
 
 **Bron:** `src/data/pc200_payroll_dataset_2026.json`
-**Peildatum:** 2026-05-24
+**Peildatum:** 2026-05-30
 **Doeljaar:** 2026
 **Totaal:** 71 datapunten
 **Bronnen:** 15 bronrecords
@@ -32,14 +32,14 @@
 | `rsz_werknemer_basis` | actief | Tier 1 | Persoonlijke RSZ-bijdrage werknemer (privésector, bedienden) |
 | `rsz_werkgever_profit_basis` | actief | Tier 1 | Faciaal tarief werkgeversbijdrage RSZ – privé profitsector (na taxshift sinds 1/1/2018) |
 | `rsz_basis_arbeiders_108` | actief | Tier 1 | Berekeningsbasis RSZ-bijdragen voor arbeiders (108% brutoloon) – ter contrast met bedienden (100%) |
-| `rsz_bijzondere_bijdragen_verwijzing` | mogelijk_verouderd | Tier 1 | Bijzondere RSZ-bijdragen (extralegale pensioenen, FSO, CO2-solidariteitsbijdrage bedrijfswagens, dubbel vakantiegeld, solidariteitsbijdrage winstdeelname, bijzondere bijdrage sociale zekerheid) |
+| `rsz_bijzondere_bijdragen_verwijzing` | actief | Tier 1 | Bijzondere RSZ-bijdragen (extralegale pensioenen, FSO, CO2-solidariteitsbijdrage bedrijfswagens, dubbel vakantiegeld, solidariteitsbijdrage winstdeelname, bijzondere bijdrage sociale zekerheid) |
 | `rsz_pc200_sociaal_fonds_200_werkgeversbijdrage_2026` | actief | Tier 1 | Werkgeversbijdrage Sociaal Fonds 200 (FBZ APCB) – sectorale bijdrage op brutolonen PC 200, verlengd voor 2026-2027 |
-| `rsz_pc200_bouw_aanvullend_pensioen_2026` | actief | Tier 3 | Sectoraal aanvullend pensioen voor bouwsector-subset binnen PC 200 (solidariteitsluik) – verhoging van 1,10% naar 1,80% vanaf 1/1/2026 |
+| `rsz_pc200_bouw_aanvullend_pensioen_2026` | gemarkeerd_voor_review | Tier 3 | Sectoraal aanvullend pensioen voor bouwsector-subset binnen PC 200 (solidariteitsluik) – niet actief in runtime |
 | `arbeidsongevallen_bedienden_2026` | actief | Tier 3 | Arbeidsongevallenverzekering — indicatieve werkgeverskost bedienden bureaupersoneel, configureerbaar per werkgever |
 | `provisie_eindejaarspremie_2026` | actief | Tier 1 | Provisie eindejaarspremie (13e maand): 8,33% (= 1/12) van brutoloon op werkgeverskost |
 | `provisie_dubbel_vakantiegeld_2026` | gemarkeerd_voor_review | Tier 1 | [DEPRECATED] Provisie dubbel vakantiegeld bedienden — vervangen door runtime-berekening obv 92%-percentage |
 | `vakantiegeld_dubbel_pct_2026` | actief | Tier 1 | Percentage dubbel vakantiegeld bedienden ten opzichte van brutomaandloon inclusief VAA |
-| `structurele_vermindering_laagloon_2026` | mogelijk_verouderd | Tier 1 | Structurele vermindering RSZ-werkgever voor lage lonen — hellingscoëfficiënt 0,1600 vanaf 1/4/2026 (KB 2/7/2025 BS 15/7/2025) |
+| `structurele_vermindering_laagloon_2026` | actief | Tier 1 | Structurele vermindering RSZ-werkgever voor lage lonen — hellingscoëfficiënt 0,1600 vanaf 1/4/2026 (KB 2/7/2025 BS 15/7/2025) |
 
 ## `fiscaliteit` (28 datapunten)
 
@@ -91,7 +91,7 @@
 | `pc200_woonwerk_loonplafond_prive_2026` | actief | Tier 3 | Loonplafond voor recht op vergoeding woon-werk privévervoer PC 200 vanaf 1/1/2026 |
 | `pc200_fietsvergoeding_2026_pre_oktober` | actief | Tier 1 | Sectorale fietsvergoeding PC 200 tot en met 30/09/2026 |
 | `pc200_fietsvergoeding_2026` | actief | Tier 1 | Sectorale fietsvergoeding PC 200 vanaf 1/10/2026 |
-| `pc200_maaltijdcheques_sectoraal` | niet_gevonden | ? | Sectorale verplichting maaltijdcheques in PC 200 |
+| `pc200_maaltijdcheques_sectoraal` | niet_gevonden | ? | Sectorale verplichting maaltijdcheques in PC 200 — expert bevestigd: geen sectorale verplichting |
 | `pc200_thuiswerkvergoeding_sectoraal` | niet_gevonden | ? | Sectorale thuiswerkvergoeding in PC 200 |
 | `pc200_landingsbaan_sectorvergoeding_2026` | actief | Tier 1 | Bijkomende sectorale vergoeding bij 1/5e landingsbaan PC 200 vanaf 1/6/2026 |
 | `pc200_vakantiegeld_bedienden` | actief | Tier 1 | Vakantiegeld voor bedienden PC 200 (enkel + dubbel vakantiegeld) – wettelijk regime en RSZ-basis dubbel vakantiegeld |
@@ -122,6 +122,6 @@
 - Sectorakkoord PC 200 voor 2025-2026 afgesloten op 15 januari 2026 door sociale partners; bevestigd door sfonds200.be
 - Bedrijfsvoorheffingsregels 2026 gepubliceerd via KB 11/12/2025 in BS 29/12/2025 (Bijlage III)
 - Volledige sectorale baremamatrix PC 200 (Schaal I, Schaal II, studenten × Cat A/B/C/D) opgenomen vanaf 2026-05-08; primaire bron SSN (Tier 2), getrianguleerd met ACV en ACLVB (Tier 3) — alle 228 cellen onderling bevestigd
-- Sectorpensioen-onderzoek (2026-05-08): bevestigd dat er geen algemeen sectoraal aanvullend pensioen bestaat voor het volledige PC 200 — enkel voor de bouw-subset (1,80% solidariteitsluik vanaf 1/1/2026 via CAO 13/03/2025 nr. 192.922)
+- Payroll-expertreview 2026-05-30: de vroegere bouw-subsetbijdrage aanvullend pensioen wordt niet langer als aparte runtimekost berekend; de werkgevers-RSZ blijft een globale raming en het bouwrecord blijft alleen als reviewspoor buiten runtime.
 - Sociaal Fonds 200 werkgeversbijdrage (0,23%) verlengd voor 1/1/2026–31/12/2027; bevestigd via sfonds200.be op 2026-05-24, met Partena Professional, Liantis en CLB Group als triangulatie
 - Aanvullende gemeentebelasting: geen Tier-1 machine-leesbare lijst per gemeente beschikbaar; behandeld als UI-parameter (default 7,3%) met disclaimer — niet opgenomen als dataset-datapunt

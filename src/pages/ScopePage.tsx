@@ -32,9 +32,9 @@ const POC_LIMITATIONS: { titel: string; tekst: string }[] = [
       "Voor maanden vóór oktober 2026 rekent de tool met het sectorale tarief van € 0,27/km en maximum € 10,80 per dag. Vanaf oktober 2026 geldt € 0,32/km met maximum € 12,80 per dag.",
   },
   {
-    titel: "5. Bouw-subset opt-in",
+    titel: "5. Geen aparte bouwpensioenbijdrage",
     tekst:
-      "De extra werkgeversbijdrage van 1,80 % aanvullend pensioen voor de PC 200-bouwsubset is een vinkje op het profiel. Schakel uit als de werknemer niet onder die subset valt.",
+      "Jaakie rekent geen aparte 1,80 % bouw-subsetbijdrage meer bovenop de globale werkgevers-RSZ. De werkgevers-RSZ blijft een raming op basis van het algemene profitsectorpercentage.",
   },
   {
     titel: "6. Studentenstatuut = barema-only",
