@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { Building2, Calendar, Car, Euro, Gift, Receipt, Shield, User } from "lucide-react";
+import { Building2, Car, Euro, Gift, Receipt, Shield, User } from "lucide-react";
 
 import { Banner } from "@/components/Banner";
 import { CockpitAccordion } from "@/components/CockpitAccordion";
@@ -701,26 +701,6 @@ function WerkgeversbijdragenContent({ profiel, set }: { profiel: Profiel; set: P
   );
 }
 
-function EindejaarspremieCard() {
-  return (
-    <CockpitCard title="Eindejaarspremie" icon={<Calendar size={16} />}>
-      <div
-        style={{
-          border: "1px solid var(--color-border)",
-          borderRadius: 8,
-          background: "var(--color-navy-50)",
-          color: "var(--color-navy-500)",
-          padding: "9px 10px",
-          fontSize: 12,
-          fontWeight: 600,
-        }}
-      >
-        Volledig gewerkt jaar: 12/12.
-      </div>
-    </CockpitCard>
-  );
-}
-
 
 // ─── InputCockpit ────────────────────────────────────────────────────────────
 
@@ -793,7 +773,6 @@ export function InputCockpit({
         <WerkgeversbijdragenContent profiel={profiel} set={set} />
       </CockpitAccordion>
 
-      <EindejaarspremieCard />
     </div>
   );
 }

@@ -167,16 +167,6 @@ describe("Profiel formulier", () => {
     expect(html.indexOf("Extra looncomponenten")).toBeGreaterThanOrEqual(0);
   });
 
-  it("toont eindejaarspremie als volledig gewerkt jaar zonder pro-rata velden", () => {
-    const html = renderToStaticMarkup(createElement(HomePage));
-
-    expect(html).toContain("Eindejaarspremie");
-    expect(html).toContain("Volledig gewerkt jaar: 12/12.");
-    expect(html).not.toContain("Eindejaarspremie toepassen");
-    expect(html).not.toContain("Anciënniteit (maanden)");
-    expect(html).not.toContain("Prestatie (maanden)");
-  });
-
   it("toont maaltijdcheques accordion header", () => {
     const html = renderToStaticMarkup(createElement(HomePage));
 
