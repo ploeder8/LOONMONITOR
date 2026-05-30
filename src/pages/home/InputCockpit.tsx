@@ -9,8 +9,6 @@ import type { BrutolocheckResult } from "@/lib/baremas";
 import { formatEUR } from "@/lib/money";
 import {
   aantalWeekdagenInMaand,
-  eindejaarspremieMaandenVoorCheckbox,
-  eindejaarspremieIsActief,
   percentageNaarTewerkstellingsbreuk,
   tewerkstellingsbreukNaarPercentage,
   type BaremaCat,
@@ -703,48 +701,21 @@ function WerkgeversbijdragenContent({ profiel, set }: { profiel: Profiel; set: P
   );
 }
 
-function EindejaarspremieCard({ profiel, set }: { profiel: Profiel; set: ProfielSetter }) {
-  const eindejaarspremieAan = eindejaarspremieIsActief(profiel);
+function EindejaarspremieCard() {
   return (
     <CockpitCard title="Eindejaarspremie" icon={<Calendar size={16} />}>
-      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-        <label
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            fontSize: 13,
-            color: "var(--color-navy-500)",
-            cursor: "pointer",
-          }}
-        >
-          <input
-            type="checkbox"
-            checked={eindejaarspremieAan}
-            onChange={(e) => {
-              const maanden = eindejaarspremieMaandenVoorCheckbox(e.target.checked);
-              set("ancienniteitMaanden", maanden.ancienniteitMaanden);
-              set("prestatieMaanden", maanden.prestatieMaanden);
-            }}
-            style={{ accentColor: "var(--color-primary)", width: 15, height: 15 }}
-          />
-          Eindejaarspremie toepassen
-        </label>
-        {eindejaarspremieAan && (
-          <div
-            style={{
-              border: "1px solid var(--color-border)",
-              borderRadius: 8,
-              background: "var(--color-navy-50)",
-              color: "var(--color-navy-500)",
-              padding: "9px 10px",
-              fontSize: 12,
-              fontWeight: 600,
-            }}
-          >
-            Volledig gewerkt jaar: 12/12.
-          </div>
-        )}
+      <div
+        style={{
+          border: "1px solid var(--color-border)",
+          borderRadius: 8,
+          background: "var(--color-navy-50)",
+          color: "var(--color-navy-500)",
+          padding: "9px 10px",
+          fontSize: 12,
+          fontWeight: 600,
+        }}
+      >
+        Volledig gewerkt jaar: 12/12.
       </div>
     </CockpitCard>
   );
@@ -822,7 +793,7 @@ export function InputCockpit({
         <WerkgeversbijdragenContent profiel={profiel} set={set} />
       </CockpitAccordion>
 
-      <EindejaarspremieCard profiel={profiel} set={set} />
+      <EindejaarspremieCard />
     </div>
   );
 }

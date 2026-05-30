@@ -7,7 +7,6 @@ import { headerContentLayout, mainMaxWidthForPath } from "@/App";
 import { fietsvergoeding } from "@/lib/fietsvergoeding";
 import {
   aantalWeekdagenInMaand,
-  eindejaarspremieMaandenVoorCheckbox,
   percentageNaarTewerkstellingsbreuk,
   refDatumVoorMaand,
   tewerkstellingsbreukNaarPercentage,
@@ -83,19 +82,6 @@ describe("Maand van berekening", () => {
         refDatum: refDatumVoorMaand("2026", "10"),
       }).tariefPerKm,
     ).toBe(0.32);
-  });
-});
-
-describe("Eindejaarspremie checkbox", () => {
-  it("rekent Ja als 12 maanden en Nee als 0 maanden", () => {
-    expect(eindejaarspremieMaandenVoorCheckbox(true)).toEqual({
-      ancienniteitMaanden: 12,
-      prestatieMaanden: 12,
-    });
-    expect(eindejaarspremieMaandenVoorCheckbox(false)).toEqual({
-      ancienniteitMaanden: 0,
-      prestatieMaanden: 0,
-    });
   });
 });
 
@@ -181,11 +167,12 @@ describe("Profiel formulier", () => {
     expect(html.indexOf("Extra looncomponenten")).toBeGreaterThanOrEqual(0);
   });
 
-  it("toont geen pro-rata velden voor de eindejaarspremie", () => {
+  it("toont eindejaarspremie als volledig gewerkt jaar zonder pro-rata velden", () => {
     const html = renderToStaticMarkup(createElement(HomePage));
 
     expect(html).toContain("Eindejaarspremie");
-    expect(html).toContain("Eindejaarspremie toepassen");
+    expect(html).toContain("Volledig gewerkt jaar: 12/12.");
+    expect(html).not.toContain("Eindejaarspremie toepassen");
     expect(html).not.toContain("Anciënniteit (maanden)");
     expect(html).not.toContain("Prestatie (maanden)");
   });
