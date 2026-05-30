@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { Building2, Calendar, Car, Euro, Receipt, Shield, User } from "lucide-react";
+import { Building2, Calendar, Car, Euro, Gift, Receipt, Shield, User } from "lucide-react";
 
 import { Banner } from "@/components/Banner";
 import { CockpitAccordion } from "@/components/CockpitAccordion";
@@ -14,6 +14,7 @@ import {
   percentageNaarTewerkstellingsbreuk,
   tewerkstellingsbreukNaarPercentage,
   type BaremaCat,
+  type BonusPeriode,
   type GezinsType,
   type Profiel,
   type Schaal,
@@ -417,9 +418,11 @@ function BrutoloonCard({ profiel, set }: { profiel: Profiel; set: ProfielSetter 
       </div>
     </CockpitCard>
   );
-}function ExtraLooncomponentenContent({ profiel, set }: { profiel: Profiel; set: ProfielSetter }) {
+}
+
+function ExtraLooncomponentenContent({ profiel, set }: { profiel: Profiel; set: ProfielSetter }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 16 }}>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4" style={{ gap: 16 }}>
       <div
         style={{
           background: "var(--cockpit-subsection-bg)",
@@ -604,6 +607,80 @@ function BrutoloonCard({ profiel, set }: { profiel: Profiel; set: ProfielSetter 
           ))}
         </div>
       </div>
+
+      <div
+        style={{
+          background: "var(--cockpit-subsection-bg)",
+          borderRadius: "var(--cockpit-subsection-radius)",
+          padding: 16,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            marginBottom: 12,
+            fontSize: 11,
+            fontWeight: 700,
+            letterSpacing: "0.05em",
+            textTransform: "uppercase",
+            color: "var(--color-text-muted)",
+          }}
+        >
+          <Gift size={14} /> Bonus
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <FormField
+            label={<>Bonusbedrag (€) <HelpTooltip text="Een maandbedrag wordt omgerekend naar een jaarbonus. De bonus telt alleen mee in het jaaroverzicht en wordt belast als exceptionele vergoeding." /></>}
+          >
+            <NumeriekeInput
+              className={inputClass}
+              step="0.01"
+              min={0}
+              value={profiel.bonusBedrag}
+              onValueChange={(waarde) => set("bonusBedrag", waarde)}
+            />
+          </FormField>
+          <div
+            role="group"
+            aria-label="Bonusperiode"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 6,
+            }}
+          >
+            {([
+              ["maand", "Per maand"],
+              ["jaar", "Per jaar"],
+            ] as Array<[BonusPeriode, string]>).map(([waarde, label]) => (
+              <button
+                key={waarde}
+                type="button"
+                aria-pressed={profiel.bonusPeriode === waarde}
+                onClick={() => set("bonusPeriode", waarde)}
+                style={{
+                  border: "1px solid var(--color-primary-border)",
+                  borderRadius: "var(--radius-md)",
+                  background:
+                    profiel.bonusPeriode === waarde
+                      ? "var(--color-primary)"
+                      : "var(--color-surface)",
+                  color: profiel.bonusPeriode === waarde ? "#ffffff" : "var(--color-primary)",
+                  fontSize: 12,
+                  fontWeight: 700,
+                  padding: "7px 8px",
+                  cursor: "pointer",
+                  fontFamily: "var(--font-body)",
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -750,8 +827,9 @@ export function InputCockpit({
 
       <CockpitAccordion
         title="Extra looncomponenten"
-        subtitle="Verzekeringen, maaltijdcheques, VAA"
+        subtitle="Verzekeringen, maaltijdcheques, VAA, bonus"
         icon={<Receipt size={16} />}
+        defaultOpen
       >
         <ExtraLooncomponentenContent profiel={profiel} set={set} />
       </CockpitAccordion>

@@ -10,6 +10,7 @@ export type { GezinsType } from "@/lib/netto";
 export type Statuut = "bediende" | "student";
 export type BeroepskostMethode = "forfaitair" | "reeel";
 export type BerekeningsRichting = "bruto_naar_netto" | "netto_naar_bruto";
+export type BonusPeriode = "maand" | "jaar";
 
 export interface Profiel {
   berekeningsRichting: BerekeningsRichting;
@@ -60,6 +61,8 @@ export interface Profiel {
   extraHospitalisatie: number;
   hospitalisatieEigenBijdrage: number;
   onkostenvergoedingPerMaand: number;
+  bonusBedrag: number;
+  bonusPeriode: BonusPeriode;
   gemeentebelastingPct: number;
   werknemerNaam: string;
   werknemerReferentie: string;
@@ -116,6 +119,8 @@ export const DEFAULTS: Profiel = {
   extraHospitalisatie: 0,
   hospitalisatieEigenBijdrage: 0,
   onkostenvergoedingPerMaand: 0,
+  bonusBedrag: 0,
+  bonusPeriode: "jaar",
   gemeentebelastingPct: 7.3,
   werknemerNaam: "",
   werknemerReferentie: "",

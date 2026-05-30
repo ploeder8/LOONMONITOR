@@ -1597,6 +1597,38 @@ Originele kop van het corpus:
 
 ---
 
+### Jaarbonus — exceptionele vergoeding
+
+**Status calculator:** actief sinds 30/05/2026.
+
+**Focus:** jaarbonus wordt niet als maandloon behandeld, maar als eenmalige exceptionele jaarcomponent met werknemers-RSZ, bijzondere BV en patronale RSZ op jaarbasis.
+
+**Input:**
+```json
+{
+  "bruto_maand": 3000.0,
+  "bonus_jaar": 1200.0,
+  "burgerlijke_staat": "alleenstaand",
+  "kinderen_ten_laste": 0
+}
+```
+
+| Component | Waarde |
+|---|---:|
+| Bonus bruto | €1200.00 |
+| RSZ-werknemer (13,07%) | €156.84 |
+| Belastbaar bonusbedrag | €1043.16 |
+| Bijzondere BV-tarief | 40.38% |
+| Bijzondere BV | €421.23 |
+| **Netto bonus** | **€621.93** |
+| Bonus werkgeverskost | €1200.00 |
+| RSZ werkgever op bonus (25%) | €300.00 |
+| **Stijging jaarloonkost** | **€1500.00** |
+
+Een invoer van €100 per maand moet exact dezelfde jaarbonus opleveren als €1200 per jaar. Bonus nul mag geen zichtbare bonusregels in het jaaroverzicht tonen en mag bestaande jaaroverzichttotalen niet wijzigen.
+
+---
+
 ## Bronnen
 
 - **Sociale werkbonus 1/4/2026** — RSZ Administratieve instructies 2026/1, met Partena Professional en Securex Lex4you als triangulatie

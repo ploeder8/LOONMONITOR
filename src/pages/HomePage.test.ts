@@ -190,6 +190,14 @@ describe("Profiel formulier", () => {
     expect(html).toContain("maaltijdcheques");
   });
 
+  it("toont bonusinvoer met maand- en jaaroptie", () => {
+    const html = renderToStaticMarkup(createElement(HomePage));
+
+    expect(html).toContain("Bonus");
+    expect(html).toContain("Per maand");
+    expect(html).toContain("Per jaar");
+  });
+
   it("plaatst werkgeversbijdragen als laatste invulsectie", () => {
     const html = renderToStaticMarkup(createElement(HomePage));
 
