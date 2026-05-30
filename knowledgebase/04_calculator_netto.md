@@ -320,9 +320,17 @@ function vaaBedrijfswagen(
   brandstof: 'diesel' | 'benzine' | 'lpg' | 'cng' | 'elektrisch',
   leeftijdMaanden: number
 ): number {
-  const refCO2 = brandstof === 'diesel' ? 58 : (brandstof === 'elektrisch' ? 0 : 70);
-  let coef = 5.5 + (co2 - refCO2) * 0.1;
-  coef = Math.max(4, Math.min(18, coef));
+  // Elektrische wagens en plug-in hybrides krijgen een vast CO₂-percentage van 4%
+  // (FOD Financiën — het minimumpercentage wordt toegepast omdat er geen
+  // referentie-uitstootformule van toepassing is).
+  let coef: number;
+  if (brandstof === 'elektrisch') {
+    coef = 4;
+  } else {
+    const refCO2 = brandstof === 'diesel' ? 58 : 70;
+    coef = 5.5 + (co2 - refCO2) * 0.1;
+    coef = Math.max(4, Math.min(18, coef));
+  }
   const leeftijdCoef = Math.max(0.7, 1 - Math.floor(leeftijdMaanden / 12) * 0.06);
   const vaaJaar = (cataloguswaarde * coef / 100) * leeftijdCoef * (6 / 7);
   return round2(Math.max(1690, vaaJaar)); // min VAA 2026 = €1.690
