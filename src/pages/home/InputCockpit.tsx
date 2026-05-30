@@ -797,7 +797,7 @@ export function InputCockpit({
       set("woonwerkPrivewagen", false);
       set("woonwerkBusTramMetro", true);
       set("woonwerkTrein", true);
-      // Bedrijfswagen (VAA) niet aanraken — is een aparte categorie
+      // Bedrijfswagen (VAA) niet aanraken — geen woon-werkvergoeding
     } else {
       set("woonwerkFiets", false);
       set("woonwerkPrivewagen", false);
