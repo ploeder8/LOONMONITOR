@@ -57,7 +57,11 @@ export function berekenNetto(input: NettoInput): NettoResultaat {
         ? tewerkstellingsbreuk
         : 1;
     const werkbonusVergelijkingsLoon = round2(brutoRszBasis / geldigeBreuk);
-    const werkbonusR = werkbonus({ brutoloon: werkbonusVergelijkingsLoon, refDatum });
+    const werkbonusR = werkbonus({
+        brutoloon: werkbonusVergelijkingsLoon,
+        refDatum,
+        tewerkstellingsbreuk: geldigeBreuk,
+    });
     const bbszR = bbsz({ brutoloon: brutoRszBasis, gezinstype });
     const effectieveRsz = round2(Math.max(0, rszR.werknemerBijdrage - werkbonusR.totaal));
     const woonwerkVergoeding = round2(Math.max(woonwerkVergoedingPerMaand, 0));

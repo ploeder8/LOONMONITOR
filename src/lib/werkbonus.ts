@@ -4,6 +4,7 @@ import type { Datapunt } from "@/types/dataset";
 export interface WerkbonusInput {
     brutoloon: number;
     refDatum: string;
+    tewerkstellingsbreuk?: number;
 }
 export interface WerkbonusResultaat {
     luikA: number;
@@ -31,12 +32,15 @@ function luikBonus(loon: number, p: LuikParams): number {
     return round2(p.max - p.factor * (loon - p.lower));
 }
 export function werkbonus(input: WerkbonusInput): WerkbonusResultaat {
-    const { brutoloon, refDatum } = input;
+    const { brutoloon, refDatum, tewerkstellingsbreuk = 1 } = input;
     const dp = getDatapunt("werkbonus_sociaal_luik_A_2026") ?? getDatapunt("bv_werkbonus_bedienden_2026");
     if (!dp)
         throw new Error("Datapunt werkbonus_sociaal_luik_A_2026 niet gevonden");
-    const a = luikBonus(brutoloon, LUIK_A);
-    const b = luikBonus(brutoloon, LUIK_B);
+    const geldigeBreuk = Number.isFinite(tewerkstellingsbreuk) && tewerkstellingsbreuk > 0
+        ? Math.min(tewerkstellingsbreuk, 1)
+        : 1;
+    const a = round2(luikBonus(brutoloon, LUIK_A) * geldigeBreuk);
+    const b = round2(luikBonus(brutoloon, LUIK_B) * geldigeBreuk);
     const totaal = round2(a + b);
     return {
         luikA: a,
