@@ -124,6 +124,8 @@ type AuditEntry = {
 
 ### 2.1 `sociaal_fonds_200_werkgever_2026`
 
+> **Status 2026-05-31:** niet langer gebruiken als aparte runtimecomponent in Jaakie. De werkgeverskost telt geen Sociaal Fonds 200-bijdrage meer op; dit blok blijft alleen als historisch bronrecord bewaard.
+
 ```json
 {
   "id": "sociaal_fonds_200_werkgever_2026",
@@ -212,7 +214,7 @@ type AuditEntry = {
   "id": "provisie_dubbel_vakantiegeld_pct_2026",
   "categorie": "loonprovisie",
   "label": { "nl": "[DEPRECATED] Provisie dubbel vakantiegeld bedienden", "fr": "[DEPRECATED] Provision double pécule de vacances employés" },
-  "beschrijving": { "nl": "Vervangen door runtime-berekening: (bruto + VAA) × 92% / 12.", "fr": "Remplacé par calcul runtime: (brut + AV) × 92% / 12." },
+  "beschrijving": { "nl": "Vervangen door runtime-berekening: bruto × 92% / 12.", "fr": "Remplacé par calcul runtime: brut × 92% / 12." },
   "eenheid": "pct",
   "waarde_bron": 6.67,
   "waarde_canoniek": 0.0667,
@@ -238,7 +240,7 @@ type AuditEntry = {
   "categorie": "premies_en_voordelen",
   "subcategorie": "vakantiegeld",
   "label": { "nl": "Percentage dubbel vakantiegeld bedienden", "fr": "Pourcentage double pécule de vacances employés" },
-  "beschrijving": { "nl": "Percentage dubbel vakantiegeld ten opzichte van brutomaandloon incl. VAA. Gebruikt voor zowel jaarlijkse berekening als maandelijkse provisie (= 92% / 12).", "fr": "Pourcentage du double pécule de vacances par rapport au salaire brut mensuel incl. AV. Utilisé pour le calcul annuel et la provision mensuelle (= 92% / 12)." },
+  "beschrijving": { "nl": "Percentage dubbel vakantiegeld ten opzichte van brutomaandloon. Gebruikt voor zowel jaarlijkse berekening als maandelijkse provisie (= 92% / 12).", "fr": "Pourcentage du double pécule de vacances par rapport au salaire brut mensuel. Utilisé pour le calcul annuel et la provision mensuelle (= 92% / 12)." },
   "eenheid": "fractie",
   "waarde_bron": 0.92,
   "waarde_canoniek": 0.92,

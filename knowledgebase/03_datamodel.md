@@ -184,7 +184,7 @@ Calculation-functies retourneren altijd het bron-`Datapunt`-object zodat de UI-c
 | Categorie | Beschrijving | Voorbeelden |
 |---|---|---|
 | `lonen` | Sectorale baremas | Schaal I/II × Cat A/B/C/D, studentenbarema |
-| `rsz` | RSZ-bijdragen | `rsz_werknemer_basis`, `rsz_werkgever_profit_basis`, `rsz_pc200_sociaal_fonds_200_*` |
+| `rsz` | RSZ-bijdragen | `rsz_werknemer_basis`, `rsz_werkgever_profit_basis`; Sociaal Fonds 200 is enkel historisch bronrecord en geen runtimecomponent |
 | `fiscaliteit` | PB-schijven, belastingvrije som, forfait, werkbonus, BV-verminderingen | `pb_schijven_aj2027`, `belastingvrije_som_aj2027`, `werkbonus_*` |
 | `premies_en_voordelen` | Sectorale CAO-premies en -voordelen | `pc200_eindejaarspremie`, `pc200_ecocheques_*`, `pc200_woonwerk_trein_*` |
 | `arbeidsvoorwaarden` | Verlof, arbeidsduur, overuren | `pc200_arbeidsduur`, `pc200_klein_verlet_*` |

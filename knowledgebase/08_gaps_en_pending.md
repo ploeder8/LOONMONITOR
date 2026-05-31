@@ -50,7 +50,7 @@
 | Jaarlijkse premie 2026 | €330,84 | sfonds200.be | OK — bevestigd |
 | Arbeidsongevallenverzekering kantoorbedienden | default 0,30% | Fedris bevestigt verzekeringsplicht; geen publiek sectoraal tarief | **Onzeker als tarief** — 0,30% blijft lage configureerbare default, geen harde sectorparameter |
 | Eindejaarspremie | 13e maand (formule herzien per akkoord 15/1/2026) | sfonds200.be + cao PC 200 | OK voor scope; exacte uitvoeringsnuances blijven auditpunt bij volgende cao-tekstupdate |
-| Dubbel vakantiegeld bedienden | 92% × maandloon incl. VAA; RSZ 13,07% op 85/92 | RSZ Administratieve instructies | Geïntegreerd in jaaroverzicht |
+| Dubbel vakantiegeld bedienden | 92% × brutomaandloon; RSZ 13,07% op 85/92 | RSZ Administratieve instructies | Geïntegreerd in jaaroverzicht |
 | Bouw-subset aanvullend pensioen | niet actief | oude Tier-3-publicatie onvoldoende voor runtime | Verwijderd uit runtime en UI; niet apart bovenop globale werkgevers-RSZ ramen zonder primaire CAO-parameterextractie |
 | Fietsvergoeding (akkoord 15/1/2026) | €0,27/km tot 30/09/2026; €0,32/km vanaf 01/10/2026 | sfonds200.be | OK — bronronde 24/05/2026 |
 | Tussenkomst treinvervoer | 100% prijs treinkaart 2e klasse vanaf eerste kilometer | sfonds200.be | OK — bronronde 24/05/2026 |

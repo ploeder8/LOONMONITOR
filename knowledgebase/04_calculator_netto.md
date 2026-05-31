@@ -131,8 +131,8 @@ Stap 8: = NETTO maandloon (indicatief)
 
 > **Bijzondere gevallen** (apart UI-paneel, zelfde dataset-pijplijn):
 > - **Eindejaarspremie / dubbel vakantiegeld:** bijzondere BV-schaal (`bv_bijzondere_schaal_eindejaar_2026`) op belastbaar exceptioneel bedrag na RSZ.
-> - **Sectorale jaarpremie PC 200:** alleen werknemers-RSZ; geen bedrijfsvoorheffing.
-> - **Dubbel vakantiegeld bedienden:** 92 % × maandloon incl. VAA; RSZ = 13,07 % op 85/92 van het dubbel vakantiegeld; BV via de kolom vakantiegeld.
+> - **Sectorale jaarpremie PC 200:** werknemers-RSZ, daarna bijzondere BV via dezelfde kolom als eindejaarspremie (`andere_exceptionele_vergoeding`).
+> - **Dubbel vakantiegeld bedienden:** 92 % × brutomaandloon; RSZ = 13,07 % op 85/92 van het dubbel vakantiegeld; BV via de kolom vakantiegeld.
 
 ---
 
@@ -270,8 +270,8 @@ function bvBijzonder(
 
 **Toepassing:**
 - `eindejaarspremie.ts` → in de Jaakie-gebruikersflow wordt een volledig gewerkt jaar verondersteld: bruto premie = 1 brutomaandloon; trek 13,07% RSZ af, daarna bijzondere BV met soort `andere_exceptionele_vergoeding`. De pure functie behoudt pro-rata parameters voor juridische/testdekking, maar die zijn geen UI-invoer meer.
-- `jaarpremie.ts` → sectorale PC 200-jaarpremie: trek 13,07% RSZ af; geen bedrijfsvoorheffing.
-- Dubbel vakantiegeld → bruto = `92% × (maandloon incl. VAA)`, RSZ = `13,07% × (85/92 × dubbel vakantiegeld)`, daarna bijzondere BV met soort `vakantiegeld`.
+- `jaarpremie.ts` → sectorale PC 200-jaarpremie: trek 13,07% RSZ af; daarna bijzondere BV met soort `andere_exceptionele_vergoeding`.
+- Dubbel vakantiegeld → bruto = `92% × brutomaandloon`, RSZ = `13,07% × (85/92 × dubbel vakantiegeld)`, daarna bijzondere BV met soort `vakantiegeld`.
 - Ad-hoc bonus → profielinput als maand- of jaarbedrag; Jaakie rekent altijd om naar een eenmalige jaarbonus. Op die jaarbonus wordt eerst 13,07% werknemers-RSZ ingehouden, daarna bijzondere BV met soort `andere_exceptionele_vergoeding`. De bonus wijzigt het gewone maandnetto, de gewone maand-BV, werkbonus, BBSZ en netto→bruto niet.
 
 **Datapunt:** `bv_bijzondere_schaal_eindejaar_2026` met `tabel_refertejaarloon_naar_tarief`.
