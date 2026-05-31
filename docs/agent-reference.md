@@ -171,6 +171,18 @@ Introduceer geen oude VH-assets, VH-kleuren of VH-fonts opnieuw.
 - Groepeer logisch samenhangende props bij componenten met meer dan drie props.
 - Async code krijgt error handling.
 
+## Token-budget Checklist
+
+- Heb ik eerst `rg -n` gebruikt en pas daarna snippets gelezen?
+- Heb ik full-file reads van grote bestanden vermeden?
+- Heb ik alleen herlezen na eigen edit of directe testfout (read-on-change)?
+- Heb ik file-scoped diff gebruikt (`git diff -- <file>`)?
+- Heb ik brede diff-output vermeden tenzij expliciet nodig?
+- Heb ik 1 gerichte test vóór bredere regressie gedraaid?
+- Heb ik dubbele overlappende testruns zonder nieuwe info vermeden?
+- Heb ik browse/web alleen gebruikt wanneer lokale context onvoldoende was?
+- Heb ik de finale `Token discipline`-regel opgenomen?
+
 ## Gaps En Pending
 
 Zie `knowledgebase/08_gaps_en_pending.md` voor het volledige overzicht. Korte status:

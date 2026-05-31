@@ -50,6 +50,7 @@ export function NettoPanel({ resultaat: r, vaaWerkmiddelen, maaltijdchequeWerkge
           <NettoRow label={`RSZ werknemer (13,07 %)`} bedrag={r.rsz.werknemerBijdrage}/>
           {r.werkbonus.totaal > 0 && (<NettoRow label={`Werkbonus (RSZ-vermindering)`} bedrag={r.werkbonus.totaal} prefix="+" dimmed/>)}
           <NettoRow label="Loon na RSZ en werkbonus" bedrag={r.belastbaarMaandloon} prefix="" variant="subtotal"/>
+          {r.woonwerkVergoedingPerMaand > 0 && (<NettoRow label="Woon-werkvergoeding (belastbaar)" bedrag={r.woonwerkVergoedingPerMaand} prefix="+" dimmed/>)}
           {toontVaaBedrijfswagen && (<NettoRow label="VAA bedrijfswagen" bedrag={r.vaaBedrijfswagenPerMaand} prefix="+" dimmed/>)}
           <NettoRow label="Belastbaar loon" bedrag={r.belastbaarMaandloonVoorBV} prefix="" variant="subtotal"/>
           <NettoRow label={`Bedrijfsvoorheffing (${r.bv.schaal}, vóór gezinsverminderingen)`} bedrag={r.bv.bvPerMaand} onToggle={() => setBvDetailOpen(!bvDetailOpen)} open={bvDetailOpen}/>
@@ -99,7 +100,6 @@ export function NettoPanel({ resultaat: r, vaaWerkmiddelen, maaltijdchequeWerkge
                 <HelpTooltip text={`BBSZ-scenario: ${r.bbsz.scenarioLabel}. De maandinhouding is gebaseerd op het kwartaalbedrag ${formatEUR(r.bbsz.kwartaalbijdrage)} gedeeld door 3.`}/>
               </>} bedrag={r.bbsz.maandelijksBedrag}/>
           {r.maaltijdchequeWerknemersbijdrage > 0 && (<NettoRow label={`Maaltijdcheques werknemersbijdrage (${formatEUR(r.maaltijdchequeWerknemersbijdragePerDag)} × ${r.maaltijdchequeWerkdagen} dagen)`} bedrag={r.maaltijdchequeWerknemersbijdrage}/>)}
-          {r.woonwerkVrijgesteldPerMaand > 0 && (<NettoRow label="Woon-werkvergoeding" bedrag={r.woonwerkVrijgesteldPerMaand} prefix="+" dimmed/>)}
           {r.hospitalisatieEigenBijdrage > 0 && (<NettoRow label="Eigen bijdrage hospitalisatieverzekering" bedrag={r.hospitalisatieEigenBijdrage}/>)}
           {r.onkostenvergoedingPerMaand > 0 && (<NettoRow label="Onkostenvergoedingen" bedrag={r.onkostenvergoedingPerMaand} prefix="+" dimmed/>)}
           {toontTerugnameVaa && (<NettoRow label="Terugname VAA" bedrag={totaalTerugnameVaa} onToggle={() => setVaaDetailOpen(!vaaDetailOpen)} open={vaaDetailOpen}/>)}
