@@ -152,6 +152,7 @@ function bouwNettoInputVoorProfiel(p: Profiel, refDatum: string, brutoloon: numb
     return {
         brutoloon,
         refDatum,
+        tewerkstellingsbreuk: p.tewerkstellingsbreuk,
         bouwVlag: p.bouwVlag,
         gezinstype: p.gezinstype,
         kinderenTenLaste: p.kinderenTenLaste,
@@ -163,6 +164,7 @@ function bouwNettoInputVoorProfiel(p: Profiel, refDatum: string, brutoloon: numb
         maaltijdchequeWerkdagen: maaltijdchequesActief ? p.arbeidsdagenPerMaand : 0,
         hospitalisatieEigenBijdrage: p.hospitalisatieEigenBijdrage,
         onkostenvergoedingPerMaand: p.onkostenvergoedingPerMaand,
+        woonwerkVergoedingPerMaand: mobiliteit.woonwerk.totaalVergoeding,
         woonwerkVrijgesteldPerMaand: berekenWoonwerkVrijgesteld(mobiliteit.woonwerk, p.woonwerkPrivewagenBeroepskostMethode),
         bvVrijstellingWoonWerkPerMaand: berekenWoonwerkBvVrijstellingVoorProfiel(p, mobiliteit.woonwerk),
         vaaRszPlichtigPerMaand: vaaWerkmiddelen.totaalPerMaand,

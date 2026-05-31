@@ -111,7 +111,9 @@ Stap 1: BRUTO maandloon (input)
 Stap 2: − RSZ werknemer (13,07 % × bruto)
         + Sociale werkbonus (Luik A + B, vermindering RSZ wn)
         ↓
-Stap 3: = Belastbaar voor BV (bruto − netto_RSZ_wn)
+Stap 3: = Loon na RSZ en werkbonus (bruto − netto_RSZ_wn)
+        + woon-werkvergoeding (belastbare werkgeverstussenkomst)
+        = Belastbaar voor BV
         + maandelijks omgeslagen VAA (totaal_VAA / 12)
         ↓
 Stap 4: − BEDRIJFSVOORHEFFING (sleutelformule KB Bijlage III)
@@ -124,7 +126,8 @@ Stap 5: − BV-verminderingen (kinderen ten laste, andere persoon,
         ↓
 Stap 6: − BBSZ (scenario-inhouding; kwartaalbedrag ÷ 3)
         ↓
-Stap 7: + vergoedingen woon-werk / fiets (vrijgesteld tot KB-plafond) — al in POC
+Stap 7: Voor BV wordt enkel het niet-vrijgestelde woon-werkdeel belast:
+        BV-grondslag = belastbaar loon − vrijstelling woon-werk (forfaitaire beroepskosten)
         ↓
 Stap 8: = NETTO maandloon (indicatief)
 ```
@@ -331,11 +334,15 @@ function vaaBedrijfswagen(
     coef = 5.5 + (co2 - refCO2) * 0.1;
     coef = Math.max(4, Math.min(18, coef));
   }
-  const leeftijdCoef = Math.max(0.7, 1 - Math.floor(leeftijdMaanden / 12) * 0.06);
-  const vaaJaar = (cataloguswaarde * coef / 100) * leeftijdCoef * (6 / 7);
+  // Jaarkader: ouderdomscoëfficiënt wordt op jaarbasis daggewogen bepaald
+  // voor het volledige refertejaar, daarna gedeeld door 12 voor maandbasis.
+  const leeftijdCoefJaar = gewogenLeeftijdsCoefVoorJaar(leeftijdMaanden);
+  const vaaJaar = (cataloguswaarde * coef / 100) * leeftijdCoefJaar * (6 / 7);
   return round2(Math.max(1690, vaaJaar)); // min VAA 2026 = €1.690
 }
 ```
+
+**Implementatienoot (runtime):** voor de payroll-maandoutput gebruikt Jaakie het jaar-VAA en deelt dit door 12. De leeftijdscoëfficiënt wordt in dat jaar daggewogen over de maandschijven bepaald, zodat overgangen binnen hetzelfde jaar (bv. dieselwagen die van 88% naar 82% schuift) correct in het jaarbedrag landen.
 
 **Datapunten:** `vaa_bedrijfswagen_min_2026`, `vaa_bedrijfswagen_co2_diesel_2026` (= 58), `vaa_bedrijfswagen_co2_benzine_2026` (= 70).
 

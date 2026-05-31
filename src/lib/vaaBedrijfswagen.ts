@@ -38,7 +38,7 @@ export function vaaBedrijfswagen(input: VaaBedrijfswagenInput): VaaBedrijfswagen
         ? CO2_PERCENTAGE_MIN
         : round2(clamp(CO2_BASIS_PERCENTAGE + (co2 - refCO2) * CO2_STAP_PERCENTAGE, CO2_PERCENTAGE_MIN, CO2_PERCENTAGE_MAX));
     const leeftijdMaanden = maandenSindsEersteInschrijving(input.datumEersteInschrijving, input.refDatum);
-    const leeftijdsCoefficient = leeftijdsCoefficientVoorMaanden(leeftijdMaanden);
+    const leeftijdsCoefficient = gemiddeldeLeeftijdsCoefficientVoorJaarGewogen(input.datumEersteInschrijving, input.refDatum);
     const cataloguswaarde = Math.max(input.cataloguswaarde, 0);
     const berekendJaar = round2(cataloguswaarde * (co2Percentage / 100) * leeftijdsCoefficient * (6 / 7));
     const minimum = minVaa.waarde ?? 0;
@@ -63,6 +63,24 @@ function maandenSindsEersteInschrijving(start: string, refDatum: string): number
 }
 function leeftijdsCoefficientVoorMaanden(maanden: number): number {
     return round2(Math.max(0.7, 1 - Math.floor(maanden / 12) * 0.06));
+}
+function gemiddeldeLeeftijdsCoefficientVoorJaarGewogen(datumEersteInschrijving: string, refDatum: string): number {
+    const [jaar] = splitYearMonth(refDatum);
+    const dagenInJaar = isSchrikkeljaar(jaar) ? 366 : 365;
+    let gewogenSom = 0;
+    for (let maand = 1; maand <= 12; maand++) {
+        const maandStr = maand.toString().padStart(2, "0");
+        const maandenSinds = maandenSindsEersteInschrijving(datumEersteInschrijving, `${jaar}-${maandStr}-01`);
+        const coefficient = leeftijdsCoefficientVoorMaanden(maandenSinds);
+        gewogenSom += coefficient * dagenInMaand(jaar, maand);
+    }
+    return gewogenSom / dagenInJaar;
+}
+function isSchrikkeljaar(jaar: number): boolean {
+    return (jaar % 4 === 0 && jaar % 100 !== 0) || jaar % 400 === 0;
+}
+function dagenInMaand(jaar: number, maand: number): number {
+    return new Date(jaar, maand, 0).getDate();
 }
 function splitYearMonth(value: string): [
     number,

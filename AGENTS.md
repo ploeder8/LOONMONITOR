@@ -74,9 +74,41 @@ Schend deze grenzen niet. Kies de kleinste wijziging die het echte probleem oplo
 - Chat-antwoorden mogen alleen steunen op geindexeerde corpusbestanden uit `knowledgebase/` en `knowledgebase/onderzoek/`.
 - Gebruik geen `eval` of dynamische code-uitvoering.
 
+## Tokenzuinig Werken (verplicht)
+
+- **Read-strategie**
+  - Start met `rg -n` en lees daarna alleen gerichte snippets (`Get-Content -Skip/-First` of equivalent).
+  - Vermijd full-file reads van grote bestanden (zoals uitgebreide tests of corpusbestanden), tenzij expliciet nodig voor de wijziging.
+  - Hanteer **read-on-change**: herlees een bestand alleen na een eigen edit of wanneer een falende test direct naar dat bestand wijst.
+- **Diff-strategie**
+  - Gebruik standaard file-scoped diff (`git diff -- <file>`).
+  - Gebruik brede diffs alleen in release-/reviewcontext of wanneer de gebruiker dat expliciet vraagt.
+- **Zoek-strategie**
+  - Begin smal: specifiek pad + concreet patroon + filters.
+  - Verbreed pas bij geen hits of aantoonbare noodzaak.
+- **Test-strategie**
+  - Draai eerst 1 gerichte test op geraakt gedrag.
+  - Breid daarna uit naar een compacte regressieset alleen als de eerste test slaagt of wanneer gedeelde contracten geraakt zijn.
+  - Vermijd dubbele overlappende testruns zonder nieuwe informatie.
+- **Web/browse-strategie**
+  - Browse alleen voor tijdsgevoelige/externe feiten, expliciete bronverificatie of wanneer lokale context onvoldoende is.
+  - Werk lokale codebugs eerst lokaal uit.
+- **Tool-output discipline**
+  - Vermijd commands die onnodig veel output dumpen.
+  - Segmenteer inspectie in kleine, relevante outputblokken.
+
 ## Verificatie
 
 - Werk standaard tokenzuinig: bij kleine gerichte wijzigingen eerst alleen de directe runtime/UI-code, 1 gerichte zoekronde, 1 gerichte test en hoogstens de verplichte korte SSOT/MEMORY-update. Breid pas uit naar grote docs, corpusbestanden, brede audits of volledige testsets wanneer tests falen, gedeelde contracten geraakt zijn of de gebruiker dat expliciet vraagt.
 - Minimale checks zijn toegestaan zonder extra bevestiging: gerichte test, `bun test`, `bun run typecheck` of `bun run build` wanneer compiled code raakt.
 - Bij alleen documentatiewijzigingen volstaan woord-/regelchecks en gerichte zoekchecks.
 - Er is geen ESLint, Prettier of Biome. Houd bestaande stijl consistent.
+- **Stopvoorwaarden voor escalatie naar breed werk**
+  - Schaal pas op naar brede reads/diffs/tests als minimaal één van deze condities geldt: gerichte test faalt, wijziging raakt gedeelde contracten, of gebruiker vraagt expliciet om brede validatie/audit.
+  - Noteer bij escalatie in de eindboodschap kort waarom opgeschaald werd.
+
+## Standaard Eindrapportering
+
+- Sluit taken af met een kort statusblok:
+  - `Token discipline: reads X (gericht), tests Y (gericht/regressie), diffs Z (file-scoped), afwijking: ja/nee + reden`
+- Houd dit blok feitelijk, compact en zonder uitgebreide logging.

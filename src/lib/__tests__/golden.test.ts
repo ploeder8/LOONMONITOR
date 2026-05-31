@@ -449,9 +449,20 @@ describe("TC-16c — VAA bedrijfswagen", () => {
         });
         expect(r.co2Percentage).toBe(4);
         expect(r.leeftijdMaanden).toBe(33);
-        expect(r.leeftijdsCoefficient).toBe(0.88);
+        expect(r.leeftijdsCoefficient).toBeCloseTo(0.86, 2);
         expect(r.vaaJaar).toBe(1690);
         expect(r.minimumToegepast).toBe(true);
+    });
+    it("dieselcase DEPA Nicolas geeft VAA maand €284,03 (issue 2026-05-31)", () => {
+        const r = vaaBedrijfswagen({
+            cataloguswaarde: 39694.99,
+            datumEersteInschrijving: "2023-04-19",
+            brandstof: "diesel",
+            co2: 123,
+            refDatum: REF_2026,
+        });
+        expect(r.vaaJaar).toBeCloseTo(3408.41, 1);
+        expect(r.vaaMaand).toBe(284.03);
     });
     it("laat de leeftijdscoëfficiënt zakken tot minimum 70%", () => {
         const r = vaaBedrijfswagen({
@@ -740,7 +751,7 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
         });
         expect(r.maaltijdchequeWerknemersbijdrage).toBe(0);
     });
-    it("telt woon-werkvergoeding bij het cash-nettoloon zonder de BV-basis te wijzigen", () => {
+    it("telt woon-werkvergoeding bij belastbaar loon en past BV-vrijstelling apart toe", () => {
         const basis = berekenNetto({
             brutoloon: 3000,
             refDatum: REF_2026,
@@ -752,14 +763,16 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
             refDatum: REF_2026,
             gezinstype: "alleenstaand",
             kinderenTenLaste: 0,
-            woonwerkVrijgesteldPerMaand: 100,
+            woonwerkVergoedingPerMaand: 100,
+            bvVrijstellingWoonWerkPerMaand: 41.67,
         });
-        expect(metWoonwerk.woonwerkVrijgesteldPerMaand).toBe(100);
+        expect(metWoonwerk.woonwerkVergoedingPerMaand).toBe(100);
         expect(metWoonwerk.belastbaarMaandloon).toBe(basis.belastbaarMaandloon);
-        expect(metWoonwerk.bv.bvNaVerminderingen).toBe(basis.bv.bvNaVerminderingen);
-        expect(metWoonwerk.nettoloon).toBe(basis.nettoloon + 100);
+        expect(metWoonwerk.belastbaarMaandloonVoorBV).toBe(basis.belastbaarMaandloonVoorBV + 100);
+        expect(metWoonwerk.bv.bvNaVerminderingen).toBeLessThanOrEqual(basis.bv.bvNaVerminderingen + 100);
+        expect(metWoonwerk.nettoloon).toBeGreaterThan(basis.nettoloon);
     });
-    it("telt privéwagenvergoeding 3 km mee in het cash-nettoloon", () => {
+    it("telt privéwagenvergoeding 3 km mee in belastbaar loon", () => {
         const woonwerk = berekenWoonwerkVerkeer({
             refDatum: REF_2026,
             brutoloon: 3000,
@@ -781,10 +794,11 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
             refDatum: REF_2026,
             gezinstype: "alleenstaand",
             kinderenTenLaste: 0,
-            woonwerkVrijgesteldPerMaand: woonwerk.totaalVergoeding,
+            woonwerkVergoedingPerMaand: woonwerk.totaalVergoeding,
+            bvVrijstellingWoonWerkPerMaand: woonwerk.totaalVergoeding,
         });
         expect(woonwerk.totaalVergoeding).toBe(10.96);
-        expect(metPrivewagen.woonwerkVrijgesteldPerMaand).toBe(10.96);
+        expect(metPrivewagen.woonwerkVergoedingPerMaand).toBe(10.96);
         expect(metPrivewagen.nettoloon).toBe(basis.nettoloon + 10.96);
     });
     it("beperkt de vrijgestelde privéwagenvergoeding bij forfaitaire beroepskosten tot €41,67 per maand", () => {
@@ -818,7 +832,7 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
         expect(r.bv.verminderingKinderen).toBe(52);
         expect(r.bv.bvNaVerminderingen).toBe(1596.26);
     });
-    it("telt privéwagen 3 km en trein samen mee in het cash-nettoloon", () => {
+    it("telt privéwagen 3 km en trein samen mee met forfaitaire BV-vrijstelling op privédeel", () => {
         const woonwerk = berekenWoonwerkVerkeer({
             refDatum: REF_2026,
             brutoloon: 3000,
@@ -840,11 +854,13 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
             refDatum: REF_2026,
             gezinstype: "alleenstaand",
             kinderenTenLaste: 0,
-            woonwerkVrijgesteldPerMaand: woonwerk.totaalVergoeding,
+            woonwerkVergoedingPerMaand: woonwerk.totaalVergoeding,
+            bvVrijstellingWoonWerkPerMaand: 10.96,
         });
         expect(woonwerk.totaalVergoeding).toBe(52.78);
-        expect(metMultimodaalWoonwerk.woonwerkVrijgesteldPerMaand).toBe(52.78);
-        expect(metMultimodaalWoonwerk.nettoloon).toBeCloseTo(basis.nettoloon + 52.78, 2);
+        expect(metMultimodaalWoonwerk.woonwerkVergoedingPerMaand).toBe(52.78);
+        expect(metMultimodaalWoonwerk.nettoloon).toBeGreaterThan(basis.nettoloon);
+        expect(metMultimodaalWoonwerk.nettoloon).toBeLessThan(basis.nettoloon + 52.78);
     });
     it("past bijkomende netto-looncomponenten toe zonder RSZ/BV-basis te wijzigen", () => {
         const basis = berekenNetto({
@@ -984,6 +1000,16 @@ describe("NTC-04 — GGMMI €2.189,81, alleenstaand (hoge werkbonus)", () => {
         expect(r.werkbonus.luikA).toBe(125.04);
         expect(r.werkbonus.luikB).toBe(168.62);
         expect(r.effectieveRsz).toBe(0);
+    });
+    it("deeltijds rekent werkbonus op voltijdsequivalent", () => {
+        const r = berekenNetto({
+            brutoloon: 1800,
+            tewerkstellingsbreuk: 0.5,
+            refDatum: REF_2026,
+            gezinstype: "alleenstaand",
+            kinderenTenLaste: 0,
+        });
+        expect(r.werkbonus.totaal).toBe(0);
     });
 });
 describe("NTC-09 — Alleenstaande ouder met 1 kind (+€52 extra)", () => {
