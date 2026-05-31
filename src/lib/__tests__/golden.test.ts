@@ -523,6 +523,16 @@ describe("TC-21 — Werkbonus: hoog loon buiten bereik (SSOT factoren)", () => {
         expect(r.totaal).toBe(287.99);
         expect(r.vanaf1April2026).toBe(true);
     });
+    it("deeltijds past pro-rata toe op werkbonus na voltijdsequivalent-check", () => {
+        const voltijds = werkbonus({ brutoloon: 3066.18, refDatum: "2026-06-01" });
+        const deeltijds = werkbonus({
+            brutoloon: 3066.18,
+            refDatum: "2026-06-01",
+            tewerkstellingsbreuk: 0.8224,
+        });
+        expect(voltijds.totaal).toBe(74.15);
+        expect(deeltijds.totaal).toBe(60.98);
+    });
 });
 describe("TC-22 — BBSZ: schijven", () => {
     it("brutoloon € 1.900 (< € 1.945,38) geeft kwartaalbijdrage € 0", () => {

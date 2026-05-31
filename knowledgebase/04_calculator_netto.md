@@ -544,6 +544,7 @@ De zoekruimte wordt in **hele centen** beheerd om floating-point-stagnatie te vo
   - Alle overige profielvelden (gezinstype, kinderen, mobiliteit, werkgeversbijdragen) blijven identiek.
 - De resultatenpanels tonen de **volledige forward-keten** op basis van het gevonden bruto.
 - De barema-check vergelijkt voltijds met voltijds: PC 200-barema's zijn voltijdse maandlonen. Bij deeltijdse tewerkstelling blijft het ingegeven bruto het werkelijke deeltijdse maandloon voor netto/RSZ/BV/werkgeverskost, maar de minimumcontrole rekent dit loon om naar een voltijds equivalent (`bruto / tewerkstellingsbreuk`) en toont daarnaast het pro-rata minimum.
+- Voor sociale werkbonus bij deeltijdse tewerkstelling: bepaal eerst de toepasselijke luiken op basis van het voltijdsequivalent referentieloon (`bruto / tewerkstellingsbreuk`), pas daarna het resultaat pro-rata toe met de tewerkstellingsbreuk.
 
 ### 11.6 Scope-beperkingen (Fase 1)
 
