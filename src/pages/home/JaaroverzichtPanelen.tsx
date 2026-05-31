@@ -2,7 +2,7 @@ import { AuditSourceGroup } from "@/components/AuditPanel";
 import type { JaarcomponentNetto, JaaroverzichtResultaat } from "@/lib/jaaroverzicht";
 import { formatEUR, round2 } from "@/lib/money";
 import { berekenMaaltijdchequeWaarde } from "@/lib/profielBerekeningen";
-import { NettoRow, NettoSectionRow } from "@/pages/home/ResultRows";
+import { NettoRow, NettoSectionRow, NettoSpacerRow } from "@/pages/home/ResultRows";
 export function NettoJaaroverzichtPanel({ jaaroverzicht, maaltijdchequeWerkgeversaandeelPerDag, maaltijdchequeWerknemersbijdragePerDag, maaltijdchequeWerkdagenPerMaand, }: {
     jaaroverzicht: JaaroverzichtResultaat;
     maaltijdchequeWerkgeversaandeelPerDag: number;
@@ -40,12 +40,13 @@ export function NettoJaaroverzichtPanel({ jaaroverzicht, maaltijdchequeWerkgever
       </div>
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <tbody>
-          <NettoRow label="Netto maandloon × 12" bedrag={r.maandloonNettoX12} prefix="" variant="subtotal"/>
           <JaarComponentRows titel="Eindejaarspremie" component={r.eindejaarspremie}/>
           <JaarComponentRows titel="Dubbel vakantiegeld" component={r.dubbelVakantiegeld}/>
           <JaarComponentRows titel="Sectorale jaarpremie PC 200" component={r.jaarpremie}/>
           {r.bonus.bruto > 0 && <JaarComponentRows titel="Bonus" component={r.bonus}/>}
-          <NettoRow label="Ecocheques" bedrag={r.ecocheques} prefix="+" dimmed/>
+          <NettoRow label="Ecocheques" bedrag={r.ecocheques} prefix="+" variant="bruto"/>
+          <NettoSpacerRow/>
+          <NettoRow label="Netto maandloon × 12" bedrag={r.maandloonNettoX12} prefix="" variant="subtotal"/>
           <NettoRow label="Netto jaarloon" bedrag={r.totaalNettoJaarloon} prefix="" variant="total"/>
           {maaltijdcheques.totaleWaarde > 0 && (<NettoRow label={`Netto jaarloon incl. maaltijdcheques (totale waarde ${formatEUR(maaltijdcheques.totaleWaardePerDag)} × ${maaltijdcheques.werkdagen} werkdagen)`} bedrag={nettoJaarloonInclusiefMaaltijdcheques} prefix="" variant="subtotal"/>)}
         </tbody>
@@ -59,11 +60,12 @@ function JaarComponentRows({ titel, component, }: {
 }) {
     return (<>
       <NettoSectionRow label={titel}/>
-      <NettoRow label="Bruto" bedrag={component.bruto} prefix="+" dimmed/>
+      <NettoRow label="Bruto" bedrag={component.bruto} prefix="+" variant="bruto"/>
       <NettoRow label="RSZ werknemer" bedrag={component.rsz}/>
       <NettoRow label="Belastbaar loon" bedrag={component.belastbaar} prefix="" variant="subtotal"/>
       <NettoRow label={`Bedrijfsvoorheffing (${(component.bvTarief * 100).toFixed(2)} %)`} bedrag={component.bv}/>
-      <NettoRow label={`Netto ${titel.toLowerCase()}`} bedrag={component.netto} prefix="+" dimmed/>
+      <NettoRow label={`Netto ${titel.toLowerCase()}`} bedrag={component.netto} prefix="+" variant="netto"/>
+      <NettoSpacerRow/>
     </>);
 }
 export function WerkgeverJaaroverzichtPanel({ jaaroverzicht }: {

@@ -11,6 +11,7 @@ Kort projectlogboek voor wijzigingen door coding agents.
 
 ## Log
 
+- 2026-05-31 — Netto jaaroverzicht visueel herwerkt: bruto looncomponenten (`variant="bruto"`) groter en vet, netto bedragen (`variant="netto"`) in oranje (`--color-primary`), belastbaar loon blijft vet maar niet groter, witregels (`NettoSpacerRow`) tussen componenten, netto maandloon × 12 van onderen; `src/pages/home/JaaroverzichtPanelen.tsx`, `src/pages/home/ResultRows.tsx`; reden: gebruiker vroeg overzichtelijkere hiërarchie in het jaaroverzicht.
 - 2026-05-31 — Codebase-context gecomprimeerd: actieve TS/TSX-comments gestript, gedeelde documentprimitives/profiellabels toegevoegd en `docs/codebase-map.md` aangemaakt; reden: toekomstige tokencontext verkleinen zonder functionaliteit te wijzigen.
 - 2026-05-31 — BV-correcties voor expertcase Pieter C. toegevoegd: forfaitaire woon-werkvrijstelling verlaagt alleen de achterliggende BV-grondslag, sectorale PC 200-jaarpremie krijgt exceptionele BV, dubbel vakantiegeld is 92% van het brutomaandloon zonder VAA; reden: Jaakie week af van payrolloutput voor bedrijfsvoorheffing en jaarcomponenten.
 - 2026-05-31 — Agent-instructies gecomprimeerd: `AGENTS.md` teruggebracht tot hot-path regels en detailcontext verplaatst naar `docs/agent-reference.md`; reden: tokenverbruik reduceren zonder kwaliteitsrails te verliezen.
