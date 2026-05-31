@@ -11,7 +11,6 @@
 ```
 loonkost_maand = bruto_maandloon
                + RSZ_werkgever
-               + sectoraal_sociaal_fonds (PC 200)
                + arbeidsongevallen_verzekering
                + maandelijkse_extra_voordelen_werkgever
                − structurele_vermindering (indien van toepassing)
@@ -49,11 +48,9 @@ Samenstelling (RSZ-instructies werkgevers, peildatum 2026):
 
 ### 2.2 Sociaal Fonds 200
 
-**Tarief:** **0,23%** van bruto loon (werkgeversbijdrage).
+**Runtime-status Jaakie:** niet actief als aparte component.
 
-**Bron:** Sociaal Fonds 200 bevestigt op sfonds200.be dat de bijdrage **0,23% van de totale bruto loonmassa** bedraagt tot **31 december 2027**. Securex, Partena en CLB blijven Tier-2-triangulatie.
-
-Doel: financiering eindejaarspremie + collectieve voorzieningen + opleidingen.
+Sinds 2026-05-31 telt Jaakie de werkgeversbijdrage Sociaal Fonds 200 niet meer apart op in `rszBijdragen()` of `werkgeverskost()`. De werkgeverskost rekent met de globale patronale RSZ, arbeidsongevallenverzekering en expliciet gekozen voordelen. Sfonds200.be blijft wel bron voor andere sectorale PC 200-regels zoals jaarpremie, vervoerskosten en landingsbaan.
 
 ### 2.3 Arbeidsongevallen-verzekering
 
@@ -73,7 +70,7 @@ Voor PC 200-bedienden in een typisch bureauomgeving is 0,30% verdedigbaar als la
 
 ### 2.5 Dubbel vakantiegeld in jaaroverzicht
 
-**Bedrag:** **92% × maandloon incl. VAA**, betaalbaar in de vakantieperiode.
+**Bedrag:** **92% × brutomaandloon**, betaalbaar in de vakantieperiode.
 
 **Werkgeverskost jaarbasis:** tel het brutobedrag op als jaarlijkse component. Er wordt in deze loonmotor geen werkgevers-RSZ op dubbel vakantiegeld toegevoegd.
 
@@ -127,24 +124,21 @@ Met loongrens-categorieën specifiek per loonsegment (lage-lonen-component, hoge
 
 ```python
 RSZ_WERKGEVER_BASIS_PCT = 0.25
-SOCIAAL_FONDS_200_PCT   = 0.0023
 ARBEIDSONGEVALLEN_PCT   = 0.003
 DUBBEL_VAKANTIEGELD_PCT = 0.92
 
 def werkgeverskost_maand(bruto, structurele_vermindering=0, extra_voordelen=0):
     rsz_wg          = bruto * RSZ_WERKGEVER_BASIS_PCT
-    sf200           = bruto * SOCIAAL_FONDS_200_PCT
     ao_verz         = bruto * ARBEIDSONGEVALLEN_PCT
 
     totaal = (bruto
-              + rsz_wg + sf200 + ao_verz
+              + rsz_wg + ao_verz
               + extra_voordelen
               - structurele_vermindering)
 
     return {
       "bruto_maand": bruto,
       "rsz_werkgever": rsz_wg,
-      "sociaal_fonds_200": sf200,
       "arbeidsongevallen_verzekering": ao_verz,
       "extra_voordelen": extra_voordelen,
       "structurele_vermindering": structurele_vermindering,
@@ -180,14 +174,13 @@ De summary-strip gebruikt de maandelijkse loonkost. Het jaaroverzicht toont daar
 Van **bruto** naar **loonkost werkgever per jaar**, met balken voor:
 1. Bruto loon (basis)
 2. + RSZ werkgever
-3. + Sociaal Fonds 200
-4. + Arbeidsongevallen-verzekering
-5. + Maandelijkse extra voordelen
-6. = Loonkost maand × 12
-7. + Eindejaarspremie + jaarpremie + ecocheques
-8. + Werkgevers-RSZ op eindejaarspremie + jaarpremie
-9. + Dubbel vakantiegeld
-10. = Totale loonkost per jaar
+3. + Arbeidsongevallen-verzekering
+4. + Maandelijkse extra voordelen
+5. = Loonkost maand × 12
+6. + Eindejaarspremie + jaarpremie + ecocheques
+7. + Werkgevers-RSZ op eindejaarspremie + jaarpremie
+8. + Dubbel vakantiegeld
+9. = Totale loonkost per jaar
 
 ### 5.2 Donut-chart "wie krijgt wat van de loonkost?"
 
@@ -221,7 +214,7 @@ Bv. twee bruto-loonniveaus naast elkaar voor cliëntgesprek.
 | WG-01 | RSZ wg basis 19,88% — exacte 2026 cijfers | Nog te bevestigen via RSZ-instructies | Q3 2026 |
 | WG-02 | Loonmatigingsbijdrage 5,12% — definitief 2026? | Beoordelen tegen Programmawet 18/7/2025 | Q3 2026 |
 | WG-03 | Structurele vermindering helling 0,1600 — werkbare formule | KB 2/7/2025 BS 15/7/2025 | Implementeren |
-| WG-04 | Sociaal Fonds 200 — 0,23% tot 31/12/2027 | Bevestigd via sfonds200.be op 2026-05-24 | Geen actie |
+| WG-04 | Sociaal Fonds 200 — aparte 0,23%-component | Niet actief in Jaakie-runtime sinds 2026-05-31 | Niet opnieuw toevoegen zonder expliciete productbeslissing |
 | WG-05 | Werkgeverstussenkomst woon-werkverkeer (tarief 1/1/2026) | Sociaal Fonds 200 vervoerskostenpagina bevestigd op 2026-05-24 | Opnieuw checken bij volgende sectorupdate |
 
 ---
@@ -232,7 +225,6 @@ Bv. twee bruto-loonniveaus naast elkaar voor cliëntgesprek.
 |-----------|----------|------|
 | RSZ werkgever 25% | rsz.fgov.be/nl/werkgevers/bijdragen | 1 |
 | Loonmatigingsbijdrage | rsz.fgov.be (instructies werkgevers) | 1 |
-| Sociaal Fonds 200 (0,23%) | sfonds200.be financiering + Securex/Partena/CLB triangulatie | 1 |
 | Arbeidsongevallen-verzekering | Fedris verzekeringsplicht + Liantis/Securex kostprijsinformatie | 1 voor verplichting, geen tier voor indicatief tarief |
 | Eindejaarspremie PC 200 (cao 18/12/2025 + 15/1/2026) | sfonds200.be/cao | 1 |
 | Dubbel vakantiegeld bedienden (92%) | rva.fgov.be | 1 |

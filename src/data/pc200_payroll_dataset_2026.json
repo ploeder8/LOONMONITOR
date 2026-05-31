@@ -27,7 +27,7 @@
       "Bedrijfsvoorheffingsregels 2026 gepubliceerd via KB 11/12/2025 in BS 29/12/2025 (Bijlage III)",
       "Volledige sectorale baremamatrix PC 200 (Schaal I, Schaal II, studenten × Cat A/B/C/D) opgenomen vanaf 2026-05-08; primaire bron SSN (Tier 2), getrianguleerd met ACV en ACLVB (Tier 3) — alle 228 cellen onderling bevestigd",
       "Payroll-expertreview 2026-05-30: de vroegere bouw-subsetbijdrage aanvullend pensioen wordt niet langer als aparte runtimekost berekend; de werkgevers-RSZ blijft een globale raming en het bouwrecord blijft alleen als reviewspoor buiten runtime.",
-      "Sociaal Fonds 200 werkgeversbijdrage (0,23%) verlengd voor 1/1/2026–31/12/2027; bevestigd via sfonds200.be op 2026-05-24, met Partena Professional, Liantis en CLB Group als triangulatie",
+      "Sociaal Fonds 200 werkgeversbijdrage (0,23%) blijft als bronrecord aanwezig, maar wordt sinds 2026-05-31 niet meer als aparte runtimecomponent in Jaakie gebruikt",
       "Aanvullende gemeentebelasting: geen Tier-1 machine-leesbare lijst per gemeente beschikbaar; behandeld als UI-parameter (default 7,3%) met disclaimer — niet opgenomen als dataset-datapunt"
     ]
   },
@@ -1943,9 +1943,10 @@
           "overeenstemming": "100%"
         }
       ],
-      "status": "actief",
+      "status": "gemarkeerd_voor_review",
       "conflict_opmerking": null,
       "opmerkingen": [
+        "Productbeslissing 2026-05-31: Jaakie rekent deze 0,23%-bijdrage niet meer als aparte werkgeverskostcomponent; runtime gebruikt alleen globale patronale RSZ, arbeidsongevallen en gekozen voordelen.",
         "Bronronde 2026-05-24: primaire sectorbron sfonds200.be bevestigt tarief en geldigheidsperiode; Partena Professional, Liantis en CLB Group blijven triangulatie",
         "Bestemd voor financiering opleidingen, risicogroepen, eindejaarspremie en aanvullende sectorale voordelen via FBZ APCB"
       ]
@@ -2136,11 +2137,11 @@
       "normalisatie_toegepast": true,
       "normalisatie_opmerking": null,
       "status": "gemarkeerd_voor_review",
-      "conflict_opmerking": "Vervangen door runtime-berekening: provisie = (bruto + VAA) × 92% / 12",
+      "conflict_opmerking": "Vervangen door runtime-berekening: provisie = bruto × 92% / 12",
       "opmerkingen": [
         "Deze waarde (6,67%) is wiskundig inconsistent met 92%/12 = 7,67%.",
         "De loonmotor berekent de provisie nu runtime obv het aparte 92%-percentage-datapunt.",
-        "Payroll-expertreview 2026-05-30: verder brononderzoek vereist naar officiële wetsartikels en de looncomponenten/VAA die in de dubbel-vakantiegeldbasis moeten worden opgenomen."
+        "Payroll-expertcase 2026-05-31: dubbel vakantiegeld wordt berekend op het brutomaandloon zonder VAA."
       ]
     },
     {
@@ -2149,13 +2150,13 @@
       "subcategorie": "vakantiegeld",
       "type": "parameter",
       "pc": "200",
-      "omschrijving": "Percentage dubbel vakantiegeld bedienden ten opzichte van brutomaandloon inclusief VAA",
-      "waarde_bron": "92% van brutomaandloon inclusief VAA",
+      "omschrijving": "Percentage dubbel vakantiegeld bedienden ten opzichte van brutomaandloon",
+      "waarde_bron": "92% van brutomaandloon",
       "waarde_genormaliseerd": 0.92,
       "eenheid": "fractie",
       "valuta": "EUR",
       "frequentie": "jaarlijks",
-      "berekeningsbasis": "brutomaandloon inclusief VAA",
+      "berekeningsbasis": "brutomaandloon",
       "toepassingsgebied": [
         "bedienden – wettelijk algemeen kader, ook van toepassing op PC 200"
       ],
@@ -2946,7 +2947,7 @@
       "conflict_opmerking": null,
       "opmerkingen": [
         "Toepassing: refertejaarloon = (12 × normale bruto bezoldiging) − werknemers-RSZ 13,07%",
-        "Dubbel vakantiegeld gebruikt de kolom vakantiegeld; eindejaarspremie en bonussen gebruiken de kolom andere vergoedingen en toelagen; de sectorale PC 200-jaarpremie krijgt alleen werknemers-RSZ en geen BV",
+        "Dubbel vakantiegeld gebruikt de kolom vakantiegeld; eindejaarspremie, sectorale PC 200-jaarpremie en bonussen gebruiken de kolom andere vergoedingen en toelagen",
         "Bedrijfsvoorheffing wordt toegepast op het belastbare bedrag na toepasselijke werknemers-RSZ"
       ]
     },
@@ -4443,6 +4444,6 @@
     "triangulatie_uitgevoerd": true,
     "monotone_loonprogressie_gecheckt": true,
     "sectorpensioen_onderzocht": true,
-    "sociaal_fonds_200_bijdrage_geintegreerd": true
+    "sociaal_fonds_200_bijdrage_geintegreerd": false
   }
 }

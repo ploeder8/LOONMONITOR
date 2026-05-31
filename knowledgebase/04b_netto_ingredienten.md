@@ -420,9 +420,9 @@ Voor een **kompleet "totale werkgeverskost = bruto × X"** model is de volgende 
 ### 8.3 Vakantiegeld bedienden
 
 - **Enkel vakantiegeld:** = doorbetaald loon tijdens vakantie (geen aparte provisie; valt onder regulier brutoloon).
-- **Dubbel vakantiegeld:** **92% × bruto maandloon incl. VAA** per vakantiedienstjaar.
+- **Dubbel vakantiegeld:** **92% × bruto maandloon** per vakantiedienstjaar.
 - **RSZ werknemer:** 13,07% op **85/92** van het dubbel vakantiegeld.
-- **Maandelijkse provisie dubbel vakantiegeld (werkgeverskost):** **(bruto + VAA) × 92% / 12** — runtime berekend, niet hardcoded.
+- **Maandelijkse provisie dubbel vakantiegeld (werkgeverskost):** **bruto × 92% / 12** — runtime berekend, niet hardcoded.
 - **Bedrijfsvoorheffing op dubbel vakantiegeld:** bijzondere BV-schaal, kolom vakantiegeld, op belastbaar bedrag na RSZ.
 
 ### 8.4 Eindejaarspremie PC 200

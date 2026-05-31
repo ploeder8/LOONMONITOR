@@ -95,7 +95,7 @@ Belastingvrije som €11.180 voor AJ2027: cijfer afkomstig uit de [FOD Financië
 | Basis patronale RSZ | 24,92 % | [FOD WASO](https://werk.belgie.be/), [RSZ](https://www.socialsecurity.be/) (Tier 1) |
 | Loonmatigingsbijdrage | 7,48 % (op subset) | [FOD WASO](https://werk.belgie.be/) (Tier 1) |
 | **Effectief faciaal totaal** | **~25,00 %** (gecombineerd) | [RSZ](https://www.socialsecurity.be/) |
-| Sociaal Fonds 200 | 0,23 % | [sfonds200.be](https://www.sfonds200.be/) (Tier 1) |
+| Sociaal Fonds 200 | Niet actief als aparte runtimecomponent in Jaakie | Productbeslissing 2026-05-31: werkgeverskost rekent alleen globale patronale RSZ, arbeidsongevallen en gekozen voordelen |
 | Bouw-aanvullend pensioen (subset PC 200) | Niet actief in runtime | Payroll-expertreview 2026-05-30: niet apart bovenop de globale werkgevers-RSZ ramen zonder sterkere primaire parameterbron |
 
 **RSZ-loonplafond patronale 2026** = **€86.700/kwartaal** vanaf 1/1/2026.
@@ -235,7 +235,7 @@ Bedrijfswagen-formule: **cataloguswaarde × 6/7 × CO2-percentage**. CO2-percent
 | Woon-werk trein-vergoeding | 100 % NMBS-abonnement (KB 28/7/1962 + sectorale aanvulling PC 200) | PC 200 dataset |
 | Fietsvergoeding | KB-plafond € 0,36/km (2026 indexering) | [FOD WASO](https://werk.belgie.be/) |
 | Landingsbaan-supplement | €92,45/maand (sectoraal, vanaf 1/6/2026) | [Sociaal Fonds 200 — Tijdskrediet](https://www.sfonds200.be/nl/sectormaatregelen/tijdskrediet/) |
-| Sociaal Fonds 200 bijdrage werkgever | 0,23 % tot 31/12/2027 | [Sociaal Fonds 200 — Sociaal fonds](https://www.sfonds200.be/nl/sociaal-fonds/) |
+| Sociaal Fonds 200 bijdrage werkgever | Niet opgenomen in Jaakie-runtime | Productbeslissing 2026-05-31 |
 
 **Confidence:** HIGH voor sectorale verplichtingen en landingsbaanbedrag (Tier-1 sfonds200.be). Maaltijdcheque-uitvoering blijft ondernemingsafhankelijk omdat PC 200 geen sectorale maaltijdchequeverplichting heeft.
 
@@ -380,7 +380,7 @@ Het Belgische payroll-regelkader 2026 voor PC 200-bedienden steunt op **drie wet
 
 1. **RSZ (Programmawet 18/7/2025 + KB 6/10/2025):** vaste 13,07 %-werknemersbijdrage, 24,92 % + 7,48 % patronale tarieven, plafond €86.700/kw. Aangepast door sociale werkbonus 1/4/2026 die laagverdieners structureel afstemt op het verhoogde GGMMI €2.189,81.
 2. **Bedrijfsvoorheffing (KB 11/12/2025, BS 29/12/2025):** sleutelformule-paradigma sinds 2023, gekoppeld aan PB-tarieven 25/40/45/50 % (AJ 2027) en belastingvrije som €11.180. Verminderingen voor gezinslast (kinderen ten laste, andere personen) operationaliseren de fiscale draagkracht direct in de maandelijkse inhouding.
-3. **Sectorakkoord PC 200 (CAO 18/12/2025):** behoud Sociaal Fonds 200 0,23 %, eindejaarspremie 1 maandloon (anciënniteit verlaagd naar 3 jaar), jaarlijkse premie €330,84 — **maar geen** sectorale maaltijdcheque-verplichting. Maaltijdcheque-implementatie blijft een ondernemingskeuze, ook na de Wet van 19/11/2025 die een €2-marge toelaat bovenop de 0 % loonnorm.
+3. **Sectorakkoord PC 200 (CAO 18/12/2025):** eindejaarspremie 1 maandloon (anciënniteit verlaagd naar 3 jaar), jaarlijkse premie €330,84 — **maar geen** sectorale maaltijdcheque-verplichting. Jaakie rekent geen aparte Sociaal Fonds 200-bijdrage meer in de werkgeverskost. Maaltijdcheque-implementatie blijft een ondernemingskeuze, ook na de Wet van 19/11/2025 die een €2-marge toelaat bovenop de 0 % loonnorm.
 
 **Waarom deze drie pijlers samen kloppen:** de tax-shift component van het Arizona-akkoord (RSZ-plafond + werkbonus-aanpassing 1/4/2026 + voorgestelde BBSZ-reductie 2028) richt zich op netto-versterking voor lage- en middeninkomens, terwijl de PB-pijler voor de huidige runtime stabiel blijft (indexering KI 2,3000 + FOD Fin AJ 2027-schalen). Voor PC 200-bedienden levert dit op peildatum 2026-05-24 een **moderate netto-stijging** voor lonen rond GGMMI op, en **stabiele netto's** voor middeninkomens waarvoor de werkbonus uitdooft.
 

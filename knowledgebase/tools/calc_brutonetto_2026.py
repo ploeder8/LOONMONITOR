@@ -299,7 +299,6 @@ def bereken_netto(li: LoonInput) -> LoonResultaat:
 
 # Werkgevers-RSZ profitsector
 RSZ_WERKGEVER_BASIS_PCT = 0.25
-SOCIAAL_FONDS_200_PCT = 0.0023
 ARBEIDSONGEVALLEN_VERZEKERING_PCT = 0.003  # benadering bedienden bureau (sector-afhankelijk)
 
 # Provisies (jaarbasis omgezet naar % brutoloon)
@@ -312,13 +311,12 @@ def werkgeverskost_maand(bruto_maand: float, *,
                           extra_voordelen: float = 0.0) -> dict:
     """Totale loonkost werkgever — exclusief eventuele groepsverzekering, MC, ECO, hosp."""
     rsz_wg = round(bruto_maand * RSZ_WERKGEVER_BASIS_PCT, 2)
-    sf200 = round(bruto_maand * SOCIAAL_FONDS_200_PCT, 2)
     ao = round(bruto_maand * ARBEIDSONGEVALLEN_VERZEKERING_PCT, 2)
     eindejaarspremie_provisie = round(bruto_maand * PROVISIE_EINDEJAARSPREMIE_PCT, 2)
     vakantiegeld_provisie = round(bruto_maand * PROVISIE_DUBBEL_VAKANTIEGELD_PCT, 2)
     totaal = round(
         bruto_maand
-        + rsz_wg + sf200 + ao
+        + rsz_wg + ao
         + eindejaarspremie_provisie + vakantiegeld_provisie
         + extra_voordelen
         - structurele_vermindering,
@@ -327,7 +325,6 @@ def werkgeverskost_maand(bruto_maand: float, *,
     return {
         "bruto_maand": bruto_maand,
         "rsz_werkgever": rsz_wg,
-        "sociaal_fonds_200": sf200,
         "arbeidsongevallen_verzekering": ao,
         "provisie_eindejaarspremie": eindejaarspremie_provisie,
         "provisie_dubbel_vakantiegeld": vakantiegeld_provisie,

@@ -20,7 +20,7 @@ Jaakie gebruikt een HashRouter met deze hoofdonderdelen:
 | Route | Functie |
 |---|---|
 | `/` | Profiel en calculator. Gebruikers voeren loon-, arbeids- en voordeelgegevens in en zien resultaten met audit-trail. |
-| `/loonfiche` | Pro-forma loonfiche voor één werknemer. Toont een document-achtige weergave van brutoloon → netto met alle tussenstappen, vergelijkbaar met een loonbrief maar expliciet gelabeld als pro-forma. Deelt profielstate met de calculator. Ondersteunt identificatievelden (werknemer-/werkgevernaam en -referentie), print en audit-toggle. |
+| `/loonfiche` | Pro-forma loonfiche voor één werknemer. Toont een document-achtige weergave van brutoloon → netto met alle tussenstappen, vergelijkbaar met een loonbrief maar expliciet gelabeld als pro-forma. Deelt binnen hetzelfde browservenster de profielstate met de calculator. Ondersteunt identificatievelden (werknemer-/werkgevernaam en -referentie), print en audit-toggle. |
 | `/loonrun` | Multi-werknemer loonrun. Importeert een multi-row CSV, berekent alle werknemers geïsoleerd, toont een overzichtstabel met totalen en laat individuele loonfiches bekijken per werknemer. |
 | `/testcases` | Overzicht van testcases en validatiecontext. |
 | `/scope` | Scope, bekende beperkingen en manco's. |
@@ -62,7 +62,7 @@ De belangrijkste modules zijn:
 - voordeelmodules voor eindejaarspremie, jaarpremie, ecocheques, fietsvergoeding, woon-werkverkeer, trein en VAA.
 
 Voor jaarcomponenten gebruikt Jaakie de bijzondere BV-schaal van Bijlage III:
-eindejaarspremie en dubbel vakantiegeld krijgen een tarief op basis van het normale refertejaarloon, terwijl eventuele kindvrijstelling of kindvermindering de aparte regels voor exceptionele vergoedingen volgt. De gewone maandelijkse BV-kindvermindering wordt niet opnieuw rechtstreeks afgetrokken van deze jaarcomponenten. De sectorale PC 200-jaarpremie houdt wel werknemers-RSZ in, maar geen bedrijfsvoorheffing.
+eindejaarspremie, sectorale jaarpremie en dubbel vakantiegeld krijgen een tarief op basis van het normale refertejaarloon, terwijl eventuele kindvrijstelling of kindvermindering de aparte regels voor exceptionele vergoedingen volgt. De gewone maandelijkse BV-kindvermindering wordt niet opnieuw rechtstreeks afgetrokken van deze jaarcomponenten. De sectorale PC 200-jaarpremie gebruikt dezelfde bijzondere BV-kolom als de eindejaarspremie. Dubbel vakantiegeld is 92% van het brutomaandloon.
 
 De bonusinvoer hoort bij de extra looncomponenten. Gebruikers kiezen of het ingevoerde bedrag per maand of per jaar is; Jaakie rekent dit altijd om naar een eenmalige jaarbonus. De bonus telt niet mee in het gewone maandnetto, netto-bruto, barema, werkbonus, BBSZ of maandelijkse werkgeverskost. In het jaaroverzicht wordt de bonus behandeld als andere exceptionele vergoeding: 13,07% werknemers-RSZ, bijzondere BV volgens Bijlage III en 25% patronale RSZ in de werkgeversjaarcomponent.
 
@@ -89,7 +89,7 @@ De knop **"Print overzicht"** opent een estetisch, print-vriendelijk document vo
 - **Header**: Jaakie brand, titel "Loonoverzicht", periode, statuut, werknemer-/werkgever-metadata.
 - **Executive summary**: 6 cards met bruto, netto (maand), werkgeverskost, loonwig, netto (jaar), werkgeverskost (jaar).
 - **Netto loon tabel**: bruto → RSZ → werkbonus → belastbaar loon → bedrijfsvoorheffing → BBSZ → netto te betalen.
-- **Werkgeverskost tabel**: brutoloon → RSZ werkgever → Sociaal Fonds 200 → provisies → totale werkgeverskost.
+- **Werkgeverskost tabel**: brutoloon → RSZ werkgever → arbeidsongevallen → provisies → totale werkgeverskost.
 - **Jaaroverzicht**: netto- en werkgeverskant met eindejaarspremie, vakantiegeld, jaarpremie, bonus en ecocheques.
 - **Footer**: pro-forma disclaimer.
 
@@ -99,12 +99,13 @@ Het overzicht is **print-vriendelijk** (A4 via `@media print`) en bevat geen aud
 
 ## Loonfiche
 
-De loonfiche-pagina (`#/loonfiche`) toont een pro-forma loonfiche per huidig profiel. De profielstate wordt gedeeld met de calculator via `localStorage`; wijzigingen op één pagina zijn zichtbaar op de andere.
+De loonfiche-pagina (`#/loonfiche`) toont een pro-forma loonfiche per huidig profiel. De profielstate wordt binnen hetzelfde browservenster gedeeld met de calculator via `sessionStorage`; wijzigingen op één pagina zijn zichtbaar op de andere route in dat venster. Andere browservensters kunnen onafhankelijk andere inputscenario's hebben.
 
 ### Gedeelde profielstate
 
-- `HomePage` en `LoonfichePage` lezen/schrijven hetzelfde profiel via `useSharedProfiel()` → `localStorage` key `jaakie:profiel`.
-- Fallback naar `DEFAULTS` wanneer localStorage leeg is.
+- `HomePage` en `LoonfichePage` lezen/schrijven hetzelfde profiel via `useSharedProfiel()` → `sessionStorage` key `jaakie:profiel`.
+- Fallback naar `DEFAULTS` wanneer de vensteropslag leeg is.
+- Een refresh binnen hetzelfde venster behoudt de inputs; een tweede browservenster kan apart worden ingevuld zonder het eerste venster te overschrijven.
 
 ### Loonfiche regels
 

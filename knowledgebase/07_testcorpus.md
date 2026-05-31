@@ -2,7 +2,7 @@
 
 **Versie:** 2026-05-23
 
-> **Wijziging 2026-05-23:** Het corpus is gelijkgetrokken met de huidige code-status: BV-validatie gebruikt FOD Financiën / Bijlage III 2026 als primaire payrollbron, `TESTCASES.json` bevat 30 cases met `status_validatie: "ok"`, BBSZ gebruikt de 2026-voorschotformules en netto → bruto heeft een aparte regressiesuite. De tabel hieronder is een corpusweergave; de exacte runtime-waarheid blijft de test-suite.
+> **Wijziging 2026-05-23:** Het corpus is gelijkgetrokken met de huidige code-status: BV-validatie gebruikt FOD Financiën / Bijlage III 2026 als primaire payrollbron, `TESTCASES.json` bevat 30 cases met `status_validatie: "ok"`, BBSZ gebruikt de 2026-voorschotformules, netto → bruto heeft een aparte regressiesuite en de aparte Sociaal Fonds 200-werkgeversbijdrage is uit de werkgeverskost gehaald. De tabel hieronder is een corpusweergave; de exacte runtime-waarheid blijft de test-suite.
 **Drie testlagen** (van regressie naar corpusvalidatie):
 
 | Laag | Naam | Aantal | Bestand | Status |
@@ -155,12 +155,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €2189.81 |
 | RSZ-werkgever (~25%) | €547.45 |
-| Sociaal Fonds 200 (0,23%) | €5.04 |
 | Arbeidsongevallen-verzekering (~0,3%) | €6.57 |
 | Provisie eindejaarspremie (~8,33%) | €182.41 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €146.06 |
-| **Totale loonkost werkgever** | **€3077.34** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€3072.30** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Notities:**
 - RSZ-vermindering geplafonneerd op 0
@@ -205,12 +204,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €2300.00 |
 | RSZ-werkgever (~25%) | €575.00 |
-| Sociaal Fonds 200 (0,23%) | €5.29 |
 | Arbeidsongevallen-verzekering (~0,3%) | €6.90 |
 | Provisie eindejaarspremie (~8,33%) | €191.59 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €153.41 |
-| **Totale loonkost werkgever** | **€3232.19** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€3226.90** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
@@ -252,12 +250,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €2500.00 |
 | RSZ-werkgever (~25%) | €625.00 |
-| Sociaal Fonds 200 (0,23%) | €5.75 |
 | Arbeidsongevallen-verzekering (~0,3%) | €7.50 |
 | Provisie eindejaarspremie (~8,33%) | €208.25 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €166.75 |
-| **Totale loonkost werkgever** | **€3513.25** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€3507.50** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
@@ -299,12 +296,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €2800.00 |
 | RSZ-werkgever (~25%) | €700.00 |
-| Sociaal Fonds 200 (0,23%) | €6.44 |
 | Arbeidsongevallen-verzekering (~0,3%) | €8.40 |
 | Provisie eindejaarspremie (~8,33%) | €233.24 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €186.76 |
-| **Totale loonkost werkgever** | **€3934.84** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€3928.40** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
@@ -346,12 +342,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €3000.00 |
 | RSZ-werkgever (~25%) | €750.00 |
-| Sociaal Fonds 200 (0,23%) | €6.90 |
 | Arbeidsongevallen-verzekering (~0,3%) | €9.00 |
 | Provisie eindejaarspremie (~8,33%) | €249.90 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €200.10 |
-| **Totale loonkost werkgever** | **€4215.90** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€4209.00** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
@@ -393,12 +388,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €3336.98 |
 | RSZ-werkgever (~25%) | €834.25 |
-| Sociaal Fonds 200 (0,23%) | €7.68 |
 | Arbeidsongevallen-verzekering (~0,3%) | €10.01 |
 | Provisie eindejaarspremie (~8,33%) | €277.97 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €222.58 |
-| **Totale loonkost werkgever** | **€4689.47** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€4681.79** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
@@ -440,12 +434,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €3500.00 |
 | RSZ-werkgever (~25%) | €875.00 |
-| Sociaal Fonds 200 (0,23%) | €8.05 |
 | Arbeidsongevallen-verzekering (~0,3%) | €10.50 |
 | Provisie eindejaarspremie (~8,33%) | €291.55 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €233.45 |
-| **Totale loonkost werkgever** | **€4918.55** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€4910.50** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
@@ -487,12 +480,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €4000.00 |
 | RSZ-werkgever (~25%) | €1000.00 |
-| Sociaal Fonds 200 (0,23%) | €9.20 |
 | Arbeidsongevallen-verzekering (~0,3%) | €12.00 |
 | Provisie eindejaarspremie (~8,33%) | €333.20 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €266.80 |
-| **Totale loonkost werkgever** | **€5621.20** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€5612.00** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
@@ -534,12 +526,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €4500.00 |
 | RSZ-werkgever (~25%) | €1125.00 |
-| Sociaal Fonds 200 (0,23%) | €10.35 |
 | Arbeidsongevallen-verzekering (~0,3%) | €13.50 |
 | Provisie eindejaarspremie (~8,33%) | €374.85 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €300.15 |
-| **Totale loonkost werkgever** | **€6323.85** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€6313.50** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
@@ -581,12 +572,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €5000.00 |
 | RSZ-werkgever (~25%) | €1250.00 |
-| Sociaal Fonds 200 (0,23%) | €11.50 |
 | Arbeidsongevallen-verzekering (~0,3%) | €15.00 |
 | Provisie eindejaarspremie (~8,33%) | €416.50 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €333.50 |
-| **Totale loonkost werkgever** | **€7026.50** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€7015.00** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
@@ -628,12 +618,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €5500.00 |
 | RSZ-werkgever (~25%) | €1375.00 |
-| Sociaal Fonds 200 (0,23%) | €12.65 |
 | Arbeidsongevallen-verzekering (~0,3%) | €16.50 |
 | Provisie eindejaarspremie (~8,33%) | €458.15 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €366.85 |
-| **Totale loonkost werkgever** | **€7729.15** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€7716.50** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
@@ -677,12 +666,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €2500.00 |
 | RSZ-werkgever (~25%) | €625.00 |
-| Sociaal Fonds 200 (0,23%) | €5.75 |
 | Arbeidsongevallen-verzekering (~0,3%) | €7.50 |
 | Provisie eindejaarspremie (~8,33%) | €208.25 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €166.75 |
-| **Totale loonkost werkgever** | **€3513.25** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€3507.50** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
@@ -729,12 +717,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €3000.00 |
 | RSZ-werkgever (~25%) | €750.00 |
-| Sociaal Fonds 200 (0,23%) | €6.90 |
 | Arbeidsongevallen-verzekering (~0,3%) | €9.00 |
 | Provisie eindejaarspremie (~8,33%) | €249.90 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €200.10 |
-| **Totale loonkost werkgever** | **€4215.90** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€4209.00** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
@@ -784,12 +771,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €3500.00 |
 | RSZ-werkgever (~25%) | €875.00 |
-| Sociaal Fonds 200 (0,23%) | €8.05 |
 | Arbeidsongevallen-verzekering (~0,3%) | €10.50 |
 | Provisie eindejaarspremie (~8,33%) | €291.55 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €233.45 |
-| **Totale loonkost werkgever** | **€4918.55** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€4910.50** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
@@ -836,12 +822,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €4000.00 |
 | RSZ-werkgever (~25%) | €1000.00 |
-| Sociaal Fonds 200 (0,23%) | €9.20 |
 | Arbeidsongevallen-verzekering (~0,3%) | €12.00 |
 | Provisie eindejaarspremie (~8,33%) | €333.20 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €266.80 |
-| **Totale loonkost werkgever** | **€5621.20** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€5612.00** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
@@ -888,12 +873,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €4500.00 |
 | RSZ-werkgever (~25%) | €1125.00 |
-| Sociaal Fonds 200 (0,23%) | €10.35 |
 | Arbeidsongevallen-verzekering (~0,3%) | €13.50 |
 | Provisie eindejaarspremie (~8,33%) | €374.85 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €300.15 |
-| **Totale loonkost werkgever** | **€6323.85** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€6313.50** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
@@ -940,12 +924,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €3500.00 |
 | RSZ-werkgever (~25%) | €875.00 |
-| Sociaal Fonds 200 (0,23%) | €8.05 |
 | Arbeidsongevallen-verzekering (~0,3%) | €10.50 |
 | Provisie eindejaarspremie (~8,33%) | €291.55 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €233.45 |
-| **Totale loonkost werkgever** | **€4918.55** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€4910.50** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
@@ -987,12 +970,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €6000.00 |
 | RSZ-werkgever (~25%) | €1500.00 |
-| Sociaal Fonds 200 (0,23%) | €13.80 |
 | Arbeidsongevallen-verzekering (~0,3%) | €18.00 |
 | Provisie eindejaarspremie (~8,33%) | €499.80 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €400.20 |
-| **Totale loonkost werkgever** | **€8431.80** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€8418.00** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
@@ -1035,12 +1017,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €6500.00 |
 | RSZ-werkgever (~25%) | €1625.00 |
-| Sociaal Fonds 200 (0,23%) | €14.95 |
 | Arbeidsongevallen-verzekering (~0,3%) | €19.50 |
 | Provisie eindejaarspremie (~8,33%) | €541.45 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €433.55 |
-| **Totale loonkost werkgever** | **€9134.45** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€9119.50** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
@@ -1085,12 +1066,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €7000.00 |
 | RSZ-werkgever (~25%) | €1750.00 |
-| Sociaal Fonds 200 (0,23%) | €16.10 |
 | Arbeidsongevallen-verzekering (~0,3%) | €21.00 |
 | Provisie eindejaarspremie (~8,33%) | €583.10 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €466.90 |
-| **Totale loonkost werkgever** | **€9837.10** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€9821.00** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
@@ -1132,12 +1112,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €7500.00 |
 | RSZ-werkgever (~25%) | €1875.00 |
-| Sociaal Fonds 200 (0,23%) | €17.25 |
 | Arbeidsongevallen-verzekering (~0,3%) | €22.50 |
 | Provisie eindejaarspremie (~8,33%) | €624.75 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €500.25 |
-| **Totale loonkost werkgever** | **€10539.75** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€10522.50** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
@@ -1181,12 +1160,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €8500.00 |
 | RSZ-werkgever (~25%) | €2125.00 |
-| Sociaal Fonds 200 (0,23%) | €19.55 |
 | Arbeidsongevallen-verzekering (~0,3%) | €25.50 |
 | Provisie eindejaarspremie (~8,33%) | €708.05 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €566.95 |
-| **Totale loonkost werkgever** | **€11945.05** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€11925.50** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
@@ -1232,12 +1210,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €4000.00 |
 | RSZ-werkgever (~25%) | €1000.00 |
-| Sociaal Fonds 200 (0,23%) | €9.20 |
 | Arbeidsongevallen-verzekering (~0,3%) | €12.00 |
 | Provisie eindejaarspremie (~8,33%) | €333.20 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €266.80 |
-| **Totale loonkost werkgever** | **€5621.20** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€5612.00** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
@@ -1282,12 +1259,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €5000.00 |
 | RSZ-werkgever (~25%) | €1250.00 |
-| Sociaal Fonds 200 (0,23%) | €11.50 |
 | Arbeidsongevallen-verzekering (~0,3%) | €15.00 |
 | Provisie eindejaarspremie (~8,33%) | €416.50 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €333.50 |
-| **Totale loonkost werkgever** | **€7026.50** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€7015.00** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
@@ -1334,12 +1310,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €7000.00 |
 | RSZ-werkgever (~25%) | €1750.00 |
-| Sociaal Fonds 200 (0,23%) | €16.10 |
 | Arbeidsongevallen-verzekering (~0,3%) | €21.00 |
 | Provisie eindejaarspremie (~8,33%) | €583.10 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €466.90 |
-| **Totale loonkost werkgever** | **€9837.10** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€9821.00** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
@@ -1382,12 +1357,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €3500.00 |
 | RSZ-werkgever (~25%) | €875.00 |
-| Sociaal Fonds 200 (0,23%) | €8.05 |
 | Arbeidsongevallen-verzekering (~0,3%) | €10.50 |
 | Provisie eindejaarspremie (~8,33%) | €291.55 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €233.45 |
-| **Totale loonkost werkgever** | **€4918.55** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€4910.50** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
@@ -1429,12 +1403,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €10000.00 |
 | RSZ-werkgever (~25%) | €2500.00 |
-| Sociaal Fonds 200 (0,23%) | €23.00 |
 | Arbeidsongevallen-verzekering (~0,3%) | €30.00 |
 | Provisie eindejaarspremie (~8,33%) | €833.00 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €667.00 |
-| **Totale loonkost werkgever** | **€14053.00** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€14030.00** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
@@ -1476,12 +1449,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €15000.00 |
 | RSZ-werkgever (~25%) | €3750.00 |
-| Sociaal Fonds 200 (0,23%) | €34.50 |
 | Arbeidsongevallen-verzekering (~0,3%) | €45.00 |
 | Provisie eindejaarspremie (~8,33%) | €1249.50 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €1000.50 |
-| **Totale loonkost werkgever** | **€21079.50** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€21045.00** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Status validatie:** `ok` (FOD Bijlage III 2026, tolerantie ±€5.00)
 
@@ -1528,12 +1500,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €2189.81 |
 | RSZ-werkgever (~25%) | €547.45 |
-| Sociaal Fonds 200 (0,23%) | €5.04 |
 | Arbeidsongevallen-verzekering (~0,3%) | €6.57 |
 | Provisie eindejaarspremie (~8,33%) | €182.41 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €146.06 |
-| **Totale loonkost werkgever** | **€3077.34** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€3072.30** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Notities:**
 - RSZ-vermindering geplafonneerd op 0
@@ -1583,12 +1554,11 @@ Originele kop van het corpus:
 |---|---:|
 | Bruto loon | €4500.00 |
 | RSZ-werkgever (~25%) | €1125.00 |
-| Sociaal Fonds 200 (0,23%) | €10.35 |
 | Arbeidsongevallen-verzekering (~0,3%) | €13.50 |
 | Provisie eindejaarspremie (~8,33%) | €374.85 |
 | Provisie dubbel vakantiegeld (berekend: 92% × bruto / 12) | €300.15 |
-| **Totale loonkost werkgever** | **€6323.85** |
-| Loonwig (totaal − bruto) / totaal | 28.8% |
+| **Totale loonkost werkgever** | **€6313.50** |
+| Loonwig (totaal − bruto) / totaal | 28.7% |
 
 **Notities:**
 - BBSZ benadering: bij twee inkomens kan band en bedrag verschillen — definitieve afrekening in PB-aangifte AJ 2027.
@@ -1635,7 +1605,7 @@ Een invoer van €100 per maand moet exact dezelfde jaarbonus opleveren als €1
 - **Belastingschalen AJ 2027 + belastingvrije som €11.180 + kostenforfait €6.070** — FOD Financiën belastingtarieven en beroepsinkomen, met Practicali/Wolters Kluwer als triangulatie
 - **GGMMI €2.189,81 vanaf 1/4/2026** — Acerta (snapshot 06), CAO 43/18 NAR 24/3/2026
 - **BBSZ-banden** — Liantis (snapshot 07), gevalideerd tegen Groups
-- **PC 200 indexering 2,21% + jaarlijkse premie €330,84 + Sociaal Fonds 200 0,23%** — sfonds200.be (snapshot 08)
+- **PC 200 indexering 2,21% + jaarlijkse premie €330,84** — sfonds200.be (snapshot 08)
 - **RSZ werknemer 13,07% + werkgever ~25%** — RSZ instructies werkgevers
 - **VAA bedrijfswagen min. €1.690 / ref-CO₂ 58/70 g/km AJ 2027** — FOD Financiën bedrijfswagens
 

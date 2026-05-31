@@ -33,7 +33,7 @@
 | `rsz_werkgever_profit_basis` | actief | Tier 1 | Faciaal tarief werkgeversbijdrage RSZ – privé profitsector (na taxshift sinds 1/1/2018) |
 | `rsz_basis_arbeiders_108` | actief | Tier 1 | Berekeningsbasis RSZ-bijdragen voor arbeiders (108% brutoloon) – ter contrast met bedienden (100%) |
 | `rsz_bijzondere_bijdragen_verwijzing` | actief | Tier 1 | Bijzondere RSZ-bijdragen (extralegale pensioenen, FSO, CO2-solidariteitsbijdrage bedrijfswagens, dubbel vakantiegeld, solidariteitsbijdrage winstdeelname, bijzondere bijdrage sociale zekerheid) |
-| `rsz_pc200_sociaal_fonds_200_werkgeversbijdrage_2026` | actief | Tier 1 | Werkgeversbijdrage Sociaal Fonds 200 (FBZ APCB) – sectorale bijdrage op brutolonen PC 200, verlengd voor 2026-2027 |
+| `rsz_pc200_sociaal_fonds_200_werkgeversbijdrage_2026` | gemarkeerd_voor_review | Tier 1 | Historisch bronrecord; niet langer gebruikt als aparte runtimecomponent in Jaakie |
 | `rsz_pc200_bouw_aanvullend_pensioen_2026` | gemarkeerd_voor_review | Tier 3 | Sectoraal aanvullend pensioen voor bouwsector-subset binnen PC 200 (solidariteitsluik) – niet actief in runtime |
 | `arbeidsongevallen_bedienden_2026` | actief | Tier 3 | Arbeidsongevallenverzekering — indicatieve werkgeverskost bedienden bureaupersoneel, configureerbaar per werkgever |
 | `provisie_eindejaarspremie_2026` | actief | Tier 1 | Provisie eindejaarspremie (13e maand): 8,33% (= 1/12) van brutoloon op werkgeverskost |
@@ -123,5 +123,5 @@
 - Bedrijfsvoorheffingsregels 2026 gepubliceerd via KB 11/12/2025 in BS 29/12/2025 (Bijlage III)
 - Volledige sectorale baremamatrix PC 200 (Schaal I, Schaal II, studenten × Cat A/B/C/D) opgenomen vanaf 2026-05-08; primaire bron SSN (Tier 2), getrianguleerd met ACV en ACLVB (Tier 3) — alle 228 cellen onderling bevestigd
 - Payroll-expertreview 2026-05-30: de vroegere bouw-subsetbijdrage aanvullend pensioen wordt niet langer als aparte runtimekost berekend; de werkgevers-RSZ blijft een globale raming en het bouwrecord blijft alleen als reviewspoor buiten runtime.
-- Sociaal Fonds 200 werkgeversbijdrage (0,23%) verlengd voor 1/1/2026–31/12/2027; bevestigd via sfonds200.be op 2026-05-24, met Partena Professional, Liantis en CLB Group als triangulatie
+- Sociaal Fonds 200 werkgeversbijdrage (0,23%) blijft als bronrecord aanwezig, maar wordt sinds 2026-05-31 niet meer als aparte runtimecomponent in Jaakie gebruikt
 - Aanvullende gemeentebelasting: geen Tier-1 machine-leesbare lijst per gemeente beschikbaar; behandeld als UI-parameter (default 7,3%) met disclaimer — niet opgenomen als dataset-datapunt

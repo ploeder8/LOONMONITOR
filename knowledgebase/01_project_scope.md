@@ -23,7 +23,7 @@
 ### RSZ
 - Werknemer 13,07 %
 - Werkgever ~25 % (basis + loonmatigingsbijdrage)
-- Sociaal Fonds 200 (0,23 %)
+- Geen aparte Sociaal Fonds 200-bijdrage in runtime; werkgevers-RSZ blijft de globale ~25 %-raming.
 - Geen aparte bouw-subsetbijdrage meer: de vroegere 1,80 %-opt-in wordt niet als runtimekost berekend; werkgevers-RSZ blijft een globale raming.
 
 ### Netto-laag (uitgebreid)
@@ -39,12 +39,12 @@
 
 ### Werkgeverskost-laag
 - Patronale RSZ (~25 %)
-- Sociaal Fonds 200 (0,23 %)
+- Geen aparte Sociaal Fonds 200-bijdrage
 - Arbeidsongevallenverzekering (~0,3 %, bureaupersoneel)
 - Optionele werkgeverscomponenten: groepsverzekering, hospitalisatieverzekering en maaltijdcheques
 - Maandelijkse loonkost zonder jaarlijkse componenten
 - Jaaroverzicht met eindejaarspremie, jaarpremie, ecocheques en dubbel vakantiegeld
-- Dubbel vakantiegeld: runtime-berekening `(bruto + VAA) × 92 % / 12` in het maandbeeld
+- Dubbel vakantiegeld: runtime-berekening `bruto × 92 % / 12` in het maandbeeld
 - **Loonwig %** = (totale loonkost − netto) / totale loonkost
 
 ### Premies & voordelen (sectoraal PC 200)

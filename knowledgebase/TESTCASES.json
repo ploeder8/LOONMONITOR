@@ -32,14 +32,13 @@
     "werkgeverskost": {
       "bruto_maand": 2189.81,
       "rsz_werkgever": 547.45,
-      "sociaal_fonds_200": 5.04,
       "arbeidsongevallen_verzekering": 6.57,
       "provisie_eindejaarspremie": 182.41,
       "provisie_dubbel_vakantiegeld": 146.06,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 3077.34,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 3072.3,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -81,14 +80,13 @@
     "werkgeverskost": {
       "bruto_maand": 2300.0,
       "rsz_werkgever": 575.0,
-      "sociaal_fonds_200": 5.29,
       "arbeidsongevallen_verzekering": 6.9,
       "provisie_eindejaarspremie": 191.59,
       "provisie_dubbel_vakantiegeld": 153.41,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 3232.19,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 3226.9,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -130,14 +128,13 @@
     "werkgeverskost": {
       "bruto_maand": 2500.0,
       "rsz_werkgever": 625.0,
-      "sociaal_fonds_200": 5.75,
       "arbeidsongevallen_verzekering": 7.5,
       "provisie_eindejaarspremie": 208.25,
       "provisie_dubbel_vakantiegeld": 166.75,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 3513.25,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 3507.5,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -180,14 +177,13 @@
     "werkgeverskost": {
       "bruto_maand": 2800.0,
       "rsz_werkgever": 700.0,
-      "sociaal_fonds_200": 6.44,
       "arbeidsongevallen_verzekering": 8.4,
       "provisie_eindejaarspremie": 233.24,
       "provisie_dubbel_vakantiegeld": 186.76,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 3934.84,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 3928.4,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -229,14 +225,13 @@
     "werkgeverskost": {
       "bruto_maand": 3000.0,
       "rsz_werkgever": 750.0,
-      "sociaal_fonds_200": 6.9,
       "arbeidsongevallen_verzekering": 9.0,
       "provisie_eindejaarspremie": 249.9,
       "provisie_dubbel_vakantiegeld": 200.1,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 4215.9,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 4209.0,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -278,14 +273,13 @@
     "werkgeverskost": {
       "bruto_maand": 3336.98,
       "rsz_werkgever": 834.25,
-      "sociaal_fonds_200": 7.68,
       "arbeidsongevallen_verzekering": 10.01,
       "provisie_eindejaarspremie": 277.97,
       "provisie_dubbel_vakantiegeld": 222.58,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 4689.47,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 4681.79,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -328,14 +322,13 @@
     "werkgeverskost": {
       "bruto_maand": 3500.0,
       "rsz_werkgever": 875.0,
-      "sociaal_fonds_200": 8.05,
       "arbeidsongevallen_verzekering": 10.5,
       "provisie_eindejaarspremie": 291.55,
       "provisie_dubbel_vakantiegeld": 233.45,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 4918.55,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 4910.5,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -377,14 +370,13 @@
     "werkgeverskost": {
       "bruto_maand": 4000.0,
       "rsz_werkgever": 1000.0,
-      "sociaal_fonds_200": 9.2,
       "arbeidsongevallen_verzekering": 12.0,
       "provisie_eindejaarspremie": 333.2,
       "provisie_dubbel_vakantiegeld": 266.8,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 5621.2,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 5612.0,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -426,14 +418,13 @@
     "werkgeverskost": {
       "bruto_maand": 4500.0,
       "rsz_werkgever": 1125.0,
-      "sociaal_fonds_200": 10.35,
       "arbeidsongevallen_verzekering": 13.5,
       "provisie_eindejaarspremie": 374.85,
       "provisie_dubbel_vakantiegeld": 300.15,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 6323.85,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 6313.5,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -475,14 +466,13 @@
     "werkgeverskost": {
       "bruto_maand": 5000.0,
       "rsz_werkgever": 1250.0,
-      "sociaal_fonds_200": 11.5,
       "arbeidsongevallen_verzekering": 15.0,
       "provisie_eindejaarspremie": 416.5,
       "provisie_dubbel_vakantiegeld": 333.5,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 7026.5,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 7015.0,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -524,14 +514,13 @@
     "werkgeverskost": {
       "bruto_maand": 5500.0,
       "rsz_werkgever": 1375.0,
-      "sociaal_fonds_200": 12.65,
       "arbeidsongevallen_verzekering": 16.5,
       "provisie_eindejaarspremie": 458.15,
       "provisie_dubbel_vakantiegeld": 366.85,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 7729.15,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 7716.5,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -578,14 +567,13 @@
     "werkgeverskost": {
       "bruto_maand": 2500.0,
       "rsz_werkgever": 625.0,
-      "sociaal_fonds_200": 5.75,
       "arbeidsongevallen_verzekering": 7.5,
       "provisie_eindejaarspremie": 208.25,
       "provisie_dubbel_vakantiegeld": 166.75,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 3513.25,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 3507.5,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -631,14 +619,13 @@
     "werkgeverskost": {
       "bruto_maand": 3000.0,
       "rsz_werkgever": 750.0,
-      "sociaal_fonds_200": 6.9,
       "arbeidsongevallen_verzekering": 9.0,
       "provisie_eindejaarspremie": 249.9,
       "provisie_dubbel_vakantiegeld": 200.1,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 4215.9,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 4209.0,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -686,14 +673,13 @@
     "werkgeverskost": {
       "bruto_maand": 3500.0,
       "rsz_werkgever": 875.0,
-      "sociaal_fonds_200": 8.05,
       "arbeidsongevallen_verzekering": 10.5,
       "provisie_eindejaarspremie": 291.55,
       "provisie_dubbel_vakantiegeld": 233.45,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 4918.55,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 4910.5,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -740,14 +726,13 @@
     "werkgeverskost": {
       "bruto_maand": 4000.0,
       "rsz_werkgever": 1000.0,
-      "sociaal_fonds_200": 9.2,
       "arbeidsongevallen_verzekering": 12.0,
       "provisie_eindejaarspremie": 333.2,
       "provisie_dubbel_vakantiegeld": 266.8,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 5621.2,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 5612.0,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -794,14 +779,13 @@
     "werkgeverskost": {
       "bruto_maand": 4500.0,
       "rsz_werkgever": 1125.0,
-      "sociaal_fonds_200": 10.35,
       "arbeidsongevallen_verzekering": 13.5,
       "provisie_eindejaarspremie": 374.85,
       "provisie_dubbel_vakantiegeld": 300.15,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 6323.85,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 6313.5,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -845,14 +829,13 @@
     "werkgeverskost": {
       "bruto_maand": 3500.0,
       "rsz_werkgever": 875.0,
-      "sociaal_fonds_200": 8.05,
       "arbeidsongevallen_verzekering": 10.5,
       "provisie_eindejaarspremie": 291.55,
       "provisie_dubbel_vakantiegeld": 233.45,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 4918.55,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 4910.5,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -895,14 +878,13 @@
     "werkgeverskost": {
       "bruto_maand": 6000.0,
       "rsz_werkgever": 1500.0,
-      "sociaal_fonds_200": 13.8,
       "arbeidsongevallen_verzekering": 18.0,
       "provisie_eindejaarspremie": 499.8,
       "provisie_dubbel_vakantiegeld": 400.2,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 8431.8,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 8418.0,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -947,14 +929,13 @@
     "werkgeverskost": {
       "bruto_maand": 6500.0,
       "rsz_werkgever": 1625.0,
-      "sociaal_fonds_200": 14.95,
       "arbeidsongevallen_verzekering": 19.5,
       "provisie_eindejaarspremie": 541.45,
       "provisie_dubbel_vakantiegeld": 433.55,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 9134.45,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 9119.5,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -996,14 +977,13 @@
     "werkgeverskost": {
       "bruto_maand": 7000.0,
       "rsz_werkgever": 1750.0,
-      "sociaal_fonds_200": 16.1,
       "arbeidsongevallen_verzekering": 21.0,
       "provisie_eindejaarspremie": 583.1,
       "provisie_dubbel_vakantiegeld": 466.9,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 9837.1,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 9821.0,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -1046,14 +1026,13 @@
     "werkgeverskost": {
       "bruto_maand": 7500.0,
       "rsz_werkgever": 1875.0,
-      "sociaal_fonds_200": 17.25,
       "arbeidsongevallen_verzekering": 22.5,
       "provisie_eindejaarspremie": 624.75,
       "provisie_dubbel_vakantiegeld": 500.25,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 10539.75,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 10522.5,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -1100,14 +1079,13 @@
     "werkgeverskost": {
       "bruto_maand": 8500.0,
       "rsz_werkgever": 2125.0,
-      "sociaal_fonds_200": 19.55,
       "arbeidsongevallen_verzekering": 25.5,
       "provisie_eindejaarspremie": 708.05,
       "provisie_dubbel_vakantiegeld": 566.95,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 11945.05,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 11925.5,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -1150,14 +1128,13 @@
     "werkgeverskost": {
       "bruto_maand": 4000.0,
       "rsz_werkgever": 1000.0,
-      "sociaal_fonds_200": 9.2,
       "arbeidsongevallen_verzekering": 12.0,
       "provisie_eindejaarspremie": 333.2,
       "provisie_dubbel_vakantiegeld": 266.8,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 5621.2,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 5612.0,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -1204,14 +1181,13 @@
     "werkgeverskost": {
       "bruto_maand": 5000.0,
       "rsz_werkgever": 1250.0,
-      "sociaal_fonds_200": 11.5,
       "arbeidsongevallen_verzekering": 15.0,
       "provisie_eindejaarspremie": 416.5,
       "provisie_dubbel_vakantiegeld": 333.5,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 7026.5,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 7015.0,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -1255,14 +1231,13 @@
     "werkgeverskost": {
       "bruto_maand": 7000.0,
       "rsz_werkgever": 1750.0,
-      "sociaal_fonds_200": 16.1,
       "arbeidsongevallen_verzekering": 21.0,
       "provisie_eindejaarspremie": 583.1,
       "provisie_dubbel_vakantiegeld": 466.9,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 9837.1,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 9821.0,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -1305,14 +1280,13 @@
     "werkgeverskost": {
       "bruto_maand": 3500.0,
       "rsz_werkgever": 875.0,
-      "sociaal_fonds_200": 8.05,
       "arbeidsongevallen_verzekering": 10.5,
       "provisie_eindejaarspremie": 291.55,
       "provisie_dubbel_vakantiegeld": 233.45,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 4918.55,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 4910.5,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -1355,14 +1329,13 @@
     "werkgeverskost": {
       "bruto_maand": 10000.0,
       "rsz_werkgever": 2500.0,
-      "sociaal_fonds_200": 23.0,
       "arbeidsongevallen_verzekering": 30.0,
       "provisie_eindejaarspremie": 833.0,
       "provisie_dubbel_vakantiegeld": 667.0,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 14053.0,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 14030.0,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -1405,14 +1378,13 @@
     "werkgeverskost": {
       "bruto_maand": 15000.0,
       "rsz_werkgever": 3750.0,
-      "sociaal_fonds_200": 34.5,
       "arbeidsongevallen_verzekering": 45.0,
       "provisie_eindejaarspremie": 1249.5,
       "provisie_dubbel_vakantiegeld": 1000.5,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 21079.5,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 21045.0,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -1460,14 +1432,13 @@
     "werkgeverskost": {
       "bruto_maand": 2189.81,
       "rsz_werkgever": 547.45,
-      "sociaal_fonds_200": 5.04,
       "arbeidsongevallen_verzekering": 6.57,
       "provisie_eindejaarspremie": 182.41,
       "provisie_dubbel_vakantiegeld": 146.06,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 3077.34,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 3072.3,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
@@ -1515,14 +1486,13 @@
     "werkgeverskost": {
       "bruto_maand": 4500.0,
       "rsz_werkgever": 1125.0,
-      "sociaal_fonds_200": 10.35,
       "arbeidsongevallen_verzekering": 13.5,
       "provisie_eindejaarspremie": 374.85,
       "provisie_dubbel_vakantiegeld": 300.15,
       "extra_voordelen": 0.0,
       "structurele_vermindering": 0.0,
-      "totale_loonkost_maand": 6323.85,
-      "loonwig_pct": 28.8
+      "totale_loonkost_maand": 6313.5,
+      "loonwig_pct": 28.7
     },
     "status_validatie": "ok",
     "tolerantie_marge_eur": 5.0,
