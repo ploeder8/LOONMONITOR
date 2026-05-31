@@ -11,6 +11,7 @@ Kort projectlogboek voor wijzigingen door coding agents.
 
 ## Log
 
+- 2026-05-31 — Profielupdates atomisch gemaakt voor maand/werkdagen en woon-werk toggles; `localStorage` schrijven uit de React state-updater gehaald; regressietests toegevoegd voor maanddagen en VAA-bedrijfswagenherberekening; reden: summary/detailresultaten konden tot refresh met tussenliggende profielstate rekenen.
 - 2026-05-30 — Payroll-expertreview uit ingevulde payrolldata-Excel verwerkt: bouw-subsetpensioen uit runtime/UI gehaald en datasetrecord naar reviewstatus gezet; BBSZ- en structurele-verminderingsbronnen naar officiële RSZ-DmfA-pagina's gezet; maaltijdcheques bevestigd als niet-sectorale PC 200-verplichting; knowledgebase en tests bijgewerkt; reden: release-risico's uit expertfeedback verwerken.
 - 2026-05-30 — Bedrijfswagen-checkbox in het woon-werkrijtje geplaatst en aparte "Voordeel Alle Aard"-onderverdeling verwijderd; berekening ongewijzigd; `knowledgebase/12_toolfunctionaliteit.md` en render-test bijgewerkt; reden: bedrijfswagen hoort visueel bij de mobiliteitskeuzes.
 - 2026-05-29 — Gedeeld werknemerprofiel ingevoerd: nieuwe `ProfielEditor`, `ProfielEditorDrawer` en `ProfielSnapshot`; Calculator gebruikt dezelfde editor met identificatiegroep, Loonfiche vervangt de incomplete calculator-toolbar door snapshot + zijpaneel; `knowledgebase/12_toolfunctionaliteit.md` bijgewerkt; reden: één centrale profielinvoer voor calculator, loonfiche en latere loonrun-editor.

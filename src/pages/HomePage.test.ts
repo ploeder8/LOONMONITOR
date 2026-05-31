@@ -7,10 +7,13 @@ import { headerContentLayout, mainMaxWidthForPath } from "@/App";
 import { fietsvergoeding } from "@/lib/fietsvergoeding";
 import {
   aantalWeekdagenInMaand,
+  DEFAULTS,
   percentageNaarTewerkstellingsbreuk,
   refDatumVoorMaand,
   tewerkstellingsbreukNaarPercentage,
 } from "@/lib/profiel";
+import { berekenNettoVoorProfiel } from "@/lib/profielBerekeningen";
+import { profielMetBerekeningsMaand } from "@/pages/home/InputCockpit";
 import {
   HomePage,
   waardeUitNumeriekeInput,
@@ -59,6 +62,19 @@ describe("Maand van berekening", () => {
     expect(aantalWeekdagenInMaand("2026", "02")).toBe(20);
     expect(aantalWeekdagenInMaand("2026", "06")).toBe(22);
     expect(aantalWeekdagenInMaand("2026", "08")).toBe(21);
+  });
+
+  it("zet maand en werkdagen atomisch bij een maandwijziging", () => {
+    const profiel = {
+      ...DEFAULTS,
+      berekeningsMaand: "06",
+      arbeidsdagenPerMaand: 17,
+    };
+
+    expect(profielMetBerekeningsMaand(profiel, "02")).toMatchObject({
+      berekeningsMaand: "02",
+      arbeidsdagenPerMaand: 20,
+    });
   });
 
   it("normaliseert legacy maand-state van vóór de aparte jaarselect", () => {
@@ -291,5 +307,34 @@ describe("Netto-overzicht", () => {
     const tekst = html.replace(/\u00a0/g, " ");
 
     expect(tekst).not.toContain("Netto jaarloon incl. maaltijdcheques");
+  });
+});
+
+describe("VAA bedrijfswagen", () => {
+  it("herberekent de netto-output direct wanneer de bedrijfswagenwaarden wijzigen", () => {
+    const basisProfiel = {
+      ...DEFAULTS,
+      woonwerkBedrijfswagen: true,
+      bedrijfswagenCataloguswaarde: 40000,
+      bedrijfswagenCo2: 100,
+      bedrijfswagenBrandstof: "benzine" as const,
+      bedrijfswagenDatumEersteInschrijving: "2026-01-01",
+    };
+    const aangepastProfiel = {
+      ...basisProfiel,
+      bedrijfswagenCataloguswaarde: 70000,
+      bedrijfswagenCo2: 150,
+    };
+    const refDatum = refDatumVoorMaand(
+      basisProfiel.berekeningsJaar,
+      basisProfiel.berekeningsMaand,
+    );
+
+    const basis = berekenNettoVoorProfiel(basisProfiel, refDatum);
+    const aangepast = berekenNettoVoorProfiel(aangepastProfiel, refDatum);
+
+    expect(aangepast.vaaBedrijfswagenPerMaand).toBeGreaterThan(
+      basis.vaaBedrijfswagenPerMaand,
+    );
   });
 });

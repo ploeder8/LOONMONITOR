@@ -26,6 +26,7 @@ import {
 import { CsvPaneel } from "@/pages/home/CsvPaneel";
 import { WerknemerOverzicht } from "@/pages/home/WerknemerOverzicht";
 import { computeSummary, ResultBandsPanel } from "@/pages/home/ResultatenPanel";
+import type { ProfielSetter, ProfielUpdate } from "@/pages/home/types";
 import { ProfielEditor } from "@/pages/profiel/ProfielEditor";
 
 export { waardeUitNumeriekeInput } from "@/pages/home/FormControls";
@@ -46,9 +47,14 @@ export function HomePage() {
     }
   }, [toonOverzicht]);
 
-  function set<K extends keyof Profiel>(k: K, v: Profiel[K]) {
-    setP((prev) => ({ ...normaliseerProfiel(prev), [k]: v }));
-  }
+  const set = ((kOfUpdate: keyof Profiel | ProfielUpdate, v?: Profiel[keyof Profiel]) => {
+    setP((prev) => {
+      const basis = normaliseerProfiel(prev);
+      if (typeof kOfUpdate === "function") return kOfUpdate(basis);
+      if (typeof kOfUpdate === "object") return { ...basis, ...kOfUpdate };
+      return { ...basis, [kOfUpdate]: v };
+    });
+  }) as ProfielSetter;
 
   function exporteerCsv() {
     const csv = profielNaarCsv({ profiel, commentaar });

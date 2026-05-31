@@ -704,6 +704,22 @@ function WerkgeversbijdragenContent({ profiel, set }: { profiel: Profiel; set: P
 
 // ─── InputCockpit ────────────────────────────────────────────────────────────
 
+export function profielMetBerekeningsMaand(profiel: Profiel, maand: string): Profiel {
+  return {
+    ...profiel,
+    berekeningsMaand: maand,
+    arbeidsdagenPerMaand: aantalWeekdagenInMaand(profiel.berekeningsJaar, maand),
+  };
+}
+
+export function profielMetBerekeningsJaar(profiel: Profiel, jaar: string): Profiel {
+  return {
+    ...profiel,
+    berekeningsJaar: jaar,
+    arbeidsdagenPerMaand: aantalWeekdagenInMaand(jaar, profiel.berekeningsMaand),
+  };
+}
+
 export function InputCockpit({
   profiel,
   set
@@ -712,29 +728,31 @@ export function InputCockpit({
   set: ProfielSetter;
 }) {
   function setBerekeningsMaand(maand: string) {
-    set("berekeningsMaand", maand);
-    set("arbeidsdagenPerMaand", aantalWeekdagenInMaand(profiel.berekeningsJaar, maand));
+    set((prev) => profielMetBerekeningsMaand(prev, maand));
   }
 
   function setBerekeningsJaar(jaar: string) {
-    set("berekeningsJaar", jaar);
-    set("arbeidsdagenPerMaand", aantalWeekdagenInMaand(jaar, profiel.berekeningsMaand));
+    set((prev) => profielMetBerekeningsJaar(prev, jaar));
   }
 
   function setAlleWoonwerk(actief: boolean) {
     if (actief) {
-      // Fiets wint bij conflict met privéwagen (meest gunstig voor werknemer)
-      set("woonwerkFiets", true);
-      set("woonwerkPrivewagen", false);
-      set("woonwerkBusTramMetro", true);
-      set("woonwerkTrein", true);
-      // Bedrijfswagen (VAA) niet aanraken — geen woon-werkvergoeding
+      set((prev) => ({
+        ...prev,
+        woonwerkFiets: true,
+        woonwerkPrivewagen: false,
+        woonwerkBusTramMetro: true,
+        woonwerkTrein: true,
+      }));
     } else {
-      set("woonwerkFiets", false);
-      set("woonwerkPrivewagen", false);
-      set("woonwerkBusTramMetro", false);
-      set("woonwerkTrein", false);
-      set("woonwerkBedrijfswagen", false);
+      set((prev) => ({
+        ...prev,
+        woonwerkFiets: false,
+        woonwerkPrivewagen: false,
+        woonwerkBusTramMetro: false,
+        woonwerkTrein: false,
+        woonwerkBedrijfswagen: false,
+      }));
     }
   }
 

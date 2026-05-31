@@ -3,10 +3,11 @@ import { renderToStaticMarkup } from "react-dom/server";
 
 import { ProfielEditor } from "@/pages/profiel/ProfielEditor";
 import { DEFAULTS, type Profiel } from "@/lib/profiel";
+import type { ProfielSetter, ProfielUpdate } from "@/pages/home/types";
 
 describe("ProfielEditor", () => {
   it("rendert de gedeelde calculatorgroepen en identificatievelden", () => {
-    function set<K extends keyof Profiel>(_k: K, _v: Profiel[K]) {}
+    const set = ((_kOfUpdate: keyof Profiel | ProfielUpdate, _v?: Profiel[keyof Profiel]) => {}) as ProfielSetter;
 
     const html = renderToStaticMarkup(
       <ProfielEditor profiel={DEFAULTS} set={set} />,

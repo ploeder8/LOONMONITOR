@@ -7,6 +7,7 @@ import { useSharedProfiel } from "@/lib/useSharedProfiel";
 import { bouwLoonficheVoorProfiel } from "@/lib/loonfiche";
 import type { Profiel } from "@/lib/profiel";
 import { normaliseerProfiel } from "@/lib/profiel";
+import type { ProfielSetter, ProfielUpdate } from "@/pages/home/types";
 import { LoonficheDocument } from "@/pages/loonfiche/LoonficheDocument";
 import { ProfielEditorDrawer } from "@/pages/profiel/ProfielEditorDrawer";
 import { ProfielSnapshot } from "@/pages/profiel/ProfielSnapshot";
@@ -17,9 +18,14 @@ export function LoonfichePage() {
   const [toonBronnen, setToonBronnen] = useState(true);
   const [profielEditorOpen, setProfielEditorOpen] = useState(false);
 
-  function set<K extends keyof Profiel>(k: K, v: Profiel[K]) {
-    setP((prev) => ({ ...normaliseerProfiel(prev), [k]: v }));
-  }
+  const set = ((kOfUpdate: keyof Profiel | ProfielUpdate, v?: Profiel[keyof Profiel]) => {
+    setP((prev) => {
+      const basis = normaliseerProfiel(prev);
+      if (typeof kOfUpdate === "function") return kOfUpdate(basis);
+      if (typeof kOfUpdate === "object") return { ...basis, ...kOfUpdate };
+      return { ...basis, [kOfUpdate]: v };
+    });
+  }) as ProfielSetter;
 
   const loonfiche = useMemo(() => {
     try {

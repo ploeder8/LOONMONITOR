@@ -30,11 +30,13 @@ export function useSharedProfiel(): [Profiel, (p: Profiel | ((prev: Profiel) => 
   const setProfiel = useCallback((update: Profiel | ((prev: Profiel) => Profiel)) => {
     setProfielState((prev) => {
       const next = typeof update === "function" ? (update as (prev: Profiel) => Profiel)(prev) : update;
-      const normalised = normaliseerProfiel(next);
-      writeProfielToStorage(normalised);
-      return normalised;
+      return normaliseerProfiel(next);
     });
   }, []);
+
+  useEffect(() => {
+    writeProfielToStorage(profiel);
+  }, [profiel]);
 
   // Luister naar wijzigingen vanuit andere tabs/pagina's
   useEffect(() => {

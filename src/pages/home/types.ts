@@ -2,7 +2,12 @@ import type { ReactNode } from "react";
 
 import type { Profiel } from "@/lib/profiel";
 
-export type ProfielSetter = <K extends keyof Profiel>(k: K, v: Profiel[K]) => void;
+export type ProfielUpdate = Partial<Profiel> | ((prev: Profiel) => Profiel);
+
+export interface ProfielSetter {
+  <K extends keyof Profiel>(k: K, v: Profiel[K]): void;
+  (update: ProfielUpdate): void;
+}
 
 export type CsvStatus = { kind: "success" | "error"; tekst: string } | null;
 
