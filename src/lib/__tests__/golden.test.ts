@@ -1169,9 +1169,19 @@ describe("Jaaroverzicht — netto en werkgeverskost", () => {
         expect(metBonus.netto.bonus.bvTarief).toBe(0.4038);
         expect(metBonus.netto.bonus.bv).toBe(421.23);
         expect(metBonus.netto.bonus.netto).toBe(621.93);
+        expect(metBonus.netto.variabelEnkelVakantiegeldOpBonus.bruto).toBe(92.04);
+        expect(metBonus.netto.variabelEnkelVakantiegeldOpBonus.rsz).toBe(12.03);
+        expect(metBonus.netto.variabelEnkelVakantiegeldOpBonus.netto).toBe(47.7);
+        expect(metBonus.netto.variabelDubbelVakantiegeldOpBonus.bruto).toBe(92.04);
+        expect(metBonus.netto.variabelDubbelVakantiegeldOpBonus.rsz).toBe(12.03);
+        expect(metBonus.netto.variabelDubbelVakantiegeldOpBonus.netto).toBe(47.7);
         expect(metBonus.werkgever.bonusBruto).toBe(1200);
         expect(metBonus.werkgever.rszOpBonus).toBe(300);
-        expect(metBonus.werkgever.totaleLoonkostJaar - basis.werkgever.totaleLoonkostJaar).toBe(1500);
+        expect(metBonus.werkgever.variabelEnkelVakantiegeldOpBonusBruto).toBe(92.04);
+        expect(metBonus.werkgever.variabelEnkelVakantiegeldOpBonusRsz).toBe(23.01);
+        expect(metBonus.werkgever.variabelDubbelVakantiegeldOpBonusBruto).toBe(92.04);
+        expect(metBonus.werkgever.variabelDubbelVakantiegeldOpBonusRsz).toBe(23.01);
+        expect(metBonus.werkgever.totaleLoonkostJaar - basis.werkgever.totaleLoonkostJaar).toBeCloseTo(1730.1, 2);
     });
     it("laat bonus nul de bestaande jaaroverzichttotalen ongemoeid", () => {
         const basis = berekenJaaroverzicht({
@@ -1198,8 +1208,12 @@ describe("Jaaroverzicht — netto en werkgeverskost", () => {
             bonusJaarbedrag: 0,
         });
         expect(nulBonus.netto.bonus.bruto).toBe(0);
+        expect(nulBonus.netto.variabelEnkelVakantiegeldOpBonus.bruto).toBe(0);
+        expect(nulBonus.netto.variabelDubbelVakantiegeldOpBonus.bruto).toBe(0);
         expect(nulBonus.werkgever.bonusBruto).toBe(0);
         expect(nulBonus.werkgever.rszOpBonus).toBe(0);
+        expect(nulBonus.werkgever.variabelEnkelVakantiegeldOpBonusBruto).toBe(0);
+        expect(nulBonus.werkgever.variabelDubbelVakantiegeldOpBonusBruto).toBe(0);
         expect(nulBonus.netto.totaalNettoJaarloon).toBe(basis.netto.totaalNettoJaarloon);
         expect(nulBonus.werkgever.totaleLoonkostJaar).toBe(basis.werkgever.totaleLoonkostJaar);
     });

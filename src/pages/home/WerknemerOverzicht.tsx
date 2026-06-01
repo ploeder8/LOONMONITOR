@@ -136,7 +136,11 @@ export function WerknemerOverzicht({ profiel }: WerknemerOverzichtProps) {
                 <YearRow label="Eindejaarspremie" bedrag={jaaroverzicht.netto.eindejaarspremie.netto}/>
                 <YearRow label="Dubbel vakantiegeld" bedrag={jaaroverzicht.netto.dubbelVakantiegeld.netto}/>
                 <YearRow label="Jaarpremie PC 200" bedrag={jaaroverzicht.netto.jaarpremie.netto}/>
-                {jaaroverzicht.netto.bonus.bruto > 0 && (<YearRow label="Bonus" bedrag={jaaroverzicht.netto.bonus.netto}/>)}
+                {jaaroverzicht.netto.bonus.bruto > 0 && (<>
+                    <YearRow label="Bonus" bedrag={jaaroverzicht.netto.bonus.netto}/>
+                    <YearRow label="Variabel enkel vakantiegeld op bonus" bedrag={jaaroverzicht.netto.variabelEnkelVakantiegeldOpBonus.netto}/>
+                    <YearRow label="Variabel dubbel vakantiegeld op bonus" bedrag={jaaroverzicht.netto.variabelDubbelVakantiegeldOpBonus.netto}/>
+                  </>)}
                 <YearRow label="Ecocheques" bedrag={jaaroverzicht.netto.ecocheques}/>
                 <YearRow label="Totaal netto jaar" bedrag={jaaroverzicht.netto.totaalNettoJaarloon} bold/>
               </div>
@@ -153,6 +157,10 @@ export function WerknemerOverzicht({ profiel }: WerknemerOverzichtProps) {
                 {jaaroverzicht.werkgever.bonusBruto > 0 && (<>
                     <YearRow label="Bonus" bedrag={jaaroverzicht.werkgever.bonusBruto}/>
                     <YearRow label="RSZ op bonus" bedrag={jaaroverzicht.werkgever.rszOpBonus}/>
+                    <YearRow label="Variabel enkel vakantiegeld op bonus" bedrag={jaaroverzicht.werkgever.variabelEnkelVakantiegeldOpBonusBruto}/>
+                    <YearRow label="RSZ op variabel enkel vakantiegeld bonus" bedrag={jaaroverzicht.werkgever.variabelEnkelVakantiegeldOpBonusRsz}/>
+                    <YearRow label="Variabel dubbel vakantiegeld op bonus" bedrag={jaaroverzicht.werkgever.variabelDubbelVakantiegeldOpBonusBruto}/>
+                    <YearRow label="RSZ op variabel dubbel vakantiegeld bonus" bedrag={jaaroverzicht.werkgever.variabelDubbelVakantiegeldOpBonusRsz}/>
                   </>)}
                 <YearRow label="Dubbel vakantiegeld" bedrag={jaaroverzicht.werkgever.dubbelVakantiegeld}/>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid transparent' }}>

@@ -38,6 +38,8 @@ export interface NettoJaaroverzicht {
     dubbelVakantiegeld: JaarcomponentNetto;
     jaarpremie: JaarcomponentNetto;
     bonus: JaarcomponentNetto;
+    variabelEnkelVakantiegeldOpBonus: JaarcomponentNetto;
+    variabelDubbelVakantiegeldOpBonus: JaarcomponentNetto;
     ecocheques: number;
     totaalNettoJaarloon: number;
 }
@@ -47,6 +49,10 @@ export interface WerkgeverJaaroverzicht {
     rszOpEindejaarspremieEnJaarpremie: number;
     bonusBruto: number;
     rszOpBonus: number;
+    variabelEnkelVakantiegeldOpBonusBruto: number;
+    variabelEnkelVakantiegeldOpBonusRsz: number;
+    variabelDubbelVakantiegeldOpBonusBruto: number;
+    variabelDubbelVakantiegeldOpBonusRsz: number;
     dubbelVakantiegeld: number;
     totaleLoonkostJaar: number;
     datapunten: Datapunt[];
@@ -78,22 +84,48 @@ export function berekenJaaroverzicht(input: JaaroverzichtInput): JaaroverzichtRe
     const jaarpremieNetto = berekenAndereExceptioneleComponent(jaarpremie.bedrag, normaalBrutoJaarloon, refertejaarloon, input.gezinstype, input.kinderenTenLaste, jaarpremie.datapunt);
     const bonusJaarbedrag = round2(Math.max(input.bonusJaarbedrag ?? 0, 0));
     const bonusNetto = berekenAndereExceptioneleComponent(bonusJaarbedrag, normaalBrutoJaarloon, refertejaarloon, input.gezinstype, input.kinderenTenLaste);
+    const variabelEnkelVakantiegeldOpBonus = berekenVariabelVakantiegeldOpBonusComponent({
+        bonusJaarbedrag,
+        refDatum: input.refDatum,
+        normaalBrutoJaarloon,
+        refertejaarloon,
+        gezinstype: input.gezinstype,
+        kinderenTenLaste: input.kinderenTenLaste,
+        pctDatapuntId: "vakantiegeld_variabel_enkel_bonus_pct_2026",
+    });
+    const variabelDubbelVakantiegeldOpBonus = berekenVariabelVakantiegeldOpBonusComponent({
+        bonusJaarbedrag,
+        refDatum: input.refDatum,
+        normaalBrutoJaarloon,
+        refertejaarloon,
+        gezinstype: input.gezinstype,
+        kinderenTenLaste: input.kinderenTenLaste,
+        pctDatapuntId: "vakantiegeld_variabel_dubbel_bonus_pct_2026",
+    });
     const maandloonNettoX12 = round2(input.nettoloonPerMaand * 12);
     const totaalNettoJaarloon = round2(maandloonNettoX12 +
         eindejaarNetto.netto +
         dubbelVakantiegeld.netto +
         jaarpremieNetto.netto +
         bonusNetto.netto +
+        variabelEnkelVakantiegeldOpBonus.netto +
+        variabelDubbelVakantiegeldOpBonus.netto +
         eco.bedrag);
     const maandbasisX12 = round2(input.loonkostWerkgeverPerMaand * 12);
     const jaarpremiesEnEcocheques = round2(eindejaar.premie + jaarpremie.bedrag + eco.bedrag);
     const rszOpEindejaarspremieEnJaarpremie = round2((eindejaar.premie + jaarpremie.bedrag) * RSZ_WERKGEVER_JAARPREMIES_PCT);
     const rszOpBonus = round2(bonusJaarbedrag * RSZ_WERKGEVER_JAARPREMIES_PCT);
+    const variabelEnkelVakantiegeldOpBonusRsz = round2(variabelEnkelVakantiegeldOpBonus.bruto * RSZ_WERKGEVER_JAARPREMIES_PCT);
+    const variabelDubbelVakantiegeldOpBonusRsz = round2(variabelDubbelVakantiegeldOpBonus.bruto * RSZ_WERKGEVER_JAARPREMIES_PCT);
     const totaleLoonkostJaar = round2(maandbasisX12 +
         jaarpremiesEnEcocheques +
         rszOpEindejaarspremieEnJaarpremie +
         bonusJaarbedrag +
         rszOpBonus +
+        variabelEnkelVakantiegeldOpBonus.bruto +
+        variabelEnkelVakantiegeldOpBonusRsz +
+        variabelDubbelVakantiegeldOpBonus.bruto +
+        variabelDubbelVakantiegeldOpBonusRsz +
         dubbelVakantiegeld.bruto);
     return {
         netto: {
@@ -102,6 +134,8 @@ export function berekenJaaroverzicht(input: JaaroverzichtInput): JaaroverzichtRe
             dubbelVakantiegeld,
             jaarpremie: jaarpremieNetto,
             bonus: bonusNetto,
+            variabelEnkelVakantiegeldOpBonus,
+            variabelDubbelVakantiegeldOpBonus,
             ecocheques: eco.bedrag,
             totaalNettoJaarloon,
         },
@@ -111,6 +145,10 @@ export function berekenJaaroverzicht(input: JaaroverzichtInput): JaaroverzichtRe
             rszOpEindejaarspremieEnJaarpremie,
             bonusBruto: bonusJaarbedrag,
             rszOpBonus,
+            variabelEnkelVakantiegeldOpBonusBruto: variabelEnkelVakantiegeldOpBonus.bruto,
+            variabelEnkelVakantiegeldOpBonusRsz,
+            variabelDubbelVakantiegeldOpBonusBruto: variabelDubbelVakantiegeldOpBonus.bruto,
+            variabelDubbelVakantiegeldOpBonusRsz,
             dubbelVakantiegeld: dubbelVakantiegeld.bruto,
             totaleLoonkostJaar,
             datapunten: uniekeDatapunten([
@@ -118,9 +156,28 @@ export function berekenJaaroverzicht(input: JaaroverzichtInput): JaaroverzichtRe
                 jaarpremie.datapunt,
                 eco.datapunt,
                 ...(bonusJaarbedrag > 0 ? bonusNetto.datapunten : []),
+                ...(bonusJaarbedrag > 0 ? variabelEnkelVakantiegeldOpBonus.datapunten : []),
+                ...(bonusJaarbedrag > 0 ? variabelDubbelVakantiegeldOpBonus.datapunten : []),
                 ...dubbelVakantiegeld.datapunten,
             ]),
         },
+    };
+}
+function berekenVariabelVakantiegeldOpBonusComponent(input: {
+    bonusJaarbedrag: number;
+    refDatum: string;
+    normaalBrutoJaarloon: number;
+    refertejaarloon: number;
+    gezinstype: GezinsType;
+    kinderenTenLaste: number;
+    pctDatapuntId: "vakantiegeld_variabel_enkel_bonus_pct_2026" | "vakantiegeld_variabel_dubbel_bonus_pct_2026";
+}): JaarcomponentNetto {
+    const pctRes = safeGetValue(input.pctDatapuntId, { refDatum: input.refDatum });
+    const bruto = round2(input.bonusJaarbedrag * (pctRes.waarde ?? 0));
+    const component = berekenAndereExceptioneleComponent(bruto, input.normaalBrutoJaarloon, input.refertejaarloon, input.gezinstype, input.kinderenTenLaste);
+    return {
+        ...component,
+        datapunten: uniekeDatapunten([pctRes.datapunt, ...component.datapunten]),
     };
 }
 function berekenAndereExceptioneleComponent(bruto: number, normaalBrutoJaarloon: number, refertejaarloon: number, gezinstype: GezinsType, kinderenTenLaste: number, datapunt?: Datapunt): JaarcomponentNetto {

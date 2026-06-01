@@ -275,7 +275,9 @@ function bvBijzonder(
 - `eindejaarspremie.ts` → in de Jaakie-gebruikersflow wordt een volledig gewerkt jaar verondersteld: bruto premie = 1 brutomaandloon; trek 13,07% RSZ af, daarna bijzondere BV met soort `andere_exceptionele_vergoeding`. De pure functie behoudt pro-rata parameters voor juridische/testdekking, maar die zijn geen UI-invoer meer.
 - `jaarpremie.ts` → sectorale PC 200-jaarpremie: trek 13,07% RSZ af; daarna bijzondere BV met soort `andere_exceptionele_vergoeding`.
 - Dubbel vakantiegeld → bruto = `92% × brutomaandloon`, RSZ = `13,07% × (85/92 × dubbel vakantiegeld)`, daarna bijzondere BV met soort `vakantiegeld`.
-- Ad-hoc bonus → profielinput als maand- of jaarbedrag; Jaakie rekent altijd om naar een eenmalige jaarbonus. Op die jaarbonus wordt eerst 13,07% werknemers-RSZ ingehouden, daarna bijzondere BV met soort `andere_exceptionele_vergoeding`. De bonus wijzigt het gewone maandnetto, de gewone maand-BV, werkbonus, BBSZ en netto→bruto niet.
+- Ad-hoc bonus → profielinput als maand- of jaarbedrag; Jaakie rekent altijd om naar een eenmalige jaarbonus. Op die jaarbonus wordt eerst 13,07% werknemers-RSZ ingehouden, daarna bijzondere BV met soort `andere_exceptionele_vergoeding`.
+- Bonus in jaaroverzicht activeert bijkomend twee variabele vakantiegeldcomponenten op bonusbasis: `vakantiegeld_variabel_enkel_bonus_pct_2026` en `vakantiegeld_variabel_dubbel_bonus_pct_2026`. Voor beide componenten geldt dezelfde keten: bruto componentbedrag → werknemers-RSZ → bijzondere BV (`andere_exceptionele_vergoeding`) → netto jaarcomponent.
+- De bonus en de gekoppelde variabele vakantiegeldcomponenten wijzigen het gewone maandnetto, de gewone maand-BV, werkbonus, BBSZ en netto→bruto niet.
 
 **Datapunt:** `bv_bijzondere_schaal_eindejaar_2026` met `tabel_refertejaarloon_naar_tarief`.
 
