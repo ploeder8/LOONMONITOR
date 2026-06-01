@@ -68,7 +68,7 @@ De bonusinvoer hoort bij de extra looncomponenten. Gebruikers kiezen of het inge
 
 De eindejaarspremie wordt in de gebruikersflow als volledig gewerkt jaar getoond: bruto eindejaarspremie = 1 brutomaandloon. Pro-rata anciënniteit- en prestatievelden zijn geen gebruikersinstelling meer; oude CSV-imports met afwijkende waarden worden voor actieve eindejaarspremie naar 12/12 genormaliseerd.
 
-Voor woon-werk privévervoer verwerkt Jaakie het maandbedrag als belastbare werkgeverstussenkomst in het netto-pad. De BV-berekening past daarna de woon-werkvrijstelling (bv. forfaitaire €500/jaar) apart toe op de BV-grondslag. Daardoor kunnen in één case twee bedragen bestaan met een andere functie: het uitbetaalde woon-werkbedrag en het vrijgestelde BV-deel.
+Voor woon-werk privévervoer verwerkt Jaakie het maandbedrag als belastbare werkgeverstussenkomst in het netto-pad. De BV-berekening past daarna de woon-werkvrijstelling (bv. forfaitaire €500/jaar) apart toe op de BV-grondslag. Fiets- en openbaarvervoercomponenten (trein, bus, tram, metro) worden in de nettoflow als netto-vrijgestelde vergoeding verwerkt en verhogen de BV-grondslag niet.
 
 ### Resultaten
 
