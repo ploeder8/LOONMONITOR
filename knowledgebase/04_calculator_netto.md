@@ -112,9 +112,9 @@ Stap 2: − RSZ werknemer (13,07 % × bruto)
         + Sociale werkbonus (Luik A + B, vermindering RSZ wn)
         ↓
 Stap 3: = Loon na RSZ en werkbonus (bruto − netto_RSZ_wn)
-        + woon-werkvergoeding (belastbare werkgeverstussenkomst)
-        = Belastbaar voor BV
+        + woon-werkvergoeding privévervoer (belastbare werkgeverstussenkomst)
         + maandelijks omgeslagen VAA (totaal_VAA / 12)
+        = Belastbaar voor BV
         ↓
 Stap 4: − BEDRIJFSVOORHEFFING (sleutelformule KB Bijlage III)
           Schaal bepaling: I (alleenstaande / 2 inkomens), II (eenverdiener), III (niet-inwoner)
@@ -129,7 +129,8 @@ Stap 6: − BBSZ (scenario-inhouding; kwartaalbedrag ÷ 3)
 Stap 7: Voor BV wordt enkel het niet-vrijgestelde woon-werkdeel belast:
         BV-grondslag = belastbaar loon − vrijstelling woon-werk (forfaitaire beroepskosten)
         ↓
-Stap 8: = NETTO maandloon (indicatief)
+Stap 8: + netto-vrijgestelde woon-werkvergoedingen (fiets + trein + bus/tram/metro)
+        = NETTO maandloon (indicatief)
 ```
 
 > **Bijzondere gevallen** (apart UI-paneel, zelfde dataset-pijplijn):

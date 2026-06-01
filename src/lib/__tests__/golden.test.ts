@@ -761,7 +761,7 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
         });
         expect(r.maaltijdchequeWerknemersbijdrage).toBe(0);
     });
-    it("telt woon-werkvergoeding bij belastbaar loon en past BV-vrijstelling apart toe", () => {
+    it("telt enkel belastbare woon-werkvergoeding bij belastbaar loon en voegt vrijgestelde woon-werkvergoeding netto toe", () => {
         const basis = berekenNetto({
             brutoloon: 3000,
             refDatum: REF_2026,
@@ -774,9 +774,11 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
             gezinstype: "alleenstaand",
             kinderenTenLaste: 0,
             woonwerkVergoedingPerMaand: 100,
+            woonwerkNettoVrijgesteldPerMaand: 40,
             bvVrijstellingWoonWerkPerMaand: 41.67,
         });
         expect(metWoonwerk.woonwerkVergoedingPerMaand).toBe(100);
+        expect(metWoonwerk.woonwerkNettoVrijgesteldPerMaand).toBe(40);
         expect(metWoonwerk.belastbaarMaandloon).toBe(basis.belastbaarMaandloon);
         expect(metWoonwerk.belastbaarMaandloonVoorBV).toBe(basis.belastbaarMaandloonVoorBV + 100);
         expect(metWoonwerk.bv.bvNaVerminderingen).toBeLessThanOrEqual(basis.bv.bvNaVerminderingen + 100);
@@ -842,7 +844,7 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
         expect(r.bv.verminderingKinderen).toBe(52);
         expect(r.bv.bvNaVerminderingen).toBe(1596.26);
     });
-    it("telt privéwagen 3 km en trein samen mee met forfaitaire BV-vrijstelling op privédeel", () => {
+    it("telt enkel privéwagen mee in BV-basis; trein blijft netto-vrijgesteld", () => {
         const woonwerk = berekenWoonwerkVerkeer({
             refDatum: REF_2026,
             brutoloon: 3000,
@@ -864,13 +866,14 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
             refDatum: REF_2026,
             gezinstype: "alleenstaand",
             kinderenTenLaste: 0,
-            woonwerkVergoedingPerMaand: woonwerk.totaalVergoeding,
+            woonwerkVergoedingPerMaand: woonwerk.componenten.privewagen?.vergoeding ?? 0,
+            woonwerkNettoVrijgesteldPerMaand: woonwerk.componenten.trein?.vergoeding ?? 0,
             bvVrijstellingWoonWerkPerMaand: 10.96,
         });
         expect(woonwerk.totaalVergoeding).toBe(52.78);
-        expect(metMultimodaalWoonwerk.woonwerkVergoedingPerMaand).toBe(52.78);
-        expect(metMultimodaalWoonwerk.nettoloon).toBeGreaterThan(basis.nettoloon);
-        expect(metMultimodaalWoonwerk.nettoloon).toBeLessThan(basis.nettoloon + 52.78);
+        expect(metMultimodaalWoonwerk.woonwerkVergoedingPerMaand).toBe(10.96);
+        expect(metMultimodaalWoonwerk.woonwerkNettoVrijgesteldPerMaand).toBe(41.82);
+        expect(metMultimodaalWoonwerk.nettoloon).toBeCloseTo(basis.nettoloon + 52.78, 2);
     });
     it("past bijkomende netto-looncomponenten toe zonder RSZ/BV-basis te wijzigen", () => {
         const basis = berekenNetto({
@@ -892,6 +895,40 @@ describe("TC-25 — Netto end-to-end: Schaal I Cat A 5 jaar, alleenstaand, 0 kin
         expect(metComponenten.belastbaarMaandloon).toBe(basis.belastbaarMaandloon);
         expect(metComponenten.bv.bvNaVerminderingen).toBe(basis.bv.bvNaVerminderingen);
         expect(metComponenten.nettoloon).toBe(basis.nettoloon + 100);
+    });
+    it("fietsvergoeding verhoogt netto zonder impact op BV-grondslag", () => {
+        const basis = berekenNetto({
+            brutoloon: 3000,
+            refDatum: REF_2026,
+            gezinstype: "alleenstaand",
+            kinderenTenLaste: 0,
+        });
+        const metFiets = berekenNetto({
+            brutoloon: 3000,
+            refDatum: REF_2026,
+            gezinstype: "alleenstaand",
+            kinderenTenLaste: 0,
+            woonwerkNettoVrijgesteldPerMaand: 51.36,
+        });
+        expect(metFiets.belastbaarMaandloonVoorBV).toBe(basis.belastbaarMaandloonVoorBV);
+        expect(metFiets.nettoloon).toBeCloseTo(basis.nettoloon + 51.36, 2);
+    });
+    it("busvergoeding verhoogt netto zonder impact op BV-grondslag", () => {
+        const basis = berekenNetto({
+            brutoloon: 3000,
+            refDatum: REF_2026,
+            gezinstype: "alleenstaand",
+            kinderenTenLaste: 0,
+        });
+        const metBus = berekenNetto({
+            brutoloon: 3000,
+            refDatum: REF_2026,
+            gezinstype: "alleenstaand",
+            kinderenTenLaste: 0,
+            woonwerkNettoVrijgesteldPerMaand: 60,
+        });
+        expect(metBus.belastbaarMaandloonVoorBV).toBe(basis.belastbaarMaandloonVoorBV);
+        expect(metBus.nettoloon).toBeCloseTo(basis.nettoloon + 60, 2);
     });
     it("telt bedrijfswagen-VAA bij de BV-basis maar niet bij cash", () => {
         const basis = berekenNetto({

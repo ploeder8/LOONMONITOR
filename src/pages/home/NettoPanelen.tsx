@@ -102,6 +102,7 @@ export function NettoPanel({ resultaat: r, vaaWerkmiddelen, maaltijdchequeWerkge
           {r.maaltijdchequeWerknemersbijdrage > 0 && (<NettoRow label={`Maaltijdcheques werknemersbijdrage (${formatEUR(r.maaltijdchequeWerknemersbijdragePerDag)} × ${r.maaltijdchequeWerkdagen} dagen)`} bedrag={r.maaltijdchequeWerknemersbijdrage}/>)}
           {r.hospitalisatieEigenBijdrage > 0 && (<NettoRow label="Eigen bijdrage hospitalisatieverzekering" bedrag={r.hospitalisatieEigenBijdrage}/>)}
           {r.onkostenvergoedingPerMaand > 0 && (<NettoRow label="Onkostenvergoedingen" bedrag={r.onkostenvergoedingPerMaand} prefix="+" dimmed/>)}
+          {r.woonwerkNettoVrijgesteldPerMaand > 0 && (<NettoRow label="Woon-werkvergoeding (netto vrijgesteld)" bedrag={r.woonwerkNettoVrijgesteldPerMaand} prefix="+" dimmed/>)}
           {toontTerugnameVaa && (<NettoRow label="Terugname VAA" bedrag={totaalTerugnameVaa} onToggle={() => setVaaDetailOpen(!vaaDetailOpen)} open={vaaDetailOpen}/>)}
           {toontTerugnameVaa && vaaDetailOpen && (<NettoDetailRow>
               <div style={{ display: "grid", gap: 5 }}>

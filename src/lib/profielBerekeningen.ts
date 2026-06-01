@@ -98,6 +98,16 @@ export function berekenWoonwerkVrijgesteld(woonwerk: WoonwerkVerkeerResultaat, p
         : 0;
     return round2(Math.max(0, openbaarVervoer + fiets + privewagen));
 }
+export function berekenWoonwerkNettoVrijgesteld(woonwerk: WoonwerkVerkeerResultaat): number {
+    return round2(
+        (woonwerk.componenten.trein?.vergoeding ?? 0) +
+        (woonwerk.componenten.busTramMetro?.vergoeding ?? 0) +
+        (woonwerk.componenten.fiets?.vergoeding ?? 0),
+    );
+}
+export function berekenWoonwerkBelastbaarVoorBV(woonwerk: WoonwerkVerkeerResultaat): number {
+    return round2(woonwerk.componenten.privewagen?.vergoeding ?? 0);
+}
 export function berekenWoonwerkBvVrijstellingVoorProfiel(p: Profiel, woonwerk: WoonwerkVerkeerResultaat): number {
     if (p.woonwerkBedrijfswagen && p.woonwerkBedrijfswagenBeroepskostMethode === "forfaitair") {
         return round2(500 / 12);
@@ -164,7 +174,8 @@ function bouwNettoInputVoorProfiel(p: Profiel, refDatum: string, brutoloon: numb
         maaltijdchequeWerkdagen: maaltijdchequesActief ? p.arbeidsdagenPerMaand : 0,
         hospitalisatieEigenBijdrage: p.hospitalisatieEigenBijdrage,
         onkostenvergoedingPerMaand: p.onkostenvergoedingPerMaand,
-        woonwerkVergoedingPerMaand: mobiliteit.woonwerk.totaalVergoeding,
+        woonwerkVergoedingPerMaand: berekenWoonwerkBelastbaarVoorBV(mobiliteit.woonwerk),
+        woonwerkNettoVrijgesteldPerMaand: berekenWoonwerkNettoVrijgesteld(mobiliteit.woonwerk),
         woonwerkVrijgesteldPerMaand: berekenWoonwerkVrijgesteld(mobiliteit.woonwerk, p.woonwerkPrivewagenBeroepskostMethode),
         bvVrijstellingWoonWerkPerMaand: berekenWoonwerkBvVrijstellingVoorProfiel(p, mobiliteit.woonwerk),
         vaaRszPlichtigPerMaand: vaaWerkmiddelen.totaalPerMaand,
