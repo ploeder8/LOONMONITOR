@@ -73,9 +73,14 @@ describe("WerknemerOverzicht rendering", () => {
         };
         const html = renderToStaticMarkup(<WerknemerOverzicht profiel={profiel}/>);
         expect(html).toContain("Bonus");
+        expect(html).toContain("Variabel enkel vakantiegeld op bonus");
+        expect(html).toContain("Variabel dubbel vakantiegeld op bonus");
         expect(html).toContain(formatEUR(621.93));
+        expect(html).toContain(formatEUR(47.7));
         expect(html).toContain(formatEUR(1200));
         expect(html).toContain(formatEUR(300));
+        expect(html).toContain(formatEUR(92.04));
+        expect(html).toContain(formatEUR(23.01));
     });
     it("toont de pro-forma disclaimer", () => {
         const html = renderToStaticMarkup(<WerknemerOverzicht profiel={DEFAULTS}/>);

@@ -7,7 +7,7 @@
     "taal": "nl-BE",
     "laatste_update": "2026-05-30",
     "doeljaar": 2026,
-    "datapunten_aantal": 71,
+    "datapunten_aantal": 73,
     "dekking": [
       "brutolonen",
       "rsz",
@@ -2180,6 +2180,82 @@
       "conflict_opmerking": null,
       "opmerkingen": [
         "Gebruikt door loonmotor voor zowel jaarlijkse dubbel-vakantiegeld-berekening als maandelijkse provisie (= 92% / 12)"
+      ]
+    },
+    {
+      "id": "vakantiegeld_variabel_enkel_bonus_pct_2026",
+      "categorie": "premies_en_voordelen",
+      "subcategorie": "vakantiegeld",
+      "type": "parameter",
+      "pc": "200",
+      "omschrijving": "Percentage variabel enkel vakantiegeld op bonus (bedienden)",
+      "waarde_bron": "7,67% van bonusbedrag",
+      "waarde_genormaliseerd": 0.0767,
+      "eenheid": "fractie",
+      "valuta": "EUR",
+      "frequentie": "jaarlijks",
+      "berekeningsbasis": "bonusbedrag op jaarbasis",
+      "toepassingsgebied": [
+        "bedienden – variabel vakantiegeld op variabele verloning"
+      ],
+      "voorwaarden": [],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": "2026-12-31",
+      "laatst_bevestigd_op": "2026-06-01",
+      "bron_organisatie": "RSZ / vakantiewetgeving bedienden",
+      "bron_type": "overheid",
+      "bron_titel": "Variabel vakantiegeld op variabele verloning (bedienden)",
+      "bron_url": "https://www.socialsecurity.be/employer/instructions/dmfa/fr/latest/instructions/salary/particularcases/holidaypay.html",
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": "Sectie vakantiegeld bedienden variabele bezoldiging",
+      "bron_fragment": "Variabel enkel vakantiegeld op bonus wordt als percentage van de variabele bezoldiging berekend.",
+      "betrouwbaarheid": "Tier 1",
+      "extractie_methode": "gestructureerde_overname",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": null,
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Jaakie gebruikt dit datapunt voor de jaarcomponent variabel enkel vakantiegeld op bonus."
+      ]
+    },
+    {
+      "id": "vakantiegeld_variabel_dubbel_bonus_pct_2026",
+      "categorie": "premies_en_voordelen",
+      "subcategorie": "vakantiegeld",
+      "type": "parameter",
+      "pc": "200",
+      "omschrijving": "Percentage variabel dubbel vakantiegeld op bonus (bedienden)",
+      "waarde_bron": "7,67% van bonusbedrag",
+      "waarde_genormaliseerd": 0.0767,
+      "eenheid": "fractie",
+      "valuta": "EUR",
+      "frequentie": "jaarlijks",
+      "berekeningsbasis": "bonusbedrag op jaarbasis",
+      "toepassingsgebied": [
+        "bedienden – variabel vakantiegeld op variabele verloning"
+      ],
+      "voorwaarden": [],
+      "uitsluitingen": [],
+      "geldig_vanaf": "2026-01-01",
+      "geldig_tot": "2026-12-31",
+      "laatst_bevestigd_op": "2026-06-01",
+      "bron_organisatie": "RSZ / vakantiewetgeving bedienden",
+      "bron_type": "overheid",
+      "bron_titel": "Variabel vakantiegeld op variabele verloning (bedienden)",
+      "bron_url": "https://www.socialsecurity.be/employer/instructions/dmfa/fr/latest/instructions/salary/particularcases/holidaypay.html",
+      "bron_publicatiedatum": null,
+      "bron_vindplaats": "Sectie vakantiegeld bedienden variabele bezoldiging",
+      "bron_fragment": "Variabel dubbel vakantiegeld op bonus wordt als percentage van de variabele bezoldiging berekend.",
+      "betrouwbaarheid": "Tier 1",
+      "extractie_methode": "gestructureerde_overname",
+      "normalisatie_toegepast": true,
+      "normalisatie_opmerking": null,
+      "status": "actief",
+      "conflict_opmerking": null,
+      "opmerkingen": [
+        "Jaakie gebruikt dit datapunt voor de jaarcomponent variabel dubbel vakantiegeld op bonus."
       ]
     },
     {
