@@ -1,3 +1,5 @@
+import { cbeEnterpriseToKboHtml, extractCbeEnterprise } from "../src/lib/cbe";
+
 export const config = {
   runtime: "edge",
 };
@@ -10,17 +12,34 @@ export default async function handler(request: Request): Promise<Response> {
     return new Response("Ongeldig ondernemingsnummer", { status: 400 });
   }
 
+  const token = process.env.CBE_API_KEY;
+  if (!token) {
+    return new Response("CBE API configuratie ontbreekt: CBE_API_KEY.", { status: 500 });
+  }
+
   try {
-    const response = await fetch(`https://kbopub.economie.fgov.be/kbopub/zoeknummerform.html?nummer=${nummer}&actionLu=Zoek`, {
-      headers: { "user-agent": "Jaakie Loonmotor" },
+    const response = await fetch(`https://cbeapi.be/api/v1/company/${nummer}?lang=nl`, {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+        "user-agent": "Jaakie Loonmotor",
+      },
     });
-    const html = await response.text();
+
+    if (!response.ok) {
+      return new Response(`CBE API gaf geen bruikbare gegevens terug (status ${response.status}).`, {
+        status: response.status,
+      });
+    }
+
+    const enterprise = extractCbeEnterprise(await response.json());
+    const html = cbeEnterpriseToKboHtml(enterprise);
     return new Response(html, {
-      status: response.ok ? 200 : response.status,
+      status: 200,
       headers: { "content-type": "text/html; charset=utf-8" },
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "onbekende fout";
-    return new Response(`KBO kon niet opgehaald worden: ${message}`, { status: 502 });
+    return new Response(`CBE API kon niet opgehaald worden: ${message}`, { status: 502 });
   }
 }

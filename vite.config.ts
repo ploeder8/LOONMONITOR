@@ -23,10 +23,6 @@ export default defineConfig({
     port: 7000,
     strictPort: true,
     proxy: {
-      "/api/kbo": {
-        ...kboProxy,
-        rewrite: (path) => path.replace(/^\/api\/kbo/, "/kbopub/zoeknummerform.html"),
-      },
       "/kbo": {
         ...kboProxy,
         rewrite: (path) => path.replace(/^\/kbo/, "/kbopub"),
@@ -35,10 +31,6 @@ export default defineConfig({
   },
   preview: {
     proxy: {
-      "/api/kbo": {
-        ...kboProxy,
-        rewrite: (path) => path.replace(/^\/api\/kbo/, "/kbopub/zoeknummerform.html"),
-      },
       "/kbo": {
         ...kboProxy,
         rewrite: (path) => path.replace(/^\/kbo/, "/kbopub"),

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Building2, Database, ExternalLink, FileLock2, Loader2, Plus, Save, Search, UserPlus, Users } from "lucide-react";
+import { AlertTriangle, Building2, Database, ExternalLink, FileLock2, Loader2, Plus, Save, Search, Trash2, UserPlus, Users } from "lucide-react";
 import { Banner } from "@/components/Banner";
 import { FormField, inputClass, selectClass } from "@/components/Field";
 import { fetchKboHtml, isAppHtml, isValidKboNumber, normalizeKboNumber, parseKboPage } from "@/lib/kbo";
@@ -7,7 +7,9 @@ import {
   createLeegBedrijf,
   createMedewerkerVoorBedrijf,
   maskInsz,
+  prependLoonmotorDossier,
   readLoonmotorDossiers,
+  removeLoonmotorDossier,
   writeLoonmotorDossiers,
   type LoonmotorBedrijf,
   type LoonmotorDossier,
@@ -31,6 +33,7 @@ export function LoonmotorPage({ initialDossiers }: LoonmotorPageProps) {
   const [kboLoading, setKboLoading] = useState(false);
   const [status, setStatus] = useState<Status>(null);
   const [toonMedewerkerForm, setToonMedewerkerForm] = useState(false);
+  const [teVerwijderenBedrijf, setTeVerwijderenBedrijf] = useState<LoonmotorDossier | null>(null);
   const [, setSharedProfiel] = useSharedProfiel();
 
   useEffect(() => {
@@ -103,9 +106,24 @@ export function LoonmotorPage({ initialDossiers }: LoonmotorPageProps) {
 
   function voegDossierToe(bedrijf: LoonmotorBedrijf) {
     setDossiers((prev) => {
-      const next = [{ bedrijf, medewerkers: [] }, ...prev];
-      setSelectedId(bedrijf.id);
-      return next;
+      const result = prependLoonmotorDossier(prev, bedrijf);
+      setSelectedId(result.selectedId);
+      return result.dossiers;
+    });
+  }
+
+  function verwijderBedrijf(bedrijfId: string) {
+    const naam = teVerwijderenBedrijf?.bedrijf.naam || "Naamloze onderneming";
+    const medewerkerAantal = teVerwijderenBedrijf?.medewerkers.length ?? 0;
+    setDossiers((prev) => {
+      const result = removeLoonmotorDossier(prev, bedrijfId);
+      setSelectedId(result.selectedId);
+      return result.dossiers;
+    });
+    setTeVerwijderenBedrijf(null);
+    setStatus({
+      kind: "success",
+      tekst: `${naam} verwijderd uit lokale concepten${medewerkerAantal ? `, inclusief ${medewerkerAantal} medewerker${medewerkerAantal === 1 ? "" : "s"}` : ""}.`,
     });
   }
 
@@ -193,13 +211,27 @@ export function LoonmotorPage({ initialDossiers }: LoonmotorPageProps) {
         />
       ) : (
         <div className="grid grid-cols-1 xl:grid-cols-[300px_minmax(0,1fr)]" style={{ gap: 16, marginTop: 18 }}>
-          <BedrijvenLijst dossiers={dossiers} selectedId={selected?.bedrijf.id ?? ""} onSelect={setSelectedId} />
+          <BedrijvenLijst
+            dossiers={dossiers}
+            selectedId={selected?.bedrijf.id ?? ""}
+            kboInput={kboInput}
+            setKboInput={setKboInput}
+            kboLoading={kboLoading}
+            onLookup={() => void maakBedrijfViaKbo()}
+            onManual={voegHandmatigBedrijfToe}
+            onSelect={setSelectedId}
+          />
           {selected && (
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <BedrijfHeader bedrijf={selected.bedrijf} medewerkerAantal={selected.medewerkers.length} />
               <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px]" style={{ gap: 16 }}>
                 <BedrijfForm bedrijf={selected.bedrijf} onUpdate={updateSelectedBedrijf} onDefaultsUpdate={updateSelectedDefaults} />
-                <ActiePaneel bedrijf={selected.bedrijf} medewerkers={selected.medewerkers} onAddEmployee={() => setToonMedewerkerForm(true)} />
+                <ActiePaneel
+                  bedrijf={selected.bedrijf}
+                  medewerkers={selected.medewerkers}
+                  onAddEmployee={() => setToonMedewerkerForm(true)}
+                  onDeleteCompany={() => setTeVerwijderenBedrijf(selected)}
+                />
               </div>
               <MedewerkersTabel medewerkers={selected.medewerkers} onOpenInCalculator={openInCalculator} onAddEmployee={() => setToonMedewerkerForm(true)} />
             </div>
@@ -209,6 +241,13 @@ export function LoonmotorPage({ initialDossiers }: LoonmotorPageProps) {
 
       {toonMedewerkerForm && selected && (
         <MedewerkerModal bedrijf={selected.bedrijf} onClose={() => setToonMedewerkerForm(false)} onSave={voegMedewerkerToe} />
+      )}
+      {teVerwijderenBedrijf && (
+        <VerwijderBedrijfModal
+          dossier={teVerwijderenBedrijf}
+          onCancel={() => setTeVerwijderenBedrijf(null)}
+          onConfirm={() => verwijderBedrijf(teVerwijderenBedrijf.bedrijf.id)}
+        />
       )}
     </div>
   );
@@ -255,9 +294,14 @@ function LegeStaat({ kboInput, setKboInput, kboLoading, onLookup, onManual }: {
   );
 }
 
-function BedrijvenLijst({ dossiers, selectedId, onSelect }: {
+function BedrijvenLijst({ dossiers, selectedId, kboInput, setKboInput, kboLoading, onLookup, onManual, onSelect }: {
   dossiers: LoonmotorDossier[];
   selectedId: string;
+  kboInput: string;
+  setKboInput: (value: string) => void;
+  kboLoading: boolean;
+  onLookup: () => void;
+  onManual: () => void;
   onSelect: (id: string) => void;
 }) {
   return (
@@ -287,6 +331,33 @@ function BedrijvenLijst({ dossiers, selectedId, onSelect }: {
           );
         })}
       </div>
+      <details className="bedrijf-toevoegen-panel">
+        <summary>
+          <Plus size={14} />
+          Bedrijf toevoegen
+        </summary>
+        <div style={{ display: "grid", gap: 8, marginTop: 10 }}>
+          <div className="kbo-field-label">Ondernemingsnummer</div>
+          <input
+            className={inputClass}
+            value={kboInput}
+            onChange={(event) => setKboInput(event.target.value)}
+            onBlur={(event) => {
+              const normalized = normalizeKboNumber(event.target.value);
+              if (normalized) setKboInput(normalized);
+            }}
+            placeholder="XXXX.XXX.XXX"
+          />
+          <button type="button" onClick={onLookup} disabled={kboLoading} style={buttonStyle("primary")}>
+            {kboLoading ? <Loader2 size={15} /> : <Search size={15} />}
+            Ophalen uit KBO
+          </button>
+          <button type="button" onClick={onManual} style={buttonStyle("secondary")}>
+            <Plus size={15} />
+            Handmatig bedrijf aanmaken
+          </button>
+        </div>
+      </details>
     </aside>
   );
 }
@@ -410,10 +481,11 @@ function BedrijfForm({ bedrijf, onUpdate, onDefaultsUpdate }: {
   );
 }
 
-function ActiePaneel({ bedrijf, medewerkers, onAddEmployee }: {
+function ActiePaneel({ bedrijf, medewerkers, onAddEmployee, onDeleteCompany }: {
   bedrijf: LoonmotorBedrijf;
   medewerkers: LoonmotorMedewerker[];
   onAddEmployee: () => void;
+  onDeleteCompany: () => void;
 }) {
   return (
     <aside style={{ ...panelStyle, padding: 18, alignSelf: "start" }}>
@@ -433,7 +505,50 @@ function ActiePaneel({ bedrijf, medewerkers, onAddEmployee }: {
         <MiniStat label="Medewerkers" value={String(medewerkers.length)} />
         <MiniStat label="Opslag" value="Lokaal concept" />
       </div>
+      <div style={{ marginTop: 18, paddingTop: 14, borderTop: "1px solid var(--color-border)", display: "grid", gap: 8 }}>
+        <div style={{ display: "flex", gap: 8, color: "var(--color-text-muted)", fontSize: 12, lineHeight: 1.4 }}>
+          <AlertTriangle size={15} style={{ flexShrink: 0, color: "var(--color-primary)" }} />
+          Dit verwijdert ook alle medewerkers uit dit lokale bedrijfsdossier na bevestiging.
+        </div>
+        <button type="button" onClick={onDeleteCompany} style={buttonStyle("danger")}>
+          <Trash2 size={15} />
+          Bedrijf verwijderen
+        </button>
+      </div>
     </aside>
+  );
+}
+
+function VerwijderBedrijfModal({ dossier, onCancel, onConfirm }: {
+  dossier: LoonmotorDossier;
+  onCancel: () => void;
+  onConfirm: () => void;
+}) {
+  const naam = dossier.bedrijf.naam || "Naamloze onderneming";
+  return (
+    <div style={modalOverlayStyle}>
+      <div style={{ ...modalStyle, maxWidth: 520 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={iconTileStyle("var(--color-primary-soft)", "var(--color-primary)")}>
+            <AlertTriangle size={18} />
+          </span>
+          <div>
+            <h2 style={{ margin: 0, fontSize: 19, fontWeight: 850, color: "var(--color-text)" }}>Bedrijf verwijderen</h2>
+            <div style={{ color: "var(--color-text-muted)", fontSize: 13 }}>{naam}</div>
+          </div>
+        </div>
+        <p style={{ margin: "16px 0 0", color: "var(--color-text)", fontSize: 14, lineHeight: 1.55 }}>
+          Dit verwijdert het lokale bedrijfsdossier inclusief {dossier.medewerkers.length} medewerker{dossier.medewerkers.length === 1 ? "" : "s"}. Deze actie kan niet ongedaan gemaakt worden.
+        </p>
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 18, flexWrap: "wrap" }}>
+          <button type="button" onClick={onCancel} style={buttonStyle("secondary")}>Annuleren</button>
+          <button type="button" onClick={onConfirm} style={buttonStyle("danger")}>
+            <Trash2 size={15} />
+            Definitief verwijderen
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -792,7 +907,7 @@ function iconTileStyle(background: string, color: string): React.CSSProperties {
   };
 }
 
-function buttonStyle(kind: "primary" | "secondary" | "disabled"): React.CSSProperties {
+function buttonStyle(kind: "primary" | "secondary" | "disabled" | "danger"): React.CSSProperties {
   const base: React.CSSProperties = {
     display: "inline-flex",
     alignItems: "center",
@@ -812,6 +927,9 @@ function buttonStyle(kind: "primary" | "secondary" | "disabled"): React.CSSPrope
   }
   if (kind === "disabled") {
     return { ...base, background: "var(--color-navy-50)", color: "var(--color-text-muted)", borderColor: "var(--color-border)", opacity: 0.72 };
+  }
+  if (kind === "danger") {
+    return { ...base, background: "var(--color-surface)", color: "var(--color-primary)", borderColor: "var(--color-primary-border)" };
   }
   return { ...base, background: "var(--color-surface)", color: "var(--color-primary)", borderColor: "var(--color-primary-border)" };
 }

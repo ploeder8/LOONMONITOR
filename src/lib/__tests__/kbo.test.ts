@@ -7,6 +7,7 @@ import {
   parseKboPage,
   isAppHtml,
 } from "@/lib/kbo";
+import { cbeEnterpriseToKboHtml, extractCbeEnterprise } from "@/lib/cbe";
 
 describe("KBO helpers", () => {
   it("normaliseert Belgische ondernemingsnummers naar XXXX.XXX.XXX", () => {
@@ -73,11 +74,76 @@ describe("KBO helpers", () => {
 });
 
 describe("KBO dev proxy", () => {
-  it("proxy't lokale Vite KBO-requests via /api/kbo en /kbo met TLS fallback", () => {
+  it("proxy't lokale Vite KBO-fallbackrequests via /kbo met TLS fallback", () => {
     const viteConfig = readFileSync("vite.config.ts", "utf8");
-    expect(viteConfig).toContain('"/api/kbo"');
     expect(viteConfig).toContain('"/kbo"');
     expect(viteConfig).toContain("secure: false");
-    expect(viteConfig).toContain("zoeknummerform.html");
+    expect(readFileSync("src/lib/kbo.ts", "utf8")).toContain("/kbo/zoeknummerform.html");
+    expect(viteConfig).not.toContain('"/api/kbo"');
+  });
+});
+
+describe("CBE API adapter", () => {
+  it("zet CBE enterprise JSON om naar het bestaande KBO-parsercontract", () => {
+    const enterprise = extractCbeEnterprise({
+      data: {
+        denomination: "BOER ZOEKT BIER",
+        juridical_form_short: "VZW",
+        fiscalYearEnd: "31 december",
+        address: {
+          street: "Muggenstraat",
+          street_number: "5",
+          box: "A",
+          post_code: "3500",
+          city: "Hasselt",
+        },
+      },
+    });
+
+    expect(parseKboPage(cbeEnterpriseToKboHtml(enterprise))).toEqual({
+      name: "BOER ZOEKT BIER",
+      form: "VZW",
+      yearEnd: "31 december",
+      address: {
+        street: "Muggenstraat",
+        houseNr: "5 bus A",
+        zip: "3500",
+        city: "Hasselt",
+      },
+    });
+  });
+
+  it("ondersteunt brede CBE-achtige JSON-varianten zonder de UI-parser te wijzigen", () => {
+    const enterprise = extractCbeEnterprise({
+      name: "JAakie Payroll",
+      legalForm: { description: "Besloten vennootschap" },
+      fiscalYearEnd: "31 december",
+      address: {
+        street: "Kerkstraat",
+        houseNumber: "5",
+        postalCode: "2000",
+        municipality: "Antwerpen",
+      },
+    });
+
+    expect(parseKboPage(cbeEnterpriseToKboHtml(enterprise))).toEqual({
+      name: "JAakie Payroll",
+      form: "BV",
+      yearEnd: "31 december",
+      address: {
+        street: "Kerkstraat",
+        houseNr: "5",
+        zip: "2000",
+        city: "Antwerpen",
+      },
+    });
+  });
+
+  it("gebruikt in de Vercel API-route CBE Bearer-auth in plaats van publieke KBO HTML", () => {
+    const apiRoute = readFileSync("api/kbo.ts", "utf8");
+    expect(apiRoute).toContain("https://cbeapi.be/api/v1/company/");
+    expect(apiRoute).toContain("CBE_API_KEY");
+    expect(apiRoute).toContain("Authorization");
+    expect(apiRoute).not.toContain("kbopub.economie.fgov.be");
   });
 });

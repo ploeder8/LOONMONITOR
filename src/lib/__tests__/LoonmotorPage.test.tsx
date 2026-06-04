@@ -50,4 +50,24 @@ describe("LoonmotorPage", () => {
     expect(html).toContain("Indicatief netto");
     expect(html).toContain("Open in calculator");
   });
+
+  it("toont acties om extra bedrijven toe te voegen en het geselecteerde bedrijf te verwijderen", () => {
+    const bedrijf = {
+      ...createLeegBedrijf("bedrijf-1"),
+      naam: "Jaakie Payroll BV",
+      ondernemingsnummer: "0452.085.227",
+    };
+
+    const html = renderToStaticMarkup(
+      createElement(LoonmotorPage, {
+        initialDossiers: [{ bedrijf, medewerkers: [] }],
+      }),
+    );
+
+    expect(html).toContain("Bedrijf toevoegen");
+    expect(html).toContain("Ophalen uit KBO");
+    expect(html).toContain("Handmatig bedrijf aanmaken");
+    expect(html).toContain("Bedrijf verwijderen");
+    expect(html).toContain("verwijdert ook alle medewerkers");
+  });
 });
