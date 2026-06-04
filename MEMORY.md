@@ -11,6 +11,8 @@ Kort projectlogboek voor wijzigingen door coding agents.
 
 ## Log
 
+- 2026-06-05 — Vercel KBO-lookup omgezet van publieke KBO HTML-scrape naar CBE API `/api/v1/company/{nummer}` met server-side `CBE_API_KEY`, inclusief CBE-adapter en tests; reden: publieke FOD-route weigert Vercel-verkeer via WAF.
+- 2026-06-04 — Loonmotor uitgebreid met meerdere bedrijven toevoegen vanuit de bedrijvenrail en bevestigde bedrijfsverwijdering inclusief medewerkers; reden: gebruikers moeten lokale bedrijfsdossiers kunnen beheren na het eerste dossier.
 - 2026-06-04 — KBO-lookup lokaal hersteld via Vite `/api/kbo`-proxy met TLS-fallback, KBO-adresparser verhard voor HTML-entities, KBO-zoekrij compacter gezet en header-contextstroom naar rechts geschoven; reden: lookup gaf 502/source-response en de lege-state/header voelden visueel onrustig.
 - 2026-06-04 — Drukke gegroepeerde header vervangen door rustige app-shell met desktop-linkerrail, mobiele bottomnav en lokale simulator-subnav; reden: navigatie moest professioneler en minder amateuristisch aanvoelen.
 - 2026-06-03 — Loonmotor dossiercockpit toegevoegd met gegroepeerde hoofdnav, lokale bedrijfs-/medewerkerconcepten, KBO-lookup via `/api/kbo`, medewerker-open-in-calculator en bijgewerkte tooldocumentatie; reden: volgende ontwikkelstap richting bedrijfsprofielen en loonmotorflow.

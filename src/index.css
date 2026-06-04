@@ -399,6 +399,41 @@ h1, h2, h3, h4 {
   font-weight: 700;
 }
 
+.bedrijf-toevoegen-panel {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+}
+
+.bedrijf-toevoegen-panel > summary {
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-primary-border);
+  background: var(--color-surface);
+  color: var(--color-primary);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 800;
+  list-style: none;
+}
+
+.bedrijf-toevoegen-panel > summary::-webkit-details-marker {
+  display: none;
+}
+
+.bedrijf-toevoegen-panel[open] > summary {
+  background: var(--color-primary-soft);
+}
+
+.bedrijf-toevoegen-panel input,
+.bedrijf-toevoegen-panel button {
+  width: 100%;
+}
+
 @media (max-width: 820px) {
   .kbo-lookup-row {
     grid-template-columns: minmax(0, 1fr);

@@ -217,9 +217,13 @@ Gebruikers kunnen een bedrijf aanmaken via:
 - **Ophalen uit KBO**: compacte zoekrij met invoer van een ondernemingsnummer, normalisatie naar `XXXX.XXX.XXX`, modulo-97-validatie en lookup via `/api/kbo?nummer=<10-cijfers>`.
 - **Handmatig bedrijf aanmaken**: leeg lokaal bedrijfsconcept.
 
-De KBO-flow vult in v1 alleen publieke basisvelden aan: ondernemingsnummer, naam, rechtsvorm, einddatum boekjaar, straat, huisnummer, postcode en gemeente. De lookup loopt via een serverless proxy; secrets of serverconfiguratie worden niet naar de browser gebracht. Voor lokale Vite-ontwikkeling proxyen zowel `/api/kbo` als `/kbo/*` naar de publieke KBO Public Search met TLS-fallback voor de lokale devomgeving.
+Ook na het eerste dossier blijft de bedrijvenrail een compacte actie **Bedrijf toevoegen** tonen. Een nieuw KBO- of handmatig dossier wordt bovenaan toegevoegd en meteen geselecteerd.
+
+De KBO-flow vult in v1 alleen publieke basisvelden aan: ondernemingsnummer, naam, rechtsvorm, einddatum boekjaar waar beschikbaar, straat, huisnummer, postcode en gemeente. In Vercel loopt `/api/kbo` via de CBE API (`https://cbeapi.be/api/v1/company/{nummer}`) met `CBE_API_KEY` als server-side Bearer-token; secrets of serverconfiguratie worden nooit naar de browser gebracht. Voor lokale Vite-ontwikkeling blijft `/kbo/*` een publieke KBO Public Search fallback met TLS-fallback voor UI-dev, maar CBE-pariteit test je lokaal via `pnpm exec vercel dev`.
 
 Een bedrijfsdossier bevat daarnaast handmatige payroll- en contactvelden: contactpersoon, e-mail, telefoon, arbeidsongevallenpercentage, maaltijdcheque-defaults, groepsverzekering/hospitalisatie-defaults, eerste-aanwerving-indicator en notities. De payrollscope blijft PC 200.
+
+De actie **Bedrijf verwijderen** staat in het dossieractie-paneel, niet als rij-icoon in de bedrijvenlijst. Verwijderen vraagt bevestiging en verwijdert het lokale bedrijfsdossier inclusief alle medewerkers; als er nog bedrijven bestaan selecteert Jaakie automatisch een aangrenzend dossier, anders keert de pagina terug naar de lege Loonmotor-state.
 
 ### Medewerkers
 

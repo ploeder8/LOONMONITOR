@@ -66,6 +66,11 @@ export interface StorageLike {
   removeItem?(key: string): void;
 }
 
+export interface LoonmotorDossierMutationResult {
+  dossiers: LoonmotorDossier[];
+  selectedId: string;
+}
+
 export function createLeegBedrijf(id = createLocalId("bedrijf")): LoonmotorBedrijf {
   return {
     id,
@@ -152,6 +157,34 @@ export function writeLoonmotorDossiers(
 ): void {
   if (!storage) return;
   storage.setItem(LOONMOTOR_STORAGE_KEY, JSON.stringify(dossiers));
+}
+
+export function prependLoonmotorDossier(
+  dossiers: LoonmotorDossier[],
+  bedrijf: LoonmotorBedrijf,
+): LoonmotorDossierMutationResult {
+  return {
+    dossiers: [{ bedrijf, medewerkers: [] }, ...dossiers],
+    selectedId: bedrijf.id,
+  };
+}
+
+export function removeLoonmotorDossier(
+  dossiers: LoonmotorDossier[],
+  bedrijfId: string,
+): LoonmotorDossierMutationResult {
+  const index = dossiers.findIndex((dossier) => dossier.bedrijf.id === bedrijfId);
+  if (index < 0) {
+    return {
+      dossiers,
+      selectedId: dossiers[0]?.bedrijf.id ?? "",
+    };
+  }
+  const next = dossiers.filter((dossier) => dossier.bedrijf.id !== bedrijfId);
+  return {
+    dossiers: next,
+    selectedId: next[index]?.bedrijf.id ?? next[index - 1]?.bedrijf.id ?? next[0]?.bedrijf.id ?? "",
+  };
 }
 
 export function maskInsz(insz: string): string {
