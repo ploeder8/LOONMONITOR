@@ -15,13 +15,20 @@ De payrollberekeningen draaien client-side in de browser. De optionele AI-chat i
 
 ## Navigatie
 
-Jaakie gebruikt een HashRouter met deze hoofdonderdelen:
+Jaakie gebruikt een HashRouter met een rustige app-shell:
+
+- De topbar toont Jaakie-branding links en de actieve contextstroom rechts; er staat geen volledige tabrij meer in de header.
+- Desktop gebruikt een vaste linkerrail met de hoofdmodules **Loonmotor**, **Simulator** en **Ontwikkeling**.
+- Mobiel gebruikt een compacte bottom navigation met **Loonmotor**, **Simulator** en **Meer**.
+- De Simulator-subnavigatie (`Calculator`, `Loonfiche`, `Loonrun`) verschijnt alleen binnen de simulatorcontext.
+- Ontwikkelingslinks (`Testcases`, `Scope & bekend manco`, `Onderzoeksdossier`) zijn secundair onder de Ontwikkeling-context.
 
 | Route | Functie |
 |---|---|
 | `/` | Profiel en calculator. Gebruikers voeren loon-, arbeids- en voordeelgegevens in en zien resultaten met audit-trail. |
 | `/loonfiche` | Pro-forma loonfiche voor één werknemer. Toont een document-achtige weergave van brutoloon → netto met alle tussenstappen, vergelijkbaar met een loonbrief maar expliciet gelabeld als pro-forma. Deelt binnen hetzelfde browservenster de profielstate met de calculator. Ondersteunt identificatievelden (werknemer-/werkgevernaam en -referentie), print en audit-toggle. |
 | `/loonrun` | Multi-werknemer loonrun. Importeert een multi-row CSV, berekent alle werknemers geïsoleerd, toont een overzichtstabel met totalen en laat individuele loonfiches bekijken per werknemer. |
+| `/loonmotor` | Dossiercockpit voor bedrijven en medewerkers. V1 bewaart lokale conceptdossiers in de browser, kan publieke KBO-basisgegevens ophalen via ondernemingsnummer en kan een medewerkerprofiel openen in de calculator. |
 | `/testcases` | Overzicht van testcases en validatiecontext. |
 | `/scope` | Scope, bekende beperkingen en manco's. |
 | `/onderzoek/index.html` | Statisch HTML-onderzoeksdossier met markt-, juridische en technische analyse. |
@@ -192,6 +199,39 @@ De knop **"Rapport"** opent een estetisch overzicht dat de payroll-expert kan de
 - **Footer**: pro-forma disclaimer en korte uitleg van loonwig.
 
 Het rapport is **print-vriendelijk** (A4 via `@media print`) en bevat geen audit-trail of technische details. De werkgever ontvangt een helder, zakelijk overzicht.
+
+---
+
+## Loonmotor
+
+De loonmotor-pagina (`#/loonmotor`) is een dossiercockpit voor payrollvoorbereiding. De pagina is bedoeld om bedrijven en medewerkers op te zetten voordat ze naar de calculator, loonfiche of loonrun gaan.
+
+### Lokale conceptdossiers
+
+V1 werkt zonder backend. Bedrijven en medewerkers worden als lokale concepten bewaard in `localStorage` key `jaakie:loonmotor:dossiers:v1`. De UI toont daarom expliciet dat de opslag alleen in deze browser gebeurt en geen officiële payrollfinalisatie of backend-synchronisatie is. De actie **Backend opslaan** is zichtbaar maar uitgeschakeld tot de backendkoppeling bestaat.
+
+### Bedrijven
+
+Gebruikers kunnen een bedrijf aanmaken via:
+
+- **Ophalen uit KBO**: compacte zoekrij met invoer van een ondernemingsnummer, normalisatie naar `XXXX.XXX.XXX`, modulo-97-validatie en lookup via `/api/kbo?nummer=<10-cijfers>`.
+- **Handmatig bedrijf aanmaken**: leeg lokaal bedrijfsconcept.
+
+De KBO-flow vult in v1 alleen publieke basisvelden aan: ondernemingsnummer, naam, rechtsvorm, einddatum boekjaar, straat, huisnummer, postcode en gemeente. De lookup loopt via een serverless proxy; secrets of serverconfiguratie worden niet naar de browser gebracht. Voor lokale Vite-ontwikkeling proxyen zowel `/api/kbo` als `/kbo/*` naar de publieke KBO Public Search met TLS-fallback voor de lokale devomgeving.
+
+Een bedrijfsdossier bevat daarnaast handmatige payroll- en contactvelden: contactpersoon, e-mail, telefoon, arbeidsongevallenpercentage, maaltijdcheque-defaults, groepsverzekering/hospitalisatie-defaults, eerste-aanwerving-indicator en notities. De payrollscope blijft PC 200.
+
+### Medewerkers
+
+Binnen elk bedrijf kan de gebruiker medewerkers toevoegen. Een medewerker bevat de essentie voor simulatie:
+
+- naam en interne referentie;
+- optioneel INSZ, gemaskeerd in de lijstweergave en niet nodig voor berekening;
+- optionele geboortedatum, startdatum, statuut en functie;
+- brutoloon, tewerkstellingspercentage, ervaring, fiscale context en enkele voordeelvelden;
+- een onderliggend `Profiel` dat aansluit op de bestaande calculator.
+
+De medewerkerstabel toont indicatieve bruto-, netto- en werkgeverskostcijfers via de bestaande loonfiche/profielberekeningen. De actie **Open in calculator** zet het gedeelde vensterprofiel en navigeert naar de calculator. **Toevoegen aan loonrun** is zichtbaar maar nog uitgeschakeld in v1.
 
 ---
 

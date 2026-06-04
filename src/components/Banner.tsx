@@ -42,7 +42,7 @@ export function Banner({ kind, title, children, }: {
             ...STYLES[kind],
         }}>
       <span style={{ fontWeight: 700 }}>{ICON[kind]}</span>
-      <div style={{ flex: 1 }}>
+      <div style={{ flex: 1, minWidth: 0, overflowWrap: "anywhere", wordBreak: "break-word" }}>
         {title && <div style={{ fontWeight: 600, marginBottom: 2 }}>{title}</div>}
         <div>{children}</div>
       </div>
