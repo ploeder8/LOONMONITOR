@@ -2,7 +2,16 @@ import { describe, expect, it } from "bun:test";
 import { readFileSync } from "node:fs";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { headerContentLayout, mainMaxWidthForPath } from "@/App";
+import {
+    activeSectionForPath,
+    headerContentLayout,
+    mainMaxWidthForPath,
+    MobileBottomNav,
+    PRIMARY_NAV_ITEMS,
+    PrimaryRail,
+    SIMULATOR_SUBNAV_ITEMS,
+    SimulatorSubnav,
+} from "@/App";
 import { fietsvergoeding } from "@/lib/fietsvergoeding";
 import { aantalWeekdagenInMaand, DEFAULTS, percentageNaarTewerkstellingsbreuk, refDatumVoorMaand, tewerkstellingsbreukNaarPercentage, } from "@/lib/profiel";
 import { berekenNettoVoorProfiel } from "@/lib/profielBerekeningen";
@@ -11,14 +20,53 @@ import { HomePage, waardeUitNumeriekeInput, } from "@/pages/HomePage";
 import { ScopePage } from "@/pages/ScopePage";
 import { TestcasesPage } from "@/pages/TestcasesPage";
 describe("App shell breedte", () => {
-    it("geeft alleen de calculatorroute extra desktopbreedte", () => {
+    it("geeft simulator- en loonmotorroutes extra desktopbreedte", () => {
         expect(mainMaxWidthForPath("/")).toBe(1520);
+        expect(mainMaxWidthForPath("/loonmotor")).toBe(1520);
         expect(mainMaxWidthForPath("/scope")).toBe(1180);
         expect(mainMaxWidthForPath("/testcases")).toBe(1180);
     });
     it("houdt logo en tooltitel links uitgelijnd in de header", () => {
         expect(headerContentLayout.maxWidth).toBe("none");
         expect(headerContentLayout.margin).toBe("0");
+    });
+    it("beperkt globale navigatie tot primaire werkruimtes", () => {
+        expect(PRIMARY_NAV_ITEMS.map((item) => item.label)).toEqual([
+            "Loonmotor",
+            "Simulator",
+            "Ontwikkeling",
+        ]);
+        expect(PRIMARY_NAV_ITEMS.map((item) => item.label)).not.toContain("Calculator");
+        expect(PRIMARY_NAV_ITEMS.map((item) => item.label)).not.toContain("Loonfiche");
+        expect(PRIMARY_NAV_ITEMS.map((item) => item.label)).not.toContain("Loonrun");
+        expect(PRIMARY_NAV_ITEMS.map((item) => item.label)).not.toContain("Scope & bekend manco");
+    });
+    it("houdt calculator, loonfiche en loonrun als lokale simulator-subnav", () => {
+        expect(SIMULATOR_SUBNAV_ITEMS.map((item) => item.label)).toEqual([
+            "Calculator",
+            "Loonfiche",
+            "Loonrun",
+        ]);
+    });
+    it("bepaalt actieve hoofdsectie op routegroep", () => {
+        expect(activeSectionForPath("/loonmotor")).toBe("loonmotor");
+        expect(activeSectionForPath("/")).toBe("simulator");
+        expect(activeSectionForPath("/loonfiche")).toBe("simulator");
+        expect(activeSectionForPath("/loonrun")).toBe("simulator");
+        expect(activeSectionForPath("/scope")).toBe("ontwikkeling");
+        expect(activeSectionForPath("/testcases")).toBe("ontwikkeling");
+    });
+    it("rendert linkerrail, simulator-subnav en mobiele bottomnav als gescheiden navigatie", () => {
+        const railHtml = renderToStaticMarkup(createElement(PrimaryRail, { pathname: "/loonmotor" }));
+        const simulatorHtml = renderToStaticMarkup(createElement(SimulatorSubnav, { pathname: "/loonfiche" }));
+        const mobileHtml = renderToStaticMarkup(createElement(MobileBottomNav, { pathname: "/scope" }));
+        expect(railHtml).toContain("Loonmotor");
+        expect(railHtml).toContain('aria-current="page"');
+        expect(railHtml).not.toContain("Loonfiche");
+        expect(simulatorHtml).toContain("Calculator");
+        expect(simulatorHtml).toContain("Loonfiche");
+        expect(simulatorHtml).toContain("Loonrun");
+        expect(mobileHtml).toContain("Meer");
     });
 });
 describe("Publieke documentatiepagina's", () => {
