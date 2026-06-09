@@ -205,6 +205,7 @@ export function berekenWerkgeverskostVoorProfiel(p: Profiel, refDatum: string, v
         vaaPerMaand,
         onkostenvergoedingPerMaand: p.onkostenvergoedingPerMaand,
         woonwerkVergoedingPerMaand: resolvedMobiliteit.woonwerk.totaalVergoeding,
+        doelgroepverminderingEersteAanwervingen: p.doelgroepverminderingEersteAanwervingen,
     });
 }
 export function berekenLoonwigVoorProfielResultaat(wgk: WerkgeverskostResultaat, netto: NettoResultaat): number {
@@ -225,6 +226,8 @@ export function berekenJaaroverzichtVoorProfiel(p: Profiel, refDatum: string, ne
         bonusJaarbedrag: bonusJaarbedragVoorProfiel(p),
         vaaPerMaand: vaaWerkmiddelen.totaalPerMaand +
             (mobiliteit.vaaBedrijfswagen?.vaaMaand ?? 0),
+        doelgroepverminderingWerkgeverJaar: wgk.doelgroepverminderingWerkgeverPerJaar,
+        doelgroepverminderingDatapunten: wgk.datapunten.filter((dp) => dp.id.startsWith("doelgroepvermindering_")),
     });
 }
 export function berekenProfielKernOutputs(p: Profiel): ProfielKernOutputs {

@@ -9,7 +9,7 @@ Tool voor payroll-experts om lonen en kosten te verifiëren onder **Paritair Com
   Vercel `/api/chat` met server-side OpenAI file search en Supabase-rate-limiting.
   Secrets blijven uitsluitend server-side en mogen nooit in `VITE_*` env vars staan.
 - **Data:** bundled JSON dataset (`src/data/pc200_payroll_dataset_2026.json`),
-  schema-gevalideerd bij applicatiestart — **71 datapunten, 15 bronrecords, peildatum 2026-05-30**
+  schema-gevalideerd bij applicatiestart — **75 datapunten, 15 bronrecords, peildatum 2026-05-30**
 - **Audit-first:** elke berekening is gekoppeld aan datapunt-id, status,
   betrouwbaarheidstier (1/2/3) en primaire bron met fragment-citaat
 - **Kennisbank (SSOT):** zie `knowledgebase/` voor regelkader, calculator-specs, testcorpus, gaps & roadmap
@@ -39,6 +39,7 @@ Tool voor payroll-experts om lonen en kosten te verifiëren onder **Paritair Com
 - Arbeidsongevallenverzekering (~0,3 %, bureaupersoneel)
 - Maandelijkse loonkost inclusief optionele groepsverzekering, hospitalisatie en maaltijdcheques
 - Jaaroverzicht met eindejaarspremie, jaarpremie, ecocheques en dubbel vakantiegeld
+- Doelgroepvermindering eerste aanwervingen vanaf 1/7/2026: eerste werknemer (€2.000/kwartaal) of tweede tot vijfde werknemer (€1.000/kwartaal)
 - Provisie dubbel vakantiegeld in maandbeeld: `(bruto + VAA) × 92 % / 12`
 - **Loonwig %** = (totale loonkost − netto) / totale loonkost
 
@@ -144,7 +145,7 @@ jaakie/
 │   │   ├── brand.ts                # centrale toolnaam, logo, copy en title
 │   │   └── brand.css               # centrale Jaakie design tokens
 │   ├── data/
-│   │   ├── pc200_payroll_dataset_2026.json   # 71 datapunten
+│   │   ├── pc200_payroll_dataset_2026.json   # 75 datapunten
 │   │   └── pc200_payroll_dataset.schema.json
 │   ├── types/dataset.ts
 │   ├── lib/

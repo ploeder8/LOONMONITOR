@@ -22,6 +22,8 @@ export interface JaaroverzichtInput {
     tewerkstellingsbreuk: number;
     bonusJaarbedrag?: number;
     vaaPerMaand?: number;
+    doelgroepverminderingWerkgeverJaar?: number;
+    doelgroepverminderingDatapunten?: Datapunt[];
 }
 export interface JaarcomponentNetto {
     bruto: number;
@@ -54,6 +56,9 @@ export interface WerkgeverJaaroverzicht {
     variabelDubbelVakantiegeldOpBonusBruto: number;
     variabelDubbelVakantiegeldOpBonusRsz: number;
     dubbelVakantiegeld: number;
+    doelgroepvermindering: number;
+    totaleLoonkostJaarExclusiefDoelgroepvermindering: number;
+    totaleLoonkostJaarInclusiefDoelgroepvermindering: number;
     totaleLoonkostJaar: number;
     datapunten: Datapunt[];
 }
@@ -127,6 +132,8 @@ export function berekenJaaroverzicht(input: JaaroverzichtInput): JaaroverzichtRe
         variabelDubbelVakantiegeldOpBonus.bruto +
         variabelDubbelVakantiegeldOpBonusRsz +
         dubbelVakantiegeld.bruto);
+    const doelgroepvermindering = round2(Math.max(0, input.doelgroepverminderingWerkgeverJaar ?? 0));
+    const totaleLoonkostJaarInclusiefDoelgroepvermindering = round2(Math.max(0, totaleLoonkostJaar - doelgroepvermindering));
     return {
         netto: {
             maandloonNettoX12,
@@ -150,6 +157,9 @@ export function berekenJaaroverzicht(input: JaaroverzichtInput): JaaroverzichtRe
             variabelDubbelVakantiegeldOpBonusBruto: variabelDubbelVakantiegeldOpBonus.bruto,
             variabelDubbelVakantiegeldOpBonusRsz,
             dubbelVakantiegeld: dubbelVakantiegeld.bruto,
+            doelgroepvermindering,
+            totaleLoonkostJaarExclusiefDoelgroepvermindering: totaleLoonkostJaar,
+            totaleLoonkostJaarInclusiefDoelgroepvermindering,
             totaleLoonkostJaar,
             datapunten: uniekeDatapunten([
                 eindejaar.datapunt,
@@ -159,6 +169,7 @@ export function berekenJaaroverzicht(input: JaaroverzichtInput): JaaroverzichtRe
                 ...(bonusJaarbedrag > 0 ? variabelEnkelVakantiegeldOpBonus.datapunten : []),
                 ...(bonusJaarbedrag > 0 ? variabelDubbelVakantiegeldOpBonus.datapunten : []),
                 ...dubbelVakantiegeld.datapunten,
+                ...(doelgroepvermindering > 0 ? input.doelgroepverminderingDatapunten ?? [] : []),
             ]),
         },
     };

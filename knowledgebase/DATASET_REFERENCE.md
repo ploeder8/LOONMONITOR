@@ -3,7 +3,7 @@
 **Bron:** `src/data/pc200_payroll_dataset_2026.json`
 **Peildatum:** 2026-05-30
 **Doeljaar:** 2026
-**Totaal:** 71 datapunten
+**Totaal:** 75 datapunten
 **Bronnen:** 15 bronrecords
 
 ---
@@ -25,12 +25,14 @@
 | `lonen_pc200_studenten_catC_01012026` | actief | Tier 2 | Sectorale minimum maandlonen PC 200 – Studentenschaal, Categorie C, per leeftijd |
 | `lonen_pc200_studenten_catD_01012026` | actief | Tier 2 | Sectorale minimum maandlonen PC 200 – Studentenschaal, Categorie D, per leeftijd |
 
-## `rsz` (11 datapunten)
+## `rsz` (13 datapunten)
 
 | ID | Status | Tier | Omschrijving |
 |---|---|---|---|
 | `rsz_werknemer_basis` | actief | Tier 1 | Persoonlijke RSZ-bijdrage werknemer (privésector, bedienden) |
 | `rsz_werkgever_profit_basis` | actief | Tier 1 | Faciaal tarief werkgeversbijdrage RSZ – privé profitsector (na taxshift sinds 1/1/2018) |
+| `doelgroepvermindering_eerste_werknemer_2026_juli` | actief | Tier 1 | Doelgroepvermindering eerste aanwervingen vanaf 1/7/2026: maximaal €2.000 per kwartaal voor de eerste werknemer |
+| `doelgroepvermindering_tweede_tot_vijfde_werknemer_2026_juli` | actief | Tier 1 | Doelgroepvermindering eerste aanwervingen vanaf 1/7/2026: maximaal €1.000 per kwartaal voor de tweede tot vijfde werknemer |
 | `rsz_basis_arbeiders_108` | actief | Tier 1 | Berekeningsbasis RSZ-bijdragen voor arbeiders (108% brutoloon) – ter contrast met bedienden (100%) |
 | `rsz_bijzondere_bijdragen_verwijzing` | actief | Tier 1 | Bijzondere RSZ-bijdragen (extralegale pensioenen, FSO, CO2-solidariteitsbijdrage bedrijfswagens, dubbel vakantiegeld, solidariteitsbijdrage winstdeelname, bijzondere bijdrage sociale zekerheid) |
 | `rsz_pc200_sociaal_fonds_200_werkgeversbijdrage_2026` | gemarkeerd_voor_review | Tier 1 | Historisch bronrecord; niet langer gebruikt als aparte runtimecomponent in Jaakie |
@@ -106,7 +108,7 @@
 
 ---
 
-**Totaal: 71 datapunten** (over 5 categorieën)
+**Totaal: 75 datapunten** (over 5 categorieën)
 
 **Bronnen: 15 bronrecords**
 

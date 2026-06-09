@@ -8,7 +8,7 @@ import type { BrutolocheckResult } from "@/lib/baremas";
 import { formatEUR } from "@/lib/money";
 import { aantalWeekdagenInMaand, percentageNaarTewerkstellingsbreuk, tewerkstellingsbreukNaarPercentage, type BaremaCat, type BonusPeriode, type GezinsType, type Profiel, type Schaal, type Statuut, type StudentenCat, } from "@/lib/profiel";
 import { berekenBaremaInlineCheck } from "@/lib/profielBerekeningen";
-import { MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026 } from "@/lib/werkgeverskost";
+import { MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026, type DoelgroepverminderingEersteAanwervingen } from "@/lib/werkgeverskost";
 import { HelpTooltip, NumeriekeInput } from "@/pages/home/FormControls";
 import { MobiliteitPaneel } from "@/pages/home/MobiliteitPaneel";
 import type { ProfielSetter } from "@/pages/home/types";
@@ -409,20 +409,33 @@ function ExtraLooncomponentenContent({ profiel, set }: {
       </div>
     </div>);
 }
+const DOELGROEPVERMINDERING_OPMERKING = "de doelgroepvermindering kan echter enkel toegepast worden indien de onderneming daadwerkelijk extra werkgelegenheid creeert , waarbij rekening gehouden wordt met bestaande/voorafgaande tewerkstellingen in andere vennootschappen waarmee de nieuwe onderneming verbonden is";
 function WerkgeversbijdragenContent({ profiel, set }: {
     profiel: Profiel;
     set: ProfielSetter;
 }) {
-    return (<div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 16 }}>
-      <FormField label={<>Arbeidsongevallen (%) <HelpTooltip text="Burelen: ~0,3%. Controleer uw polis."/></>}>
-        <NumeriekeInput className={inputClass} step="0.01" min={0} max={10} value={profiel.arbeidsongevallenPct * 100} formatValue={(waarde) => waarde.toFixed(2)} onValueChange={(waarde) => set("arbeidsongevallenPct", waarde / 100)}/>
+    return (<div style={{ display: "grid", gap: 16 }}>
+      <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 16 }}>
+        <FormField label={<>Arbeidsongevallen (%) <HelpTooltip text="Burelen: ~0,3%. Controleer uw polis."/></>}>
+          <NumeriekeInput className={inputClass} step="0.01" min={0} max={10} value={profiel.arbeidsongevallenPct * 100} formatValue={(waarde) => waarde.toFixed(2)} onValueChange={(waarde) => set("arbeidsongevallenPct", waarde / 100)}/>
+        </FormField>
+        <FormField label="Patronale groepsverzekering (€/m)">
+          <NumeriekeInput className={inputClass} step="0.01" min={0} value={profiel.extraGroepsverzekering} onValueChange={(waarde) => set("extraGroepsverzekering", waarde)}/>
+        </FormField>
+        <FormField label="Hospitalisatieverzekering (€/m)">
+          <NumeriekeInput className={inputClass} step="0.01" min={0} value={profiel.extraHospitalisatie} onValueChange={(waarde) => set("extraHospitalisatie", waarde)}/>
+        </FormField>
+      </div>
+      <FormField label={<>Doelgroepvermindering eerste aanwervingen <HelpTooltip text="Programmawet 30 mei 2026: vanaf 1 juli 2026 maximaal €2.000/kwartaal voor de eerste werknemer en €1.000/kwartaal voor werknemers 2 tot 5 binnen het toepassingsvenster."/></>}>
+        <select className={selectClass} value={profiel.doelgroepverminderingEersteAanwervingen} onChange={(e) => set("doelgroepverminderingEersteAanwervingen", e.target.value as DoelgroepverminderingEersteAanwervingen)}>
+          <option value="geen">Geen doelgroepvermindering</option>
+          <option value="eerste_werknemer">Eerste werknemer - max. €2.000/kwartaal</option>
+          <option value="tweede_tot_vijfde_werknemer">Tweede tot vijfde werknemer - max. €1.000/kwartaal</option>
+        </select>
       </FormField>
-      <FormField label="Patronale groepsverzekering (€/m)">
-        <NumeriekeInput className={inputClass} step="0.01" min={0} value={profiel.extraGroepsverzekering} onValueChange={(waarde) => set("extraGroepsverzekering", waarde)}/>
-      </FormField>
-      <FormField label="Hospitalisatieverzekering (€/m)">
-        <NumeriekeInput className={inputClass} step="0.01" min={0} value={profiel.extraHospitalisatie} onValueChange={(waarde) => set("extraHospitalisatie", waarde)}/>
-      </FormField>
+      {profiel.doelgroepverminderingEersteAanwervingen !== "geen" && (<Banner kind="warning" title="Voorwaarde doelgroepvermindering">
+        {DOELGROEPVERMINDERING_OPMERKING}
+      </Banner>)}
     </div>);
 }
 export function profielMetBerekeningsMaand(profiel: Profiel, maand: string): Profiel {

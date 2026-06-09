@@ -12,7 +12,7 @@ Jaakie is een browser-only SPA voor payroll-experts onder PC 200. De tool bereke
 - Package/runtime: `pnpm` voor dependencies, `bun:test` voor tests. Geen Vitest/Jest.
 - Devserver: `pnpm dev` op `http://localhost:7000` met `strictPort: true`.
 - Path alias: `@/` wijst naar `src/`.
-- Dataset: `src/data/pc200_payroll_dataset_2026.json` bevat 71 datapunten.
+- Dataset: `src/data/pc200_payroll_dataset_2026.json` bevat 75 datapunten.
 
 ## Commands
 

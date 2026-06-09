@@ -51,7 +51,7 @@ Gebruikers kunnen onder meer invullen of aanpassen:
 - gezinstype en kinderen ten laste;
 - maaltijdcheques, bonus en andere voordelen;
 - woon-werkcomponenten: fiets, privewagen, openbaar vervoer, trein en bedrijfswagen/VAA;
-- werkgeverskostparameters zoals arbeidsongevallenpercentage, groepsverzekering en hospitalisatie.
+- werkgeverskostparameters zoals arbeidsongevallenpercentage, groepsverzekering, hospitalisatie en doelgroepvermindering eerste aanwervingen.
 
 De vroegere bouw-subsetoptie voor een aparte 1,80% aanvullende pensioenbijdrage is niet langer zichtbaar of actief. Oude CSV-profielen met `bouwVlag` blijven inleesbaar, maar Jaakie telt geen aparte bouwbijdrage bovenop de globale werkgevers-RSZ.
 
@@ -74,6 +74,8 @@ eindejaarspremie, sectorale jaarpremie en dubbel vakantiegeld krijgen een tarief
 De bonusinvoer hoort bij de extra looncomponenten. Gebruikers kiezen of het ingevoerde bedrag per maand of per jaar is; Jaakie rekent dit altijd om naar een eenmalige jaarbonus. De bonus telt niet mee in het gewone maandnetto, netto-bruto, barema, werkbonus, BBSZ of maandelijkse werkgeverskost. In het jaaroverzicht verwerkt Jaakie drie gekoppelde exceptionele componenten: de bonus zelf, variabel enkel vakantiegeld op bonus en variabel dubbel vakantiegeld op bonus. Elke component krijgt 13,07% werknemers-RSZ, bijzondere BV volgens Bijlage III (kolom andere exceptionele vergoeding) en 25% patronale RSZ in de werkgeversjaarcomponent.
 
 De eindejaarspremie wordt in de gebruikersflow als volledig gewerkt jaar getoond: bruto eindejaarspremie = 1 brutomaandloon. Pro-rata anciënniteit- en prestatievelden zijn geen gebruikersinstelling meer; oude CSV-imports met afwijkende waarden worden voor actieve eindejaarspremie naar 12/12 genormaliseerd.
+
+Voor werkgeversbijdragen kan de gebruiker een doelgroepvermindering eerste aanwervingen kiezen. Vanaf 1/7/2026 rekent Jaakie voor de eerste werknemer maximaal €2.000 per kwartaal (= €8.000 per jaar) en voor de tweede tot vijfde werknemer maximaal €1.000 per kwartaal (= €4.000 per jaar). De maand- en jaarpanelen tonen de werkgeverskost exclusief doelgroepvermindering en, wanneer gekozen, daaronder inclusief doelgroepvermindering met de verplichte klantopmerking over daadwerkelijke extra werkgelegenheid en verbonden vennootschappen.
 
 Voor woon-werk privévervoer verwerkt Jaakie het maandbedrag als belastbare werkgeverstussenkomst in het netto-pad. De BV-berekening past daarna de woon-werkvrijstelling (bv. forfaitaire €500/jaar) apart toe op de BV-grondslag. Fiets- en openbaarvervoercomponenten (trein, bus, tram, metro) worden in de nettoflow als netto-vrijgestelde vergoeding verwerkt en verhogen de BV-grondslag niet.
 
@@ -98,8 +100,8 @@ De knop **"Print overzicht"** opent een estetisch, print-vriendelijk document vo
 - **Header**: Jaakie brand, titel "Loonoverzicht", periode, statuut, werknemer-/werkgever-metadata.
 - **Executive summary**: 6 cards met bruto, netto (maand), werkgeverskost, loonwig, netto (jaar), werkgeverskost (jaar).
 - **Netto loon tabel**: bruto → RSZ → werkbonus → belastbaar loon → bedrijfsvoorheffing → BBSZ → netto te betalen.
-- **Werkgeverskost tabel**: brutoloon → RSZ werkgever → arbeidsongevallen → provisies → totale werkgeverskost.
-- **Jaaroverzicht**: netto- en werkgeverskant met eindejaarspremie, vakantiegeld, jaarpremie, bonus, variabel enkel/dubbel vakantiegeld op bonus en ecocheques.
+- **Werkgeverskost tabel**: brutoloon → RSZ werkgever → arbeidsongevallen → provisies → totale werkgeverskost, met aparte totaalregel inclusief doelgroepvermindering wanneer gekozen.
+- **Jaaroverzicht**: netto- en werkgeverskant met eindejaarspremie, vakantiegeld, jaarpremie, bonus, variabel enkel/dubbel vakantiegeld op bonus, ecocheques en eventuele doelgroepvermindering.
 - **Footer**: pro-forma disclaimer.
 
 Het overzicht is **print-vriendelijk** (A4 via `@media print`) en bevat geen audit-trail. Studentenmodus toont een vereenvoudigde melding.

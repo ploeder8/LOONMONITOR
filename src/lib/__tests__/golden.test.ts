@@ -1254,6 +1254,25 @@ describe("Jaaroverzicht — netto en werkgeverskost", () => {
         expect(nulBonus.netto.totaalNettoJaarloon).toBe(basis.netto.totaalNettoJaarloon);
         expect(nulBonus.werkgever.totaleLoonkostJaar).toBe(basis.werkgever.totaleLoonkostJaar);
     });
+    it("toont werkgeverskost exclusief en inclusief doelgroepvermindering eerste werknemer", () => {
+        const r = berekenJaaroverzicht({
+            brutoloon: 3000,
+            nettoloonPerMaand: 2000,
+            loonkostWerkgeverPerMaand: 3900,
+            doelgroepverminderingWerkgeverJaar: 8000,
+            refDatum: REF_2026,
+            gezinstype: "alleenstaand",
+            kinderenTenLaste: 0,
+            ancienniteitMaanden: 0,
+            prestatieMaandenInRefertepériode: 0,
+            tewerkstellingsbreuk: 1,
+            doelgroepverminderingDatapunten: [getDatapunt("doelgroepvermindering_eerste_werknemer_2026_juli")!],
+        });
+        expect(r.werkgever.doelgroepvermindering).toBe(8000);
+        expect(r.werkgever.totaleLoonkostJaarExclusiefDoelgroepvermindering).toBe(r.werkgever.totaleLoonkostJaar);
+        expect(r.werkgever.totaleLoonkostJaarInclusiefDoelgroepvermindering).toBe(r.werkgever.totaleLoonkostJaar - 8000);
+        expect(r.werkgever.datapunten.map((dp) => dp.id)).toContain("doelgroepvermindering_eerste_werknemer_2026_juli");
+    });
     it("berekent de jaarcomponenten voor €4.500 bruto volgens het voorbeeld jaaroverzicht", () => {
         const r = berekenJaaroverzicht({
             brutoloon: 4500,
@@ -1396,5 +1415,16 @@ describe("TC-WGK-01 — werkgeverskost met extralegale voordelen", () => {
         });
         expect(metOnkosten.extraVoordelen).toBe(125);
         expect(metOnkosten.totaleLoonkostBreed).toBe(basis.totaleLoonkostBreed + 125);
+    });
+    it("past de doelgroepvermindering eerste werknemer toe als €2.000 per kwartaal", () => {
+        const r = werkgeverskost({
+            brutoloon: bruto,
+            refDatum: "2026-07-01",
+            doelgroepverminderingEersteAanwervingen: "eerste_werknemer",
+        });
+        expect(r.doelgroepverminderingWerkgeverPerKwartaal).toBe(2000);
+        expect(r.doelgroepverminderingWerkgeverPerJaar).toBe(8000);
+        expect(r.doelgroepverminderingWerkgeverPerMaand).toBe(666.67);
+        expect(r.totaleLoonkostBreedNaDoelgroepvermindering).toBe(r.totaleLoonkostBreed - 666.67);
     });
 });

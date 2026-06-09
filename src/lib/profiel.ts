@@ -1,7 +1,7 @@
 import type { BaremaCat, Schaal, StudentenCat } from "@/lib/baremas";
 import type { BrandstofBedrijfswagen } from "@/lib/vaaBedrijfswagen";
 import type { GezinsType } from "@/lib/netto";
-import { MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026 } from "@/lib/werkgeverskost";
+import { MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026, type DoelgroepverminderingEersteAanwervingen } from "@/lib/werkgeverskost";
 export type { BaremaCat, Schaal, StudentenCat } from "@/lib/baremas";
 export type { BrandstofBedrijfswagen } from "@/lib/vaaBedrijfswagen";
 export type { GezinsType } from "@/lib/netto";
@@ -51,6 +51,7 @@ export interface Profiel {
     woonwerkPrivewagenBeroepskostMethode: BeroepskostMethode;
     woonwerkBedrijfswagenBeroepskostMethode: BeroepskostMethode;
     arbeidsongevallenPct: number;
+    doelgroepverminderingEersteAanwervingen: DoelgroepverminderingEersteAanwervingen;
     extraGroepsverzekering: number;
     maaltijdchequesActief: boolean;
     maaltijdchequeWerkgeversaandeelPerDag: number;
@@ -108,6 +109,7 @@ export const DEFAULTS: Profiel = {
     woonwerkPrivewagenBeroepskostMethode: "forfaitair",
     woonwerkBedrijfswagenBeroepskostMethode: "forfaitair",
     arbeidsongevallenPct: 0.003,
+    doelgroepverminderingEersteAanwervingen: "geen",
     extraGroepsverzekering: 0,
     maaltijdchequesActief: false,
     maaltijdchequeWerkgeversaandeelPerDag: MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026,
