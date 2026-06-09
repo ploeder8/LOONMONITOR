@@ -53,6 +53,7 @@ export function WerkgeverskostPanel({ resultaat: r, loonwigPct, netto, extras, }
           {extras.hospitalisatie > 0 && (<NettoRow label="Hospitalisatieverzekering" bedrag={extras.hospitalisatie} prefix="+" dimmed/>)}
           {extras.woonwerk > 0 && (<NettoRow label="Woon-werkvergoeding" bedrag={extras.woonwerk} prefix="+" dimmed/>)}
           {extras.onkostenvergoeding > 0 && (<NettoRow label="Onkostenvergoedingen" bedrag={extras.onkostenvergoeding} prefix="+" dimmed/>)}
+          {r.doelgroepverminderingWerkgeverPerMaand > 0 && (<NettoRow label="Doelgroepvermindering eerste aanwervingen" bedrag={r.doelgroepverminderingWerkgeverPerMaand} prefix="-" dimmed/>)}
           <tr style={{ borderTop: "2px solid var(--color-primary)" }}>
             <td style={{
             padding: "10px 8px 4px 0",
@@ -61,7 +62,9 @@ export function WerkgeverskostPanel({ resultaat: r, loonwigPct, netto, extras, }
             fontFamily: "var(--font-display)",
             fontSize: 15,
         }}>
-              Loonkost werkgever per maand
+              {r.doelgroepverminderingWerkgeverPerMaand > 0
+                ? "Loonkost werkgever per maand excl. doelgroepvermindering"
+                : "Loonkost werkgever per maand"}
             </td>
             <td style={{
             padding: "10px 0 4px 8px",
@@ -74,6 +77,27 @@ export function WerkgeverskostPanel({ resultaat: r, loonwigPct, netto, extras, }
               {formatEUR(r.totaleLoonkostBreed)}
             </td>
           </tr>
+          {r.doelgroepverminderingWerkgeverPerMaand > 0 && (<tr>
+            <td style={{
+            padding: "6px 8px 4px 0",
+            fontWeight: 700,
+            color: "var(--color-text)",
+            fontFamily: "var(--font-display)",
+            fontSize: 15,
+        }}>
+              Loonkost werkgever per maand incl. doelgroepvermindering
+            </td>
+            <td style={{
+            padding: "6px 0 4px 8px",
+            textAlign: "right",
+            fontFamily: "var(--font-mono)",
+            fontWeight: 700,
+            color: "var(--color-primary)",
+            fontSize: 18,
+        }}>
+              {formatEUR(r.totaleLoonkostBreedNaDoelgroepvermindering)}
+            </td>
+          </tr>)}
         </tbody>
       </table>
 

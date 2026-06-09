@@ -98,7 +98,21 @@ export function WerkgeverJaaroverzichtPanel({ jaaroverzicht }: {
               <NettoRow label="RSZ op bonus" bedrag={r.rszOpBonus} prefix="+" dimmed/>
             </>)}
           <NettoRow label="Dubbel vakantiegeld" bedrag={r.dubbelVakantiegeld} prefix="+" dimmed/>
-          <NettoRow label="Loonkost werkgever per jaar" bedrag={r.totaleLoonkostJaar} prefix="" variant="total"/>
+          <NettoRow label={r.doelgroepvermindering > 0 ? "Loonkost werkgever per jaar excl. doelgroepvermindering" : "Loonkost werkgever per jaar"} bedrag={r.totaleLoonkostJaarExclusiefDoelgroepvermindering} prefix="" variant="total"/>
+          {r.doelgroepvermindering > 0 && (<>
+              <NettoRow label="Doelgroepvermindering eerste aanwervingen" bedrag={r.doelgroepvermindering} prefix="-" dimmed/>
+              <NettoRow label="Loonkost werkgever per jaar incl. doelgroepvermindering" bedrag={r.totaleLoonkostJaarInclusiefDoelgroepvermindering} prefix="" variant="total"/>
+              <tr>
+                <td colSpan={2} style={{
+            padding: "10px 0 0",
+            fontSize: 12,
+            color: "var(--color-text-muted)",
+            lineHeight: 1.45,
+        }}>
+                  de doelgroepvermindering kan echter enkel toegepast worden indien de onderneming daadwerkelijk extra werkgelegenheid creeert , waarbij rekening gehouden wordt met bestaande/voorafgaande tewerkstellingen in andere vennootschappen waarmee de nieuwe onderneming verbonden is
+                </td>
+              </tr>
+            </>)}
         </tbody>
       </table>
       <AuditSourceGroup datapunten={r.datapunten}/>

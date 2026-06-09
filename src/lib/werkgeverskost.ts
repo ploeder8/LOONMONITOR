@@ -19,7 +19,9 @@ export interface WerkgeverskostInput {
     vaaRszPlichtigPerMaand?: number;
     woonwerkVergoedingPerMaand?: number;
     onkostenvergoedingPerMaand?: number;
+    doelgroepverminderingEersteAanwervingen?: DoelgroepverminderingEersteAanwervingen;
 }
+export type DoelgroepverminderingEersteAanwervingen = "geen" | "eerste_werknemer" | "tweede_tot_vijfde_werknemer";
 export interface WerkgeverskostResultaat {
     brutoloon: number;
     rszWerkgever: number;
@@ -31,6 +33,10 @@ export interface WerkgeverskostResultaat {
     woonwerkVergoedingPerMaand: number;
     totaleLoonkostSmal: number;
     totaleLoonkostBreed: number;
+    doelgroepverminderingWerkgeverPerKwartaal: number;
+    doelgroepverminderingWerkgeverPerJaar: number;
+    doelgroepverminderingWerkgeverPerMaand: number;
+    totaleLoonkostBreedNaDoelgroepvermindering: number;
     loonwigPct?: number;
     datapunten: Datapunt[];
 }
@@ -39,7 +45,7 @@ const DEFAULT_EJP_PCT = 0.0833;
 export const MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026 = 8.91;
 const MAALTIJDCHEQUE_MAX_WG_PER_DAG_PRE_2026 = 6.91;
 export function werkgeverskost(input: WerkgeverskostInput): WerkgeverskostResultaat {
-    const { brutoloon, refDatum, bouwVlag = false, arbeidsongevallenPct = DEFAULT_AO_PCT, premieEjpPct = DEFAULT_EJP_PCT, vaaPerMaand: _vaaPerMaand = 0, extraGroepsverzekering = 0, extraMaaltijdcheques = 0, maaltijdchequeWerkgeversaandeelPerDag, maaltijdchequeWerkdagen = 0, extraHospitalisatie = 0, extraEcocheques = 0, vaaRszPlichtigPerMaand = 0, woonwerkVergoedingPerMaand = 0, onkostenvergoedingPerMaand = 0, } = input;
+    const { brutoloon, refDatum, bouwVlag = false, arbeidsongevallenPct = DEFAULT_AO_PCT, premieEjpPct = DEFAULT_EJP_PCT, vaaPerMaand: _vaaPerMaand = 0, extraGroepsverzekering = 0, extraMaaltijdcheques = 0, maaltijdchequeWerkgeversaandeelPerDag, maaltijdchequeWerkdagen = 0, extraHospitalisatie = 0, extraEcocheques = 0, vaaRszPlichtigPerMaand = 0, woonwerkVergoedingPerMaand = 0, onkostenvergoedingPerMaand = 0, doelgroepverminderingEersteAanwervingen = "geen", } = input;
     const rszBasis = round2(brutoloon + Math.max(vaaRszPlichtigPerMaand, 0));
     const rszR: RszResultaat = rszBijdragen({ brutoloon: rszBasis, refDatum, bouwVlag });
     const vgPctRes = safeGetValue("vakantiegeld_dubbel_pct_2026", { refDatum });
@@ -58,6 +64,10 @@ export function werkgeverskost(input: WerkgeverskostInput): WerkgeverskostResult
         Math.max(onkostenvergoedingPerMaand, 0));
     const smal = round2(brutoloon + rszR.totaalWerkgever + ao);
     const breed = round2(smal + provEjp + provVg + extraVoordelen);
+    const doelgroepverminderingPerKwartaal = doelgroepverminderingEersteAanwervingenBedrag(doelgroepverminderingEersteAanwervingen, refDatum);
+    const doelgroepverminderingPerJaar = round2(doelgroepverminderingPerKwartaal * 4);
+    const doelgroepverminderingPerMaand = round2(doelgroepverminderingPerJaar / 12);
+    const breedNaDoelgroepvermindering = round2(Math.max(0, breed - doelgroepverminderingPerMaand));
     const datapunten: Datapunt[] = [];
     for (const b of rszR.bronnen)
         datapunten.push(b.datapunt);
@@ -68,6 +78,9 @@ export function werkgeverskost(input: WerkgeverskostInput): WerkgeverskostResult
     if (dpEjpProv)
         datapunten.push(dpEjpProv);
     datapunten.push(vgPctRes.datapunt);
+    const dpDoelgroepvermindering = doelgroepverminderingDatapunt(doelgroepverminderingEersteAanwervingen);
+    if (dpDoelgroepvermindering)
+        datapunten.push(dpDoelgroepvermindering);
     return {
         brutoloon,
         rszWerkgever: rszR.werkgeverBasisbijdrage,
@@ -79,6 +92,10 @@ export function werkgeverskost(input: WerkgeverskostInput): WerkgeverskostResult
         woonwerkVergoedingPerMaand: round2(Math.max(woonwerkVergoedingPerMaand, 0)),
         totaleLoonkostSmal: smal,
         totaleLoonkostBreed: breed,
+        doelgroepverminderingWerkgeverPerKwartaal: doelgroepverminderingPerKwartaal,
+        doelgroepverminderingWerkgeverPerJaar: doelgroepverminderingPerJaar,
+        doelgroepverminderingWerkgeverPerMaand: doelgroepverminderingPerMaand,
+        totaleLoonkostBreedNaDoelgroepvermindering: breedNaDoelgroepvermindering,
         datapunten,
     };
 }
@@ -91,4 +108,19 @@ function maxMaaltijdchequeWerkgeversaandeel(refDatum: string): number {
     return refDatum >= "2026-01-01"
         ? MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026
         : MAALTIJDCHEQUE_MAX_WG_PER_DAG_PRE_2026;
+}
+function doelgroepverminderingEersteAanwervingenBedrag(keuze: DoelgroepverminderingEersteAanwervingen, refDatum: string): number {
+    if (keuze === "geen" || refDatum < "2026-07-01")
+        return 0;
+    const datapuntId = keuze === "eerste_werknemer"
+        ? "doelgroepvermindering_eerste_werknemer_2026_juli"
+        : "doelgroepvermindering_tweede_tot_vijfde_werknemer_2026_juli";
+    return safeGetValue(datapuntId, { refDatum }).waarde ?? 0;
+}
+function doelgroepverminderingDatapunt(keuze: DoelgroepverminderingEersteAanwervingen): Datapunt | null {
+    if (keuze === "geen")
+        return null;
+    return getDatapunt(keuze === "eerste_werknemer"
+        ? "doelgroepvermindering_eerste_werknemer_2026_juli"
+        : "doelgroepvermindering_tweede_tot_vijfde_werknemer_2026_juli");
 }

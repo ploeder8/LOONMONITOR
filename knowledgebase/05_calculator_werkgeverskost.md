@@ -112,11 +112,13 @@ Met loongrens-categorieën specifiek per loonsegment (lage-lonen-component, hoge
 
 | Vermindering | Toepasbaarheid | Opmerking |
 |---|---|---|
-| ✅ **Doelgroepvermindering eerste aanwervingen (federaal)** | **WEL — onafhankelijk van PC** | Verplicht meenemen indien cliënt het aanduidt. Regime wijzigt **vanaf 1/4/2026** — verifieer tegen meest recente KB. Bron: [VLAIO — doelgroepvermindering eerste aanwervingen federaal](https://www.vlaio.be/nl/subsidies-financiering/subsidiedatabank/maatregelen/doelgroepvermindering-eerste-aanwervingen-federaal). |
+| ✅ **Doelgroepvermindering eerste aanwervingen (federaal)** | **WEL — onafhankelijk van PC** | Verplicht meenemen indien cliënt het aanduidt. Regime wijzigt **vanaf 1/7/2026** via Programmawet 30 mei 2026, art. 103 e.v.: eerste werknemer max. €2.000/kwartaal onbeperkt; tweede t.e.m. vijfde werknemer max. €1.000/kwartaal gedurende 12 kwartalen binnen 20 kwartalen. Bron: [Belgisch Staatsblad — Programmawet 30 mei 2026](https://www.ejustice.just.fgov.be/eli/wet/2026/05/30/2026003986/staatsblad). |
 | ⚙️ Doelgroepvermindering oudere werknemers (Vlaanderen) | configureerbaar | Afhankelijk van leeftijd en loongrens werknemer |
 | ⚙️ Doelgroepvermindering kunstenaars | configureerbaar | Vanaf 1/4/2026 enkel BRU + WAL |
 
-**Implementatie loonmotor:** de UI biedt een checkbox **"eerste aanwerving"** (met sub-veld kwartaal van indiensttreding) en past de patronale RSZ automatisch aan op basis van de federale tabel.
+**Implementatie loonmotor:** de UI biedt in **Werkgeversbijdragen** een selectie **"Doelgroepvermindering eerste aanwervingen"** met keuzes geen, eerste werknemer en tweede tot vijfde werknemer. Jaakie toont de werkgeverskost exclusief doelgroepvermindering en daaronder de werkgeverskost inclusief vermindering. Voor de eerste werknemer is de jaarimpact €8.000 (= 4 × €2.000); voor werknemers twee tot vijf is de jaarimpact €4.000 (= 4 × €1.000) zolang de gebruiker dit binnen het toepassingsvenster aanduidt.
+
+**Klantopmerking:** "de doelgroepvermindering kan echter enkel toegepast worden indien de onderneming daadwerkelijk extra werkgelegenheid creeert , waarbij rekening gehouden wordt met bestaande/voorafgaande tewerkstellingen in andere vennootschappen waarmee de nieuwe onderneming verbonden is"
 
 ---
 
