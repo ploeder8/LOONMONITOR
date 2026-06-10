@@ -11,6 +11,7 @@ export function valideerLoonrunInput(inputs: Array<{
     id: string;
     naam: string;
     profiel: Profiel;
+    insz?: string;
 }>): LoonrunValidatie[] {
     const meldingen: LoonrunValidatie[] = [];
     const contexten = inputs.map((input) => ({
@@ -92,6 +93,38 @@ export function valideerLoonrunInput(inputs: Array<{
                 niveau: "waarschuwing",
                 code: "werknemernaam_ontbreekt",
                 boodschap: "Werknemernaam ontbreekt.",
+                werknemerId: input.id,
+            });
+        }
+        if (!p.werkgeverNaam.trim()) {
+            meldingen.push({
+                niveau: "waarschuwing",
+                code: "werkgever_ontbreekt",
+                boodschap: "Werkgevernaam ontbreekt voor exportvoorbereiding.",
+                werknemerId: input.id,
+            });
+        }
+        if (!p.werkgeverOndernemingsnummer.trim()) {
+            meldingen.push({
+                niveau: "waarschuwing",
+                code: "ondernemingsnummer_ontbreekt",
+                boodschap: "Ondernemingsnummer ontbreekt voor exportvoorbereiding.",
+                werknemerId: input.id,
+            });
+        }
+        if (!input.naam.trim() && !p.werknemerNaam.trim() && !p.werknemerReferentie.trim()) {
+            meldingen.push({
+                niveau: "waarschuwing",
+                code: "werknemer_identificatie_onvolledig",
+                boodschap: "Werknemernaam en referentie ontbreken voor exportvoorbereiding.",
+                werknemerId: input.id,
+            });
+        }
+        if (!input.insz?.trim()) {
+            meldingen.push({
+                niveau: "waarschuwing",
+                code: "insz_ontbreekt",
+                boodschap: "INSZ ontbreekt voor latere payrollintegraties.",
                 werknemerId: input.id,
             });
         }

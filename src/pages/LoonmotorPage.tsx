@@ -16,6 +16,12 @@ import {
   type LoonmotorMedewerker,
 } from "@/lib/loonmotor";
 import { bouwLoonficheVoorProfiel } from "@/lib/loonfiche";
+import {
+  bepaalLoonmotorReadiness,
+  loonmotorMedewerkersNaarLoonrunInputs,
+  type LoonmotorReadiness,
+} from "@/lib/loonmotorLoonrun";
+import { appendLoonrunInputs, readLoonrunInputs, writeLoonrunInputs } from "@/lib/loonrunStorage";
 import { formatEUR } from "@/lib/money";
 import { DEFAULTS, normaliseerProfiel, type Profiel } from "@/lib/profiel";
 import { useSharedProfiel } from "@/lib/useSharedProfiel";
@@ -160,6 +166,25 @@ export function LoonmotorPage({ initialDossiers }: LoonmotorPageProps) {
     if (typeof window !== "undefined") window.location.hash = "#/";
   }
 
+  function voegMedewerkersToeAanLoonrun(medewerkers: LoonmotorMedewerker[]) {
+    if (medewerkers.length === 0) {
+      setStatus({ kind: "error", tekst: "Voeg eerst minstens één medewerker toe." });
+      return;
+    }
+    const additions = loonmotorMedewerkersNaarLoonrunInputs(medewerkers);
+    const next = appendLoonrunInputs(readLoonrunInputs(), additions);
+    writeLoonrunInputs(next);
+    setStatus({
+      kind: "success",
+      tekst: `${additions.length} medewerker${additions.length === 1 ? "" : "s"} toegevoegd aan loonrun.`,
+    });
+    if (typeof window !== "undefined") window.location.hash = "#/loonrun";
+  }
+
+  function voegMedewerkerToeAanLoonrun(medewerker: LoonmotorMedewerker) {
+    voegMedewerkersToeAanLoonrun([medewerker]);
+  }
+
   function conceptBewaren() {
     writeLoonmotorDossiers(undefined, dossiers);
     setStatus({ kind: "success", tekst: "Concept lokaal bewaard in deze browser." });
@@ -230,10 +255,16 @@ export function LoonmotorPage({ initialDossiers }: LoonmotorPageProps) {
                   bedrijf={selected.bedrijf}
                   medewerkers={selected.medewerkers}
                   onAddEmployee={() => setToonMedewerkerForm(true)}
+                  onAddToLoonrun={() => voegMedewerkersToeAanLoonrun(selected.medewerkers)}
                   onDeleteCompany={() => setTeVerwijderenBedrijf(selected)}
                 />
               </div>
-              <MedewerkersTabel medewerkers={selected.medewerkers} onOpenInCalculator={openInCalculator} onAddEmployee={() => setToonMedewerkerForm(true)} />
+              <MedewerkersTabel
+                medewerkers={selected.medewerkers}
+                onOpenInCalculator={openInCalculator}
+                onAddToLoonrun={voegMedewerkerToeAanLoonrun}
+                onAddEmployee={() => setToonMedewerkerForm(true)}
+              />
             </div>
           )}
         </div>
@@ -481,12 +512,14 @@ function BedrijfForm({ bedrijf, onUpdate, onDefaultsUpdate }: {
   );
 }
 
-function ActiePaneel({ bedrijf, medewerkers, onAddEmployee, onDeleteCompany }: {
+function ActiePaneel({ bedrijf, medewerkers, onAddEmployee, onAddToLoonrun, onDeleteCompany }: {
   bedrijf: LoonmotorBedrijf;
   medewerkers: LoonmotorMedewerker[];
   onAddEmployee: () => void;
+  onAddToLoonrun: () => void;
   onDeleteCompany: () => void;
 }) {
+  const readiness = bepaalLoonmotorReadiness({ bedrijf, medewerkers });
   return (
     <aside style={{ ...panelStyle, padding: 18, alignSelf: "start" }}>
       <SectionTitle icon={<UserPlus size={16} />} title="Dossieracties" />
@@ -495,14 +528,15 @@ function ActiePaneel({ bedrijf, medewerkers, onAddEmployee, onDeleteCompany }: {
           <UserPlus size={15} />
           Medewerker toevoegen
         </button>
-        <button type="button" disabled style={buttonStyle("disabled")}>
+        <button type="button" onClick={onAddToLoonrun} disabled={medewerkers.length === 0} style={buttonStyle(medewerkers.length === 0 ? "disabled" : "secondary")}>
           <ExternalLink size={15} />
-          Toevoegen aan loonrun
+          Alle medewerkers naar loonrun
         </button>
       </div>
       <div style={{ marginTop: 18, display: "grid", gap: 8 }}>
         <MiniStat label="Onderneming" value={bedrijf.naam || "Nog aan te vullen"} />
         <MiniStat label="Medewerkers" value={String(medewerkers.length)} />
+        <MiniStat label="Loonrunstatus" value={readinessLabel(readiness)} />
         <MiniStat label="Opslag" value="Lokaal concept" />
       </div>
       <div style={{ marginTop: 18, paddingTop: 14, borderTop: "1px solid var(--color-border)", display: "grid", gap: 8 }}>
@@ -552,9 +586,10 @@ function VerwijderBedrijfModal({ dossier, onCancel, onConfirm }: {
   );
 }
 
-function MedewerkersTabel({ medewerkers, onOpenInCalculator, onAddEmployee }: {
+function MedewerkersTabel({ medewerkers, onOpenInCalculator, onAddToLoonrun, onAddEmployee }: {
   medewerkers: LoonmotorMedewerker[];
   onOpenInCalculator: (medewerker: LoonmotorMedewerker) => void;
+  onAddToLoonrun: (medewerker: LoonmotorMedewerker) => void;
   onAddEmployee: () => void;
 }) {
   return (
@@ -594,9 +629,12 @@ function MedewerkersTabel({ medewerkers, onOpenInCalculator, onAddEmployee }: {
                     <td style={tdRightStyle}>{indicatie.netto}</td>
                     <td style={tdRightStyle}>{indicatie.werkgeverskost}</td>
                     <td style={tdStyle}>{maskInsz(medewerker.insz) || "-"}</td>
-                    <td style={tdStyle}>
+                    <td style={{ ...tdStyle, display: "flex", gap: 6, flexWrap: "wrap" }}>
                       <button type="button" onClick={() => onOpenInCalculator(medewerker)} style={smallButtonStyle}>
                         Open in calculator
+                      </button>
+                      <button type="button" onClick={() => onAddToLoonrun(medewerker)} style={smallButtonStyle}>
+                        Naar loonrun
                       </button>
                     </td>
                   </tr>
@@ -801,6 +839,12 @@ function MiniStat({ label, value }: { label: string; value: string }) {
       <strong>{value}</strong>
     </div>
   );
+}
+
+function readinessLabel(readiness: LoonmotorReadiness): string {
+  if (readiness === "klaar_voor_loonrun") return "Klaar voor loonrun";
+  if (readiness === "aandacht_nodig") return "Aandacht nodig";
+  return "Nog geen medewerkers";
 }
 
 const titleStyle: React.CSSProperties = {

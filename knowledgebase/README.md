@@ -42,6 +42,7 @@
 | 10 | `10_bronnen_guideline.md` | Iedereen (3-tier bronnenhiërarchie) |
 | 11 | `11_ui_ux_migratieplan.md` | Developer / UX (fasegewijze UI-migratie) |
 | 12 | `12_toolfunctionaliteit.md` | Chatbot-corpus / support (actuele toolwerking) |
+| 13 | `13_loonmotor_integraties.md` | Product owner / developer (toekomstige integraties) |
 
 ### Mappen
 - **`bronnen/`** — Volledig bronnenarchief: 57 URLs + 8 PDF-snapshots, gerangschikt per Tier (1/2/3) + categorie, plus het bronronde-log `bronnen/bronronde_2026-05-24.md`
@@ -62,6 +63,7 @@
 7. **Hoe gaan we verder?** → `09_implementation_roadmap.md`
 8. **UI/UX migratieplan** → `11_ui_ux_migratieplan.md`
 9. **Hoe werkt Jaakie als tool?** → `12_toolfunctionaliteit.md`
+10. **Welke integraties zijn later nodig?** → `13_loonmotor_integraties.md`
 
 ---
 
@@ -106,6 +108,7 @@ Implementeer als **feature-flags**, default = huidige waarden. Zie `08_gaps_en_p
 | 2026-05-11 | Initiële SSOT-creatie. Consolidatie van `ProjectFiles/` (oude POC-kennisbank) + `ProjectFiles-CopilotCowork/` (expert-geverifieerde uitbreiding). |
 | 2026-05-12 | `Referenties/groups_be_salarysim.md` toegevoegd: geverifieerde UI/invoer/output-documentatie van Group S Salary Sim, incl. vergelijkingstabel en feature-prioriteitenlijst. |
 | 2026-05-24 | Juridische bronronde toegevoegd: AJ 2027, werkbonus, PC 200, Sociaal Fonds 200, AO en VAA opnieuw tegen live bronnen geklasseerd. |
+| 2026-06-10 | Integratieverkenning toegevoegd: toekomstige HRIS-, sociaal-secretariaat-, aangifte-, betaal- en boekhoudkoppelingen gefaseerd vastgelegd. |
 
 ---
 

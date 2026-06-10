@@ -7,32 +7,19 @@ import { SummaryCard, TableFrame, Td, Th } from "@/components/DocumentPrimitives
 import { formatEUR, round2 } from "@/lib/money";
 import { profielenUitCsv } from "@/lib/profielCsv";
 import { bouwLoonrun, type LoonrunWerknemerInput } from "@/lib/loonrun";
-import { loonrunNaarCsv } from "@/lib/loonrunExport";
+import { bouwIntegratieExportBatch, integratieExportBatchNaarCsv, type IntegratieExportBatch } from "@/lib/integratieExport";
+import { clearLoonrunInputs, readLoonrunInputs, writeLoonrunInputs } from "@/lib/loonrunStorage";
 import { LoonficheDocument } from "@/pages/loonfiche/LoonficheDocument";
 import { WerkgeverRapport } from "@/pages/loonrun/WerkgeverRapport";
 import type { Loonfiche } from "@/lib/loonfiche";
-const LOONRUN_STORAGE_KEY = "jaakie:loonrun";
-function readInputsFromStorage(): LoonrunWerknemerInput[] | null {
-    try {
-        const raw = localStorage.getItem(LOONRUN_STORAGE_KEY);
-        if (!raw)
-            return null;
-        return JSON.parse(raw) as LoonrunWerknemerInput[];
-    }
-    catch {
-        return null;
-    }
+interface LoonrunPageProps {
+    initialInputs?: LoonrunWerknemerInput[];
 }
-function writeInputsToStorage(inputs: LoonrunWerknemerInput[]): void {
-    try {
-        localStorage.setItem(LOONRUN_STORAGE_KEY, JSON.stringify(inputs));
-    }
-    catch {
-    }
-}
-export function LoonrunPage() {
+export function LoonrunPage({ initialInputs }: LoonrunPageProps = {}) {
     const [inputs, setInputs] = useState<LoonrunWerknemerInput[]>(() => {
-        return readInputsFromStorage() ?? [];
+        if (initialInputs)
+            return initialInputs;
+        return readLoonrunInputs();
     });
     const [importStatus, setImportStatus] = useState<{
         kind: "success" | "error";
@@ -42,8 +29,10 @@ export function LoonrunPage() {
     const [toonWerkgeverRapport, setToonWerkgeverRapport] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     useEffect(() => {
-        writeInputsToStorage(inputs);
-    }, [inputs]);
+        if (initialInputs)
+            return;
+        writeLoonrunInputs(inputs);
+    }, [inputs, initialInputs]);
     useEffect(() => {
         if (toonWerkgeverRapport) {
             document.body.classList.add("print-modal-open");
@@ -51,6 +40,7 @@ export function LoonrunPage() {
         }
     }, [toonWerkgeverRapport]);
     const loonrun = useMemo(() => bouwLoonrun(inputs), [inputs]);
+    const exportBatch = useMemo(() => bouwIntegratieExportBatch(loonrun), [loonrun]);
     async function handleImport(file: File | null) {
         if (!file)
             return;
@@ -82,19 +72,19 @@ export function LoonrunPage() {
         }
     }
     function handleExport() {
-        if (loonrun.heeftBlokkeringen) {
+        if (exportBatch.status === "geblokkeerd") {
             setImportStatus({
                 kind: "error",
                 tekst: "Export geblokkeerd: los eerst de blokkerende loonrunvalidaties op.",
             });
             return;
         }
-        const csv = loonrunNaarCsv(loonrun);
+        const csv = integratieExportBatchNaarCsv(exportBatch);
         const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = `jaakie-loonrun-${new Date().toISOString().slice(0, 10)}.csv`;
+        link.download = `jaakie-payroll-export-v1-${new Date().toISOString().slice(0, 10)}.csv`;
         link.click();
         URL.revokeObjectURL(url);
     }
@@ -103,11 +93,7 @@ export function LoonrunPage() {
             !window.confirm("Alle werknemers uit de loonrun verwijderen?"))
             return;
         setInputs([]);
-        try {
-            localStorage.removeItem(LOONRUN_STORAGE_KEY);
-        }
-        catch {
-        }
+        clearLoonrunInputs();
         setImportStatus(null);
     }
     function handleMarkeerGecontroleerd() {
@@ -183,10 +169,13 @@ export function LoonrunPage() {
               <button type="button" onClick={handleVastzetten} style={buttonStyle("secondary")}>
                 Vastzetten
               </button>
-              <button type="button" onClick={handleExport} style={buttonStyle("primary")}>
-                <Download size={14}/>
-                Export
-              </button>
+              {exportBatch.status === "geblokkeerd" ? (<button type="button" disabled style={{ ...buttonStyle("secondary"), opacity: 0.55, cursor: "not-allowed" }}>
+                  <Download size={14}/>
+                  Download geblokkeerd
+                </button>) : (<button type="button" onClick={handleExport} style={buttonStyle("primary")}>
+                  <Download size={14}/>
+                  Download payroll-export v1
+                </button>)}
               <button type="button" onClick={handleClear} style={buttonStyle("danger")}>
                 <Trash2 size={14}/>
                 Wissen
@@ -209,6 +198,8 @@ export function LoonrunPage() {
                 : "Deze loonrun wordt lokaal in deze browser bewaard. Gebruik Wissen om de opgeslagen werknemers uit deze browser te verwijderen."}
           </Banner>
         </div>)}
+
+      <ExportVoorbereiding batch={exportBatch}/>
 
       
       {loonrun.werknemers.length > 0 && (<div style={{
@@ -364,6 +355,61 @@ export function LoonrunPage() {
         </div>, document.body)}
     </div>);
 }
+function ExportVoorbereiding({ batch }: { batch: IntegratieExportBatch }) {
+    const blokkerendeCodes = batch.audit.validatieCodes.filter((code) => code.startsWith("blokkerend:"));
+    const heeftRegels = batch.regels.length > 0;
+    return (<section style={{
+            marginBottom: 20,
+            border: "1px solid var(--color-border)",
+            borderRadius: "var(--radius-lg)",
+            background: "var(--color-surface)",
+            padding: 16,
+        }}>
+      <div style={{
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            gap: 12,
+            flexWrap: "wrap",
+        }}>
+        <div>
+          <div style={{ fontSize: 14, fontWeight: 800, color: "var(--color-text)", marginBottom: 4 }}>
+            Exportvoorbereiding
+          </div>
+          <div style={{ fontSize: 12, color: "var(--color-text-muted)", maxWidth: 680 }}>
+            Voorbereiding voor sociaal secretariaat / boekhouding, geen officiële aangifte.
+          </div>
+        </div>
+        <StatusBadge status={batch.status === "exporteerbaar" ? "Exporteerbaar" : "Geblokkeerd"}/>
+      </div>
+      <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+            gap: 10,
+            marginTop: 14,
+        }}>
+        <ExportMeta label="Schema" value={batch.schemaVersie}/>
+        <ExportMeta label="Periode" value={batch.periode}/>
+        <ExportMeta label="Werkgever" value={batch.werkgeverNaam || "Nog niet ingevuld"}/>
+        <ExportMeta label="Ondernemingsnummer" value={batch.ondernemingsnummer || "Nog niet ingevuld"}/>
+        <ExportMeta label="Refdatum" value={batch.audit.refDatum || "Nog niet beschikbaar"}/>
+        <ExportMeta label="Dataset" value={batch.audit.dataset}/>
+      </div>
+      {blokkerendeCodes.length > 0 ? (<div style={{ marginTop: 12, fontSize: 12, color: "#991b1b", fontWeight: 700 }}>
+          Download geblokkeerd: {blokkerendeCodes.join(", ")}
+        </div>) : (<div style={{ marginTop: 12, fontSize: 12, color: "var(--color-text-muted)" }}>
+          {heeftRegels
+                ? "Deze batch is exporteerbaar als generieke Jaakie payroll-export v1."
+                : "Importeer werknemers om een exportbatch op te bouwen."}
+        </div>)}
+    </section>);
+}
+function ExportMeta({ label, value }: { label: string; value: string }) {
+    return (<div>
+      <div style={{ fontSize: 11, color: "var(--color-text-muted)", marginBottom: 2 }}>{label}</div>
+      <div style={{ fontSize: 12, fontWeight: 700, color: "var(--color-text)", overflowWrap: "anywhere" }}>{value}</div>
+    </div>);
+}
 function StatusBadge({ status }: {
     status: string;
 }) {
@@ -391,6 +437,16 @@ function StatusBadge({ status }: {
             bg: "var(--color-primary-soft)",
             text: "var(--color-primary)",
             border: "var(--color-primary-border)",
+        },
+        Exporteerbaar: {
+            bg: "rgba(28,210,163,0.10)",
+            text: "#047857",
+            border: "rgba(28,210,163,0.35)",
+        },
+        Geblokkeerd: {
+            bg: "#fff1f2",
+            text: "#991b1b",
+            border: "#fca5a5",
         },
         fout: {
             bg: "#fff1f2",
