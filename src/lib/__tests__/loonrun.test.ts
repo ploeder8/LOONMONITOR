@@ -93,6 +93,29 @@ describe("Loonrun — domeinlaag", () => {
         expect(run.heeftBlokkeringen).toBe(true);
         expect(run.validaties.some((v) => v.code === "gemengde_periode")).toBe(true);
     });
+    it("meldt ontbrekende exportidentificatie als waarschuwing zonder export te blokkeren", () => {
+        const run = bouwLoonrun([
+            {
+                id: "1",
+                naam: "",
+                profiel: {
+                    ...DEFAULTS,
+                    werknemerNaam: "",
+                    werknemerReferentie: "",
+                    werkgeverNaam: "",
+                    werkgeverOndernemingsnummer: "",
+                },
+            },
+        ]);
+        expect(run.heeftBlokkeringen).toBe(false);
+        expect(run.validaties.map((v) => v.code)).toEqual(expect.arrayContaining([
+            "werkgever_ontbreekt",
+            "ondernemingsnummer_ontbreekt",
+            "werknemer_identificatie_onvolledig",
+            "insz_ontbreekt",
+        ]));
+        expect(run.validaties.filter((v) => v.niveau === "waarschuwing").length).toBeGreaterThanOrEqual(4);
+    });
     it("telt gecontroleerde en vastgezette werknemers apart", () => {
         const run = bouwLoonrun([
             { id: "1", naam: "Jan", profiel: { ...DEFAULTS, brutoloon: 3000 }, status: "gecontroleerd" },

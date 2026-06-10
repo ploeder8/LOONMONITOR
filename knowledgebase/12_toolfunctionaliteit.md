@@ -190,7 +190,9 @@ De CSV-export bevat één rij per werknemer met batchkolommen en expliciete payr
 
 ### Lokale opslag
 
-De loonrun-inputs worden lokaal in de browser bewaard via `localStorage` key `jaakie:loonrun`, zodat een import niet verdwijnt bij navigatie of refresh. De UI toont hiervoor een melding. De actie **Wissen** verwijdert de werknemers uit de loonrun en wist de lokale opslagkey.
+De loonrun-inputs worden lokaal in de browser bewaard via de gedeelde storage-lib `src/lib/loonrunStorage.ts` met `localStorage` key `jaakie:loonrun`, zodat een import of Loonmotor-doorstroom niet verdwijnt bij navigatie of refresh. De UI toont hiervoor een melding. De actie **Wissen** verwijdert de werknemers uit de loonrun en wist de lokale opslagkey.
+
+Toevoegingen vanuit Loonmotor gebruiken dezelfde key en vervangen duplicaten op werknemer-id. Een medewerker die opnieuw naar de loonrun wordt gestuurd, werkt dus de bestaande rij bij in plaats van een dubbele rij aan te maken.
 
 ### Rapport voor werkgever
 
@@ -239,7 +241,19 @@ Binnen elk bedrijf kan de gebruiker medewerkers toevoegen. Een medewerker bevat 
 - brutoloon, tewerkstellingspercentage, ervaring, fiscale context en enkele voordeelvelden;
 - een onderliggend `Profiel` dat aansluit op de bestaande calculator.
 
-De medewerkerstabel toont indicatieve bruto-, netto- en werkgeverskostcijfers via de bestaande loonfiche/profielberekeningen. De actie **Open in calculator** zet het gedeelde vensterprofiel en navigeert naar de calculator. **Toevoegen aan loonrun** is zichtbaar maar nog uitgeschakeld in v1.
+De medewerkerstabel toont indicatieve bruto-, netto- en werkgeverskostcijfers via de bestaande loonfiche/profielberekeningen. De actie **Open in calculator** zet het gedeelde vensterprofiel en navigeert naar de calculator.
+
+### Doorstroom naar loonrun
+
+Loonmotor kan lokale medewerkers browser-only doorzetten naar `#/loonrun`. De actie **Alle medewerkers naar loonrun** stuurt alle medewerkers van het geselecteerde bedrijf door; de rijactie **Naar loonrun** stuurt alleen die medewerker door. Beide acties schrijven naar `jaakie:loonrun`, vervangen bestaande loonrunrijen met dezelfde medewerker-id en navigeren daarna naar de loonrun.
+
+De mapping behoudt de medewerker-id, neemt bedrijf- en medewerker-id mee als bronvelden, normaliseert het onderliggende profiel en zet de loonrunstatus op `concept` of `te_controleren`. Ontbrekende INSZ blijft voorlopig een waarschuwing in de loonrunvalidatie en blokkeert de exportvoorbereiding niet.
+
+Het dossieractie-paneel toont een compacte readiness-status:
+
+- `geen_medewerkers`: er zijn nog geen medewerkers in het geselecteerde dossier.
+- `aandacht_nodig`: werkgever, ondernemingsnummer of medewerkernaam ontbreekt.
+- `klaar_voor_loonrun`: het dossier bevat medewerkers en de minimale werkgever-/naamvelden zijn aanwezig.
 
 ---
 

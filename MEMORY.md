@@ -11,6 +11,7 @@ Kort projectlogboek voor wijzigingen door coding agents.
 
 ## Log
 
+- 2026-06-11 — Interne Loonmotor -> Loonrun-doorstroom toegevoegd met gedeelde `jaakie:loonrun` opslag, mapper/readiness, actieve UI-acties, extra waarschuwingen en tests; reden: dossieropbouw browser-only laten aansluiten op loonruncontrole en payroll-export v1.
 - 2026-06-10 — Eerste integratiefase control/export toegevoegd: pure `integratieExport`-laag, generieke payroll-exportbatch v1 in Loonrun UI, downloadblokkering bij validaties en gerichte tests; reden: Jaakie voorbereiden op latere sociaal-secretariaat-/boekhoudkoppelingen zonder backend of officiële aangifte.
 - 2026-06-10 — Integratieverkenning vastgelegd in `knowledgebase/13_loonmotor_integraties.md` en gekoppeld vanuit `knowledgebase/README.md`; reden: toekomstige HRIS-, sociaal-secretariaat-, aangifte-, betaal- en boekhoudkoppelingen als SSOT bewaren.
 - 2026-06-05 — Vercel KBO-lookup omgezet van publieke KBO HTML-scrape naar CBE API `/api/v1/company/{nummer}` met server-side `CBE_API_KEY`, inclusief CBE-adapter en tests; reden: publieke FOD-route weigert Vercel-verkeer via WAF.

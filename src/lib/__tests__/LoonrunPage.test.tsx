@@ -2,6 +2,30 @@ import { describe, expect, it } from "bun:test";
 import { renderToStaticMarkup } from "react-dom/server";
 import { DEFAULTS } from "@/lib/profiel";
 import { LoonrunPage } from "@/pages/LoonrunPage";
+import { LOONRUN_STORAGE_KEY } from "@/lib/loonrunStorage";
+
+function withLocalStorage(value: string, callback: () => void) {
+  const previous = globalThis.localStorage;
+  globalThis.localStorage = {
+    get length() {
+      return 1;
+    },
+    clear() {},
+    getItem(key: string) {
+      return key === LOONRUN_STORAGE_KEY ? value : null;
+    },
+    key(index: number) {
+      return index === 0 ? LOONRUN_STORAGE_KEY : null;
+    },
+    setItem() {},
+    removeItem() {},
+  };
+  try {
+    callback();
+  } finally {
+    globalThis.localStorage = previous;
+  }
+}
 
 describe("LoonrunPage exportvoorbereiding", () => {
   it("toont de generieke exportvoorbereiding als controlelaag", () => {
@@ -44,5 +68,29 @@ describe("LoonrunPage exportvoorbereiding", () => {
     expect(html).toContain("gemengde_periode");
     expect(html).toContain("Download geblokkeerd");
     expect(html).not.toContain("Download payroll-export v1</button>");
+  });
+
+  it("leest werknemers uit de gedeelde loonrunopslag", () => {
+    withLocalStorage(
+      JSON.stringify([
+        {
+          id: "wn-storage",
+          naam: "Storage Werknemer",
+          profiel: {
+            ...DEFAULTS,
+            werknemerNaam: "Storage Werknemer",
+            werkgeverNaam: "Jaakie Payroll BV",
+            werkgeverOndernemingsnummer: "0452.085.227",
+          },
+        },
+      ]),
+      () => {
+        const html = renderToStaticMarkup(<LoonrunPage />);
+
+        expect(html).toContain("Storage Werknemer");
+        expect(html).toContain("Exportvoorbereiding");
+        expect(html).toContain("jaakie-payroll-export-v1");
+      },
+    );
   });
 });

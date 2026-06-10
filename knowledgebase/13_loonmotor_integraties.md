@@ -6,7 +6,7 @@
 
 Jaakie rekent vandaag browser-only en fungeert als audit-traceerbare controle- en simulatieomgeving. De integratiestrategie moet daarom gefaseerd blijven: eerst data en exports beheersbaar maken, daarna partnerkoppelingen opzetten, en pas later officiële aangiftes of betalingen uitvoeren.
 
-Sinds 10 juni 2026 bevat de loonrun een eerste concrete control/export-stap: een generieke Jaakie payroll-exportbatch v1 (`jaakie-payroll-export-v1`) met batchmetadata, validatiecodes, dataset-/refdatumcontext, werknemerregels en totalen. Dit is nog geen provideradapter, backendopslag, officiële aangifte of payrollfinalisatie.
+Sinds 10 juni 2026 bevat de loonrun een eerste concrete control/export-stap: een generieke Jaakie payroll-exportbatch v1 (`jaakie-payroll-export-v1`) met batchmetadata, validatiecodes, dataset-/refdatumcontext, werknemerregels en totalen. De tweede interne mijlpaal sluit Loonmotor browser-only aan op Loonrun: medewerkers uit lokale dossiers kunnen naar de loonrun worden doorgestuurd, waarna dezelfde controle- en exportvoorbereiding gebruikt wordt. Dit is nog geen provideradapter, backendopslag, officiële aangifte of payrollfinalisatie.
 
 ## Kernconclusie
 
@@ -106,6 +106,12 @@ Output-integraties zijn nuttig vóór officiële aangiftes:
 
 De loonrun bouwt nu browser-only een provider-onafhankelijke exportbatch via `bouwIntegratieExportBatch()`. `integratieExportBatchNaarCsv()` zet die batch om naar CSV v1. Blokkerende loonrunvalidaties zetten de batchstatus op `geblokkeerd` en schermen de download af; geldige runs krijgen status `exporteerbaar`.
 
+### Tweede interne mijlpaal
+
+Loonmotor kan medewerkers uit het lokale dossier nu naar de loonrun schrijven via de gedeelde `jaakie:loonrun` browseropslag. De doorstroom gebruikt een pure mapper van `LoonmotorMedewerker` naar `LoonrunWerknemerInput`, behoudt bron-id's, vervangt duplicaten op medewerker-id en blijft volledig browser-only.
+
+Deze stap maakt Jaakie sterker als interne control layer: dossieropbouw gebeurt in Loonmotor, controle en exportvoorbereiding in Loonrun. Externe integraties blijven pas aan de orde nadat het interne contract, de validaties en de auditmetadata stabiel genoeg zijn.
+
 ### Integratiecontract
 
 Definieer een stabiel intern contract voor:
@@ -171,11 +177,12 @@ Een integratie mag pas naar de volgende fase als deze gates gehaald zijn:
 ## Aanbevolen roadmap
 
 1. **Gedaan:** generieke loonrun-export met expliciete status, validaties, bronversie en auditmetadata.
-2. **Nu:** documenteer het interne integratiecontract verder per veld en breid CSV/exportdenken uit met provider-onafhankelijke veldnamen.
-3. **Daarna:** voer een pilotmapping uit naar één sociaal-secretariaattemplate of HRIS-import/export.
-4. **Daarna:** voeg backendopslag en rolbeheer toe voor dossiers, runs en exportbatches.
-5. **Daarna:** voer 3 maanden parallelrun uit tegen een bestaand sociaal secretariaat.
-6. **Pas later:** bouw officiële Dimona/DmfA/Belcotax/FinProf-koppelingen.
+2. **Gedaan:** interne Loonmotor -> Loonrun-doorstroom met gedeelde browseropslag, duplicaatvervanging en dossier-readiness.
+3. **Nu:** documenteer het interne integratiecontract verder per veld en breid CSV/exportdenken uit met provider-onafhankelijke veldnamen.
+4. **Daarna:** voer een pilotmapping uit naar één sociaal-secretariaattemplate of HRIS-import/export.
+5. **Daarna:** voeg backendopslag en rolbeheer toe voor dossiers, runs en exportbatches.
+6. **Daarna:** voer 3 maanden parallelrun uit tegen een bestaand sociaal secretariaat.
+7. **Pas later:** bouw officiële Dimona/DmfA/Belcotax/FinProf-koppelingen.
 
 ## Bronnen
 

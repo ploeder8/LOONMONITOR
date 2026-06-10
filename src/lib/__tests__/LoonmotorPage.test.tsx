@@ -49,6 +49,9 @@ describe("LoonmotorPage", () => {
     expect(html).toContain("Jan Peeters");
     expect(html).toContain("Indicatief netto");
     expect(html).toContain("Open in calculator");
+    expect(html).toContain("Klaar voor loonrun");
+    expect(html).toContain("Alle medewerkers naar loonrun");
+    expect(html).toContain("Naar loonrun");
   });
 
   it("toont acties om extra bedrijven toe te voegen en het geselecteerde bedrijf te verwijderen", () => {
@@ -69,5 +72,6 @@ describe("LoonmotorPage", () => {
     expect(html).toContain("Handmatig bedrijf aanmaken");
     expect(html).toContain("Bedrijf verwijderen");
     expect(html).toContain("verwijdert ook alle medewerkers");
+    expect(html).toContain("Nog geen medewerkers");
   });
 });

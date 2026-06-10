@@ -9,6 +9,7 @@ describe("integratie exportbatch", () => {
       {
         id: "wn-1",
         naam: "Jan Peeters",
+        insz: "90010112345",
         profiel: {
           ...DEFAULTS,
           werknemerNaam: "Jan Peeters",
@@ -58,6 +59,7 @@ describe("integratie exportbatch", () => {
       {
         id: "wn-1",
         naam: "Jan Peeters",
+        insz: "90010112345",
         profiel: {
           ...DEFAULTS,
           werknemerNaam: "Jan Peeters",

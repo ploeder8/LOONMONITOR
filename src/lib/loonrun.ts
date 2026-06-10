@@ -9,6 +9,9 @@ export interface LoonrunWerknemerInput {
     naam: string;
     profiel: Profiel;
     status?: LoonrunStatus;
+    insz?: string;
+    bronBedrijfId?: string;
+    bronMedewerkerId?: string;
 }
 export interface LoonrunWerknemer {
     id: string;

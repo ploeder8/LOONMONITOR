@@ -8,36 +8,18 @@ import { formatEUR, round2 } from "@/lib/money";
 import { profielenUitCsv } from "@/lib/profielCsv";
 import { bouwLoonrun, type LoonrunWerknemerInput } from "@/lib/loonrun";
 import { bouwIntegratieExportBatch, integratieExportBatchNaarCsv, type IntegratieExportBatch } from "@/lib/integratieExport";
+import { clearLoonrunInputs, readLoonrunInputs, writeLoonrunInputs } from "@/lib/loonrunStorage";
 import { LoonficheDocument } from "@/pages/loonfiche/LoonficheDocument";
 import { WerkgeverRapport } from "@/pages/loonrun/WerkgeverRapport";
 import type { Loonfiche } from "@/lib/loonfiche";
-const LOONRUN_STORAGE_KEY = "jaakie:loonrun";
 interface LoonrunPageProps {
     initialInputs?: LoonrunWerknemerInput[];
-}
-function readInputsFromStorage(): LoonrunWerknemerInput[] | null {
-    try {
-        const raw = localStorage.getItem(LOONRUN_STORAGE_KEY);
-        if (!raw)
-            return null;
-        return JSON.parse(raw) as LoonrunWerknemerInput[];
-    }
-    catch {
-        return null;
-    }
-}
-function writeInputsToStorage(inputs: LoonrunWerknemerInput[]): void {
-    try {
-        localStorage.setItem(LOONRUN_STORAGE_KEY, JSON.stringify(inputs));
-    }
-    catch {
-    }
 }
 export function LoonrunPage({ initialInputs }: LoonrunPageProps = {}) {
     const [inputs, setInputs] = useState<LoonrunWerknemerInput[]>(() => {
         if (initialInputs)
             return initialInputs;
-        return readInputsFromStorage() ?? [];
+        return readLoonrunInputs();
     });
     const [importStatus, setImportStatus] = useState<{
         kind: "success" | "error";
@@ -49,7 +31,7 @@ export function LoonrunPage({ initialInputs }: LoonrunPageProps = {}) {
     useEffect(() => {
         if (initialInputs)
             return;
-        writeInputsToStorage(inputs);
+        writeLoonrunInputs(inputs);
     }, [inputs, initialInputs]);
     useEffect(() => {
         if (toonWerkgeverRapport) {
@@ -111,11 +93,7 @@ export function LoonrunPage({ initialInputs }: LoonrunPageProps = {}) {
             !window.confirm("Alle werknemers uit de loonrun verwijderen?"))
             return;
         setInputs([]);
-        try {
-            localStorage.removeItem(LOONRUN_STORAGE_KEY);
-        }
-        catch {
-        }
+        clearLoonrunInputs();
         setImportStatus(null);
     }
     function handleMarkeerGecontroleerd() {
