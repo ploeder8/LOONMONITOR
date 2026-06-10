@@ -184,7 +184,9 @@ De loonrun maakt onderscheid tussen:
 
 ### Export
 
-De summary CSV-export bevat één rij per werknemer met expliciete kolommen (`id;naam;cash_bruto;bruto_rsz_basis;belastbaar_voor_bv;netto;werkgeverskost;loonwig_pct;status;validaties;fout`) plus een totaalregel. Export wordt geblokkeerd bij blokkerende loonrunvalidaties.
+De loonrun toont een compact paneel **Exportvoorbereiding**. Dit paneel bouwt browser-only een generieke Jaakie payroll-exportbatch v1 (`jaakie-payroll-export-v1`) met batchmetadata, periode, werkgever, ondernemingsnummer, referentiedatum, datasetnaam, bronstatus, validatiecodes, werknemerregels en totalen. De UI labelt deze flow expliciet als voorbereiding voor sociaal secretariaat / boekhouding en niet als officiële aangifte.
+
+De CSV-export bevat één rij per werknemer met batchkolommen en expliciete payrollkolommen (`cash_bruto`, `bruto_rsz_basis`, `belastbaar_voor_bv`, `netto`, `werkgeverskost`, `loonwig_pct`, `loonrun_status`, `validaties`, `fout`) plus een totaalregel. Export wordt geblokkeerd bij blokkerende loonrunvalidaties; de downloadknop toont dan **Download geblokkeerd** en het exportpaneel toont de blokkerende validatiecodes.
 
 ### Lokale opslag
 
