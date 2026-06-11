@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ErrorBoundary } from "react-error-boundary";
-import { FileText, Printer, X } from "lucide-react";
+import { Download, FileText, Printer, X } from "lucide-react";
 import { Banner } from "@/components/Banner";
 import { DirectionToggle } from "@/components/DirectionToggle";
 import { HeroSummary } from "@/components/HeroSummary";
@@ -23,6 +23,7 @@ export function HomePage() {
         kind: "success" | "error";
         tekst: string;
     } | null>(null);
+    const [toonCsvPaneel, setToonCsvPaneel] = useState(false);
     const [toonOverzicht, setToonOverzicht] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const profiel = normaliseerProfiel(p);
@@ -141,31 +142,22 @@ export function HomePage() {
         profiel.vaaGsmAbonnementActief,
     ]);
     const summary = useMemo(() => computeSummary(profiel), [profiel]);
-    return (<div className="home-layout" style={{ maxWidth: 1280, margin: "0 auto", padding: "1.5rem 1rem" }}>
-      <CsvPaneel exportNaam={exportNaam} setExportNaam={setExportNaam} commentaar={commentaar} setCommentaar={setCommentaar} status={csvStatus} fileInputRef={fileInputRef} onImport={(file) => void importeerCsvBestand(file)} onExport={exporteerCsv}/>
-
-      <DirectionToggle value={profiel.berekeningsRichting} onChange={setBerekeningsRichting}/>
-
-      <HeroSummary brutoloon={summary.bruto} nettoloon={summary.netto} werkgeverskost={summary.werkgeverskost} loonwig={summary.loonwig}/>
-
-      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
-        <button type="button" onClick={() => setToonOverzicht(true)} style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 6,
-            padding: "6px 12px",
-            fontSize: 12,
-            fontWeight: 600,
-            borderRadius: "var(--radius-md)",
-            border: "1px solid var(--color-primary-border)",
-            background: "var(--color-surface)",
-            color: "var(--color-primary)",
-            cursor: "pointer",
-            fontFamily: "var(--font-body)",
-        }}>
-          <FileText size={14}/>
-          Print overzicht
-        </button>
+    return (<div className="home-layout" style={{ maxWidth: 1280, margin: "-18px auto 0", padding: "0 1rem 1.5rem" }}>
+      <div className="calculator-sticky-summary">
+        <div className="calculator-summary-controls">
+          <DirectionToggle value={profiel.berekeningsRichting} onChange={setBerekeningsRichting}/>
+          <div className="calculator-dev-actions calculator-summary-actions">
+            <button type="button" onClick={() => setToonCsvPaneel(true)} className="calculator-dev-action-button">
+              <Download size={14}/>
+              CSV import/export
+            </button>
+            <button type="button" onClick={() => setToonOverzicht(true)} className="calculator-dev-action-button">
+              <FileText size={14}/>
+              Print overzicht
+            </button>
+          </div>
+        </div>
+        <HeroSummary brutoloon={summary.bruto} nettoloon={summary.netto} werkgeverskost={summary.werkgeverskost} loonwig={summary.loonwig}/>
       </div>
 
       <ProfielEditor profiel={profiel} set={set}/>
@@ -187,6 +179,74 @@ export function HomePage() {
           </Banner>)} resetKeys={[JSON.stringify(profiel)]}>
         <ResultBandsPanel profiel={profiel}/>
       </ErrorBoundary>
+
+      {toonCsvPaneel && createPortal(<div role="dialog" aria-modal="true" aria-labelledby="csv-modal-title" style={{
+                position: "fixed",
+                inset: 0,
+                background: "rgba(19,31,55,0.38)",
+                zIndex: 190,
+                display: "flex",
+                alignItems: "flex-start",
+                justifyContent: "center",
+                padding: "72px 20px 24px",
+                overflowY: "auto",
+            }} onClick={(e) => {
+                if (e.target === e.currentTarget)
+                    setToonCsvPaneel(false);
+            }}>
+          <div style={{
+                width: "min(680px, 100%)",
+                borderRadius: "var(--radius-lg)",
+                border: "1px solid var(--color-border)",
+                background: "var(--color-surface)",
+                boxShadow: "var(--shadow-lg)",
+                padding: 18,
+            }}>
+            <div style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 12,
+                marginBottom: 14,
+            }}>
+              <div>
+                <h2 id="csv-modal-title" style={{
+                    margin: 0,
+                    color: "var(--color-text)",
+                    fontFamily: "var(--font-display)",
+                    fontSize: 18,
+                    fontWeight: 800,
+                    letterSpacing: 0,
+                }}>
+                  CSV import/export
+                </h2>
+                <p style={{
+                    margin: "3px 0 0",
+                    color: "var(--color-text-muted)",
+                    fontSize: 12,
+                    fontFamily: "var(--font-body)",
+                }}>
+                  Development-tool voor profielbestanden.
+                </p>
+              </div>
+              <button type="button" onClick={() => setToonCsvPaneel(false)} aria-label="CSV import/export sluiten" style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: "50%",
+                    background: "var(--color-surface)",
+                    border: "1px solid var(--color-border)",
+                    color: "var(--color-text)",
+                    cursor: "pointer",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                }}>
+                <X size={16}/>
+              </button>
+            </div>
+            <CsvPaneel exportNaam={exportNaam} setExportNaam={setExportNaam} commentaar={commentaar} setCommentaar={setCommentaar} status={csvStatus} fileInputRef={fileInputRef} onImport={(file) => void importeerCsvBestand(file)} onExport={exporteerCsv}/>
+          </div>
+        </div>, document.body)}
 
       
       {toonOverzicht && createPortal(<div className="print-modal-overlay werknemer-overzicht-modal-overlay" style={{

@@ -22,23 +22,23 @@ export function NettoJaaroverzichtPanel({ jaaroverzicht, maaltijdchequeWerkgever
         ...r.jaarpremie.datapunten,
         ...(r.bonus.bruto > 0 ? r.bonus.datapunten : []),
     ].filter((dp, index, all) => all.findIndex((item) => item.id === dp.id) === index);
-    return (<div style={{
-            borderRadius: "var(--radius-lg)",
-            border: "2px solid var(--color-primary)",
+    return (<div className="result-detail-card" style={{
+            borderRadius: "var(--radius-md)",
+            border: "1px solid var(--color-primary)",
             background: "var(--color-surface)",
-            padding: "1rem 1.1rem",
+            padding: "0.5rem 0.65rem",
         }}>
-      <div style={{
-            fontSize: 15,
+      <div className="result-detail-title" style={{
+            fontSize: 13,
             fontWeight: 700,
             color: "var(--color-text)",
             fontFamily: "var(--font-display)",
             letterSpacing: 0,
-            marginBottom: 12,
+            marginBottom: 6,
         }}>
         Netto jaaroverzicht
       </div>
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <table className="result-detail-table" style={{ width: "100%", borderCollapse: "collapse" }}>
         <tbody>
           <JaarComponentRows titel="Eindejaarspremie" component={r.eindejaarspremie}/>
           <JaarComponentRows titel="Dubbel vakantiegeld" component={r.dubbelVakantiegeld}/>
@@ -72,23 +72,23 @@ export function WerkgeverJaaroverzichtPanel({ jaaroverzicht }: {
     jaaroverzicht: JaaroverzichtResultaat;
 }) {
     const r = jaaroverzicht.werkgever;
-    return (<div style={{
-            borderRadius: "var(--radius-lg)",
-            border: "2px solid var(--color-primary)",
+    return (<div className="result-detail-card" style={{
+            borderRadius: "var(--radius-md)",
+            border: "1px solid var(--color-primary)",
             background: "var(--color-surface)",
-            padding: "1rem 1.1rem",
+            padding: "0.5rem 0.65rem",
         }}>
-      <div style={{
-            fontSize: 15,
+      <div className="result-detail-title" style={{
+            fontSize: 13,
             fontWeight: 700,
             color: "var(--color-text)",
             fontFamily: "var(--font-display)",
             letterSpacing: 0,
-            marginBottom: 12,
+            marginBottom: 6,
         }}>
         Loonkost werkgever (per jaar)
       </div>
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <table className="result-detail-table" style={{ width: "100%", borderCollapse: "collapse" }}>
         <tbody>
           <NettoRow label="Loonkost werkgever per maand × 12" bedrag={r.maandbasisX12} prefix=""/>
           <NettoRow label="Eindejaarspremie + jaarpremie + ecocheques" bedrag={r.jaarpremiesEnEcocheques} prefix="+" dimmed/>
@@ -104,10 +104,10 @@ export function WerkgeverJaaroverzichtPanel({ jaaroverzicht }: {
               <NettoRow label="Loonkost werkgever per jaar incl. doelgroepvermindering" bedrag={r.totaleLoonkostJaarInclusiefDoelgroepvermindering} prefix="" variant="total"/>
               <tr>
                 <td colSpan={2} style={{
-            padding: "10px 0 0",
-            fontSize: 12,
+            padding: "5px 0 0",
+            fontSize: 11,
             color: "var(--color-text-muted)",
-            lineHeight: 1.45,
+            lineHeight: 1.35,
         }}>
                   de doelgroepvermindering kan echter enkel toegepast worden indien de onderneming daadwerkelijk extra werkgelegenheid creeert , waarbij rekening gehouden wordt met bestaande/voorafgaande tewerkstellingen in andere vennootschappen waarmee de nieuwe onderneming verbonden is
                 </td>

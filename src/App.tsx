@@ -74,11 +74,11 @@ function AppShell() {
         <header className="app-topbar">
           <div className="app-topbar-inner" style={headerContentLayout}>
             <BrandLockup />
-            <div className="app-context">
-              <span>{sectionLabelForPath(location.pathname)}</span>
-              <ChevronRight size={14}/>
-              <span>{activeSection === "simulator" ? "Loonkost Simulator" : activeSection === "ontwikkeling" ? "Werkruimte" : "Dossiercockpit"}</span>
-            </div>
+            {activeSection === "simulator" ? (<SimulatorSubnav pathname={location.pathname} placement="header"/>) : (<div className="app-context">
+                <span>{sectionLabelForPath(location.pathname)}</span>
+                <ChevronRight size={14}/>
+                <span>{activeSection === "ontwikkeling" ? "Werkruimte" : "Dossiercockpit"}</span>
+              </div>)}
             <div className="app-topbar-actions" aria-label="Contextacties">
               <span className="app-status-pill">Lokaal concept</span>
               <span className="app-chat-pill"><MessageCircle size={14}/> Chat</span>
@@ -89,7 +89,7 @@ function AppShell() {
         <div className="app-body">
           <PrimaryRail pathname={location.pathname}/>
           <div className="app-content-column">
-            {activeSection === "simulator" && <SimulatorSubnav pathname={location.pathname}/>}
+            {activeSection === "simulator" && <SimulatorSubnav pathname={location.pathname} placement="mobile"/>}
             {activeSection === "ontwikkeling" && <DevelopmentSubnav pathname={location.pathname}/>}
             <main className="app-main" style={{ maxWidth: mainMaxWidth, width: "100%", boxSizing: "border-box", margin: "0 auto", padding: "28px 28px" }}>
               <Routes>
@@ -157,11 +157,13 @@ function DevelopmentRailLinks() {
         </a>))}
     </div>);
 }
-export function SimulatorSubnav({ pathname }: {
+export function SimulatorSubnav({ pathname, placement = "mobile" }: {
     pathname: string;
+    placement?: "header" | "mobile";
 }) {
-    return (<nav className="app-subnav" aria-label="Simulator navigatie">
-      <div className="app-subnav-inner">
+    const isHeader = placement === "header";
+    return (<nav className={isHeader ? "app-header-subnav" : "app-subnav app-subnav-mobile"} aria-label="Simulator navigatie">
+      <div className={isHeader ? "app-header-subnav-inner" : "app-subnav-inner"}>
         <span className="app-subnav-kicker"><Calculator size={14}/> Simulator</span>
         {SIMULATOR_SUBNAV_ITEMS.map((item) => (<a key={item.to} href={hashHref(item.to)} aria-current={pathname === item.to ? "page" : undefined} className={`app-subnav-link ${pathname === item.to ? "is-active" : ""}`}>
           {item.label}

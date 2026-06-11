@@ -93,20 +93,19 @@ export function HeroSummary({ brutoloon, nettoloon, werkgeverskost, loonwig, }: 
             icon: <TrendingUp size={14}/>,
         },
     ];
-    return (<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-      {cards.map((card) => (<div key={card.label} className="rounded-2xl p-4 flex flex-col justify-center" style={{
+    return (<div className="hero-summary hero-summary-compact">
+      {cards.map((card) => (<div key={card.label} className="hero-summary-card" style={{
                 background: card.bg,
                 border: `1px solid ${card.border}`,
                 boxShadow: "var(--shadow-sm)",
-                minHeight: 90,
             }}>
-          <div className="flex items-center gap-1.5 mb-1">
+          <div className="hero-summary-label">
             {card.icon}
-            <span className="text-xs font-bold tracking-wider uppercase" style={{ color: "var(--color-text-muted)" }}>
+            <span style={{ color: "var(--color-text-muted)" }}>
               {card.label}
             </span>
           </div>
-          <span className="text-2xl sm:text-3xl font-extrabold tabular-nums" style={{
+          <span className="hero-summary-value" style={{
                 color: card.text,
                 fontFamily: "var(--font-mono)",
                 letterSpacing: 0,

@@ -20,19 +20,19 @@ export function NettoRow({ label, bedrag, prefix = "-", variant = "normal", dimm
     </>);
     return (<tr style={{
             borderBottom: total ? "none" : "1px solid var(--color-navy-50)",
-            borderTop: subtotal ? "2px solid var(--color-border)" : total ? "2px solid var(--color-primary)" : undefined,
+            borderTop: subtotal ? "1px solid var(--color-border)" : total ? "2px solid var(--color-primary)" : undefined,
         }}>
       <td style={{
-            padding: total ? "10px 8px 4px 0" : "7px 8px 7px 0",
+            padding: total ? "5px 5px 2px 0" : "3px 5px 3px 0",
             color: dimmed ? "var(--color-text-muted)" : bruto || subtotal || total ? "var(--color-text)" : "var(--color-navy-500)",
             fontWeight: bruto || subtotal || total ? 700 : 400,
-            fontSize: bruto || total ? 15 : 13,
+            fontSize: bruto || total ? 13 : 12,
             fontFamily: bruto || subtotal || total ? "var(--font-display)" : undefined,
         }}>
         {onToggle ? (<button onClick={onToggle} style={{
                 display: "inline-flex",
                 alignItems: "center",
-                gap: 6,
+                gap: 5,
                 background: "transparent",
                 border: "none",
                 padding: 0,
@@ -46,12 +46,12 @@ export function NettoRow({ label, bedrag, prefix = "-", variant = "normal", dimm
           </button>) : (content)}
       </td>
       <td style={{
-            padding: total ? "10px 0 4px 8px" : "7px 0 7px 8px",
+            padding: total ? "5px 0 2px 5px" : "3px 0 3px 5px",
             textAlign: "right",
             fontFamily: "var(--font-mono)",
             fontWeight: bruto || subtotal || total ? 700 : 500,
             color: total || netto ? "var(--color-primary)" : dimmed ? "var(--color-text-muted)" : "var(--color-text)",
-            fontSize: total ? 22 : bruto ? 15 : 13,
+            fontSize: total ? 18 : bruto ? 13 : 12,
         }}>
         {prefix !== "" ? `${prefix} ${formatEUR(bedrag)}` : formatEUR(bedrag)}
       </td>
@@ -62,10 +62,10 @@ export function NettoSectionRow({ label }: {
 }) {
     return (<tr>
       <td colSpan={2} style={{
-            padding: "14px 0 5px",
+            padding: "6px 0 2px",
             color: "var(--color-text-muted)",
             fontFamily: "var(--font-display)",
-            fontSize: 11,
+            fontSize: 10,
             fontWeight: 800,
             letterSpacing: "0.04em",
             textTransform: "uppercase",
@@ -76,20 +76,20 @@ export function NettoSectionRow({ label }: {
 }
 export function NettoSpacerRow() {
     return (<tr>
-      <td colSpan={2} style={{ padding: "6px 0" }}/>
+      <td colSpan={2} style={{ padding: "2px 0" }}/>
     </tr>);
 }
 export function NettoDetailRow({ children }: {
     children: ReactNode;
 }) {
     return (<tr>
-      <td colSpan={2} style={{ padding: "0 0 8px 18px" }}>
+      <td colSpan={2} style={{ padding: "0 0 4px 12px" }}>
         <div style={{
             borderLeft: "2px solid var(--color-primary-border)",
-            padding: "8px 0 8px 10px",
+            padding: "5px 0 5px 7px",
             color: "var(--color-text-muted)",
-            fontSize: 12,
-            lineHeight: 1.45,
+            fontSize: 11,
+            lineHeight: 1.35,
         }}>
           {children}
         </div>

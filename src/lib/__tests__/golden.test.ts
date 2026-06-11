@@ -645,7 +645,7 @@ describe("TC-23 — BV: alleenstaand, 0 kinderen (AJ 2027)", () => {
             refDatum: "2026-05-01",
             gezinstype: "alleenstaand",
             kinderenTenLaste: 0,
-            woonwerkVrijgesteldPerMaand: 16.42,
+            woonwerkNettoVrijgesteldPerMaand: 16.42,
         });
         expect(r.belastbaarMaandloonVoorBV).toBe(2281.04);
         expect(r.werkbonus.totaal).toBe(281.65);

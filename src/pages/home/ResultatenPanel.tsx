@@ -1,5 +1,5 @@
 import { useMemo, useState, type ReactNode } from "react";
-import { Briefcase, Wallet } from "lucide-react";
+import { Briefcase, Building2, Wallet } from "lucide-react";
 import { AuditOpenProvider, type AuditForceState } from "@/components/AuditPanel";
 import { Banner } from "@/components/Banner";
 import { ResultBand } from "@/components/ResultBand";
@@ -77,34 +77,37 @@ export function ResultBandsPanel({ profiel, }: {
       </AuditOpenProvider>
     </section>);
 }
+function renderError(e: unknown): React.ReactNode {
+    if (e instanceof DatapuntNietGeldigOpDatum) {
+        return (<Banner kind="warning" title="Datapunt niet geldig op deze datum">
+          <p>{e.message}</p>
+        </Banner>);
+    }
+    if (e instanceof DatapuntNietBruikbaar) {
+        return (<Banner kind="warning" title="Datapunt niet bruikbaar">
+          <p>{e.message}</p>
+        </Banner>);
+    }
+    if (e instanceof BaremaBuitenSchaalError) {
+        return (<Banner kind="error" title="Barema-fout">
+          <p>{e.message}</p>
+        </Banner>);
+    }
+    if (e instanceof PC200DatasetError) {
+        return (<Banner kind="error" title="Dataset-fout">
+          <p>{e.message}</p>
+        </Banner>);
+    }
+    return (<Banner kind="error" title="Onverwachte fout">
+        <p>{(e as Error).message}</p>
+      </Banner>);
+}
 function safeRender<T>(fn: () => T, render: (r: T) => React.ReactNode): React.ReactNode {
     try {
         return render(fn());
     }
     catch (e) {
-        if (e instanceof DatapuntNietGeldigOpDatum) {
-            return (<Banner kind="warning" title="Datapunt niet geldig op deze datum">
-          <p>{e.message}</p>
-        </Banner>);
-        }
-        if (e instanceof DatapuntNietBruikbaar) {
-            return (<Banner kind="warning" title="Datapunt niet bruikbaar">
-          <p>{e.message}</p>
-        </Banner>);
-        }
-        if (e instanceof BaremaBuitenSchaalError) {
-            return (<Banner kind="error" title="Barema-fout">
-          <p>{e.message}</p>
-        </Banner>);
-        }
-        if (e instanceof PC200DatasetError) {
-            return (<Banner kind="error" title="Dataset-fout">
-          <p>{e.message}</p>
-        </Banner>);
-        }
-        return (<Banner kind="error" title="Onverwachte fout">
-        <p>{(e as Error).message}</p>
-      </Banner>);
+        return renderError(e);
     }
 }
 function bouwResultaten(p: Profiel): BouwResultaten {
@@ -112,42 +115,66 @@ function bouwResultaten(p: Profiel): BouwResultaten {
     const summary = computeSummary(p);
     const bands: ResultBandSpec[] = [];
     if (p.statuut === "bediende") {
-        bands.push({
-            id: "band-loonkost",
-            title: "Loonkost & netto",
-            shortLabel: "Loonkost",
-            icon: <Wallet size={14}/>,
-            blocks: [
-                safeRender(() => {
-                    const mobiliteit = berekenMobiliteitVoorProfiel(p, refDatum);
-                    const vaaWerkmiddelen = berekenVaaWerkmiddelenVoorProfiel(p, refDatum);
-                    const netto = berekenNettoVoorProfiel(p, refDatum);
-                    const wgk = berekenWerkgeverskostVoorProfiel(p, refDatum, vaaWerkmiddelen, mobiliteit);
-                    const jaaroverzicht = berekenJaaroverzichtVoorProfiel(p, refDatum, netto, wgk, vaaWerkmiddelen, mobiliteit);
-                    const wig = berekenLoonwigVoorProfielResultaat(wgk, netto);
-                    return { netto, wgk, wig, mobiliteit, vaaWerkmiddelen, jaaroverzicht };
-                }, ({ netto, wgk, wig, mobiliteit, vaaWerkmiddelen, jaaroverzicht }) => (<div style={{ display: "grid", gap: 12 }}>
-              <div className="grid grid-cols-1" style={{
-                        gap: 12,
-                        alignItems: "flex-start",
+        try {
+            const mobiliteit = berekenMobiliteitVoorProfiel(p, refDatum);
+            const vaaWerkmiddelen = berekenVaaWerkmiddelenVoorProfiel(p, refDatum);
+            const netto = berekenNettoVoorProfiel(p, refDatum);
+            const wgk = berekenWerkgeverskostVoorProfiel(p, refDatum, vaaWerkmiddelen, mobiliteit);
+            const jaaroverzicht = berekenJaaroverzichtVoorProfiel(p, refDatum, netto, wgk, vaaWerkmiddelen, mobiliteit);
+            const wig = berekenLoonwigVoorProfielResultaat(wgk, netto);
+            const maaltijdchequeWerkgeversaandeelPerDag = heeftMaaltijdcheques(p) ? p.maaltijdchequeWerkgeversaandeelPerDag : 0;
+            const maaltijdchequeWerknemersbijdragePerDag = heeftMaaltijdcheques(p) ? p.maaltijdchequeWerknemersbijdragePerDag : 0;
+            const maaltijdchequeWerkdagenPerMaand = heeftMaaltijdcheques(p) ? p.arbeidsdagenPerMaand : 0;
+            bands.push({
+                id: "band-netto",
+                title: "Netto",
+                shortLabel: "Netto",
+                icon: <Wallet size={14}/>,
+                blocks: [
+                    <div className="grid grid-cols-1" style={{
+                        gap: 8,
+                        alignItems: "stretch",
                         gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 460px), 1fr))",
                     }}>
-                <NettoPanel resultaat={netto} vaaWerkmiddelen={vaaWerkmiddelen} maaltijdchequeWerkgeversaandeelPerDag={heeftMaaltijdcheques(p) ? p.maaltijdchequeWerkgeversaandeelPerDag : 0} gemeentebelastingPct={p.gemeentebelastingPct}/>
-                <WerkgeverskostPanel resultaat={wgk} loonwigPct={wig} netto={netto.nettoloon} extras={{
-                        arbeidsongevallenPct: p.arbeidsongevallenPct,
-                        groepsverzekering: p.extraGroepsverzekering,
-                        maaltijdcheques: berekenMaaltijdchequeWerkgeverskostVoorProfiel(p),
-                        hospitalisatie: p.extraHospitalisatie,
-                        ecocheques: 0,
-                        woonwerk: mobiliteit.woonwerk.totaalVergoeding,
-                        onkostenvergoeding: p.onkostenvergoedingPerMaand,
-                    }}/>
-              </div>
-              <NettoJaaroverzichtPanel jaaroverzicht={jaaroverzicht} maaltijdchequeWerkgeversaandeelPerDag={heeftMaaltijdcheques(p) ? p.maaltijdchequeWerkgeversaandeelPerDag : 0} maaltijdchequeWerknemersbijdragePerDag={heeftMaaltijdcheques(p) ? p.maaltijdchequeWerknemersbijdragePerDag : 0} maaltijdchequeWerkdagenPerMaand={heeftMaaltijdcheques(p) ? p.arbeidsdagenPerMaand : 0}/>
-              <WerkgeverJaaroverzichtPanel jaaroverzicht={jaaroverzicht}/>
-            </div>)),
-            ],
-        });
+                        <NettoPanel resultaat={netto} vaaWerkmiddelen={vaaWerkmiddelen} maaltijdchequeWerkgeversaandeelPerDag={maaltijdchequeWerkgeversaandeelPerDag} gemeentebelastingPct={p.gemeentebelastingPct}/>
+                        <NettoJaaroverzichtPanel jaaroverzicht={jaaroverzicht} maaltijdchequeWerkgeversaandeelPerDag={maaltijdchequeWerkgeversaandeelPerDag} maaltijdchequeWerknemersbijdragePerDag={maaltijdchequeWerknemersbijdragePerDag} maaltijdchequeWerkdagenPerMaand={maaltijdchequeWerkdagenPerMaand}/>
+                    </div>,
+                ],
+            });
+            bands.push({
+                id: "band-loonkost-werkgever",
+                title: "Loonkost werkgever",
+                shortLabel: "Loonkost",
+                icon: <Building2 size={14}/>,
+                blocks: [
+                    <div className="grid grid-cols-1" style={{
+                        gap: 8,
+                        alignItems: "stretch",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 460px), 1fr))",
+                    }}>
+                        <WerkgeverskostPanel resultaat={wgk} loonwigPct={wig} netto={netto.nettoloon} extras={{
+                            arbeidsongevallenPct: p.arbeidsongevallenPct,
+                            groepsverzekering: p.extraGroepsverzekering,
+                            maaltijdcheques: berekenMaaltijdchequeWerkgeverskostVoorProfiel(p),
+                            hospitalisatie: p.extraHospitalisatie,
+                            ecocheques: 0,
+                            woonwerk: mobiliteit.woonwerk.totaalVergoeding,
+                            onkostenvergoeding: p.onkostenvergoedingPerMaand,
+                        }}/>
+                        <WerkgeverJaaroverzichtPanel jaaroverzicht={jaaroverzicht}/>
+                    </div>,
+                ],
+            });
+        }
+        catch (e) {
+            bands.push({
+                id: "band-netto",
+                title: "Netto & loonkost werkgever",
+                shortLabel: "Berekening",
+                icon: <Wallet size={14}/>,
+                blocks: [renderError(e)],
+            });
+        }
     }
     const loonbasisBlocks: ReactNode[] = [];
     if (p.statuut === "bediende") {

@@ -11,6 +11,17 @@ Kort projectlogboek voor wijzigingen door coding agents.
 
 ## Log
 
+- 2026-06-11 — Loonkost & Netto-resultaatzone herschikt in twee aparte banden: "Netto" (maand + jaar naast elkaar) en "Loonkost werkgever" (maand + jaar naast elkaar); oude gecombineerde band verwijderd; jump anchors en render-test bijgewerkt; reden: volle-breedte jaaroverzichten waren niet overzichtelijk.
+- 2026-06-11 — Loonkost & Netto-resultaatblokken verder verkleind: kaartpadding, titelspacing, tabelrijen, bronaccordion, loonwig-callout en sectiegaps compacter; bijbehorende render-tests bijgewerkt; reden: blokken namen nog steeds meer ruimte in dan nodig.
+- 2026-06-11 — Correctie TC-23 golden test: `woonwerkVrijgesteldPerMaand` vervangen door `woonwerkNettoVrijgesteldPerMaand` zodat de verwachte nettoberekening overeenkomt met de `berekenNetto`-interface; reden: test faalde op juistheid na woon-werk nettoflow-refactor.
+- 2026-06-11 — Mobiele hero-summary-test bijgewerkt naar de nieuwe compacte CSS-gebaseerde layout; reden: test verwachtte oude Tailwind grid/font-classes die niet meer in gebruik zijn.
+- 2026-06-11 — Profielinvoer compacter gezet met lagere cockpitkaarten, labels, inputs en sectiegaps; reden: meer kernvelden tegelijk zichtbaar maken zonder rekenlogica te wijzigen.
+- 2026-06-11 — Sticky rekenbalk opnieuw uitgelijnd: toggle gecentreerd, CSV/print-acties rechts en acties/toggle compacter; reden: headerlayout visueel corrigeren en extra verticale ruimte winnen.
+- 2026-06-11 — Bruto/netto-toggle gecentreerd en sticky kerncijfers verder verkleind; reden: meer schermruimte vrijmaken in de calculatorheader.
+- 2026-06-11 — Sticky rekenbalk dichter onder de header gezet en initiële top-spacing van de calculator verminderd; reden: ongebruikte witruimte wegnemen en scrollverspringing beperken.
+- 2026-06-11 — Calculatorrichting, kerncijfers en calculatoracties samengebracht in een compactere sticky rekenbalk; reden: meer invoercontent zichtbaar houden tijdens scrollen zonder rekenlogica te wijzigen.
+- 2026-06-11 — Calculator CSV import/export uit de hoofdflow gehaald en achter een sticky ontwikkelknop met modal gezet; reden: minder visuele ruis terwijl tijdelijke dev-export snel bereikbaar blijft.
+- 2026-06-11 — Simulator-subnavigatie op desktop naar de topbar verplaatst en mobiel onder de topbar behouden; reden: minder verticale UI-ruimte en duidelijkere simulatorcontext zonder rekenlogica te raken.
 - 2026-06-11 — Interne Loonmotor -> Loonrun-doorstroom toegevoegd met gedeelde `jaakie:loonrun` opslag, mapper/readiness, actieve UI-acties, extra waarschuwingen en tests; reden: dossieropbouw browser-only laten aansluiten op loonruncontrole en payroll-export v1.
 - 2026-06-10 — Eerste integratiefase control/export toegevoegd: pure `integratieExport`-laag, generieke payroll-exportbatch v1 in Loonrun UI, downloadblokkering bij validaties en gerichte tests; reden: Jaakie voorbereiden op latere sociaal-secretariaat-/boekhoudkoppelingen zonder backend of officiële aangifte.
 - 2026-06-10 — Integratieverkenning vastgelegd in `knowledgebase/13_loonmotor_integraties.md` en gekoppeld vanuit `knowledgebase/README.md`; reden: toekomstige HRIS-, sociaal-secretariaat-, aangifte-, betaal- en boekhoudkoppelingen als SSOT bewaren.

@@ -17,10 +17,10 @@ De payrollberekeningen draaien client-side in de browser. De optionele AI-chat i
 
 Jaakie gebruikt een HashRouter met een rustige app-shell:
 
-- De topbar toont Jaakie-branding links en de actieve contextstroom rechts; er staat geen volledige tabrij meer in de header.
+- De topbar toont Jaakie-branding links. Binnen de Simulator-context staat de lokale simulator-subnavigatie op brede desktop rechts in de topbar; buiten de Simulator-context blijft de actieve contextstroom rechts staan.
 - Desktop gebruikt een vaste linkerrail met de hoofdmodules **Loonmotor**, **Simulator** en **Ontwikkeling**.
 - Mobiel gebruikt een compacte bottom navigation met **Loonmotor**, **Simulator** en **Meer**.
-- De Simulator-subnavigatie (`Calculator`, `Loonfiche`, `Loonrun`) verschijnt alleen binnen de simulatorcontext.
+- De Simulator-subnavigatie (`Calculator`, `Loonfiche`, `Loonrun`) verschijnt alleen binnen de simulatorcontext; op smallere viewports blijft ze als horizontale subnav onder de topbar staan.
 - Ontwikkelingslinks (`Testcases`, `Scope & bekend manco`, `Onderzoeksdossier`) zijn secundair onder de Ontwikkeling-context.
 
 | Route | Functie |
@@ -54,6 +54,12 @@ Gebruikers kunnen onder meer invullen of aanpassen:
 - werkgeverskostparameters zoals arbeidsongevallenpercentage, groepsverzekering, hospitalisatie en doelgroepvermindering eerste aanwervingen.
 
 De vroegere bouw-subsetoptie voor een aparte 1,80% aanvullende pensioenbijdrage is niet langer zichtbaar of actief. Oude CSV-profielen met `bouwVlag` blijven inleesbaar, maar Jaakie telt geen aparte bouwbijdrage bovenop de globale werkgevers-RSZ.
+
+De tijdelijke single-profile CSV import/export zit achter een sticky ontwikkelactie **CSV import/export**. Die opent een modal met exportnaam, commentaar, import en export; ingevulde exportnaam en commentaar blijven behouden wanneer de modal wordt gesloten en later opnieuw geopend.
+
+De berekeningsrichting, kerncijfers (`Bruto`, `Netto`, `Werkgeverskost`, `Loonwig`) en calculatoracties staan bovenaan in een compacte sticky rekenbalk, zodat de belangrijkste uitkomst zichtbaar blijft terwijl gebruikers door de invoerblokken scrollen.
+
+De profielinvoer gebruikt compacte cockpitkaarten met lagere sectiekoppen, kleinere labels en lagere inputs op desktop, zodat meer kernvelden tegelijk zichtbaar zijn; mobiel behoudt leesbare touchruimte.
 
 ### Berekening
 
