@@ -87,7 +87,7 @@ function WieBenJeCard({ profiel, set }: {
     set: ProfielSetter;
 }) {
     return (<CockpitCard title="Wie ben je?" icon={<User size={16}/>}>
-      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <FormField label="Statuut">
           <select className={selectClass} value={profiel.statuut} onChange={(e) => set("statuut", e.target.value as Statuut)}>
             <option value="bediende">Bediende</option>
@@ -144,7 +144,7 @@ function ArbeidscontextCard({ profiel, set, setBerekeningsMaand, setBerekeningsJ
     setBerekeningsJaar: (jaar: string) => void;
 }) {
     return (<CockpitCard title="Arbeidscontext" icon={<Building2 size={16}/>}>
-      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {profiel.statuut === "bediende" && (<div className="grid grid-cols-3 gap-3">
             <FormField label="Schaal">
               <select className={selectClass} value={profiel.schaal} onChange={(e) => set("schaal", e.target.value as Schaal)}>
@@ -203,7 +203,7 @@ function BrutoloonCard({ profiel, set }: {
     set: ProfielSetter;
 }) {
     return (<CockpitCard title="Brutoloon" icon={<Euro size={16}/>}>
-      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {profiel.statuut === "bediende" && profiel.berekeningsRichting === "bruto_naar_netto" ? (<FormField label="Brutoloon (€)">
             <NumeriekeInput className={inputClass} step="0.01" value={profiel.brutoloon} onValueChange={(waarde) => set("brutoloon", waarde)}/>
           </FormField>) : profiel.statuut === "bediende" ? (<>

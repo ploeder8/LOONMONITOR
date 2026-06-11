@@ -24,25 +24,25 @@ export function NettoPanel({ resultaat: r, vaaWerkmiddelen, maaltijdchequeWerkge
         werkdagen: r.maaltijdchequeWerkdagen,
     });
     const nettoloonInclusiefMaaltijdcheques = round2(r.nettoloon + maaltijdcheques.totaleWaarde);
-    return (<div style={{
-            borderRadius: "var(--radius-lg)",
-            border: "2px solid var(--color-primary)",
+    return (<div className="result-detail-card" style={{
+            borderRadius: "var(--radius-md)",
+            border: "1px solid var(--color-primary)",
             background: "var(--color-surface)",
-            padding: "1rem 1.1rem",
+            padding: "0.5rem 0.65rem",
         }}>
       
-      <div style={{
-            fontSize: 15,
+      <div className="result-detail-title" style={{
+            fontSize: 13,
             fontWeight: 700,
             color: "var(--color-text)",
             fontFamily: "var(--font-display)",
             letterSpacing: 0,
-            marginBottom: 12,
+            marginBottom: 6,
         }}>
         Netto berekening (per maand)
       </div>
 
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <table className="result-detail-table" style={{ width: "100%", borderCollapse: "collapse" }}>
         <tbody>
           <NettoRow label="Brutoloon" bedrag={r.brutoloon} prefix=""/>
           {vaaWerkmiddelen?.lijnen.map((lijn) => (<NettoRow key={lijn.datapunt.id} label={`VAA ${lijn.label}`} bedrag={lijn.bedrag} prefix="+" dimmed/>))}
@@ -80,8 +80,8 @@ export function NettoPanel({ resultaat: r, vaaWerkmiddelen, maaltijdchequeWerkge
                 ["BV / maand sleutelformule (vóór gezinsvermindering)", formatEUR(r.bv.bvPerMaand)],
                 ["BV / maand (na gezinsvermindering)", formatEUR(r.bv.bvNaVerminderingen)],
             ].map(([lbl, val]) => (<tr key={lbl} style={{ borderBottom: "1px solid var(--color-navy-50)" }}>
-                      <td style={{ padding: "4px 6px 4px 0", color: "var(--color-text-muted)" }}>{lbl}</td>
-                      <td style={{ padding: "4px 0 4px 6px", textAlign: "right", fontFamily: "var(--font-mono)", color: "var(--color-navy-500)" }}>{val}</td>
+                      <td style={{ padding: "3px 5px 3px 0", color: "var(--color-text-muted)" }}>{lbl}</td>
+                      <td style={{ padding: "3px 0 3px 5px", textAlign: "right", fontFamily: "var(--font-mono)", color: "var(--color-navy-500)" }}>{val}</td>
                     </tr>))}
                 </tbody>
               </table>
@@ -133,8 +133,8 @@ export function NettoPanel({ resultaat: r, vaaWerkmiddelen, maaltijdchequeWerkge
           {maaltijdcheques.totaleWaarde > 0 && (<NettoRow label={`Nettoloon incl. maaltijdcheques (totale waarde ${formatEUR(maaltijdcheques.totaleWaardePerDag)} × ${maaltijdcheques.werkdagen} dagen)`} bedrag={nettoloonInclusiefMaaltijdcheques} prefix="" variant="subtotal"/>)}
           <tr>
             <td colSpan={2} style={{
-            padding: "8px 0",
-            fontSize: 12,
+            padding: "5px 0",
+            fontSize: 11,
             color: "var(--color-text-muted)",
             borderTop: "1px dashed var(--color-border)",
         }}>

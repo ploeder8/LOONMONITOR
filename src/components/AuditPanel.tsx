@@ -22,7 +22,7 @@ export function AuditSourceGroup({ datapunten }: {
     if (uniekeDatapunten.length === 0)
         return null;
     return (<div style={{
-            marginTop: 4,
+            marginTop: 2,
             borderRadius: "var(--radius-md)",
             border: open ? "1px solid var(--color-navy-100)" : "1px solid transparent",
             background: open ? "var(--color-navy-50)" : "transparent",
@@ -32,32 +32,32 @@ export function AuditSourceGroup({ datapunten }: {
             width: "100%",
             alignItems: "center",
             justifyContent: "space-between",
-            gap: 10,
+            gap: 8,
             border: "1px solid var(--color-navy-100)",
             borderRadius: "var(--radius-md)",
             background: "var(--color-surface)",
             color: "var(--color-navy-500)",
-            padding: "7px 10px",
+            padding: "4px 7px",
             cursor: "pointer",
             boxShadow: open ? "none" : "0 2px 8px rgba(19, 31, 55, 0.035)",
             fontFamily: "var(--font-body)",
             textAlign: "left",
         }}>
-        <span style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0, flexWrap: "wrap" }}>
+        <span style={{ display: "flex", alignItems: "center", gap: 6, minWidth: 0, flexWrap: "wrap" }}>
           <span style={{
             display: "inline-flex",
             alignItems: "center",
             justifyContent: "center",
-            width: 22,
-            height: 22,
+            width: 17,
+            height: 17,
             borderRadius: "var(--radius-pill)",
             background: heeftAandachtNodig ? "var(--color-primary-soft)" : "var(--color-mint-soft)",
             color: heeftAandachtNodig ? "var(--color-primary)" : "var(--color-success-dark)",
             flexShrink: 0,
         }}>
-            {heeftAandachtNodig ? <BookOpen size={13}/> : <ShieldCheck size={13}/>}
+            {heeftAandachtNodig ? <BookOpen size={10}/> : <ShieldCheck size={10}/>}
           </span>
-          <span style={{ fontSize: 12, fontWeight: 700, color: "var(--color-navy-700)" }}>
+          <span style={{ fontSize: 11, fontWeight: 700, color: "var(--color-navy-700)" }}>
             {bronSamenvatting(uniekeDatapunten)}
           </span>
           {heeftAandachtNodig && (<span style={{
@@ -65,7 +65,7 @@ export function AuditSourceGroup({ datapunten }: {
                 background: "var(--color-primary-soft)",
                 border: "1px solid var(--color-primary-border)",
                 color: "var(--color-primary)",
-                fontSize: 11,
+                fontSize: 10,
                 fontWeight: 700,
                 padding: "1px 7px",
             }}>
@@ -73,15 +73,15 @@ export function AuditSourceGroup({ datapunten }: {
             </span>)}
         </span>
         {open
-            ? <ChevronUp size={15} style={{ color: "var(--color-text-muted)", flexShrink: 0 }}/>
-            : <ChevronDown size={15} style={{ color: "var(--color-text-muted)", flexShrink: 0 }}/>}
+            ? <ChevronUp size={13} style={{ color: "var(--color-text-muted)", flexShrink: 0 }}/>
+            : <ChevronDown size={13} style={{ color: "var(--color-text-muted)", flexShrink: 0 }}/>}
       </button>
 
       {open && (<div style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: 5,
-                padding: "8px",
+                gap: 4,
+                padding: "5px",
             }}>
           {uniekeDatapunten.map((dp) => (<AuditPanel key={dp.id} datapunt={dp} compact/>))}
         </div>)}
@@ -98,25 +98,25 @@ export function AuditPanel({ datapunt, compact = false }: {
             borderRadius: "var(--radius-md)",
             border: "1px solid var(--color-border)",
             background: compact ? "var(--color-surface)" : "var(--color-navy-50)",
-            fontSize: 13,
+            fontSize: compact ? 12 : 13,
         }}>
       <button type="button" aria-expanded={open} onClick={() => setLocalOpen(!open)} style={{
             display: "flex",
             width: "100%",
             alignItems: "center",
             justifyContent: "space-between",
-            gap: 8,
-            padding: compact ? "7px 10px" : "8px 12px",
+            gap: 6,
+            padding: compact ? "5px 8px" : "8px 12px",
             textAlign: "left",
             background: "transparent",
             border: "none",
             cursor: "pointer",
             transition: "background 0.15s",
         }} onMouseEnter={(e) => (e.currentTarget.style.background = "var(--color-primary-soft)")} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
-        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6, minWidth: 0 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 5, minWidth: 0 }}>
           <span style={{
             fontFamily: "var(--font-mono)",
-            fontSize: 11,
+            fontSize: compact ? 10 : 11,
             color: "var(--color-navy-500)",
             overflowWrap: "anywhere",
             minWidth: 0,
@@ -127,16 +127,16 @@ export function AuditPanel({ datapunt, compact = false }: {
           {datapunt.betrouwbaarheid && <TierBadge tier={datapunt.betrouwbaarheid}/>}
         </div>
         {open
-            ? <ChevronUp size={14} style={{ color: "var(--color-text-muted)", flexShrink: 0 }}/>
-            : <ChevronDown size={14} style={{ color: "var(--color-text-muted)", flexShrink: 0 }}/>}
+            ? <ChevronUp size={compact ? 12 : 14} style={{ color: "var(--color-text-muted)", flexShrink: 0 }}/>
+            : <ChevronDown size={compact ? 12 : 14} style={{ color: "var(--color-text-muted)", flexShrink: 0 }}/>}
       </button>
 
       {open && (<div style={{
                 borderTop: "1px solid var(--color-border)",
-                padding: compact ? "10px" : "12px",
+                padding: compact ? "7px" : "12px",
                 display: "flex",
                 flexDirection: "column",
-                gap: compact ? 10 : 12,
+                gap: compact ? 7 : 12,
             }}>
           <AuditField label="Omschrijving">{datapunt.omschrijving}</AuditField>
 

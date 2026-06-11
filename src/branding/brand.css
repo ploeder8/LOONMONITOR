@@ -76,9 +76,9 @@
   --cockpit-card-bg: #FFFFFF;
   --cockpit-card-border: #E5EAF2;
   --cockpit-card-radius: var(--radius-lg);
-  --cockpit-card-padding: 20px;
+  --cockpit-card-padding: 14px;
   --cockpit-card-shadow: var(--shadow-sm);
-  --cockpit-grid-gap: 16px;
+  --cockpit-grid-gap: 10px;
   --cockpit-section-icon-bg: #FFF3EF;
   --cockpit-section-icon-color: #D83A18;
   --cockpit-subsection-bg: #F3F6FA;

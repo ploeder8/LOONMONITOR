@@ -10,40 +10,40 @@ export function WerkgeverskostPanel({ resultaat: r, loonwigPct, netto, extras, }
     netto: number;
     extras: WerkgeverskostExtras;
 }) {
-    return (<div style={{
-            borderRadius: "var(--radius-lg)",
-            border: "2px solid var(--color-primary)",
+    return (<div className="result-detail-card" style={{
+            borderRadius: "var(--radius-md)",
+            border: "1px solid var(--color-primary)",
             background: "var(--color-surface)",
-            padding: "1rem 1.1rem",
+            padding: "0.5rem 0.65rem",
         }}>
-      <div style={{
-            fontSize: 15,
+      <div className="result-detail-title" style={{
+            fontSize: 13,
             fontWeight: 700,
             color: "var(--color-text)",
             fontFamily: "var(--font-display)",
             letterSpacing: 0,
-            marginBottom: 12,
+            marginBottom: 6,
         }}>
         Loonkost werkgever (per maand)
       </div>
 
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <table className="result-detail-table" style={{ width: "100%", borderCollapse: "collapse" }}>
         <tbody>
           <NettoRow label="Brutoloon" bedrag={r.brutoloon} prefix=""/>
           <NettoRow label="RSZ werkgever (~25%)" bedrag={r.rszWerkgever} prefix="+"/>
           <NettoRow label={`Arbeidsongevallen (${(extras.arbeidsongevallenPct * 100).toFixed(2)} %)`} bedrag={r.arbeidsongevallen} prefix="+"/>
           <tr style={{ borderTop: "1px solid var(--color-border)" }}>
-            <td style={{ padding: "8px 8px 4px 0", fontWeight: 600, color: "var(--color-navy-500)", fontSize: 13 }}>
+            <td style={{ padding: "4px 5px 2px 0", fontWeight: 600, color: "var(--color-navy-500)", fontSize: 12 }}>
               Loonkost zonder voordelen{" "}
               <HelpTooltip text="Loonkost vóór extra voordelen en vergoedingen zoals groepsverzekering, maaltijdcheques, hospitalisatie, woon-werkvergoeding en onkostenvergoedingen."/>
             </td>
             <td style={{
-            padding: "8px 0 4px 8px",
+            padding: "4px 0 2px 5px",
             textAlign: "right",
             fontFamily: "var(--font-mono)",
             fontWeight: 600,
             color: "var(--color-navy-500)",
-            fontSize: 13,
+            fontSize: 12,
         }}>
               {formatEUR(r.totaleLoonkostSmal)}
             </td>
@@ -56,44 +56,44 @@ export function WerkgeverskostPanel({ resultaat: r, loonwigPct, netto, extras, }
           {r.doelgroepverminderingWerkgeverPerMaand > 0 && (<NettoRow label="Doelgroepvermindering eerste aanwervingen" bedrag={r.doelgroepverminderingWerkgeverPerMaand} prefix="-" dimmed/>)}
           <tr style={{ borderTop: "2px solid var(--color-primary)" }}>
             <td style={{
-            padding: "10px 8px 4px 0",
+            padding: "5px 5px 2px 0",
             fontWeight: 700,
             color: "var(--color-text)",
             fontFamily: "var(--font-display)",
-            fontSize: 15,
+            fontSize: 13,
         }}>
               {r.doelgroepverminderingWerkgeverPerMaand > 0
                 ? "Loonkost werkgever per maand excl. doelgroepvermindering"
                 : "Loonkost werkgever per maand"}
             </td>
             <td style={{
-            padding: "10px 0 4px 8px",
+            padding: "5px 0 2px 5px",
             textAlign: "right",
             fontFamily: "var(--font-mono)",
             fontWeight: 700,
             color: "var(--color-primary)",
-            fontSize: 22,
+            fontSize: 18,
         }}>
               {formatEUR(r.totaleLoonkostBreed)}
             </td>
           </tr>
           {r.doelgroepverminderingWerkgeverPerMaand > 0 && (<tr>
             <td style={{
-            padding: "6px 8px 4px 0",
+            padding: "4px 5px 2px 0",
             fontWeight: 700,
             color: "var(--color-text)",
             fontFamily: "var(--font-display)",
-            fontSize: 15,
+            fontSize: 13,
         }}>
               Loonkost werkgever per maand incl. doelgroepvermindering
             </td>
             <td style={{
-            padding: "6px 0 4px 8px",
+            padding: "4px 0 2px 5px",
             textAlign: "right",
             fontFamily: "var(--font-mono)",
             fontWeight: 700,
             color: "var(--color-primary)",
-            fontSize: 18,
+            fontSize: 15,
         }}>
               {formatEUR(r.totaleLoonkostBreedNaDoelgroepvermindering)}
             </td>
@@ -102,13 +102,13 @@ export function WerkgeverskostPanel({ resultaat: r, loonwigPct, netto, extras, }
       </table>
 
       
-      <div style={{
-            marginTop: 14,
+      <div className="result-loonwig-callout" style={{
+            marginTop: 6,
             background: "var(--color-primary-soft)",
             border: "1px solid var(--color-primary-border)",
             borderRadius: 8,
-            padding: "10px 12px",
-            fontSize: 13,
+            padding: "5px 8px",
+            fontSize: 12,
             color: "var(--color-text)",
         }}>
         <strong>Loonwig: {(loonwigPct * 100).toFixed(1)} %</strong>{" "}

@@ -8,7 +8,7 @@ export function ResultBand({ id, title, subtitle, icon, children, }: {
     return (<section id={id} style={{
             display: "flex",
             flexDirection: "column",
-            gap: 10,
+            gap: 6,
             scrollMarginTop: 140,
         }}>
       <header style={{
@@ -39,6 +39,6 @@ export function ResultBand({ id, title, subtitle, icon, children, }: {
             {subtitle}
           </span>)}
       </header>
-      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>{children}</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>{children}</div>
     </section>);
 }

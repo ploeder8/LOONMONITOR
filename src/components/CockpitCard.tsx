@@ -18,11 +18,11 @@ export function CockpitCard({ title, icon, children, highlight }: CockpitCardPro
         }} onMouseLeave={(e) => {
             (e.currentTarget as HTMLElement).style.boxShadow = "var(--cockpit-card-shadow)";
         }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
         <div style={{
-            width: 32,
-            height: 32,
-            borderRadius: "var(--radius-md)",
+            width: 24,
+            height: 24,
+            borderRadius: "var(--radius-sm)",
             background: "var(--cockpit-section-icon-bg)",
             display: "flex",
             alignItems: "center",
@@ -34,8 +34,8 @@ export function CockpitCard({ title, icon, children, highlight }: CockpitCardPro
         </div>
         <span style={{
             fontFamily: "var(--font-display)",
-            fontSize: 14,
-            fontWeight: 700,
+            fontSize: 13,
+            fontWeight: 750,
             color: "var(--color-text)",
         }}>
           {title}

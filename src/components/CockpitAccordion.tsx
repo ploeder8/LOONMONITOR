@@ -21,16 +21,16 @@ export function CockpitAccordion({ title, subtitle, icon, children, defaultOpen 
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            padding: "20px",
+            padding: "14px",
             border: "none",
             background: "transparent",
             cursor: "pointer",
         }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <div style={{
-            width: 32,
-            height: 32,
-            borderRadius: "var(--radius-md)",
+            width: 24,
+            height: 24,
+            borderRadius: "var(--radius-sm)",
             background: "var(--cockpit-section-icon-bg)",
             display: "flex",
             alignItems: "center",
@@ -42,14 +42,14 @@ export function CockpitAccordion({ title, subtitle, icon, children, defaultOpen 
           <div style={{ textAlign: "left" }}>
             <div style={{
             fontFamily: "var(--font-display)",
-            fontSize: 14,
-            fontWeight: 700,
+            fontSize: 13,
+            fontWeight: 750,
             color: "var(--color-text)",
         }}>
               {title}
             </div>
             <div style={{
-            fontSize: 12,
+            fontSize: 11,
             fontWeight: 600,
             color: "var(--color-text-muted)",
         }}>
@@ -57,7 +57,7 @@ export function CockpitAccordion({ title, subtitle, icon, children, defaultOpen 
             </div>
           </div>
         </div>
-        <ChevronDown size={20} style={{
+        <ChevronDown size={16} style={{
             color: "var(--color-text-muted)",
             transition: "transform 0.3s",
             transform: open ? "rotate(180deg)" : "rotate(0deg)",
@@ -65,10 +65,10 @@ export function CockpitAccordion({ title, subtitle, icon, children, defaultOpen 
       </button>
 
       {open && (<div style={{
-                padding: "0 20px 20px",
+                padding: "0 14px 14px",
                 borderTop: "1px solid var(--color-border)",
             }}>
-          <div style={{ paddingTop: 16 }}>{children}</div>
+          <div style={{ paddingTop: 10 }}>{children}</div>
         </div>)}
     </div>);
 }

@@ -58,11 +58,12 @@ describe("App shell breedte", () => {
     });
     it("rendert linkerrail, simulator-subnav en mobiele bottomnav als gescheiden navigatie", () => {
         const railHtml = renderToStaticMarkup(createElement(PrimaryRail, { pathname: "/loonmotor" }));
-        const simulatorHtml = renderToStaticMarkup(createElement(SimulatorSubnav, { pathname: "/loonfiche" }));
+        const simulatorHtml = renderToStaticMarkup(createElement(SimulatorSubnav, { pathname: "/loonfiche", placement: "header" }));
         const mobileHtml = renderToStaticMarkup(createElement(MobileBottomNav, { pathname: "/scope" }));
         expect(railHtml).toContain("Loonmotor");
         expect(railHtml).toContain('aria-current="page"');
         expect(railHtml).not.toContain("Loonfiche");
+        expect(simulatorHtml).toContain("app-header-subnav");
         expect(simulatorHtml).toContain("Calculator");
         expect(simulatorHtml).toContain("Loonfiche");
         expect(simulatorHtml).toContain("Loonrun");
@@ -143,8 +144,11 @@ describe("Profiel formulier", () => {
     it("houdt de mobiele layout binnen de viewport zonder hero-overflow", () => {
         const html = renderToStaticMarkup(createElement(HomePage));
         const css = readFileSync("src/index.css", "utf8");
-        expect(html).toContain("grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4");
-        expect(html).toContain("text-2xl sm:text-3xl");
+        expect(html).toContain("hero-summary hero-summary-compact");
+        expect(css).toContain(".hero-summary {");
+        expect(css).toContain("grid-template-columns: repeat(4, minmax(0, 1fr));");
+        expect(css).toContain(".hero-summary-value {");
+        expect(css).toContain("font-size: 19px;");
         expect(css).toContain("max-width: 100% !important;");
         expect(css).not.toContain("max-width: calc(100vw - 84px)");
     });
