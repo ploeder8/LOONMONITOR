@@ -158,8 +158,11 @@ describe("Profiel formulier", () => {
         expect(html).toContain('aria-pressed="false"');
         expect(html).toContain('aria-expanded="false"');
     });
-    it("toont de BV-gezinsvelden in Wie ben je? card", () => {
+    it("toont de BV-gezinsvelden in Persoonsgegevens", () => {
         const html = renderToStaticMarkup(createElement(HomePage));
+        expect(html.indexOf("Persoonsgegevens")).toBeGreaterThanOrEqual(0);
+        expect(html.indexOf("Naam werknemer")).toBeGreaterThanOrEqual(0);
+        expect(html.indexOf("Rijksregisternummer")).toBeGreaterThanOrEqual(0);
         expect(html.indexOf("Gezinstype (voor BV)")).toBeGreaterThanOrEqual(0);
         expect(html.indexOf("Kinderen ten laste")).toBeGreaterThanOrEqual(0);
         expect(html).not.toContain("Kinderen < 3 jaar");
@@ -187,10 +190,10 @@ describe("Profiel formulier", () => {
         const html = renderToStaticMarkup(createElement(HomePage));
         expect(html.indexOf("Extra looncomponenten")).toBeGreaterThanOrEqual(0);
     });
-    it("toont maaltijdcheques accordion header", () => {
+    it("toont maaltijdcheques subsection in extra looncomponenten", () => {
         const html = renderToStaticMarkup(createElement(HomePage));
         expect(html).toContain("Extra looncomponenten");
-        expect(html).toContain("maaltijdcheques");
+        expect(html).toContain("Maaltijdcheques");
     });
     it("toont bonusinvoer met maand- en jaaroptie", () => {
         const html = renderToStaticMarkup(createElement(HomePage));
@@ -198,10 +201,11 @@ describe("Profiel formulier", () => {
         expect(html).toContain("Per maand");
         expect(html).toContain("Per jaar");
     });
-    it("plaatst werkgeversbijdragen als laatste invulsectie", () => {
+    it("plaatst werkgever en werkgeversbijdragen bovenaan de invoer", () => {
         const html = renderToStaticMarkup(createElement(HomePage));
-        expect(html.indexOf("Woon-werk verkeer")).toBeGreaterThanOrEqual(0);
-        expect(html.indexOf("Werkgeversbijdragen")).toBeGreaterThan(html.indexOf("Woon-werk verkeer"));
+        expect(html.indexOf("Werkgever")).toBeGreaterThanOrEqual(0);
+        expect(html.indexOf("Werkgeversbijdragen")).toBeGreaterThan(html.indexOf("Werkgever"));
+        expect(html.indexOf("Persoonsgegevens")).toBeGreaterThan(html.indexOf("Werkgeversbijdragen"));
     });
     it("plaatst bedrijfswagen in het woon-werkrijtje zonder aparte VAA-onderverdeling", () => {
         const html = renderToStaticMarkup(createElement(HomePage));
@@ -209,8 +213,9 @@ describe("Profiel formulier", () => {
         expect(html.indexOf("Bedrijfswagen")).toBeLessThan(html.indexOf("Selecteer alle vergoedingen"));
         expect(html).not.toContain("Voordeel Alle Aard");
     });
-    it("plaatst tewerkstelling in de arbeidscontext card", () => {
+    it("plaatst tewerkstelling in de arbeidscontext subsection", () => {
         const html = renderToStaticMarkup(createElement(HomePage));
+        expect(html.indexOf("Contractgegevens")).toBeGreaterThanOrEqual(0);
         expect(html.indexOf("Arbeidscontext")).toBeGreaterThanOrEqual(0);
         expect(html.indexOf("Ervaring")).toBeGreaterThanOrEqual(0);
         expect(html.indexOf("Tewerkstelling (%)")).toBeGreaterThanOrEqual(0);

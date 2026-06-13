@@ -1250,3 +1250,13 @@ h1, h2, h3, h4 {
 .wo-summary-grid {
   grid-template-columns: repeat(4, 1fr);
 }
+
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

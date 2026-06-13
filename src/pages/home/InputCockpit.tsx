@@ -1,17 +1,49 @@
-import type { CSSProperties } from "react";
-import { Building2, Car, Euro, Gift, Receipt, Shield, User } from "lucide-react";
+import type { CSSProperties, ReactNode } from "react";
+import { Building2, Briefcase, Car, Euro, Gift, Receipt, Shield, User } from "lucide-react";
 import { Banner } from "@/components/Banner";
 import { CockpitAccordion } from "@/components/CockpitAccordion";
 import { CockpitCard } from "@/components/CockpitCard";
+import { DirectionToggle } from "@/components/DirectionToggle";
 import { FormField, inputClass, selectClass } from "@/components/Field";
 import type { BrutolocheckResult } from "@/lib/baremas";
 import { formatEUR } from "@/lib/money";
-import { aantalWeekdagenInMaand, percentageNaarTewerkstellingsbreuk, tewerkstellingsbreukNaarPercentage, type BaremaCat, type BonusPeriode, type GezinsType, type Profiel, type Schaal, type Statuut, type StudentenCat, } from "@/lib/profiel";
+import { aantalWeekdagenInMaand, percentageNaarTewerkstellingsbreuk, tewerkstellingsbreukNaarPercentage, type BaremaCat, type BerekeningsRichting, type BonusPeriode, type GezinsType, type Profiel, type Schaal, type Statuut, type StudentenCat, } from "@/lib/profiel";
 import { berekenBaremaInlineCheck } from "@/lib/profielBerekeningen";
-import { MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026, type DoelgroepverminderingEersteAanwervingen } from "@/lib/werkgeverskost";
+import { MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026 } from "@/lib/werkgeverskost";
 import { HelpTooltip, NumeriekeInput } from "@/pages/home/FormControls";
 import { MobiliteitPaneel } from "@/pages/home/MobiliteitPaneel";
 import type { ProfielSetter } from "@/pages/home/types";
+function Subsection({ title, icon, children }: {
+    title: string;
+    icon: ReactNode;
+    children: ReactNode;
+}) {
+    return (
+        <div style={{
+            background: "var(--cockpit-subsection-bg)",
+            borderRadius: "var(--cockpit-subsection-radius)",
+            padding: 16,
+            display: "flex",
+            flexDirection: "column",
+            gap: 12,
+        }}>
+            <div style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: "0.05em",
+                textTransform: "uppercase",
+                color: "var(--color-text-muted)",
+            }}>
+                {icon}
+                {title}
+            </div>
+            {children}
+        </div>
+    );
+}
 function BaremaInlineCheck({ profiel }: {
     profiel: Profiel;
 }) {
@@ -82,12 +114,21 @@ function baremaInlineStyle(ok: boolean): CSSProperties {
         gap: 4,
     };
 }
-function WieBenJeCard({ profiel, set }: {
+function PersoonsgegevensCard({ profiel, set }: {
     profiel: Profiel;
     set: ProfielSetter;
 }) {
-    return (<CockpitCard title="Wie ben je?" icon={<User size={16}/>}>
+    return (<CockpitCard title="Persoonsgegevens" icon={<User size={16}/>}>
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 12 }}>
+          <FormField label="Naam werknemer">
+            <input type="text" value={profiel.werknemerNaam} onChange={(e) => set("werknemerNaam", e.target.value)} className={inputClass} placeholder="bv. Jan Jansen"/>
+          </FormField>
+          <FormField label="Rijksregisternummer">
+            <input type="text" value={profiel.werknemerRijksregister} onChange={(e) => set("werknemerRijksregister", e.target.value)} className={inputClass} placeholder="bv. 01.01.01-001.01"/>
+          </FormField>
+        </div>
+
         <FormField label="Statuut">
           <select className={selectClass} value={profiel.statuut} onChange={(e) => set("statuut", e.target.value as Statuut)}>
             <option value="bediende">Bediende</option>
@@ -198,12 +239,19 @@ function ArbeidscontextCard({ profiel, set, setBerekeningsMaand, setBerekeningsJ
       </div>
     </CockpitCard>);
 }
-function BrutoloonCard({ profiel, set }: {
+function BrutoloonCard({ profiel, set, onChangeRichting }: {
     profiel: Profiel;
     set: ProfielSetter;
+    onChangeRichting?: (richting: BerekeningsRichting) => void;
 }) {
     return (<CockpitCard title="Brutoloon" icon={<Euro size={16}/>}>
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {profiel.statuut === "bediende" && onChangeRichting && (
+          <FormField label="Berekeningsrichting">
+            <DirectionToggle value={profiel.berekeningsRichting} onChange={onChangeRichting}/>
+          </FormField>
+        )}
+
         {profiel.statuut === "bediende" && profiel.berekeningsRichting === "bruto_naar_netto" ? (<FormField label="Brutoloon (€)">
             <NumeriekeInput className={inputClass} step="0.01" value={profiel.brutoloon} onValueChange={(waarde) => set("brutoloon", waarde)}/>
           </FormField>) : profiel.statuut === "bediende" ? (<>
@@ -409,35 +457,6 @@ function ExtraLooncomponentenContent({ profiel, set }: {
       </div>
     </div>);
 }
-const DOELGROEPVERMINDERING_OPMERKING = "de doelgroepvermindering kan echter enkel toegepast worden indien de onderneming daadwerkelijk extra werkgelegenheid creeert , waarbij rekening gehouden wordt met bestaande/voorafgaande tewerkstellingen in andere vennootschappen waarmee de nieuwe onderneming verbonden is";
-function WerkgeversbijdragenContent({ profiel, set }: {
-    profiel: Profiel;
-    set: ProfielSetter;
-}) {
-    return (<div style={{ display: "grid", gap: 16 }}>
-      <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 16 }}>
-        <FormField label={<>Arbeidsongevallen (%) <HelpTooltip text="Burelen: ~0,3%. Controleer uw polis."/></>}>
-          <NumeriekeInput className={inputClass} step="0.01" min={0} max={10} value={profiel.arbeidsongevallenPct * 100} formatValue={(waarde) => waarde.toFixed(2)} onValueChange={(waarde) => set("arbeidsongevallenPct", waarde / 100)}/>
-        </FormField>
-        <FormField label="Patronale groepsverzekering (€/m)">
-          <NumeriekeInput className={inputClass} step="0.01" min={0} value={profiel.extraGroepsverzekering} onValueChange={(waarde) => set("extraGroepsverzekering", waarde)}/>
-        </FormField>
-        <FormField label="Hospitalisatieverzekering (€/m)">
-          <NumeriekeInput className={inputClass} step="0.01" min={0} value={profiel.extraHospitalisatie} onValueChange={(waarde) => set("extraHospitalisatie", waarde)}/>
-        </FormField>
-      </div>
-      <FormField label={<>Doelgroepvermindering eerste aanwervingen <HelpTooltip text="Programmawet 30 mei 2026: vanaf 1 juli 2026 maximaal €2.000/kwartaal voor de eerste werknemer en €1.000/kwartaal voor werknemers 2 tot 5 binnen het toepassingsvenster."/></>}>
-        <select className={selectClass} value={profiel.doelgroepverminderingEersteAanwervingen} onChange={(e) => set("doelgroepverminderingEersteAanwervingen", e.target.value as DoelgroepverminderingEersteAanwervingen)}>
-          <option value="geen">Geen doelgroepvermindering</option>
-          <option value="eerste_werknemer">Eerste werknemer - max. €2.000/kwartaal</option>
-          <option value="tweede_tot_vijfde_werknemer">Tweede tot vijfde werknemer - max. €1.000/kwartaal</option>
-        </select>
-      </FormField>
-      {profiel.doelgroepverminderingEersteAanwervingen !== "geen" && (<Banner kind="warning" title="Voorwaarde doelgroepvermindering">
-        {DOELGROEPVERMINDERING_OPMERKING}
-      </Banner>)}
-    </div>);
-}
 export function profielMetBerekeningsMaand(profiel: Profiel, maand: string): Profiel {
     return {
         ...profiel,
@@ -452,9 +471,10 @@ export function profielMetBerekeningsJaar(profiel: Profiel, jaar: string): Profi
         arbeidsdagenPerMaand: aantalWeekdagenInMaand(jaar, profiel.berekeningsMaand),
     };
 }
-export function InputCockpit({ profiel, set }: {
+export function InputCockpit({ profiel, set, onChangeRichting }: {
     profiel: Profiel;
     set: ProfielSetter;
+    onChangeRichting?: (richting: BerekeningsRichting) => void;
 }) {
     function setBerekeningsMaand(maand: string) {
         set((prev) => profielMetBerekeningsMaand(prev, maand));
@@ -485,22 +505,26 @@ export function InputCockpit({ profiel, set }: {
     }
     return (<div style={{ display: "flex", flexDirection: "column", gap: "var(--cockpit-grid-gap)" }}>
 
-      <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: "var(--cockpit-grid-gap)" }}>
-        <WieBenJeCard profiel={profiel} set={set}/>
-        <ArbeidscontextCard profiel={profiel} set={set} setBerekeningsMaand={setBerekeningsMaand} setBerekeningsJaar={setBerekeningsJaar}/>
-      </div>
+      <PersoonsgegevensCard profiel={profiel} set={set}/>
 
-      <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: "var(--cockpit-grid-gap)" }}>
-        <BrutoloonCard profiel={profiel} set={set}/>
-        <MobiliteitPaneel profiel={profiel} set={set} setAlleWoonwerk={setAlleWoonwerk}/>
-      </div>
+      <CockpitAccordion title="Contractgegevens" subtitle="Arbeidscontext, brutoloon, woon-werkverkeer, extra looncomponenten" icon={<Briefcase size={16}/>} defaultOpen>
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--cockpit-grid-gap)" }}>
+          <Subsection title="Arbeidscontext" icon={<Building2 size={14}/>}>
+            <ArbeidscontextCard profiel={profiel} set={set} setBerekeningsMaand={setBerekeningsMaand} setBerekeningsJaar={setBerekeningsJaar}/>
+          </Subsection>
 
-      <CockpitAccordion title="Extra looncomponenten" subtitle="Verzekeringen, maaltijdcheques, VAA, bonus" icon={<Receipt size={16}/>} defaultOpen>
-        <ExtraLooncomponentenContent profiel={profiel} set={set}/>
-      </CockpitAccordion>
+          <Subsection title="Brutoloon" icon={<Euro size={14}/>}>
+            <BrutoloonCard profiel={profiel} set={set} onChangeRichting={onChangeRichting}/>
+          </Subsection>
 
-      <CockpitAccordion title="Werkgeversbijdragen" subtitle="Arbeidsongevallen, groepsverzekering, hospitalisatie" icon={<Shield size={16}/>}>
-        <WerkgeversbijdragenContent profiel={profiel} set={set}/>
+          <Subsection title="Woon-werkverkeer" icon={<Car size={14}/>}>
+            <MobiliteitPaneel profiel={profiel} set={set} setAlleWoonwerk={setAlleWoonwerk}/>
+          </Subsection>
+
+          <Subsection title="Extra looncomponenten" icon={<Gift size={14}/>}>
+            <ExtraLooncomponentenContent profiel={profiel} set={set}/>
+          </Subsection>
+        </div>
       </CockpitAccordion>
 
     </div>);

@@ -41,23 +41,28 @@ De hoofdpagina bestaat uit invoerblokken en resultaatbanden.
 
 ### Invoer
 
-Gebruikers kunnen onder meer invullen of aanpassen:
+De invoer is opgedeeld in twee hoofdsecties: **werkgever** en **werknemer**.
 
-- berekeningsrichting: bruto naar netto of netto naar bruto;
-- bruto maandloon of gewenst nettoloon;
-- referentiedatum;
-- leeftijd, ervaring, baremacategorie en functiecontext;
-- arbeidsregime, tewerkstellingsbreuk en arbeidsdagen per maand;
-- gezinstype en kinderen ten laste;
-- maaltijdcheques, bonus en andere voordelen;
-- woon-werkcomponenten: fiets, privewagen, openbaar vervoer, trein en bedrijfswagen/VAA;
-- werkgeverskostparameters zoals arbeidsongevallenpercentage, groepsverzekering, hospitalisatie en doelgroepvermindering eerste aanwervingen.
+**Werkgever** staat bovenaan en bevat:
+
+- KBO-nummer met ophaalactie via `/api/kbo`; bij een geldig nummer worden naam en zeteladres (straat, huisnummer, postcode, gemeente) automatisch ingevuld;
+- handmatige aanpassing van naam, ondernemingsnummer en adres;
+- werkgeversbijdragen: arbeidsongevallenpercentage, patronale groepsverzekering, hospitalisatieverzekering en doelgroepvermindering eerste aanwervingen.
+
+**Werknemer** bestaat uit:
+
+- **Persoonsgegevens**: naam werknemer, rijksregisternummer, statuut (bediende/student) en gezinstype/kinderen ten laste voor de bedrijfsvoorheffing;
+- **Contractgegevens** (gegroepeerd in een accordion):
+  - *Arbeidscontext*: schaal, categorie, ervaring, referentiedatum (maand/jaar), arbeidsdagen per maand en tewerkstellingsbreuk;
+  - *Brutoloon*: bruto maandloon of gewenst nettoloon, met de bruto/netto-berekeningsrichting direct in deze kaart;
+  - *Woon-werkverkeer*: fiets, privéwagen, bus/tram/metro, trein en bedrijfswagen/VAA;
+  - *Extra looncomponenten*: verzekeringen, maaltijdcheques, VAA-werkmiddelen en bonus.
 
 De vroegere bouw-subsetoptie voor een aparte 1,80% aanvullende pensioenbijdrage is niet langer zichtbaar of actief. Oude CSV-profielen met `bouwVlag` blijven inleesbaar, maar Jaakie telt geen aparte bouwbijdrage bovenop de globale werkgevers-RSZ.
 
 De tijdelijke single-profile CSV import/export zit achter een sticky ontwikkelactie **CSV import/export**. Die opent een modal met exportnaam, commentaar, import en export; ingevulde exportnaam en commentaar blijven behouden wanneer de modal wordt gesloten en later opnieuw geopend.
 
-De berekeningsrichting, kerncijfers (`Bruto`, `Netto`, `Werkgeverskost`, `Loonwig`) en calculatoracties staan bovenaan in een compacte sticky rekenbalk, zodat de belangrijkste uitkomst zichtbaar blijft terwijl gebruikers door de invoerblokken scrollen.
+De kerncijfers (`Bruto`, `Netto`, `Werkgeverskost`, `Loonwig`) en calculatoracties staan bovenaan in een compacte sticky rekenbalk, zodat de belangrijkste uitkomst zichtbaar blijft terwijl gebruikers door de invoerblokken scrollen.
 
 De profielinvoer gebruikt compacte cockpitkaarten met lagere sectiekoppen, kleinere labels en lagere inputs op desktop, zodat meer kernvelden tegelijk zichtbaar zijn; mobiel behoudt leesbare touchruimte.
 

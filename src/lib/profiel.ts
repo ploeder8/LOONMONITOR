@@ -63,9 +63,14 @@ export interface Profiel {
     bonusPeriode: BonusPeriode;
     gemeentebelastingPct: number;
     werknemerNaam: string;
+    werknemerRijksregister: string;
     werknemerReferentie: string;
     werkgeverNaam: string;
     werkgeverOndernemingsnummer: string;
+    werkgeverStraat: string;
+    werkgeverHuisnummer: string;
+    werkgeverPostcode: string;
+    werkgeverGemeente: string;
 }
 export const DEFAULTS: Profiel = {
     berekeningsRichting: "bruto_naar_netto",
@@ -121,9 +126,14 @@ export const DEFAULTS: Profiel = {
     bonusPeriode: "jaar",
     gemeentebelastingPct: 7.3,
     werknemerNaam: "",
+    werknemerRijksregister: "",
     werknemerReferentie: "",
     werkgeverNaam: "",
     werkgeverOndernemingsnummer: "",
+    werkgeverStraat: "",
+    werkgeverHuisnummer: "",
+    werkgeverPostcode: "",
+    werkgeverGemeente: "",
 };
 export function aantalWeekdagenInMaand(berekeningsJaar: string, berekeningsMaand: string): number {
     const jaar = parseInt(berekeningsJaar, 10);
