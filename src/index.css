@@ -1197,6 +1197,35 @@ h1, h2, h3, h4 {
     margin-top: 2px !important;
   }
 
+  body.print-modal-open .werknemer-overzicht-document .wo-grid {
+    gap: 8px !important;
+    margin-bottom: 6px !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-grid > div {
+    min-width: 0 !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-doelgroep {
+    margin-top: 6px !important;
+    padding: 5px 7px !important;
+    font-size: 8px !important;
+    line-height: 1.35 !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-loonwig {
+    margin-bottom: 6px !important;
+    padding: 4px 8px !important;
+    font-size: 8px !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-disclaimer {
+    margin-top: 6px !important;
+    padding-top: 6px !important;
+    font-size: 8px !important;
+    line-height: 1.35 !important;
+  }
+
   body {
     background: #fff !important;
     color: #000 !important;
