@@ -1,34 +1,62 @@
-import { CompactTable, DocumentFooter, DocumentHeader, DocumentSection, MetaCard, ProFormaDocument, SummaryCard, YearRow, captionStyle, } from "@/components/DocumentPrimitives";
+import { CompactTable, DocumentHeader, DocumentSection, MetaCard, ProFormaDocument, } from "@/components/DocumentPrimitives";
+import type { JaarcomponentNetto } from "@/lib/jaaroverzicht";
 import { round2 } from "@/lib/money";
 import { refDatumVoorMaand, type Profiel } from "@/lib/profiel";
 import { generatieDatumLabel, profielPeriodeLabel, statuutLabel } from "@/lib/profielLabels";
 import { berekenNettoVoorProfiel, berekenWerkgeverskostVoorProfiel, berekenJaaroverzichtVoorProfiel, berekenVaaWerkmiddelenVoorProfiel, berekenMobiliteitVoorProfiel, berekenLoonwigVoorProfielResultaat, } from "@/lib/profielBerekeningen";
+import type { VaaForfaitsWerkmiddelenResultaat } from "@/lib/vaaForfaits";
+
 interface WerknemerOverzichtProps {
     profiel: Profiel;
 }
+
+const doelgroepverminderingVoorwaardeTekst =
+    "Voorwaarde doelgroepvermindering: De doelgroepvermindering kan enkel toegepast worden indien de onderneming daadwerkelijk extra werkgelegenheid creëert , waarbij rekening gehouden wordt met bestaande/voorafgaande tewerkstellingen in andere vennootschappen waarmee de nieuwe onderneming verbonden is.";
+
+const disclaimerTekst =
+    "Het doel van deze simulatie is om u een beeld te geven van de bedragen en kosten die verbonden zijn aan een bepaald loon, op een bepaald moment. Deze simulatie is een momentopname en de resultaten zijn afhankelijk van vele variabelen die aan evolutie onderhevig zijn. Wij kunnen in geen geval aansprakelijk gesteld worden voor mogelijke rechtstreekse- of onrechtstreekse schade, van eender welke omvang, door gelijk welk gebruik van deze simulatie.";
+
 export function WerknemerOverzicht({ profiel }: WerknemerOverzichtProps) {
     const refDatum = refDatumVoorMaand(profiel.berekeningsJaar, profiel.berekeningsMaand);
     const generatieDatum = generatieDatumLabel();
     const periode = profielPeriodeLabel(profiel);
+
     let netto = null;
     let wgk = null;
     let loonwigPct: number | null = null;
     let jaaroverzicht = null;
+    let vaaWerkmiddelen: VaaForfaitsWerkmiddelenResultaat | null = null;
+
     if (profiel.statuut === "bediende") {
         try {
             const mobiliteit = berekenMobiliteitVoorProfiel(profiel, refDatum);
-            const vaaWerkmiddelen = berekenVaaWerkmiddelenVoorProfiel(profiel, refDatum);
+            vaaWerkmiddelen = berekenVaaWerkmiddelenVoorProfiel(profiel, refDatum);
             netto = berekenNettoVoorProfiel(profiel, refDatum);
             wgk = berekenWerkgeverskostVoorProfiel(profiel, refDatum, vaaWerkmiddelen, mobiliteit);
             loonwigPct = berekenLoonwigVoorProfielResultaat(wgk, netto);
             jaaroverzicht = berekenJaaroverzichtVoorProfiel(profiel, refDatum, netto, wgk, vaaWerkmiddelen, mobiliteit);
         }
         catch {
+            // Bij berekeningsfouten tonen we het overzicht zonder resultaten.
         }
     }
+
     const isStudent = profiel.statuut === "student";
+    const heeftDoelgroepvermindering =
+        profiel.doelgroepverminderingEersteAanwervingen !== "geen" &&
+        (jaaroverzicht?.werkgever.doelgroepvermindering ?? 0) > 0;
+
+    const werkgeverAdres = [
+        profiel.werkgeverStraat && profiel.werkgeverHuisnummer
+            ? `${profiel.werkgeverStraat} ${profiel.werkgeverHuisnummer}`
+            : profiel.werkgeverStraat || null,
+        profiel.werkgeverPostcode && profiel.werkgeverGemeente
+            ? `${profiel.werkgeverPostcode} ${profiel.werkgeverGemeente}`
+            : profiel.werkgeverGemeente || null,
+    ].filter(Boolean).join(", ");
+
     return (<ProFormaDocument className="werknemer-overzicht-document" contentClassName="wo-content">
-      <DocumentHeader className="wo-header" title="Loonoverzicht" periode={periode} marginBottom={24} details={<>
+      <DocumentHeader className="wo-header" title="Loonoverzicht" periode={periode} marginBottom={20} details={<>
             <div style={{ fontSize: 12, color: "var(--color-text-muted)", marginTop: 2 }}>
               {statuutLabel(profiel)}
             </div>
@@ -36,32 +64,28 @@ export function WerknemerOverzicht({ profiel }: WerknemerOverzichtProps) {
               {generatieDatum}
             </div>
           </>}/>
-        {(profiel.werknemerNaam || profiel.werkgeverNaam) && (<div className="wo-metadata" style={{
+
+      {(profiel.werknemerNaam || profiel.werkgeverNaam) && (<div className="wo-metadata" style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(2, 1fr)",
                 gap: 12,
-                marginBottom: 24,
+                marginBottom: 20,
             }}>
-            {profiel.werknemerNaam && (<MetaCard label="Werknemer" value={profiel.werknemerNaam}/>)}
+            {profiel.werknemerNaam
+                ? (<MetaCard label="Werknemer" value={profiel.werknemerNaam}/>)
+                : (<MetaCard label="Werknemer" value="—"/>)}
+            {profiel.werkgeverNaam
+                ? (<MetaCard label="Werkgever" value={profiel.werkgeverNaam}/>)
+                : profiel.werkgeverOndernemingsnummer
+                    ? (<MetaCard label="Werkgever" value="—"/>)
+                    : null}
             {profiel.werknemerReferentie && (<MetaCard label="Referentie" value={profiel.werknemerReferentie}/>)}
-            {profiel.werkgeverNaam && (<MetaCard label="Werkgever" value={profiel.werkgeverNaam}/>)}
             {profiel.werkgeverOndernemingsnummer && (<MetaCard label="Ondernemingsnummer" value={profiel.werkgeverOndernemingsnummer}/>)}
+            {profiel.werknemerRijksregister && (<MetaCard label="Rijksregisternummer" value={profiel.werknemerRijksregister}/>)}
+            {werkgeverAdres && (<MetaCard label="Adres werkgever" value={werkgeverAdres}/>)}
           </div>)}
 
-        {netto && wgk && (<div className="wo-summary wo-summary-grid" style={{
-                display: "grid",
-                gap: 12,
-                marginBottom: 28,
-            }}>
-            <SummaryCard label="Bruto" bedrag={netto.brutoRszBasis}/>
-            <SummaryCard label="Netto (maand)" bedrag={netto.nettoloon}/>
-            <SummaryCard label="Werkgeverskost" bedrag={wgk.totaleLoonkostBreed} accent/>
-            <SummaryCard label="Loonwig" bedrag={loonwigPct} isPercentage/>
-            <SummaryCard label="Netto (jaar)" bedrag={jaaroverzicht?.netto.totaalNettoJaarloon ?? null}/>
-            <SummaryCard label="WGK (jaar)" bedrag={jaaroverzicht?.werkgever.totaleLoonkostJaar ?? null}/>
-          </div>)}
-
-        {isStudent && (<div style={{
+      {isStudent && (<div style={{
                 textAlign: "center",
                 padding: "32px 24px",
                 color: "var(--color-text-muted)",
@@ -75,104 +99,184 @@ export function WerknemerOverzicht({ profiel }: WerknemerOverzichtProps) {
             </div>
           </div>)}
 
-        {netto && (<DocumentSection title="Netto loon (maand)" className="wo-section">
-            <CompactTable rows={[
-                { label: "Brutoloon", bedrag: netto.brutoloon },
-                { label: "RSZ werknemer", bedrag: -netto.rsz.werknemerBijdrage },
-                ...(netto.werkbonus.totaal > 0
-                    ? [{ label: "Werkbonus", bedrag: netto.werkbonus.totaal }]
-                    : []),
-                { label: "Belastbaar loon", bedrag: netto.belastbaarMaandloon, bold: true },
-                { label: "Bedrijfsvoorheffing", bedrag: -netto.bv.bvNaVerminderingen },
-                ...(netto.bbsz.maandelijksBedrag > 0
-                    ? [{ label: "BBSZ", bedrag: -netto.bbsz.maandelijksBedrag }]
-                    : []),
-                ...(netto.maaltijdchequeWerknemersbijdrage > 0
-                    ? [{ label: "Maaltijdcheques (werknemer)", bedrag: -netto.maaltijdchequeWerknemersbijdrage }]
-                    : []),
-                ...(netto.hospitalisatieEigenBijdrage > 0
-                    ? [{ label: "Hospitalisatie (eigen bijdrage)", bedrag: -netto.hospitalisatieEigenBijdrage }]
-                    : []),
-                { label: "Netto te betalen (cash)", bedrag: netto.nettoloon, bold: true, highlight: true },
-                ...(profiel.maaltijdchequesActief && profiel.arbeidsdagenPerMaand > 0
-                    ? [
-                        {
-                            label: "Maaltijdcheques (waarde)",
-                            bedrag: round2((profiel.maaltijdchequeWerkgeversaandeelPerDag +
-                                profiel.maaltijdchequeWerknemersbijdragePerDag) *
-                                profiel.arbeidsdagenPerMaand),
-                        },
-                    ]
-                    : []),
-            ]}/>
-          </DocumentSection>)}
-        {wgk && (<DocumentSection title="Werkgeverskost (maand)" className="wo-section">
-            <CompactTable rows={[
-                { label: "Brutoloon", bedrag: wgk.brutoloon },
-                { label: "RSZ werkgever", bedrag: wgk.rszWerkgever },
-                { label: "Arbeidsongevallen", bedrag: wgk.arbeidsongevallen },
-                { label: "Provisie eindejaarspremie", bedrag: wgk.provisieEindejaarspremie },
-                { label: "Provisie vakantiegeld", bedrag: wgk.provisieVakantiegeld },
-                ...(wgk.extraVoordelen > 0
-                    ? [{ label: "Extralegale voordelen", bedrag: wgk.extraVoordelen }]
-                    : []),
-                { label: "Totale werkgeverskost", bedrag: wgk.totaleLoonkostBreed, bold: true, highlight: true },
-            ]}/>
-          </DocumentSection>)}
-        {jaaroverzicht && (<DocumentSection title="Jaaroverzicht" className="wo-section">
-            <div style={{
+      {netto && wgk && jaaroverzicht && (<>
+            <div className="wo-grid" style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-                gap: 16,
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gap: 20,
+                marginBottom: 24,
             }}>
-              <div>
-                <div style={{
-                ...captionStyle,
-                marginBottom: 8,
-            }}>
-                  Werknemer (netto)
-                </div>
-                <YearRow label="Maandloon × 12" bedrag={jaaroverzicht.netto.maandloonNettoX12}/>
-                <YearRow label="Eindejaarspremie" bedrag={jaaroverzicht.netto.eindejaarspremie.netto}/>
-                <YearRow label="Dubbel vakantiegeld" bedrag={jaaroverzicht.netto.dubbelVakantiegeld.netto}/>
-                <YearRow label="Jaarpremie PC 200" bedrag={jaaroverzicht.netto.jaarpremie.netto}/>
-                {jaaroverzicht.netto.bonus.bruto > 0 && (<>
-                    <YearRow label="Bonus" bedrag={jaaroverzicht.netto.bonus.netto}/>
-                    <YearRow label="Variabel enkel vakantiegeld op bonus" bedrag={jaaroverzicht.netto.variabelEnkelVakantiegeldOpBonus.netto}/>
-                    <YearRow label="Variabel dubbel vakantiegeld op bonus" bedrag={jaaroverzicht.netto.variabelDubbelVakantiegeldOpBonus.netto}/>
-                  </>)}
-                <YearRow label="Ecocheques" bedrag={jaaroverzicht.netto.ecocheques}/>
-                <YearRow label="Totaal netto jaar" bedrag={jaaroverzicht.netto.totaalNettoJaarloon} bold/>
-              </div>
-              <div>
-                <div style={{
-                ...captionStyle,
-                marginBottom: 8,
-            }}>
-                  Werkgever
-                </div>
-                <YearRow label="Maandbasis × 12" bedrag={jaaroverzicht.werkgever.maandbasisX12}/>
-                <YearRow label="Jaarpremies + ecocheques" bedrag={jaaroverzicht.werkgever.jaarpremiesEnEcocheques}/>
-                <YearRow label="RSZ op premies" bedrag={jaaroverzicht.werkgever.rszOpEindejaarspremieEnJaarpremie}/>
-                {jaaroverzicht.werkgever.bonusBruto > 0 && (<>
-                    <YearRow label="Bonus" bedrag={jaaroverzicht.werkgever.bonusBruto}/>
-                    <YearRow label="RSZ op bonus" bedrag={jaaroverzicht.werkgever.rszOpBonus}/>
-                    <YearRow label="Variabel enkel vakantiegeld op bonus" bedrag={jaaroverzicht.werkgever.variabelEnkelVakantiegeldOpBonusBruto}/>
-                    <YearRow label="RSZ op variabel enkel vakantiegeld bonus" bedrag={jaaroverzicht.werkgever.variabelEnkelVakantiegeldOpBonusRsz}/>
-                    <YearRow label="Variabel dubbel vakantiegeld op bonus" bedrag={jaaroverzicht.werkgever.variabelDubbelVakantiegeldOpBonusBruto}/>
-                    <YearRow label="RSZ op variabel dubbel vakantiegeld bonus" bedrag={jaaroverzicht.werkgever.variabelDubbelVakantiegeldOpBonusRsz}/>
-                  </>)}
-                <YearRow label="Dubbel vakantiegeld" bedrag={jaaroverzicht.werkgever.dubbelVakantiegeld}/>
-                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid transparent' }}>
-                  <span style={{ fontSize: 13 }}>&nbsp;</span>
-                  <span style={{ fontSize: 13 }}>&nbsp;</span>
-                </div>
-                <YearRow label="Totaal loonkost jaar" bedrag={jaaroverzicht.werkgever.totaleLoonkostJaar} bold/>
-              </div>
+              <DocumentSection title="Bruto Netto op maandbasis" className="wo-section">
+                <CompactTable rows={maakNettoMaandRijen(profiel, netto, vaaWerkmiddelen)}/>
+              </DocumentSection>
+              <DocumentSection title="Loonkost op maandbasis" className="wo-section">
+                <CompactTable rows={maakWerkgeverskostMaandRijen(wgk)}/>
+              </DocumentSection>
             </div>
-          </DocumentSection>)}
-        <div className="wo-footer">
-          <DocumentFooter />
-        </div>
+
+            <div className="wo-grid" style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gap: 20,
+                marginBottom: 24,
+            }}>
+              <DocumentSection title="Bruto Netto op jaarbasis" className="wo-section">
+                <CompactTable rows={maakNettoJaarRijen(jaaroverzicht.netto)}/>
+              </DocumentSection>
+              <DocumentSection title="Loonkost op jaarbasis" className="wo-section">
+                <CompactTable rows={maakWerkgeverskostJaarRijen(jaaroverzicht.werkgever)}/>
+                {heeftDoelgroepvermindering && (<div className="wo-doelgroep" style={{
+                        marginTop: 12,
+                        padding: 10,
+                        background: "var(--color-primary-soft)",
+                        border: "1px solid var(--color-primary-border)",
+                        borderRadius: "var(--radius-md)",
+                        fontSize: 11,
+                        color: "var(--color-text)",
+                        lineHeight: 1.45,
+                    }}>
+                    {doelgroepverminderingVoorwaardeTekst}
+                  </div>)}
+              </DocumentSection>
+            </div>
+          </>)}
+
+      {netto && wgk && loonwigPct !== null && (<div className="wo-loonwig" style={{
+            marginBottom: 20,
+            padding: "8px 12px",
+            background: "var(--color-primary-soft)",
+            border: "1px solid var(--color-primary-border)",
+            borderRadius: "var(--radius-md)",
+            fontSize: 12,
+            color: "var(--color-text)",
+        }}>
+          <strong>Loonwig: {(loonwigPct * 100).toFixed(1)} %</strong>
+          {" — percentage van de werkgeverskost dat niet uitbetaald wordt als netto loon."}
+        </div>)}
+
+      <div className="wo-footer wo-disclaimer" style={{
+            marginTop: 20,
+            paddingTop: 14,
+            borderTop: "1px solid var(--color-border)",
+            fontSize: 11,
+            color: "var(--color-text-muted)",
+            lineHeight: 1.5,
+            fontStyle: "italic",
+        }}>
+        {disclaimerTekst}
+      </div>
     </ProFormaDocument>);
+}
+
+function maakNettoMaandRijen(profiel: Profiel, netto: Exclude<ReturnType<typeof berekenNettoVoorProfiel>, null>, vaaWerkmiddelen: VaaForfaitsWerkmiddelenResultaat | null) {
+    const totaalTerugnameVaa = netto.vaaBedrijfswagenPerMaand + netto.vaaRszPlichtigPerMaand;
+    const rows = [
+        { label: "Brutoloon", bedrag: netto.brutoloon },
+        ...(vaaWerkmiddelen?.lijnen ?? []).map((lijn) => ({ label: `VAA ${lijn.label}`, bedrag: lijn.bedrag })),
+        { label: "Totaal bruto", bedrag: netto.brutoRszBasis, bold: true },
+        { label: "RSZ werknemer", bedrag: -netto.rsz.werknemerBijdrage },
+        ...(netto.werkbonus.totaal > 0
+            ? [{ label: "Werkbonus", bedrag: netto.werkbonus.totaal }]
+            : []),
+        ...(netto.vaaBedrijfswagenPerMaand > 0
+            ? [{ label: "VAA bedrijfswagen", bedrag: netto.vaaBedrijfswagenPerMaand }]
+            : []),
+        { label: "Belastbaar loon", bedrag: netto.belastbaarMaandloonVoorBV, bold: true },
+        { label: "Bedrijfsvoorheffing", bedrag: -netto.bv.bvNaVerminderingen },
+        ...(netto.bbsz.maandelijksBedrag > 0
+            ? [{ label: "Bijzondere bijdrage RSZ", bedrag: -netto.bbsz.maandelijksBedrag }]
+            : []),
+        ...(netto.maaltijdchequeWerknemersbijdrage > 0
+            ? [{ label: "Maaltijdcheques (werknemer)", bedrag: -netto.maaltijdchequeWerknemersbijdrage }]
+            : []),
+        ...(netto.hospitalisatieEigenBijdrage > 0
+            ? [{ label: "Hospitalisatie (eigen bijdrage)", bedrag: -netto.hospitalisatieEigenBijdrage }]
+            : []),
+        ...(netto.onkostenvergoedingPerMaand > 0
+            ? [{ label: "Onkostenvergoedingen", bedrag: netto.onkostenvergoedingPerMaand }]
+            : []),
+        ...(netto.woonwerkNettoVrijgesteldPerMaand > 0
+            ? [{ label: "Woon-werkvergoeding (netto vrijgesteld)", bedrag: netto.woonwerkNettoVrijgesteldPerMaand }]
+            : []),
+        ...(totaalTerugnameVaa > 0
+            ? [{ label: "Terugname VAA", bedrag: -totaalTerugnameVaa }]
+            : []),
+        { label: "Netto op maandbasis", bedrag: netto.nettoloon, bold: true, highlight: true },
+        ...(profiel.maaltijdchequesActief && profiel.arbeidsdagenPerMaand > 0
+            ? [
+                {
+                    label: "Maaltijdcheques (waarde)",
+                    bedrag: round2((profiel.maaltijdchequeWerkgeversaandeelPerDag +
+                        profiel.maaltijdchequeWerknemersbijdragePerDag) *
+                        profiel.arbeidsdagenPerMaand),
+                },
+            ]
+            : []),
+    ];
+    return rows;
+}
+
+function maakWerkgeverskostMaandRijen(wgk: Exclude<ReturnType<typeof berekenWerkgeverskostVoorProfiel>, null>) {
+    return [
+        { label: "Brutoloon", bedrag: wgk.brutoloon },
+        { label: "RSZ werkgever", bedrag: wgk.rszWerkgever },
+        { label: "Arbeidsongevallen", bedrag: wgk.arbeidsongevallen },
+        { label: "Provisie eindejaarspremie", bedrag: wgk.provisieEindejaarspremie },
+        { label: "Provisie vakantiegeld", bedrag: wgk.provisieVakantiegeld },
+        ...(wgk.extraVoordelen > 0
+            ? [{ label: "Extralegale voordelen", bedrag: wgk.extraVoordelen }]
+            : []),
+        ...(wgk.doelgroepverminderingWerkgeverPerMaand > 0
+            ? [{ label: "Doelgroepvermindering eerste aanwervingen", bedrag: -wgk.doelgroepverminderingWerkgeverPerMaand }]
+            : []),
+        { label: "Totale loonkost op maandbasis", bedrag: wgk.totaleLoonkostBreed, bold: true, highlight: true },
+        ...(wgk.doelgroepverminderingWerkgeverPerMaand > 0
+            ? [{ label: "Totale loonkost incl. doelgroepvermindering", bedrag: wgk.totaleLoonkostBreedNaDoelgroepvermindering, bold: true }]
+            : []),
+    ];
+}
+
+function maakNettoJaarRijen(netto: Exclude<ReturnType<typeof berekenJaaroverzichtVoorProfiel>, null>["netto"]) {
+    const rows: Array<{ label: string; bedrag: number; bold?: boolean; highlight?: boolean }> = [];
+    voegJaarcomponentToe(rows, "Eindejaarspremie", netto.eindejaarspremie);
+    voegJaarcomponentToe(rows, "Dubbel vakantiegeld", netto.dubbelVakantiegeld);
+    voegJaarcomponentToe(rows, "Sectorale jaarpremie PC 200", netto.jaarpremie);
+    if (netto.bonus.bruto > 0) {
+        voegJaarcomponentToe(rows, "Bonus", netto.bonus);
+    }
+    if (netto.ecocheques > 0) {
+        rows.push({ label: "Ecocheques", bedrag: netto.ecocheques });
+    }
+    rows.push({ label: "Netto op jaarbasis", bedrag: netto.totaalNettoJaarloon, bold: true, highlight: true });
+    return rows;
+}
+
+function voegJaarcomponentToe(rows: Array<{ label: string; bedrag: number; bold?: boolean; highlight?: boolean }>, titel: string, component: JaarcomponentNetto) {
+    rows.push({ label: `${titel} — bruto`, bedrag: component.bruto });
+    rows.push({ label: `${titel} — RSZ`, bedrag: -component.rsz });
+    rows.push({ label: `${titel} — belastbaar loon`, bedrag: component.belastbaar, bold: true });
+    rows.push({ label: `${titel} — bedrijfsvoorheffing`, bedrag: -component.bv });
+    rows.push({ label: `${titel} — netto`, bedrag: component.netto });
+}
+
+function maakWerkgeverskostJaarRijen(werkgever: Exclude<ReturnType<typeof berekenJaaroverzichtVoorProfiel>, null>["werkgever"]) {
+    return [
+        { label: "Totale loonkost op maandbasis × 12", bedrag: werkgever.maandbasisX12 },
+        { label: "Eindejaarspremie + jaarlijkse premie + ecocheques", bedrag: werkgever.jaarpremiesEnEcocheques },
+        { label: "RSZ op eindejaarspremie + sectorale premie", bedrag: werkgever.rszOpEindejaarspremieEnJaarpremie },
+        ...(werkgever.bonusBruto > 0
+            ? [
+                { label: "Bonus", bedrag: werkgever.bonusBruto },
+                { label: "RSZ op bonus", bedrag: werkgever.rszOpBonus },
+            ]
+            : []),
+        { label: "Dubbel vakantiegeld", bedrag: werkgever.dubbelVakantiegeld },
+        { label: "Totale loonkost op jaarbasis", bedrag: werkgever.totaleLoonkostJaarExclusiefDoelgroepvermindering, bold: true, highlight: true },
+        ...(werkgever.doelgroepvermindering > 0
+            ? [
+                { label: "Doelgroepvermindering eerste aanwervingen", bedrag: -werkgever.doelgroepvermindering },
+                { label: "Totale loonkost incl. doelgroepvermindering", bedrag: werkgever.totaleLoonkostJaarInclusiefDoelgroepvermindering, bold: true },
+            ]
+            : []),
+    ];
 }

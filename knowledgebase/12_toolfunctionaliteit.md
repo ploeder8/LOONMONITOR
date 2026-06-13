@@ -108,12 +108,17 @@ Studentenmodus beperkt de samenvatting tot relevante studentencijfers.
 
 De knop **"Print overzicht"** opent een estetisch, print-vriendelijk document voor de huidige werknemer:
 
-- **Header**: Jaakie brand, titel "Loonoverzicht", periode, statuut, werknemer-/werkgever-metadata.
-- **Executive summary**: 6 cards met bruto, netto (maand), werkgeverskost, loonwig, netto (jaar), werkgeverskost (jaar).
-- **Netto loon tabel**: bruto → RSZ → werkbonus → belastbaar loon → bedrijfsvoorheffing → BBSZ → netto te betalen.
-- **Werkgeverskost tabel**: brutoloon → RSZ werkgever → arbeidsongevallen → provisies → totale werkgeverskost, met aparte totaalregel inclusief doelgroepvermindering wanneer gekozen.
-- **Jaaroverzicht**: netto- en werkgeverskant met eindejaarspremie, vakantiegeld, jaarpremie, bonus, variabel enkel/dubbel vakantiegeld op bonus, ecocheques en eventuele doelgroepvermindering.
-- **Footer**: pro-forma disclaimer.
+- **Header**: Jaakie brand, titel "Loonoverzicht", periode, statuut, generatiedatum.
+- **Gegevens**: werknemer- en werkgever-metadata (naam, referentie, rijksregisternummer, ondernemingsnummer, adres werkgever).
+- **Maandelijkse kolommen** (twee-koloms layout):
+  - Links **"Bruto Netto op maandbasis"**: brutoloon, VAA-werkmiddelen, totaal bruto, RSZ werknemer, werkbonus, belastbaar loon, bedrijfsvoorheffing, BBSZ, maaltijdcheques, hospitalisatie, onkostenvergoedingen, woon-werkvergoeding, terugname VAA, netto op maandbasis.
+  - Rechts **"Loonkost op maandbasis"**: brutoloon, RSZ werkgever, arbeidsongevallen, provisies, extralegale voordelen, eventuele doelgroepvermindering, totale loonkost op maandbasis.
+- **Jaarlijkse kolommen** (twee-koloms layout):
+  - Links **"Bruto Netto op jaarbasis"**: eindejaarspremie, dubbel vakantiegeld, sectorale jaarpremie PC 200, bonus, ecocheques en netto op jaarbasis.
+  - Rechts **"Loonkost op jaarbasis"**: loonkost maand × 12, jaarpremies, RSZ op premies, bonus, dubbel vakantiegeld, totale loonkost op jaarbasis, inclusief doelgroepvermindering wanneer gekozen.
+- **Doelgroepvermindering**: wanneer een doelgroepvermindering van toepassing is, verschijnt onder de jaarkost een kader met de voorwaarde.
+- **Loonwig**: korte callout met het loonwigpercentage.
+- **Footer**: pro-forma banner en een cursieve disclaimer over het simulatiekarakter.
 
 Het overzicht is **print-vriendelijk** (A4 via `@media print`) en bevat geen audit-trail. Studentenmodus toont een vereenvoudigde melding.
 
