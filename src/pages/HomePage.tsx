@@ -3,7 +3,6 @@ import { createPortal } from "react-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { Download, FileText, Printer, X } from "lucide-react";
 import { Banner } from "@/components/Banner";
-import { DirectionToggle } from "@/components/DirectionToggle";
 import { HeroSummary } from "@/components/HeroSummary";
 import { useSharedProfiel } from "@/lib/useSharedProfiel";
 import { normaliseerProfiel, refDatumVoorMaand, type BerekeningsRichting, type Profiel, } from "@/lib/profiel";
@@ -145,8 +144,7 @@ export function HomePage() {
     return (<div className="home-layout" style={{ maxWidth: 1280, margin: "-18px auto 0", padding: "0 1rem 1.5rem" }}>
       <div className="calculator-sticky-summary">
         <div className="calculator-summary-controls">
-          <DirectionToggle value={profiel.berekeningsRichting} onChange={setBerekeningsRichting}/>
-          <div className="calculator-dev-actions calculator-summary-actions">
+          <div className="calculator-dev-actions calculator-summary-actions" style={{ marginLeft: 0 }}>
             <button type="button" onClick={() => setToonCsvPaneel(true)} className="calculator-dev-action-button">
               <Download size={14}/>
               CSV import/export
@@ -160,7 +158,7 @@ export function HomePage() {
         <HeroSummary brutoloon={summary.bruto} nettoloon={summary.netto} werkgeverskost={summary.werkgeverskost} loonwig={summary.loonwig}/>
       </div>
 
-      <ProfielEditor profiel={profiel} set={set}/>
+      <ProfielEditor profiel={profiel} set={set} onChangeRichting={setBerekeningsRichting}/>
 
       <ErrorBoundary fallbackRender={({ error, resetErrorBoundary }) => (<Banner kind="error" title="Onverwachte fout">
             <p>{(error as Error).message}</p>

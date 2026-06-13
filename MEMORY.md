@@ -11,6 +11,7 @@ Kort projectlogboek voor wijzigingen door coding agents.
 
 ## Log
 
+- 2026-06-13 — Calculator-layout herschikt: `WerkgeverPaneel` met KBO-ophaal + handmatig adres bovenaan, werkgeversbijdragen direct eronder; werknemersgegevens opgesplitst in `Persoonsgegevens` (rijksregisternummer + naam) en `Contractgegevens` (arbeidscontext, brutoloon met bruto/netto-switch, woon-werkverkeer, extra looncomponenten); profiel uitgebreid met rijksregister- en werkgeveradresvelden; bijbehorende tests bijgewerkt; reden: gebruiker vroeg overzichtelijkere invoervolgorde.
 - 2026-06-11 — Loonkost & Netto-resultaatzone herschikt in twee aparte banden: "Netto" (maand + jaar naast elkaar) en "Loonkost werkgever" (maand + jaar naast elkaar); oude gecombineerde band verwijderd; jump anchors en render-test bijgewerkt; reden: volle-breedte jaaroverzichten waren niet overzichtelijk.
 - 2026-06-11 — Loonkost & Netto-resultaatblokken verder verkleind: kaartpadding, titelspacing, tabelrijen, bronaccordion, loonwig-callout en sectiegaps compacter; bijbehorende render-tests bijgewerkt; reden: blokken namen nog steeds meer ruimte in dan nodig.
 - 2026-06-11 — Correctie TC-23 golden test: `woonwerkVrijgesteldPerMaand` vervangen door `woonwerkNettoVrijgesteldPerMaand` zodat de verwachte nettoberekening overeenkomt met de `berekenNetto`-interface; reden: test faalde op juistheid na woon-werk nettoflow-refactor.
