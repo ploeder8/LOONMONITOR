@@ -26,7 +26,7 @@ Jaakie gebruikt een HashRouter met een rustige app-shell:
 | Route | Functie |
 |---|---|
 | `/` | Profiel en calculator. Gebruikers voeren loon-, arbeids- en voordeelgegevens in en zien resultaten met audit-trail. |
-| `/loonfiche` | Pro-forma loonfiche voor één werknemer. Toont een document-achtige weergave van brutoloon → netto met alle tussenstappen, vergelijkbaar met een loonbrief maar expliciet gelabeld als pro-forma. Deelt binnen hetzelfde browservenster de profielstate met de calculator. Ondersteunt identificatievelden (werknemer-/werkgevernaam en -referentie), print en audit-toggle. |
+| `/loonfiche` | Pro-forma loonfiche voor één werknemer, opgemaakt als een echte loonstrook. Toont bovenaan een rode simulatie-banner, daarna werkgever-/werknemer-metadata en de brutoloon → netto regels. Deelt binnen hetzelfde browservenster de profielstate met de calculator. Ondersteunt identificatievelden (werknemer-/werkgevernaam, -referentie, -adres en -ondernemingsnummer), print en audit-toggle. |
 | `/loonrun` | Multi-werknemer loonrun. Importeert een multi-row CSV, berekent alle werknemers geïsoleerd, toont een overzichtstabel met totalen en laat individuele loonfiches bekijken per werknemer. |
 | `/loonmotor` | Dossiercockpit voor bedrijven en medewerkers. V1 bewaart lokale conceptdossiers in de browser, kan publieke KBO-basisgegevens ophalen via ondernemingsnummer en kan een medewerkerprofiel openen in de calculator. |
 | `/testcases` | Overzicht van testcases en validatiecontext. |
@@ -126,7 +126,7 @@ Het overzicht is **print-vriendelijk** (A4 via `@media print`) en bevat geen aud
 
 ## Loonfiche
 
-De loonfiche-pagina (`#/loonfiche`) toont een pro-forma loonfiche per huidig profiel. De profielstate wordt binnen hetzelfde browservenster gedeeld met de calculator via `sessionStorage`; wijzigingen op één pagina zijn zichtbaar op de andere route in dat venster. Andere browservensters kunnen onafhankelijk andere inputscenario's hebben.
+De loonfiche-pagina (`#/loonfiche`) toont een pro-forma loonfiche per huidig profiel, opgemaakt als een echte werknemersloonstrook. De profielstate wordt binnen hetzelfde browservenster gedeeld met de calculator via `sessionStorage`; wijzigingen op één pagina zijn zichtbaar op de andere route in dat venster. Andere browservensters kunnen onafhankelijk andere inputscenario's hebben.
 
 ### Gedeelde profielstate
 
@@ -136,7 +136,7 @@ De loonfiche-pagina (`#/loonfiche`) toont een pro-forma loonfiche per huidig pro
 
 ### Loonfiche regels
 
-De loonfiche bevat gecodeerde regels (bv. `1000` Brutoloon, `2000` RSZ werknemer, `3000` Bedrijfsvoorheffing, `9000` Netto te betalen, `9500` Werkgeverskost). Subtotalen (`1090`, `2090`, `2190`, `3090`) en totaalregels worden altijd getoond; nulregels worden verborgen. De tabel rendert regels op globale sortering zodat subtotalen tussen de juiste stappen blijven staan.
+De loonfiche bevat gecodeerde regels (bv. `1000` Brutoloon, `2000` RSZ werknemer, `3000` Bedrijfsvoorheffing, `9000` Netto te betalen). Subtotalen (`1090`, `2090`, `2190`, `3090`) en totaalregels worden altijd getoond; nulregels worden verborgen. De tabel rendert regels op globale sortering zodat subtotalen tussen de juiste stappen blijven staan. De werkgeverskost wordt niet op de loonstrook getoond.
 
 ### Modi
 
@@ -150,23 +150,23 @@ De loonfiche heeft geen aparte incomplete calculator-invoer meer. Boven het docu
 
 De gedeelde profiel-editor bevat een aparte identificatiegroep:
 
-- Werknemer: naam en referentie
-- Werkgever: naam en ondernemingsnummer
+- Werknemer: naam, rijksregisternummer en referentie
+- Werkgever: naam, ondernemingsnummer, straat, huisnummer, postcode en gemeente
 
-Deze velden worden opgeslagen in het gedeelde profiel, meegenomen in CSV export/import en getoond in de loonficheblokken boven de tabel. De loonfiche zelf blijft een document- en controleweergave; alle impactvolle berekeningsinputs worden via het gedeelde profiel aangepast.
+Deze velden worden opgeslagen in het gedeelde profiel, meegenomen in CSV export/import en getoond in de metadata-blokken boven de regeltabel. De loonfiche zelf blijft een document- en controleweergave; alle impactvolle berekeningsinputs worden via het gedeelde profiel aangepast.
 
-### Prestatieblok
+### Layout
 
-De loonfiche toont naast werknemer en werkgever ook een prestatieblok met periode, statuut, tewerkstellingsbreuk en arbeidsdagen.
+Bovenaan staat een rode, opvallende simulatie-banner (`SIMULATIE – geen officiële loonfiche`). Daaronder volgt een loonstrook-header met links de werkgever en rechts de titel `LOONSTROOK` met de periode. De metadata is gegroepeerd in referte, onderneming, persoonlijke gegevens en contractgegevens. De lijntabel toont code, omschrijving en bedrag, afgesloten met het netto te betalen.
 
 ### Print
 
- De loonfiche is print-vriendelijk: `@media print` verbergt header, navigatie, footer, chat, de input-toolbar en de actieknoppen; toont de loonfiche compact op één A4-pagina zonder schaduwen. Wanneer bronnen zichtbaar zijn, starten ze op een aparte tweede pagina als samenhangend bronblok, zodat de loonfiche zelf niet over twee pagina's wordt gesplitst.
+De loonfiche is print-vriendelijk: `@media print` verbergt de app-header, -footer, -navigatie (linker rail, mobiele bottom-nav, simulator-subnav), chat, actieknoppen én de bronvermelding. Alleen het loonstrook-document wordt afgedrukt, compact op A4, zonder schaduwen of branding. De rode simulatie-banner blijft zichtbaar bovenaan de print.
 
 ### Acties
 
 - **Print loonfiche** — opent het systeem-printdialoog.
-- **Toon bronnen / Verberg bronnen** — toggelt de zichtbaarheid van de bronvermelding onder de loonfiche.
+- **Toon bronnen / Verberg bronnen** — toggelt de zichtbaarheid van de bronvermelding onder de loonfiche (op het scherm; niet in de print).
 
 ---
 

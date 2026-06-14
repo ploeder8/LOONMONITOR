@@ -4,27 +4,51 @@ import { LoonficheDocument } from "@/pages/loonfiche/LoonficheDocument";
 import { LoonficheTabel } from "@/pages/loonfiche/LoonficheTabel";
 import { bouwLoonficheVoorProfiel } from "@/lib/loonfiche";
 import { DEFAULTS } from "@/lib/profiel";
+
 const loonfiche = bouwLoonficheVoorProfiel(DEFAULTS);
+
 describe("LoonficheDocument rendering", () => {
-    it("rendert het pro-forma label", () => {
+    it("rendert de rode simulatie-banner", () => {
         const html = renderToStaticMarkup(<LoonficheDocument loonfiche={loonfiche}/>);
-        expect(html).toContain("Pro-forma loonfiche");
-        expect(html).toContain("geen officiële loonbrief");
+        expect(html).toContain("SIMULATIE");
+        expect(html).toContain("geen officiële loonfiche");
     });
-    it("toont 'Netto te betalen' in het totalenblok", () => {
+
+    it("toont de loonstrook-header met werkgever en periode", () => {
+        const profiel = {
+            ...DEFAULTS,
+            werkgeverNaam: "Acme BV",
+            werkgeverStraat: "Industrieweg",
+            werkgeverHuisnummer: "78",
+            werkgeverPostcode: "3620",
+            werkgeverGemeente: "Lanaken",
+        };
+        const lf = bouwLoonficheVoorProfiel(profiel);
+        const html = renderToStaticMarkup(<LoonficheDocument loonfiche={lf}/>);
+        expect(html).toContain("LOONSTROOK");
+        expect(html).toContain("Acme BV");
+        expect(html).toContain("periode van 01.06.2026 tot 30.06.2026");
+        expect(html).toContain("uittreksel van de individuele rekening");
+    });
+
+    it("toont 'Netto te betalen'", () => {
         const html = renderToStaticMarkup(<LoonficheDocument loonfiche={loonfiche}/>);
         expect(html).toContain("Netto te betalen");
     });
-    it("toont de periode", () => {
+
+    it("toont geen werkgeverskost in het document", () => {
         const html = renderToStaticMarkup(<LoonficheDocument loonfiche={loonfiche}/>);
-        expect(html).toContain("juni 2026");
+        expect(html).not.toContain("Werkgeverskost per maand");
     });
-    it("toont werknemer-/werkgever-/prestatieblokken", () => {
+
+    it("toont de metadata-groepen", () => {
         const html = renderToStaticMarkup(<LoonficheDocument loonfiche={loonfiche}/>);
-        expect(html).toContain("Werknemer");
-        expect(html).toContain("Werkgever");
-        expect(html).toContain("Prestatie");
+        expect(html).toContain("referte");
+        expect(html).toContain("onderneming");
+        expect(html).toContain("persoonlijke gegevens");
+        expect(html).toContain("contractgegevens");
     });
+
     it("toont werknemer- en werkgeverwaarden wanneer ingevuld", () => {
         const profiel = {
             ...DEFAULTS,
@@ -40,18 +64,22 @@ describe("LoonficheDocument rendering", () => {
         expect(html).toContain("Acme BV");
         expect(html).toContain("0123.456.789");
     });
+
     it("toont em-dash voor lege identificatievelden", () => {
         const html = renderToStaticMarkup(<LoonficheDocument loonfiche={loonfiche}/>);
         expect(html).toContain("—");
     });
+
     it("toont audit-sectie wanneer toonBronnen=true", () => {
         const html = renderToStaticMarkup(<LoonficheDocument loonfiche={loonfiche} toonBronnen={true}/>);
         expect(html).toContain("Bronvermelding");
     });
+
     it("verbergt audit-sectie wanneer toonBronnen=false", () => {
         const html = renderToStaticMarkup(<LoonficheDocument loonfiche={loonfiche} toonBronnen={false}/>);
         expect(html).not.toContain("Bronvermelding");
     });
+
     it("toont subtotalen in de loonfichetabel", () => {
         const html = renderToStaticMarkup(<LoonficheTabel regels={loonfiche.regels}/>);
         expect(html).toContain("Totaal bruto RSZ-basis");

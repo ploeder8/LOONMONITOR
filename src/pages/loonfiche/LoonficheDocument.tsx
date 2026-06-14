@@ -1,229 +1,160 @@
-import { FileText, AlertTriangle } from "lucide-react";
-import { APP_BRAND } from "@/branding/brand";
-import { Banner } from "@/components/Banner";
+import { AlertTriangle } from "lucide-react";
 import { AuditSourceGroup } from "@/components/AuditPanel";
 import type { Loonfiche, LoonficheRegel } from "@/lib/loonfiche";
 import { formatEUR } from "@/lib/money";
 import { LoonficheTabel } from "./LoonficheTabel";
+
 interface LoonficheDocumentProps {
     loonfiche: Loonfiche;
     toonBronnen?: boolean;
 }
+
+function formatDateBE(d: Date): string {
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}.${month}.${year}`;
+}
+
+function periodeVanTot(jaar: string, maand: string): string {
+    const y = Number(jaar);
+    const m = Number(maand);
+    const start = new Date(y, m - 1, 1);
+    const end = new Date(y, m, 0);
+    return `periode van ${formatDateBE(start)} tot ${formatDateBE(end)}`;
+}
+
 export function LoonficheDocument({ loonfiche, toonBronnen = true }: LoonficheDocumentProps) {
-    const auditRegels = loonfiche.regels.filter((r) => r.datapunten && r.datapunten.length > 0);
+    const strookRegels = loonfiche.regels.filter((r) => r.type !== "werkgever");
+    const auditRegels = strookRegels.filter((r) => r.datapunten && r.datapunten.length > 0);
     const p = loonfiche.profielSnapshot;
-    return (<div className="loonfiche-document" style={{
-            background: "var(--color-surface)",
-            border: "1px solid var(--color-border)",
-            borderRadius: "var(--radius-xl)",
-            boxShadow: "var(--shadow-md)",
-            overflow: "hidden",
-        }}>
-      
-      <div className="loonfiche-banner" style={{
-            background: "var(--color-primary-soft)",
-            borderBottom: "1px solid var(--color-primary-border)",
-            padding: "10px 20px",
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            fontSize: 13,
-            fontWeight: 600,
-            color: "var(--color-primary)",
-            fontFamily: "var(--font-display)",
-        }}>
-        <FileText size={16}/>
-        Pro-forma loonfiche — geen officiële loonbrief
-      </div>
+    const statuutLabel = loonfiche.isStudent ? "Student" : "Bediende";
+    const tewerkstellingsbreukPct = Math.round(p.tewerkstellingsbreuk * 100);
 
-      <div className="loonfiche-content" style={{ padding: "24px 28px 28px" }}>
-        
-        <div className="loonfiche-header" style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-            marginBottom: 24,
-            flexWrap: "wrap",
-            gap: 16,
-        }}>
-          <div>
-            <div style={{
-            fontFamily: "var(--font-display)",
-            fontSize: 22,
-            fontWeight: 800,
-            color: "var(--color-text)",
-            letterSpacing: 0,
-            marginBottom: 4,
-        }}>
-              {APP_BRAND.name}
+    return (
+        <div className="loonfiche-document">
+            <div className="loonfiche-simulatie-banner">
+                SIMULATIE – geen officiële loonfiche
             </div>
-            <div style={{ fontSize: 13, color: "var(--color-text-muted)" }}>
-              {APP_BRAND.productLabel}
-            </div>
-          </div>
-          <div style={{ textAlign: "right" }}>
-            <div style={{
-            fontFamily: "var(--font-display)",
-            fontSize: 16,
-            fontWeight: 700,
-            color: "var(--color-text)",
-        }}>
-              {loonfiche.periode}
-            </div>
-            <div style={{ fontSize: 12, color: "var(--color-text-muted)", marginTop: 2 }}>
-              {loonfiche.isStudent ? "Student" : "Bediende"} · {loonfiche.profielSnapshot.berekeningsRichting === "netto_naar_bruto" ? "Netto → Bruto" : "Bruto → Netto"}
-            </div>
-          </div>
-        </div>
 
-        
-        <div className="loonfiche-info-grid" style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-            gap: 12,
-            marginBottom: 24,
-        }}>
-          <InfoBlock title="Werknemer" velden={[
-            { label: "Naam", waarde: p.werknemerNaam },
-            { label: "Referentie", waarde: p.werknemerReferentie },
-        ]}/>
-          <InfoBlock title="Werkgever" velden={[
-            { label: "Naam", waarde: p.werkgeverNaam },
-            { label: "Ondernemingsnummer", waarde: p.werkgeverOndernemingsnummer },
-        ]}/>
-          <InfoBlock title="Prestatie" velden={[
-            { label: "Periode", waarde: loonfiche.periode },
-            { label: "Statuut", waarde: loonfiche.isStudent ? "Student" : "Bediende" },
-            { label: "Tewerkstellingsbreuk", waarde: `${Math.round(p.tewerkstellingsbreuk * 100)} %` },
-            { label: "Arbeidsdagen", waarde: `${p.arbeidsdagenPerMaand}` },
-        ]}/>
-        </div>
+            <div className="loonfiche-content">
+                <header className="loonfiche-payslip-header">
+                    <div className="loonfiche-employer-block">
+                        <div className="loonfiche-employer-name">{p.werkgeverNaam || "—"}</div>
+                        <div>{p.werkgeverStraat} {p.werkgeverHuisnummer}</div>
+                        <div>{p.werkgeverPostcode} {p.werkgeverGemeente}</div>
+                    </div>
+                    <div className="loonfiche-title-block">
+                        <div className="loonfiche-title">LOONSTROOK</div>
+                        <div className="loonfiche-periode">
+                            {periodeVanTot(p.berekeningsJaar, p.berekeningsMaand)}
+                        </div>
+                        <div className="loonfiche-subtitle">
+                            uittreksel van de individuele rekening, zorgvuldig bewaren
+                        </div>
+                    </div>
+                </header>
 
-        
-        {loonfiche.waarschuwingen.length > 0 && (<div className="loonfiche-waarschuwingen" style={{ marginBottom: 20 }}>
-            {loonfiche.waarschuwingen.map((w, i) => (<Banner key={i} kind="warning" title={i === 0 ? "Waarschuwing" : undefined}>
-                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                  <AlertTriangle size={14}/>
-                  {w}
+                <div className="loonfiche-meta-grid">
+                    <MetaGroup title="referte" rows={[{ label: "referte", value: p.werknemerReferentie }]} />
+                    <div className="loonfiche-employee-name">
+                        <div className="loonfiche-meta-value-large">{p.werknemerNaam || "—"}</div>
+                    </div>
+
+                    <MetaGroup
+                        title="onderneming"
+                        rows={[
+                            { label: "ondernemingsnummer", value: p.werkgeverOndernemingsnummer },
+                            { label: "RSZ-nummer", value: "—" },
+                        ]}
+                    />
+                    <MetaGroup
+                        title="persoonlijke gegevens"
+                        rows={[
+                            { label: "rijksregisternummer", value: p.werknemerRijksregister },
+                            { label: "burgerlijke staat", value: "—" },
+                            { label: "ten laste", value: String(p.kinderenTenLaste) },
+                        ]}
+                    />
+                    <MetaGroup
+                        title="contractgegevens"
+                        rows={[
+                            { label: "paritair comité", value: "PC 200" },
+                            { label: "statuut", value: statuutLabel },
+                            { label: "datum in dienst", value: "—" },
+                            { label: "plaats tewerkstelling", value: "—" },
+                            { label: "basisloon", value: formatEUR(loonfiche.totalen.cashBrutoloon) },
+                            { label: "looncategorie", value: `Schaal ${p.schaal} – cat ${p.cat}` },
+                            { label: "tewerkstellingsbreuk", value: `${tewerkstellingsbreukPct} / 100` },
+                        ]}
+                    />
                 </div>
-              </Banner>))}
-          </div>)}
 
-        
-        <LoonficheTabel regels={loonfiche.regels}/>
+                {loonfiche.waarschuwingen.length > 0 && (
+                    <div className="loonfiche-waarschuwingen">
+                        {loonfiche.waarschuwingen.map((w, i) => (
+                            <div key={i} className="loonfiche-waarschuwing">
+                                <AlertTriangle size={14} />
+                                {w}
+                            </div>
+                        ))}
+                    </div>
+                )}
 
-        
-        <div className="loonfiche-totalen" style={{
-            marginTop: 24,
-            paddingTop: 16,
-            borderTop: "2px solid var(--color-primary)",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexWrap: "wrap",
-            gap: 12,
-        }}>
-          <div>
-            <div style={{ fontSize: 13, color: "var(--color-text-muted)", marginBottom: 2 }}>
-              Netto te betalen
+                <LoonficheTabel regels={strookRegels} />
+
+                <div className="loonfiche-netto-block">
+                    <div className="loonfiche-netto-label">Netto te betalen</div>
+                    <div className="loonfiche-netto-value">
+                        {formatEUR(loonfiche.totalen.nettoTeBetalen)}
+                    </div>
+                </div>
+
+                {toonBronnen && auditRegels.length > 0 && (
+                    <div className="loonfiche-audit">
+                        <div className="loonfiche-audit-title">Bronvermelding</div>
+                        <div className="loonfiche-audit-list">
+                            {auditRegels.map((regel) => (
+                                <AuditRegelBlock key={regel.code} regel={regel} />
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
-            <div style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 24,
-            fontWeight: 700,
-            color: "var(--color-primary)",
-            fontVariantNumeric: "tabular-nums",
-        }}>
-              {formatEUR(loonfiche.totalen.nettoTeBetalen)}
-            </div>
-          </div>
-          <div style={{ textAlign: "right" }}>
-            <div style={{ fontSize: 13, color: "var(--color-text-muted)", marginBottom: 2 }}>
-              Werkgeverskost per maand
-            </div>
-            <div style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 18,
-            fontWeight: 600,
-            color: "var(--color-text)",
-            fontVariantNumeric: "tabular-nums",
-        }}>
-              {formatEUR(loonfiche.totalen.werkgeverskostMaand)}
-            </div>
-          </div>
         </div>
+    );
+}
 
-        
-        {toonBronnen && auditRegels.length > 0 && (<div className="loonfiche-audit" style={{ marginTop: 28 }}>
-            <div style={{
-                fontFamily: "var(--font-display)",
-                fontSize: 11,
-                fontWeight: 800,
-                letterSpacing: "0.04em",
-                textTransform: "uppercase",
-                color: "var(--color-text-muted)",
-                marginBottom: 10,
-            }}>
-              Bronvermelding
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {auditRegels.map((regel) => (<AuditRegelBlock key={regel.code} regel={regel}/>))}
-            </div>
-          </div>)}
-      </div>
-    </div>);
-}
-function InfoBlock({ title, velden, }: {
+function MetaGroup({
+    title,
+    rows,
+}: {
     title: string;
-    velden: Array<{
-        label: string;
-        waarde: string;
-    }>;
+    rows: Array<{ label: string; value: string }>;
 }) {
-    return (<div className="loonfiche-info-block" style={{
-            background: "var(--color-navy-50)",
-            borderRadius: "var(--radius-lg)",
-            padding: "14px 16px",
-        }}>
-      <div style={{
-            fontFamily: "var(--font-display)",
-            fontSize: 11,
-            fontWeight: 800,
-            letterSpacing: "0.04em",
-            textTransform: "uppercase",
-            color: "var(--color-text-muted)",
-            marginBottom: 8,
-        }}>
-        {title}
-      </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-        {velden.map((v) => (<div key={v.label}>
-            <div style={{ fontSize: 11, color: "var(--color-text-muted)", marginBottom: 1 }}>
-              {v.label}
+    return (
+        <div className="loonfiche-meta-group">
+            <div className="loonfiche-meta-group-title">{title}</div>
+            <div className="loonfiche-meta-rows">
+                {rows.map((row) => (
+                    <div key={row.label} className="loonfiche-meta-row">
+                        <span className="loonfiche-meta-label">{row.label}</span>
+                        <span className="loonfiche-meta-value">{row.value || "—"}</span>
+                    </div>
+                ))}
             </div>
-            <div style={{
-                fontSize: 14,
-                color: v.waarde ? "var(--color-text)" : "var(--color-navy-300)",
-                fontWeight: v.waarde ? 500 : 400,
-            }}>
-              {v.waarde || "—"}
-            </div>
-          </div>))}
-      </div>
-    </div>);
+        </div>
+    );
 }
-function AuditRegelBlock({ regel }: {
-    regel: LoonficheRegel;
-}) {
-    if (!regel.datapunten || regel.datapunten.length === 0)
-        return null;
-    return (<div className="loonfiche-audit-regel" style={{
-            borderLeft: "2px solid var(--color-primary-border)",
-            paddingLeft: 10,
-        }}>
-      <div style={{ fontSize: 12, fontWeight: 600, color: "var(--color-navy-500)", marginBottom: 4 }}>
-        {regel.code} — {regel.label}
-      </div>
-      <AuditSourceGroup datapunten={regel.datapunten}/>
-    </div>);
+
+function AuditRegelBlock({ regel }: { regel: LoonficheRegel }) {
+    if (!regel.datapunten || regel.datapunten.length === 0) return null;
+    return (
+        <div className="loonfiche-audit-regel">
+            <div className="loonfiche-audit-regel-title">
+                {regel.code} — {regel.label}
+            </div>
+            <AuditSourceGroup datapunten={regel.datapunten} />
+        </div>
+    );
 }
