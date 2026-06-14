@@ -31,6 +31,11 @@ export function LoonficheDocument({ loonfiche, toonBronnen = true }: LoonficheDo
     const statuutLabel = loonfiche.isStudent ? "Student" : "Bediende";
     const tewerkstellingsbreukPct = Math.round(p.tewerkstellingsbreuk * 100);
 
+    const werkgeverAdresRegels = [
+        `${p.werkgeverStraat} ${p.werkgeverHuisnummer}`.trim(),
+        `${p.werkgeverPostcode} ${p.werkgeverGemeente}`.trim(),
+    ].filter((r) => r.length > 0);
+
     return (
         <div className="loonfiche-document">
             <div className="loonfiche-simulatie-banner">
@@ -41,8 +46,9 @@ export function LoonficheDocument({ loonfiche, toonBronnen = true }: LoonficheDo
                 <header className="loonfiche-payslip-header">
                     <div className="loonfiche-employer-block">
                         <div className="loonfiche-employer-name">{p.werkgeverNaam || "—"}</div>
-                        <div>{p.werkgeverStraat} {p.werkgeverHuisnummer}</div>
-                        <div>{p.werkgeverPostcode} {p.werkgeverGemeente}</div>
+                        {werkgeverAdresRegels.map((regel, i) => (
+                            <div key={i}>{regel}</div>
+                        ))}
                     </div>
                     <div className="loonfiche-title-block">
                         <div className="loonfiche-title">LOONSTROOK</div>
@@ -56,10 +62,15 @@ export function LoonficheDocument({ loonfiche, toonBronnen = true }: LoonficheDo
                 </header>
 
                 <div className="loonfiche-meta-grid">
-                    <MetaGroup title="referte" rows={[{ label: "referte", value: p.werknemerReferentie }]} />
-                    <div className="loonfiche-employee-name">
-                        <div className="loonfiche-meta-value-large">{p.werknemerNaam || "—"}</div>
+                    <div className="loonfiche-referte-row">
+                        <span className="loonfiche-meta-label">referte</span>
+                        <span className="loonfiche-meta-value">{p.werknemerReferentie || "—"}</span>
                     </div>
+                    {p.werknemerNaam && (
+                        <div className="loonfiche-employee-name">
+                            <div className="loonfiche-meta-value-large">{p.werknemerNaam}</div>
+                        </div>
+                    )}
 
                     <MetaGroup
                         title="onderneming"
@@ -102,13 +113,6 @@ export function LoonficheDocument({ loonfiche, toonBronnen = true }: LoonficheDo
                 )}
 
                 <LoonficheTabel regels={strookRegels} />
-
-                <div className="loonfiche-netto-block">
-                    <div className="loonfiche-netto-label">Netto te betalen</div>
-                    <div className="loonfiche-netto-value">
-                        {formatEUR(loonfiche.totalen.nettoTeBetalen)}
-                    </div>
-                </div>
 
                 {toonBronnen && auditRegels.length > 0 && (
                     <div className="loonfiche-audit">

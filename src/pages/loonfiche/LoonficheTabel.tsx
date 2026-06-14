@@ -16,8 +16,6 @@ const TYPE_HEADERS: Record<LoonficheRegelType, string> = {
 
 function tekenPrefix(teken: string): string {
     switch (teken) {
-        case "plus":
-            return "+";
         case "min":
             return "−";
         default:

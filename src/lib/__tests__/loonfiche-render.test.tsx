@@ -49,6 +49,17 @@ describe("LoonficheDocument rendering", () => {
         expect(html).toContain("contractgegevens");
     });
 
+    it("toont referte als enkele rij zonder uppercase groepstitel", () => {
+        const html = renderToStaticMarkup(<LoonficheDocument loonfiche={loonfiche}/>);
+        expect(html).toContain("referte");
+        expect(html).not.toContain("REFERTE");
+    });
+
+    it("toont geen lege werknemersnaam-placeholder", () => {
+        const html = renderToStaticMarkup(<LoonficheDocument loonfiche={loonfiche}/>);
+        expect(html).not.toContain("loonfiche-employee-name");
+    });
+
     it("toont werknemer- en werkgeverwaarden wanneer ingevuld", () => {
         const profiel = {
             ...DEFAULTS,
@@ -86,5 +97,10 @@ describe("LoonficheDocument rendering", () => {
         expect(html).toContain("Loon na RSZ en werkbonus");
         expect(html).toContain("Belastbaar loon voor BV");
         expect(html).toContain("BV na verminderingen");
+    });
+
+    it("toont geen plus-prefix bij positieve bedragen", () => {
+        const html = renderToStaticMarkup(<LoonficheTabel regels={loonfiche.regels}/>);
+        expect(html).not.toContain("+ €");
     });
 });

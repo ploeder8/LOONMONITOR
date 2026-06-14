@@ -157,7 +157,15 @@ Deze velden worden opgeslagen in het gedeelde profiel, meegenomen in CSV export/
 
 ### Layout
 
-Bovenaan staat een rode, opvallende simulatie-banner (`SIMULATIE – geen officiële loonfiche`). Daaronder volgt een loonstrook-header met links de werkgever en rechts de titel `LOONSTROOK` met de periode. De metadata is gegroepeerd in referte, onderneming, persoonlijke gegevens en contractgegevens. De lijntabel toont code, omschrijving en bedrag, afgesloten met het netto te betalen.
+Bovenaan staat een rode, opvallende simulatie-banner (`SIMULATIE – geen officiële loonfiche`). Daaronder volgt een loonstrook-header met links de werkgever en rechts de titel `LOONSTROOK` met de periode. De werknemersnaam staat rechtsboven wanneer die is ingevuld.
+
+De metadata is opgebouwd als:
+- een enkele **referte**-rij bovenaan;
+- daarna de groepen **onderneming**, **persoonlijke gegevens** en **contractgegevens**.
+
+Velden die niet in het profiel zitten (bijv. `RSZ-nummer`, `burgerlijke staat`, `datum in dienst`, `plaats tewerkstelling`) blijven zichtbaar met een streepje (`—`) zodat de loonstrookstructuur behouden blijft.
+
+De lijntabel toont de kolommen **Code**, **Omschrijving** en **Bedrag**. Positieve bedragen tonen geen `+`-teken; alleen inhoudingen tonen `−`. Subtotalen en het totaal `Netto te betalen` worden vet weergegeven. Het netto totaal komt enkel voor in de tabel en wordt niet herhaald in een apart blok.
 
 ### Print
 
