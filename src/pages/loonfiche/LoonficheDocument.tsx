@@ -1,12 +1,10 @@
 import { AlertTriangle } from "lucide-react";
-import { AuditSourceGroup } from "@/components/AuditPanel";
-import type { Loonfiche, LoonficheRegel } from "@/lib/loonfiche";
+import type { Loonfiche } from "@/lib/loonfiche";
 import { formatEUR } from "@/lib/money";
 import { LoonficheTabel } from "./LoonficheTabel";
 
 interface LoonficheDocumentProps {
     loonfiche: Loonfiche;
-    toonBronnen?: boolean;
 }
 
 function formatDateBE(d: Date): string {
@@ -24,9 +22,8 @@ function periodeVanTot(jaar: string, maand: string): string {
     return `periode van ${formatDateBE(start)} tot ${formatDateBE(end)}`;
 }
 
-export function LoonficheDocument({ loonfiche, toonBronnen = true }: LoonficheDocumentProps) {
+export function LoonficheDocument({ loonfiche }: LoonficheDocumentProps) {
     const strookRegels = loonfiche.regels.filter((r) => r.type !== "werkgever");
-    const auditRegels = strookRegels.filter((r) => r.datapunten && r.datapunten.length > 0);
     const p = loonfiche.profielSnapshot;
     const statuutLabel = loonfiche.isStudent ? "Student" : "Bediende";
     const tewerkstellingsbreukPct = Math.round(p.tewerkstellingsbreuk * 100);
@@ -113,17 +110,6 @@ export function LoonficheDocument({ loonfiche, toonBronnen = true }: LoonficheDo
                 )}
 
                 <LoonficheTabel regels={strookRegels} />
-
-                {toonBronnen && auditRegels.length > 0 && (
-                    <div className="loonfiche-audit">
-                        <div className="loonfiche-audit-title">Bronvermelding</div>
-                        <div className="loonfiche-audit-list">
-                            {auditRegels.map((regel) => (
-                                <AuditRegelBlock key={regel.code} regel={regel} />
-                            ))}
-                        </div>
-                    </div>
-                )}
             </div>
         </div>
     );
@@ -147,18 +133,6 @@ function MetaGroup({
                     </div>
                 ))}
             </div>
-        </div>
-    );
-}
-
-function AuditRegelBlock({ regel }: { regel: LoonficheRegel }) {
-    if (!regel.datapunten || regel.datapunten.length === 0) return null;
-    return (
-        <div className="loonfiche-audit-regel">
-            <div className="loonfiche-audit-regel-title">
-                {regel.code} — {regel.label}
-            </div>
-            <AuditSourceGroup datapunten={regel.datapunten} />
         </div>
     );
 }

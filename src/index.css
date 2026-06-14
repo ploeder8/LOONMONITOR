@@ -1139,38 +1139,6 @@ h1, h2, h3, h4 {
   color: var(--color-primary);
 }
 
-.loonfiche-audit {
-  margin-top: 28px;
-}
-
-.loonfiche-audit-title {
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-  margin-bottom: 10px;
-}
-
-.loonfiche-audit-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.loonfiche-audit-regel {
-  border-left: 2px solid var(--color-primary-border);
-  padding-left: 10px;
-}
-
-.loonfiche-audit-regel-title {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--color-navy-500);
-  margin-bottom: 4px;
-}
-
 @media print {
   @page {
     size: A4;
@@ -1188,8 +1156,7 @@ h1, h2, h3, h4 {
   .loonfiche-toolbar,
   .loonfiche-acties,
   .profiel-snapshot,
-  .profiel-editor-drawer,
-  .loonfiche-audit {
+  .profiel-editor-drawer {
     display: none !important;
   }
 

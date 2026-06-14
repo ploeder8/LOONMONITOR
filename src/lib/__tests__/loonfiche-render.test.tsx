@@ -81,13 +81,8 @@ describe("LoonficheDocument rendering", () => {
         expect(html).toContain("—");
     });
 
-    it("toont audit-sectie wanneer toonBronnen=true", () => {
-        const html = renderToStaticMarkup(<LoonficheDocument loonfiche={loonfiche} toonBronnen={true}/>);
-        expect(html).toContain("Bronvermelding");
-    });
-
-    it("verbergt audit-sectie wanneer toonBronnen=false", () => {
-        const html = renderToStaticMarkup(<LoonficheDocument loonfiche={loonfiche} toonBronnen={false}/>);
+    it("toont nooit de bronvermelding", () => {
+        const html = renderToStaticMarkup(<LoonficheDocument loonfiche={loonfiche}/>);
         expect(html).not.toContain("Bronvermelding");
     });
 

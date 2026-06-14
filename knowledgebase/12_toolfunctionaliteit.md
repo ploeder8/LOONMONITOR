@@ -26,7 +26,7 @@ Jaakie gebruikt een HashRouter met een rustige app-shell:
 | Route | Functie |
 |---|---|
 | `/` | Profiel en calculator. Gebruikers voeren loon-, arbeids- en voordeelgegevens in en zien resultaten met audit-trail. |
-| `/loonfiche` | Pro-forma loonfiche voor één werknemer, opgemaakt als een echte loonstrook. Toont bovenaan een rode simulatie-banner, daarna werkgever-/werknemer-metadata en de brutoloon → netto regels. Deelt binnen hetzelfde browservenster de profielstate met de calculator. Ondersteunt identificatievelden (werknemer-/werkgevernaam, -referentie, -adres en -ondernemingsnummer), print en audit-toggle. |
+| `/loonfiche` | Pro-forma loonfiche voor één werknemer, opgemaakt als een echte loonstrook. Toont bovenaan een rode simulatie-banner, daarna werkgever-/werknemer-metadata en de brutoloon → netto regels. Deelt binnen hetzelfde browservenster de profielstate met de calculator. Ondersteunt identificatievelden (werknemer-/werkgevernaam, -referentie, -adres en -ondernemingsnummer) en print. |
 | `/loonrun` | Multi-werknemer loonrun. Importeert een multi-row CSV, berekent alle werknemers geïsoleerd, toont een overzichtstabel met totalen en laat individuele loonfiches bekijken per werknemer. |
 | `/loonmotor` | Dossiercockpit voor bedrijven en medewerkers. V1 bewaart lokale conceptdossiers in de browser, kan publieke KBO-basisgegevens ophalen via ondernemingsnummer en kan een medewerkerprofiel openen in de calculator. |
 | `/testcases` | Overzicht van testcases en validatiecontext. |
@@ -169,12 +169,11 @@ De lijntabel toont de kolommen **Code**, **Omschrijving** en **Bedrag**. Positie
 
 ### Print
 
-De loonfiche is print-vriendelijk: `@media print` verbergt de app-header, -footer, -navigatie (linker rail, mobiele bottom-nav, simulator-subnav), chat, actieknoppen én de bronvermelding. Alleen het loonstrook-document wordt afgedrukt, compact op A4, zonder schaduwen of branding. De rode simulatie-banner blijft zichtbaar bovenaan de print.
+De loonfiche is print-vriendelijk: `@media print` verbergt de app-header, -footer, -navigatie (linker rail, mobiele bottom-nav, simulator-subnav), chat en actieknoppen. De bronvermelding is in de loonfiche nooit zichtbaar. Alleen het loonstrook-document wordt afgedrukt, compact op A4, zonder schaduwen of branding. De rode simulatie-banner blijft zichtbaar bovenaan de print.
 
 ### Acties
 
 - **Print loonfiche** — opent het systeem-printdialoog.
-- **Toon bronnen / Verberg bronnen** — toggelt de zichtbaarheid van de bronvermelding onder de loonfiche (op het scherm; niet in de print).
 
 ---
 

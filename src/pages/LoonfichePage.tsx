@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { FileText, Printer, SlidersHorizontal } from "lucide-react";
+import { Printer, SlidersHorizontal } from "lucide-react";
 import { Banner } from "@/components/Banner";
 import { useSharedProfiel } from "@/lib/useSharedProfiel";
 import { bouwLoonficheVoorProfiel } from "@/lib/loonfiche";
@@ -13,7 +13,6 @@ import { ProfielSnapshot } from "@/pages/profiel/ProfielSnapshot";
 export function LoonfichePage() {
     const [p, setP] = useSharedProfiel();
     const profiel = normaliseerProfiel(p);
-    const [toonBronnen, setToonBronnen] = useState(true);
     const [profielEditorOpen, setProfielEditorOpen] = useState(false);
     const set = ((kOfUpdate: keyof Profiel | ProfielUpdate, v?: Profiel[keyof Profiel]) => {
         setP((prev) => {
@@ -62,24 +61,6 @@ export function LoonfichePage() {
           <SlidersHorizontal size={14}/>
           Profiel bewerken
         </button>
-        <button type="button" onClick={() => setToonBronnen(!toonBronnen)} style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 6,
-            padding: "6px 12px",
-            fontSize: 12,
-            fontWeight: 600,
-            borderRadius: "var(--radius-md)",
-            border: "1px solid var(--color-primary-border)",
-            background: toonBronnen ? "var(--color-primary)" : "var(--color-surface)",
-            color: toonBronnen ? "#fff" : "var(--color-primary)",
-            cursor: "pointer",
-            fontFamily: "var(--font-body)",
-            transition: "background 0.15s, color 0.15s",
-        }}>
-          <FileText size={14}/>
-          {toonBronnen ? "Verberg bronnen" : "Toon bronnen"}
-        </button>
         <button type="button" onClick={() => window.print()} style={{
             display: "inline-flex",
             alignItems: "center",
@@ -116,7 +97,7 @@ export function LoonfichePage() {
               Opnieuw proberen
             </button>
           </Banner>)} resetKeys={[JSON.stringify(profiel)]}>
-        <LoonficheDocument loonfiche={loonfiche} toonBronnen={toonBronnen}/>
+        <LoonficheDocument loonfiche={loonfiche}/>
       </ErrorBoundary>
 
       <ProfielEditorDrawer open={profielEditorOpen} profiel={profiel} set={set} onClose={() => setProfielEditorOpen(false)}/>
