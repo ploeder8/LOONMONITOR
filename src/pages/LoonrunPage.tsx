@@ -531,7 +531,7 @@ function LoonficheModal({ loonfiche, onClose, }: {
         <ErrorBoundary fallbackRender={({ error }) => (<Banner kind="error" title="Fout bij tonen loonfiche">
               {(error as Error).message}
             </Banner>)}>
-          <LoonficheDocument loonfiche={loonfiche} toonBronnen={true}/>
+          <LoonficheDocument loonfiche={loonfiche}/>
         </ErrorBoundary>
       </div>
     </div>);
