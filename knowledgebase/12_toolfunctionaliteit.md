@@ -109,7 +109,7 @@ Studentenmodus beperkt de samenvatting tot relevante studentencijfers.
 De knop **"Print overzicht"** opent een estetisch, print-vriendelijk document voor de huidige werknemer:
 
 - **Header**: Jaakie brand, titel "Loonoverzicht", periode, statuut, generatiedatum.
-- **Gegevens**: werknemer- en werkgever-metadata (naam, referentie, rijksregisternummer, ondernemingsnummer, adres werkgever).
+- **Gegevens**: werknemer- en werkgever-metadata staan in twee aparte kolommen. Links staan de werknemersgegevens (naam, rijksregisternummer, referentie) en rechts de werkgeversgegevens (naam, ondernemingsnummer, adres). Op smalle schermen vallen de kolommen onder elkaar. Lege velden worden niet getoond; als één kant geen gegevens heeft, neemt de andere kant de volle breedte in.
 - **Maandelijkse kolommen** (twee-koloms layout):
   - Links **"Bruto Netto op maandbasis"**: brutoloon, VAA-werkmiddelen, totaal bruto, RSZ werknemer, werkbonus, belastbaar loon, bedrijfsvoorheffing, BBSZ, maaltijdcheques, hospitalisatie, onkostenvergoedingen, woon-werkvergoeding, terugname VAA, netto op maandbasis.
   - Rechts **"Loonkost op maandbasis"**: brutoloon, RSZ werkgever, arbeidsongevallen, provisies, extralegale voordelen, eventuele doelgroepvermindering, totale loonkost op maandbasis.

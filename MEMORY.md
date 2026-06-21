@@ -11,6 +11,7 @@ Kort projectlogboek voor wijzigingen door coding agents.
 
 ## Log
 
+- 2026-06-21 — Printoverzicht metadata gescheiden in twee kolommen: werknemersgegevens links (naam, rijksregisternummer, referentie) en werkgeversgegevens rechts (naam, ondernemingsnummer, adres); lege velden verborgen, kolommen stapelen op smalle schermen; `src/pages/home/WerknemerOverzicht.tsx`, `src/index.css`, `knowledgebase/12_toolfunctionaliteit.md`; reden: werkgever- en werknemersinfo stond door elkaar in het Loonoverzicht.
 - 2026-06-14 — Simulator scroll-overlay gefixt: `.calculator-sticky-summary` in `src/index.css` een opaak achtergrond gegeven en een `::before`-masker toegevoegd dat de ruimte boven de sticky hero-strip afdekt; reden: pagina moet volledig achter de hero’s verdwijnen.
 - 2026-06-14 — Simulator scroll-overlay verfijnd: sticky summary op desktop tegen de topbar geplaatst (`top: 64px`), extra bovenpadding zodat de controles op dezelfde hoogte blijven, masker verhoogd naar `120px` en tablet padding gecorrigeerd; reden: klein stukje inhoud was nog zichtbaar boven de CSV-knop.
 - 2026-06-13 — Bronvermelding uit de loonfiche verwijderd: "Toon bronnen / Verberg bronnen"-knop en audit-sectie weggehaald uit `LoonfichePage`/`LoonficheDocument`, bijbehorende CSS en tests opgeschoond; reden: bronvermelding hoort niet op een werknemersloonstrook.

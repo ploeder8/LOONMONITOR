@@ -1395,6 +1395,14 @@ h1, h2, h3, h4 {
     font-size: 10px !important;
   }
 
+  body.print-modal-open .werknemer-overzicht-document .wo-metadata-column {
+    gap: 4px !important;
+  }
+
+  body.print-modal-open .werknemer-overzicht-document .wo-metadata-column [style*="font-size: 11px"] {
+    font-size: 8px !important;
+  }
+
   body.print-modal-open .werknemer-overzicht-document .wo-summary {
     margin-bottom: 8px !important;
     gap: 6px !important;
@@ -1482,6 +1490,10 @@ h1, h2, h3, h4 {
 }
 
 @media (max-width: 640px) {
+  .wo-metadata {
+    grid-template-columns: 1fr !important;
+  }
+
   .app-main {
     padding-right: 14px !important;
     padding-left: 14px !important;

@@ -55,6 +55,9 @@ export function WerknemerOverzicht({ profiel }: WerknemerOverzichtProps) {
             : profiel.werkgeverGemeente || null,
     ].filter(Boolean).join(", ");
 
+    const heeftWerknemerInfo = Boolean(profiel.werknemerNaam || profiel.werknemerRijksregister || profiel.werknemerReferentie);
+    const heeftWerkgeverInfo = Boolean(profiel.werkgeverNaam || profiel.werkgeverOndernemingsnummer || werkgeverAdres);
+
     return (<ProFormaDocument className="werknemer-overzicht-document" contentClassName="wo-content">
       <DocumentHeader className="wo-header" title="Loonoverzicht" periode={periode} marginBottom={20} details={<>
             <div style={{ fontSize: 12, color: "var(--color-text-muted)", marginTop: 2 }}>
@@ -65,24 +68,42 @@ export function WerknemerOverzicht({ profiel }: WerknemerOverzichtProps) {
             </div>
           </>}/>
 
-      {(profiel.werknemerNaam || profiel.werkgeverNaam) && (<div className="wo-metadata" style={{
+      {(heeftWerknemerInfo || heeftWerkgeverInfo) && (<div className="wo-metadata" style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(2, 1fr)",
-                gap: 12,
+                gridTemplateColumns: heeftWerknemerInfo && heeftWerkgeverInfo ? "repeat(2, 1fr)" : "1fr",
+                gap: 16,
                 marginBottom: 20,
             }}>
-            {profiel.werknemerNaam
-                ? (<MetaCard label="Werknemer" value={profiel.werknemerNaam}/>)
-                : (<MetaCard label="Werknemer" value="—"/>)}
-            {profiel.werkgeverNaam
-                ? (<MetaCard label="Werkgever" value={profiel.werkgeverNaam}/>)
-                : profiel.werkgeverOndernemingsnummer
-                    ? (<MetaCard label="Werkgever" value="—"/>)
-                    : null}
-            {profiel.werknemerReferentie && (<MetaCard label="Referentie" value={profiel.werknemerReferentie}/>)}
-            {profiel.werkgeverOndernemingsnummer && (<MetaCard label="Ondernemingsnummer" value={profiel.werkgeverOndernemingsnummer}/>)}
-            {profiel.werknemerRijksregister && (<MetaCard label="Rijksregisternummer" value={profiel.werknemerRijksregister}/>)}
-            {werkgeverAdres && (<MetaCard label="Adres werkgever" value={werkgeverAdres}/>)}
+            {heeftWerknemerInfo && (<div className="wo-metadata-column" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <div style={{
+                        fontFamily: "var(--font-display)",
+                        fontSize: 11,
+                        fontWeight: 800,
+                        letterSpacing: "0.04em",
+                        textTransform: "uppercase",
+                        color: "var(--color-text-muted)",
+                    }}>
+                  Werknemer
+                </div>
+                <MetaCard label="Naam" value={profiel.werknemerNaam || "—"}/>
+                {profiel.werknemerRijksregister && (<MetaCard label="Rijksregisternummer" value={profiel.werknemerRijksregister}/>)}
+                {profiel.werknemerReferentie && (<MetaCard label="Referentie" value={profiel.werknemerReferentie}/>)}
+              </div>)}
+            {heeftWerkgeverInfo && (<div className="wo-metadata-column" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <div style={{
+                        fontFamily: "var(--font-display)",
+                        fontSize: 11,
+                        fontWeight: 800,
+                        letterSpacing: "0.04em",
+                        textTransform: "uppercase",
+                        color: "var(--color-text-muted)",
+                    }}>
+                  Werkgever
+                </div>
+                <MetaCard label="Naam" value={profiel.werkgeverNaam || "—"}/>
+                {profiel.werkgeverOndernemingsnummer && (<MetaCard label="Ondernemingsnummer" value={profiel.werkgeverOndernemingsnummer}/>)}
+                {werkgeverAdres && (<MetaCard label="Adres" value={werkgeverAdres}/>)}
+              </div>)}
           </div>)}
 
       {isStudent && (<div style={{
