@@ -1096,7 +1096,6 @@ h1, h2, h3, h4 {
 .loonfiche-tabel-row.is-subtotaal td {
   border-top: 2px solid var(--color-border);
   border-bottom: none;
-  font-weight: 700;
 }
 
 .loonfiche-tabel-row.is-totaal td {
@@ -1116,8 +1115,7 @@ h1, h2, h3, h4 {
   color: var(--color-navy-500);
 }
 
-.loonfiche-tabel-row.is-subtotaal .loonfiche-tabel-label,
-.loonfiche-tabel-row.is-totaal .loonfiche-tabel-label {
+.loonfiche-tabel-row.is-bold .loonfiche-tabel-label {
   color: var(--color-text);
   font-family: var(--font-display);
   font-weight: 700;
@@ -1139,8 +1137,7 @@ h1, h2, h3, h4 {
   padding-right: 0;
 }
 
-.loonfiche-tabel-row.is-subtotaal .loonfiche-tabel-bedrag,
-.loonfiche-tabel-row.is-totaal .loonfiche-tabel-bedrag {
+.loonfiche-tabel-row.is-bold .loonfiche-tabel-bedrag {
   color: var(--color-text);
   font-weight: 700;
 }

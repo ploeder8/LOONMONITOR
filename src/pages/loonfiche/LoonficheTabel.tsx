@@ -58,6 +58,7 @@ export function LoonficheTabel({ regels }: { regels: LoonficheRegel[] }) {
 function LoonficheRow({ regel }: { regel: LoonficheRegel }) {
     const isSubtotaal = regel.type === "subtotaal";
     const isTotaal = regel.code === "9000";
+    const isBold = regel.bold || isTotaal;
     const prefix = tekenPrefix(regel.teken);
     return (
         <tr
@@ -65,6 +66,7 @@ function LoonficheRow({ regel }: { regel: LoonficheRegel }) {
                 "loonfiche-tabel-row",
                 isSubtotaal ? "is-subtotaal" : "",
                 isTotaal ? "is-totaal" : "",
+                isBold ? "is-bold" : "",
             ].join(" ")}
         >
             <td className="loonfiche-tabel-code">{regel.code}</td>

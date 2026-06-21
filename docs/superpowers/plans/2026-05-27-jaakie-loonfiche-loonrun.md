@@ -104,12 +104,12 @@ Neem minimaal deze regels op, met vaste codes en volgorde:
 |---|---|---|---|
 | `1000` | Brutoloon | bruto | `NettoResultaat.brutoloon` |
 | `1010` | VAA werkmiddelen | bruto | `VaaForfaitsWerkmiddelenResultaat` |
-| `1090` | Totaal bruto RSZ-basis | belastbaar | `NettoResultaat.brutoRszBasis` |
+| `1090` | Totaal bruto | belastbaar | `NettoResultaat.brutoRszBasis` |
 | `2000` | RSZ werknemer | rsz | `NettoResultaat.rsz.werknemerBijdrage` |
 | `2010` | Sociale werkbonus | rsz | `NettoResultaat.werkbonus.totaal` |
 | `2090` | Loon na RSZ en werkbonus | belastbaar | `NettoResultaat.belastbaarMaandloon` |
 | `2100` | VAA bedrijfswagen | belastbaar | `NettoResultaat.vaaBedrijfswagenPerMaand` |
-| `2190` | Belastbaar loon voor BV | belastbaar | `NettoResultaat.belastbaarMaandloonVoorBV` |
+| `2190` | Belastbaar loon | belastbaar | `NettoResultaat.belastbaarMaandloonVoorBV` |
 | `3000` | Bedrijfsvoorheffing | bv | `NettoResultaat.bv.bvPerMaand` |
 | `3010` | BV-vermindering kinderen | bv | `NettoResultaat.bv.verminderingKinderen` |
 | `3020` | BV-vermindering fiscaal alleenstaande | bv | `NettoResultaat.bv.verminderingAlleenstaandeKind` |

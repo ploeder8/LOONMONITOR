@@ -88,9 +88,9 @@ describe("LoonficheDocument rendering", () => {
 
     it("toont subtotalen in de loonfichetabel", () => {
         const html = renderToStaticMarkup(<LoonficheTabel regels={loonfiche.regels}/>);
-        expect(html).toContain("Totaal bruto RSZ-basis");
+        expect(html).toContain("Totaal bruto");
         expect(html).toContain("Loon na RSZ en werkbonus");
-        expect(html).toContain("Belastbaar loon voor BV");
+        expect(html).toContain("Belastbaar loon");
         expect(html).toContain("BV na verminderingen");
     });
 

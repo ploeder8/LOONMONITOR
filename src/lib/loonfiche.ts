@@ -20,6 +20,7 @@ export interface LoonficheRegel {
     sortering: number;
     datapunten?: Datapunt[];
     detail?: string;
+    bold?: boolean;
 }
 export interface LoonficheTotalen {
     cashBrutoloon: number;
@@ -47,6 +48,7 @@ interface RegelInput {
     sortering: number;
     datapunten?: Datapunt[];
     detail?: string;
+    bold?: boolean;
 }
 function r(input: RegelInput): LoonficheRegel {
     return { ...input };
@@ -131,11 +133,12 @@ function bouwBediendeLoonfiche(profiel: Profiel, refDatum: string, periode: stri
     }
     regels.push(r({
         code: "1090",
-        label: "Totaal bruto RSZ-basis",
+        label: "Totaal bruto",
         type: "subtotaal",
         bedrag: netto.brutoRszBasis,
         teken: "neutraal",
         sortering: 190,
+        bold: true,
     }));
     regels.push(r({
         code: "2000",
@@ -179,11 +182,12 @@ function bouwBediendeLoonfiche(profiel: Profiel, refDatum: string, periode: stri
     }
     regels.push(r({
         code: "2190",
-        label: "Belastbaar loon voor BV",
+        label: "Belastbaar loon",
         type: "subtotaal",
         bedrag: netto.belastbaarMaandloonVoorBV,
         teken: "neutraal",
         sortering: 390,
+        bold: true,
     }));
     regels.push(r({
         code: "3000",
