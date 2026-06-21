@@ -28,7 +28,7 @@ describe("LoonficheDocument rendering", () => {
         expect(html).toContain("LOONSTROOK");
         expect(html).toContain("Acme BV");
         expect(html).toContain("periode van 01.06.2026 tot 30.06.2026");
-        expect(html).toContain("uittreksel van de individuele rekening");
+        expect(html).not.toContain("uittreksel van de individuele rekening");
     });
 
     it("toont 'Netto te betalen'", () => {
