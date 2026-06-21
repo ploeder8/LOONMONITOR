@@ -119,6 +119,7 @@ function bouwBediendeLoonfiche(profiel: Profiel, refDatum: string, periode: stri
         bedrag: effectiefBruto,
         teken: "plus",
         sortering: 100,
+        bold: true,
     }));
     if (vaaWerkmiddelen.totaalPerMaand > 0) {
         regels.push(r({
