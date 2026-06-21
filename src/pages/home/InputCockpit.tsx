@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import { Building2, Briefcase, Car, Euro, Gift, Receipt, Shield, User } from "lucide-react";
+import { Building2, Briefcase, Car, Euro, Gift, Receipt, Shield, User, Wallet } from "lucide-react";
 import { Banner } from "@/components/Banner";
 import { CockpitAccordion } from "@/components/CockpitAccordion";
 import { CockpitCard } from "@/components/CockpitCard";
@@ -8,6 +8,7 @@ import { FormField, inputClass, selectClass } from "@/components/Field";
 import type { BrutolocheckResult } from "@/lib/baremas";
 import { formatEUR } from "@/lib/money";
 import { aantalWeekdagenInMaand, percentageNaarTewerkstellingsbreuk, tewerkstellingsbreukNaarPercentage, type BaremaCat, type BerekeningsRichting, type BonusPeriode, type GezinsType, type Profiel, type Schaal, type Statuut, type StudentenCat, } from "@/lib/profiel";
+import { OnkostenvergoedingenContent } from "@/pages/home/OnkostenvergoedingenContent";
 import { berekenBaremaInlineCheck } from "@/lib/profielBerekeningen";
 import { MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026 } from "@/lib/werkgeverskost";
 import { HelpTooltip, NumeriekeInput } from "@/pages/home/FormControls";
@@ -267,10 +268,6 @@ function BrutoloonCard({ profiel, set, onChangeRichting }: {
 
         {profiel.statuut === "bediende" && <BaremaInlineCheck profiel={profiel}/>}
 
-        <FormField label={<>Onkostenvergoedingen (€/m) <HelpTooltip text="Vrijgestelde netto-vergoeding: verhoogt nettoloon en werkgeverskost, zonder RSZ/BV-basis te wijzigen."/></>}>
-          <NumeriekeInput className={inputClass} step="0.01" min={0} value={profiel.onkostenvergoedingPerMaand} onValueChange={(waarde) => set("onkostenvergoedingPerMaand", waarde)}/>
-        </FormField>
-
       </div>
     </CockpitCard>);
 }
@@ -525,6 +522,10 @@ export function InputCockpit({ profiel, set, onChangeRichting }: {
             <ExtraLooncomponentenContent profiel={profiel} set={set}/>
           </Subsection>
         </div>
+      </CockpitAccordion>
+
+      <CockpitAccordion title="Onkostenvergoedingen" subtitle="Forfaitaire kostenvergoedingen vrijgesteld van RSZ" icon={<Wallet size={16}/>}>
+        <OnkostenvergoedingenContent profiel={profiel} set={set}/>
       </CockpitAccordion>
 
     </div>);

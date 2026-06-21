@@ -3,8 +3,9 @@ import type { JaarcomponentNetto } from "@/lib/jaaroverzicht";
 import { round2 } from "@/lib/money";
 import { refDatumVoorMaand, type Profiel } from "@/lib/profiel";
 import { generatieDatumLabel, profielPeriodeLabel, statuutLabel } from "@/lib/profielLabels";
-import { berekenNettoVoorProfiel, berekenWerkgeverskostVoorProfiel, berekenJaaroverzichtVoorProfiel, berekenVaaWerkmiddelenVoorProfiel, berekenMobiliteitVoorProfiel, berekenLoonwigVoorProfielResultaat, } from "@/lib/profielBerekeningen";
+import { berekenNettoVoorProfiel, berekenWerkgeverskostVoorProfiel, berekenJaaroverzichtVoorProfiel, berekenVaaWerkmiddelenVoorProfiel, berekenMobiliteitVoorProfiel, berekenLoonwigVoorProfielResultaat, berekenOnkostenvergoedingVoorProfiel, } from "@/lib/profielBerekeningen";
 import type { VaaForfaitsWerkmiddelenResultaat } from "@/lib/vaaForfaits";
+import type { OnkostenvergoedingResultaat } from "@/lib/onkostenvergoeding";
 
 interface WerknemerOverzichtProps {
     profiel: Profiel;
@@ -26,6 +27,7 @@ export function WerknemerOverzicht({ profiel }: WerknemerOverzichtProps) {
     let loonwigPct: number | null = null;
     let jaaroverzicht = null;
     let vaaWerkmiddelen: VaaForfaitsWerkmiddelenResultaat | null = null;
+    let onkosten: OnkostenvergoedingResultaat | null = null;
 
     if (profiel.statuut === "bediende") {
         try {
@@ -35,6 +37,7 @@ export function WerknemerOverzicht({ profiel }: WerknemerOverzichtProps) {
             wgk = berekenWerkgeverskostVoorProfiel(profiel, refDatum, vaaWerkmiddelen, mobiliteit);
             loonwigPct = berekenLoonwigVoorProfielResultaat(wgk, netto);
             jaaroverzicht = berekenJaaroverzichtVoorProfiel(profiel, refDatum, netto, wgk, vaaWerkmiddelen, mobiliteit);
+            onkosten = berekenOnkostenvergoedingVoorProfiel(profiel, refDatum);
         }
         catch {
             // Bij berekeningsfouten tonen we het overzicht zonder resultaten.
@@ -128,7 +131,7 @@ export function WerknemerOverzicht({ profiel }: WerknemerOverzichtProps) {
                 marginBottom: 24,
             }}>
               <DocumentSection title="Bruto Netto op maandbasis" className="wo-section">
-                <CompactTable rows={maakNettoMaandRijen(profiel, netto, vaaWerkmiddelen)}/>
+                <CompactTable rows={maakNettoMaandRijen(profiel, netto, vaaWerkmiddelen, onkosten)}/>
               </DocumentSection>
               <DocumentSection title="Loonkost op maandbasis" className="wo-section">
                 <CompactTable rows={maakWerkgeverskostMaandRijen(wgk)}/>
@@ -189,7 +192,7 @@ export function WerknemerOverzicht({ profiel }: WerknemerOverzichtProps) {
     </ProFormaDocument>);
 }
 
-function maakNettoMaandRijen(profiel: Profiel, netto: Exclude<ReturnType<typeof berekenNettoVoorProfiel>, null>, vaaWerkmiddelen: VaaForfaitsWerkmiddelenResultaat | null) {
+function maakNettoMaandRijen(profiel: Profiel, netto: Exclude<ReturnType<typeof berekenNettoVoorProfiel>, null>, vaaWerkmiddelen: VaaForfaitsWerkmiddelenResultaat | null, onkosten: OnkostenvergoedingResultaat | null) {
     const totaalTerugnameVaa = netto.vaaBedrijfswagenPerMaand + netto.vaaRszPlichtigPerMaand;
     const rows = [
         { label: "Brutoloon", bedrag: netto.brutoloon },
@@ -213,9 +216,7 @@ function maakNettoMaandRijen(profiel: Profiel, netto: Exclude<ReturnType<typeof 
         ...(netto.hospitalisatieEigenBijdrage > 0
             ? [{ label: "Hospitalisatie (eigen bijdrage)", bedrag: -netto.hospitalisatieEigenBijdrage }]
             : []),
-        ...(netto.onkostenvergoedingPerMaand > 0
-            ? [{ label: "Onkostenvergoedingen", bedrag: netto.onkostenvergoedingPerMaand }]
-            : []),
+        ...(onkosten?.lijnen ?? []).map((lijn) => ({ label: lijn.label, bedrag: lijn.maandBedrag })),
         ...(netto.woonwerkNettoVrijgesteldPerMaand > 0
             ? [{ label: "Woon-werkvergoeding (netto vrijgesteld)", bedrag: netto.woonwerkNettoVrijgesteldPerMaand }]
             : []),

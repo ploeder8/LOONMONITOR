@@ -278,6 +278,11 @@ describe("Netto-overzicht", () => {
         const html = renderToStaticMarkup(createElement(HomePage));
         expect(html).toContain("Extra looncomponenten");
     });
+    it("toont de onkostenvergoedingen-accordion", () => {
+        const html = renderToStaticMarkup(createElement(HomePage));
+        expect(html).toContain("Onkostenvergoedingen");
+        expect(html).toContain("Forfaitaire kostenvergoedingen vrijgesteld van RSZ");
+    });
     it("toont standaard geen nettoloon inclusief maaltijdcheques", () => {
         const html = renderToStaticMarkup(createElement(HomePage));
         const tekst = html.replace(/\u00a0/g, " ");

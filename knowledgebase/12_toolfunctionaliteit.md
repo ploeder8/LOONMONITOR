@@ -57,6 +57,13 @@ De invoer is opgedeeld in twee hoofdsecties: **werkgever** en **werknemer**.
   - *Brutoloon*: bruto maandloon of gewenst nettoloon, met de bruto/netto-berekeningsrichting direct in deze kaart;
   - *Woon-werkverkeer*: fiets, privéwagen, bus/tram/metro, trein en bedrijfswagen/VAA;
   - *Extra looncomponenten*: verzekeringen, maaltijdcheques, VAA-werkmiddelen en bonus.
+- **Onkostenvergoedingen** (aparte accordion): forfaitaire kostenvergoedingen vrijgesteld van RSZ. Per categorie kan de gebruiker:
+  - aanduiden of deze actief is;
+  - het wettelijk forfait-maximum zien (bijv. parking € 15/maand, maaltijd € 9/dag, kilometervergoeding € 0,4571/km);
+  - het forfait overschrijven met een eigen bedrag;
+  - voor dagafhankelijke vergoedingen het aantal dagen aanpassen;
+  - voor kilometervergoeding het aantal kilometers invullen.
+  Ondersteunde categorieën: parking, carwash, garage, maaltijd, baan, internet, thuiswerk en kilometer. Het forfait voor mei/juni 2026 is nog niet officieel gecommuniceerd door de RSZ; Jaakie gebruikt dan voorlopig het meest recente bevestigde tarief (retroactief april 2026: € 0,4571/km) en toont een waarschuwing.
 
 De vroegere bouw-subsetoptie voor een aparte 1,80% aanvullende pensioenbijdrage is niet langer zichtbaar of actief. Oude CSV-profielen met `bouwVlag` blijven inleesbaar, maar Jaakie telt geen aparte bouwbijdrage bovenop de globale werkgevers-RSZ.
 
@@ -77,7 +84,7 @@ De belangrijkste modules zijn:
 - `netto.ts` voor bruto naar netto;
 - `nettoNaarBruto.ts` voor inverse berekening;
 - `werkgeverskost.ts` voor totale werkgeverskost en loonwig;
-- voordeelmodules voor eindejaarspremie, jaarpremie, ecocheques, fietsvergoeding, woon-werkverkeer, trein en VAA.
+- voordeelmodules voor eindejaarspremie, jaarpremie, ecocheques, fietsvergoeding, woon-werkverkeer, trein, VAA en onkostenvergoedingen.
 
 Voor jaarcomponenten gebruikt Jaakie de bijzondere BV-schaal van Bijlage III:
 eindejaarspremie, sectorale jaarpremie en dubbel vakantiegeld krijgen een tarief op basis van het normale refertejaarloon, terwijl eventuele kindvrijstelling of kindvermindering de aparte regels voor exceptionele vergoedingen volgt. De gewone maandelijkse BV-kindvermindering wordt niet opnieuw rechtstreeks afgetrokken van deze jaarcomponenten. De sectorale PC 200-jaarpremie gebruikt dezelfde bijzondere BV-kolom als de eindejaarspremie. Dubbel vakantiegeld is 92% van het brutomaandloon.

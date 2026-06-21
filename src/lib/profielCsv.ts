@@ -18,8 +18,14 @@ export function bouwCsvExportRij({ profiel, commentaar, }: {
 }): Record<string, CsvWaarde> {
     const outputs = berekenProfielKernOutputs(profiel);
     const rij: Record<string, CsvWaarde> = {};
-    for (const kolom of INPUT_KOLOMMEN)
-        rij[kolom] = profiel[kolom];
+    for (const kolom of INPUT_KOLOMMEN) {
+        if (kolom === "onkostenCategorieen") {
+            rij[kolom] = JSON.stringify(profiel[kolom]);
+        }
+        else {
+            rij[kolom] = profiel[kolom] as CsvWaarde;
+        }
+    }
     rij.commentaar = commentaar;
     rij.output_bruto = outputs.bruto;
     rij.output_netto = outputs.netto;
@@ -98,6 +104,14 @@ function isInputKolom(kolom: string): kolom is keyof Profiel {
     return Object.prototype.hasOwnProperty.call(DEFAULTS, kolom);
 }
 function parseProfielWaarde<K extends keyof Profiel>(kolom: K, waarde: string): Profiel[K] {
+    if (kolom === "onkostenCategorieen") {
+        try {
+            return JSON.parse(waarde) as Profiel[K];
+        }
+        catch {
+            return DEFAULTS[kolom] as Profiel[K];
+        }
+    }
     const voorbeeld = DEFAULTS[kolom];
     if (typeof voorbeeld === "boolean")
         return parseBoolean(waarde) as Profiel[K];

@@ -25,6 +25,8 @@ import { appendLoonrunInputs, readLoonrunInputs, writeLoonrunInputs } from "@/li
 import { formatEUR } from "@/lib/money";
 import { DEFAULTS, normaliseerProfiel, type Profiel } from "@/lib/profiel";
 import { useSharedProfiel } from "@/lib/useSharedProfiel";
+import { OnkostenvergoedingenContent } from "@/pages/home/OnkostenvergoedingenContent";
+import type { ProfielSetter, ProfielUpdate } from "@/pages/home/types";
 
 interface LoonmotorPageProps {
   initialDossiers?: LoonmotorDossier[];
@@ -782,10 +784,21 @@ function MedewerkerModal({ bedrijf, onClose, onSave }: {
               <FormField label="Groepsverzekering eigen bijdrage">
                 <input className={inputClass} type="number" value={profiel.groepsverzekeringEigenBijdrage} onChange={(event) => setProfiel((prev) => ({ ...prev, groepsverzekeringEigenBijdrage: Number(event.target.value) }))} />
               </FormField>
-              <FormField label="Onkostenvergoeding/maand">
-                <input className={inputClass} type="number" value={profiel.onkostenvergoedingPerMaand} onChange={(event) => setProfiel((prev) => ({ ...prev, onkostenvergoedingPerMaand: Number(event.target.value) }))} />
-              </FormField>
             </div>
+          </section>
+
+          <section>
+            <SectionTitle icon={<Database size={16} />} title="Onkostenvergoedingen" />
+            <OnkostenvergoedingenContent profiel={profiel} set={((kOfUpdate: keyof Profiel | ProfielUpdate, v?: Profiel[keyof Profiel]) => {
+              setProfiel((prev) => {
+                const basis = normaliseerProfiel(prev);
+                if (typeof kOfUpdate === "function")
+                  return kOfUpdate(basis);
+                if (typeof kOfUpdate === "object")
+                  return { ...basis, ...kOfUpdate };
+                return { ...basis, [kOfUpdate]: v };
+              });
+            }) as ProfielSetter}/>
           </section>
         </div>
 
