@@ -9,6 +9,22 @@ export type Statuut = "bediende" | "student";
 export type BeroepskostMethode = "forfaitair" | "reeel";
 export type BerekeningsRichting = "bruto_naar_netto" | "netto_naar_bruto";
 export type BonusPeriode = "maand" | "jaar";
+export type OnkostenCategorieKey =
+    | "parking"
+    | "carwash"
+    | "garage"
+    | "maaltijd"
+    | "baan"
+    | "internet"
+    | "thuiswerk"
+    | "kilometer";
+export interface OnkostenCategorie {
+    actief: boolean;
+    forfaitBedrag: number;
+    overrideBedrag: number | null;
+    aantalDagen: number;
+    aantalKm: number;
+}
 export interface Profiel {
     berekeningsRichting: BerekeningsRichting;
     statuut: Statuut;
@@ -58,7 +74,8 @@ export interface Profiel {
     maaltijdchequeWerknemersbijdragePerDag: number;
     extraHospitalisatie: number;
     hospitalisatieEigenBijdrage: number;
-    onkostenvergoedingPerMaand: number;
+    onkostenvergoedingPerMaand: number; // deprecated: behouden voor backwards-compat CSV; wordt niet meer gebruikt in berekening
+    onkostenCategorieen: Record<OnkostenCategorieKey, OnkostenCategorie>;
     bonusBedrag: number;
     bonusPeriode: BonusPeriode;
     gemeentebelastingPct: number;
@@ -122,6 +139,7 @@ export const DEFAULTS: Profiel = {
     extraHospitalisatie: 0,
     hospitalisatieEigenBijdrage: 0,
     onkostenvergoedingPerMaand: 0,
+    onkostenCategorieen: maakOnkostenCategorieenDefault(),
     bonusBedrag: 0,
     bonusPeriode: "jaar",
     gemeentebelastingPct: 7.3,
@@ -150,6 +168,18 @@ export function aantalWeekdagenInMaand(berekeningsJaar: string, berekeningsMaand
     }
     return dagen;
 }
+export function maakOnkostenCategorieenDefault(arbeidsdagenPerMaand = aantalWeekdagenInMaand("2026", "06")): Record<OnkostenCategorieKey, OnkostenCategorie> {
+    return {
+        parking: { actief: false, forfaitBedrag: 15, overrideBedrag: null, aantalDagen: arbeidsdagenPerMaand, aantalKm: 0 },
+        carwash: { actief: false, forfaitBedrag: 15, overrideBedrag: null, aantalDagen: arbeidsdagenPerMaand, aantalKm: 0 },
+        garage: { actief: false, forfaitBedrag: 50, overrideBedrag: null, aantalDagen: arbeidsdagenPerMaand, aantalKm: 0 },
+        maaltijd: { actief: false, forfaitBedrag: 9, overrideBedrag: null, aantalDagen: arbeidsdagenPerMaand, aantalKm: 0 },
+        baan: { actief: false, forfaitBedrag: 10, overrideBedrag: null, aantalDagen: arbeidsdagenPerMaand, aantalKm: 0 },
+        internet: { actief: false, forfaitBedrag: 20, overrideBedrag: null, aantalDagen: arbeidsdagenPerMaand, aantalKm: 0 },
+        thuiswerk: { actief: false, forfaitBedrag: 160.99, overrideBedrag: null, aantalDagen: arbeidsdagenPerMaand, aantalKm: 0 },
+        kilometer: { actief: false, forfaitBedrag: 0.4571, overrideBedrag: null, aantalDagen: arbeidsdagenPerMaand, aantalKm: 0 },
+    };
+}
 export function refDatumVoorMaand(berekeningsJaar: string | undefined, berekeningsMaand: string | undefined): string {
     if (berekeningsMaand && /^\d{4}-\d{2}$/.test(berekeningsMaand)) {
         return `${berekeningsMaand}-01`;
@@ -157,18 +187,22 @@ export function refDatumVoorMaand(berekeningsJaar: string | undefined, berekenin
     return `${berekeningsJaar ?? DEFAULTS.berekeningsJaar}-${berekeningsMaand ?? DEFAULTS.berekeningsMaand}-01`;
 }
 export function normaliseerProfiel(profiel: Profiel): Profiel {
-    if (/^\d{4}-\d{2}$/.test(profiel.berekeningsMaand)) {
-        const [berekeningsJaar, berekeningsMaand] = profiel.berekeningsMaand.split("-");
+    const metDefaults = {
+        ...profiel,
+        onkostenCategorieen: profiel.onkostenCategorieen ?? maakOnkostenCategorieenDefault(profiel.arbeidsdagenPerMaand),
+    };
+    if (/^\d{4}-\d{2}$/.test(metDefaults.berekeningsMaand)) {
+        const [berekeningsJaar, berekeningsMaand] = metDefaults.berekeningsMaand.split("-");
         return {
-            ...profiel,
-            berekeningsJaar: profiel.berekeningsJaar ?? berekeningsJaar,
+            ...metDefaults,
+            berekeningsJaar: metDefaults.berekeningsJaar ?? berekeningsJaar,
             berekeningsMaand,
         };
     }
-    if (!profiel.berekeningsJaar) {
-        return { ...profiel, berekeningsJaar: DEFAULTS.berekeningsJaar };
+    if (!metDefaults.berekeningsJaar) {
+        return { ...metDefaults, berekeningsJaar: DEFAULTS.berekeningsJaar };
     }
-    return profiel;
+    return metDefaults;
 }
 export function heeftMaaltijdcheques(profiel: Pick<Profiel, "maaltijdchequesActief">): boolean {
     return profiel.maaltijdchequesActief;

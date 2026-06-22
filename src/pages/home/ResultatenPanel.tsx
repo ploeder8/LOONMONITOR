@@ -8,7 +8,7 @@ import type { JumpAnchor } from "@/components/ResultsSummaryStrip";
 import { BaremaBuitenSchaalError, DatapuntNietBruikbaar, DatapuntNietGeldigOpDatum, PC200DatasetError, } from "@/lib/errors";
 import { formatEUR } from "@/lib/money";
 import { heeftMaaltijdcheques, refDatumVoorMaand, tewerkstellingsbreukNaarPercentage, type Profiel, } from "@/lib/profiel";
-import { berekenBediendeLoonbasisVoorProfiel, berekenJaaroverzichtVoorProfiel, berekenLoonwigVoorProfielResultaat, berekenMaaltijdchequeWerkgeverskostVoorProfiel, berekenMobiliteitVoorProfiel, berekenNettoVoorProfiel, berekenProfielKernOutputs, berekenStudentenBaremaVoorProfiel, berekenVaaWerkmiddelenVoorProfiel, berekenWerkgeverskostVoorProfiel, } from "@/lib/profielBerekeningen";
+import { berekenBediendeLoonbasisVoorProfiel, berekenJaaroverzichtVoorProfiel, berekenLoonwigVoorProfielResultaat, berekenMaaltijdchequeWerkgeverskostVoorProfiel, berekenMobiliteitVoorProfiel, berekenNettoVoorProfiel, berekenOnkostenvergoedingVoorProfiel, berekenProfielKernOutputs, berekenStudentenBaremaVoorProfiel, berekenVaaWerkmiddelenVoorProfiel, berekenWerkgeverskostVoorProfiel, } from "@/lib/profielBerekeningen";
 import { NettoJaaroverzichtPanel, WerkgeverJaaroverzichtPanel } from "@/pages/home/JaaroverzichtPanelen";
 import { NettoPanel } from "@/pages/home/NettoPanelen";
 import { WerkgeverskostPanel } from "@/pages/home/WerkgeverskostPanel";
@@ -120,6 +120,7 @@ function bouwResultaten(p: Profiel): BouwResultaten {
             const vaaWerkmiddelen = berekenVaaWerkmiddelenVoorProfiel(p, refDatum);
             const netto = berekenNettoVoorProfiel(p, refDatum);
             const wgk = berekenWerkgeverskostVoorProfiel(p, refDatum, vaaWerkmiddelen, mobiliteit);
+            const onkosten = berekenOnkostenvergoedingVoorProfiel(p, refDatum);
             const jaaroverzicht = berekenJaaroverzichtVoorProfiel(p, refDatum, netto, wgk, vaaWerkmiddelen, mobiliteit);
             const wig = berekenLoonwigVoorProfielResultaat(wgk, netto);
             const maaltijdchequeWerkgeversaandeelPerDag = heeftMaaltijdcheques(p) ? p.maaltijdchequeWerkgeversaandeelPerDag : 0;
@@ -136,7 +137,7 @@ function bouwResultaten(p: Profiel): BouwResultaten {
                         alignItems: "stretch",
                         gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 460px), 1fr))",
                     }}>
-                        <NettoPanel resultaat={netto} vaaWerkmiddelen={vaaWerkmiddelen} maaltijdchequeWerkgeversaandeelPerDag={maaltijdchequeWerkgeversaandeelPerDag} gemeentebelastingPct={p.gemeentebelastingPct}/>
+                        <NettoPanel resultaat={netto} vaaWerkmiddelen={vaaWerkmiddelen} maaltijdchequeWerkgeversaandeelPerDag={maaltijdchequeWerkgeversaandeelPerDag} gemeentebelastingPct={p.gemeentebelastingPct} onkosten={onkosten}/>
                         <NettoJaaroverzichtPanel jaaroverzicht={jaaroverzicht} maaltijdchequeWerkgeversaandeelPerDag={maaltijdchequeWerkgeversaandeelPerDag} maaltijdchequeWerknemersbijdragePerDag={maaltijdchequeWerknemersbijdragePerDag} maaltijdchequeWerkdagenPerMaand={maaltijdchequeWerkdagenPerMaand}/>
                     </div>,
                 ],
@@ -159,8 +160,11 @@ function bouwResultaten(p: Profiel): BouwResultaten {
                             hospitalisatie: p.extraHospitalisatie,
                             ecocheques: 0,
                             woonwerk: mobiliteit.woonwerk.totaalVergoeding,
-                            onkostenvergoeding: p.onkostenvergoedingPerMaand,
+                            onkostenvergoeding: onkosten.totaal,
                         }}/>
+                        {onkosten.waarschuwingen.length > 0 && (<Banner kind="warning" title="Onkostenvergoeding">
+                          {onkosten.waarschuwingen.map((w, i) => (<div key={i}>{w}</div>))}
+                        </Banner>)}
                         <WerkgeverJaaroverzichtPanel jaaroverzicht={jaaroverzicht}/>
                     </div>,
                 ],

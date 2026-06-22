@@ -2,15 +2,17 @@ import { useState } from "react";
 import { AuditSourceGroup } from "@/components/AuditPanel";
 import { formatEUR, round2 } from "@/lib/money";
 import type { NettoResultaat } from "@/lib/netto";
+import type { OnkostenvergoedingResultaat } from "@/lib/onkostenvergoeding";
 import { berekenMaaltijdchequeWaarde } from "@/lib/profielBerekeningen";
 import type { VaaForfaitsWerkmiddelenResultaat } from "@/lib/vaaForfaits";
 import { HelpTooltip } from "@/pages/home/FormControls";
 import { NettoDetailRow, NettoRow, NettoSectionRow } from "@/pages/home/ResultRows";
-export function NettoPanel({ resultaat: r, vaaWerkmiddelen, maaltijdchequeWerkgeversaandeelPerDag, gemeentebelastingPct, }: {
+export function NettoPanel({ resultaat: r, vaaWerkmiddelen, maaltijdchequeWerkgeversaandeelPerDag, gemeentebelastingPct, onkosten, }: {
     resultaat: NettoResultaat;
     vaaWerkmiddelen?: VaaForfaitsWerkmiddelenResultaat;
     maaltijdchequeWerkgeversaandeelPerDag: number;
     gemeentebelastingPct: number;
+    onkosten?: OnkostenvergoedingResultaat;
 }) {
     const [bvDetailOpen, setBvDetailOpen] = useState(false);
     const [vaaDetailOpen, setVaaDetailOpen] = useState(false);
@@ -101,7 +103,7 @@ export function NettoPanel({ resultaat: r, vaaWerkmiddelen, maaltijdchequeWerkge
               </>} bedrag={r.bbsz.maandelijksBedrag}/>
           {r.maaltijdchequeWerknemersbijdrage > 0 && (<NettoRow label={`Maaltijdcheques werknemersbijdrage (${formatEUR(r.maaltijdchequeWerknemersbijdragePerDag)} × ${r.maaltijdchequeWerkdagen} dagen)`} bedrag={r.maaltijdchequeWerknemersbijdrage}/>)}
           {r.hospitalisatieEigenBijdrage > 0 && (<NettoRow label="Eigen bijdrage hospitalisatieverzekering" bedrag={r.hospitalisatieEigenBijdrage}/>)}
-          {r.onkostenvergoedingPerMaand > 0 && (<NettoRow label="Onkostenvergoedingen" bedrag={r.onkostenvergoedingPerMaand} prefix="+" dimmed/>)}
+          {onkosten && onkosten.lijnen.map((lijn) => (<NettoRow key={lijn.key} label={lijn.label} bedrag={lijn.maandBedrag} prefix="+" dimmed/>))}
           {r.woonwerkNettoVrijgesteldPerMaand > 0 && (<NettoRow label="Woon-werkvergoeding (netto vrijgesteld)" bedrag={r.woonwerkNettoVrijgesteldPerMaand} prefix="+" dimmed/>)}
           {toontTerugnameVaa && (<NettoRow label="Terugname VAA" bedrag={totaalTerugnameVaa} onToggle={() => setVaaDetailOpen(!vaaDetailOpen)} open={vaaDetailOpen}/>)}
           {toontTerugnameVaa && vaaDetailOpen && (<NettoDetailRow>

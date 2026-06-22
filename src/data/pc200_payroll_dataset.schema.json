@@ -321,7 +321,8 @@
             "bronverwijzing",
             "gestructureerde_overname",
             "samenvattend_met_bronverwijzing",
-            "intern"
+            "intern",
+            "schatting_op_basis_van_laatste_bekend_bedrag"
           ]
         },
         { "type": "null" }
@@ -338,7 +339,10 @@
             "jaarlijks",
             "per_prestatie",
             "wekelijks",
-            "kwartaal"
+            "kwartaal",
+            "per_dag",
+            "per_maand",
+            "per_km"
           ]
         },
         { "type": "null" }

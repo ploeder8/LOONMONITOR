@@ -5,7 +5,7 @@ import { safeGetValue } from "@/lib/periode";
 import { brutolocheck, lookupBarema, lookupStudentenbarema } from "@/lib/baremas";
 import type { Profiel, BerekeningsRichting } from "@/lib/profiel";
 import { refDatumVoorMaand, heeftMaaltijdcheques, } from "@/lib/profiel";
-import { berekenNettoVoorProfiel, berekenWerkgeverskostVoorProfiel, berekenMobiliteitVoorProfiel, berekenVaaWerkmiddelenVoorProfiel, berekenMaaltijdchequeWaarde, zoekBrutoVoorProfielDoelNetto, } from "@/lib/profielBerekeningen";
+import { berekenNettoVoorProfiel, berekenWerkgeverskostVoorProfiel, berekenMobiliteitVoorProfiel, berekenVaaWerkmiddelenVoorProfiel, berekenMaaltijdchequeWaarde, zoekBrutoVoorProfielDoelNetto, berekenOnkostenvergoedingVoorProfiel, } from "@/lib/profielBerekeningen";
 import type { NettoResultaat } from "@/lib/netto";
 import type { WerkgeverskostResultaat } from "@/lib/werkgeverskost";
 import { PC200DatasetError } from "@/lib/errors";
@@ -20,6 +20,7 @@ export interface LoonficheRegel {
     sortering: number;
     datapunten?: Datapunt[];
     detail?: string;
+    bold?: boolean;
 }
 export interface LoonficheTotalen {
     cashBrutoloon: number;
@@ -47,6 +48,7 @@ interface RegelInput {
     sortering: number;
     datapunten?: Datapunt[];
     detail?: string;
+    bold?: boolean;
 }
 function r(input: RegelInput): LoonficheRegel {
     return { ...input };
@@ -80,6 +82,10 @@ function bouwBediendeLoonfiche(profiel: Profiel, refDatum: string, periode: stri
     const vaaWerkmiddelen = berekenVaaWerkmiddelenVoorProfiel(profiel, refDatum);
     const netto = berekenNettoVoorProfiel(profiel, refDatum, effectiefBruto);
     const wgk = berekenWerkgeverskostVoorProfiel(profiel, refDatum, vaaWerkmiddelen, mobiliteit, effectiefBruto);
+    const onkosten = berekenOnkostenvergoedingVoorProfiel(profiel, refDatum);
+    if (onkosten.waarschuwingen.length > 0) {
+        waarschuwingen.push(...onkosten.waarschuwingen);
+    }
     const maaltijdchequesActief = heeftMaaltijdcheques(profiel);
     const maaltijdcheques = maaltijdchequesActief
         ? berekenMaaltijdchequeWaarde({
@@ -117,6 +123,7 @@ function bouwBediendeLoonfiche(profiel: Profiel, refDatum: string, periode: stri
         bedrag: effectiefBruto,
         teken: "plus",
         sortering: 100,
+        bold: true,
     }));
     if (vaaWerkmiddelen.totaalPerMaand > 0) {
         regels.push(r({
@@ -131,11 +138,12 @@ function bouwBediendeLoonfiche(profiel: Profiel, refDatum: string, periode: stri
     }
     regels.push(r({
         code: "1090",
-        label: "Totaal bruto RSZ-basis",
+        label: "Totaal bruto",
         type: "subtotaal",
         bedrag: netto.brutoRszBasis,
         teken: "neutraal",
         sortering: 190,
+        bold: true,
     }));
     regels.push(r({
         code: "2000",
@@ -179,11 +187,12 @@ function bouwBediendeLoonfiche(profiel: Profiel, refDatum: string, periode: stri
     }
     regels.push(r({
         code: "2190",
-        label: "Belastbaar loon voor BV",
+        label: "Belastbaar loon",
         type: "subtotaal",
         bedrag: netto.belastbaarMaandloonVoorBV,
         teken: "neutraal",
         sortering: 390,
+        bold: true,
     }));
     regels.push(r({
         code: "3000",
@@ -298,16 +307,17 @@ function bouwBediendeLoonfiche(profiel: Profiel, refDatum: string, periode: stri
             datapunten: mobiliteit.woonwerk.datapunten,
         }));
     }
-    if (netto.onkostenvergoedingPerMaand > 0) {
+    onkosten.lijnen.forEach((lijn, index) => {
         regels.push(r({
-            code: "5010",
-            label: "Onkostenvergoeding",
+            code: `501${index}`,
+            label: lijn.label,
             type: "netto",
-            bedrag: netto.onkostenvergoedingPerMaand,
+            bedrag: lijn.maandBedrag,
             teken: "plus",
-            sortering: 610,
+            sortering: 610 + index,
+            datapunten: [lijn.datapunt],
         }));
-    }
+    });
     if (netto.vaaBedrijfswagenPerMaand > 0) {
         regels.push(r({
             code: "6000",
@@ -390,6 +400,10 @@ function bouwStudentenLoonfiche(profiel: Profiel, refDatum: string, periode: str
     const woonwerkVrijgesteld = round2((mobiliteit.woonwerk.componenten.trein?.vergoeding ?? 0) +
         (mobiliteit.woonwerk.componenten.busTramMetro?.vergoeding ?? 0) +
         Math.min(mobiliteit.woonwerk.componenten.fiets?.vergoeding ?? 0, round2(3700 / 12)));
+    const onkosten = berekenOnkostenvergoedingVoorProfiel(profiel, refDatum);
+    if (onkosten.waarschuwingen.length > 0) {
+        waarschuwingen.push(...onkosten.waarschuwingen);
+    }
     const bruto = barema.maandloonEUR;
     const maaltijdchequeWerknemersbijdrage = maaltijdcheques
         ? round2(profiel.maaltijdchequeWerknemersbijdragePerDag * maaltijdcheques.werkdagen)
@@ -400,7 +414,7 @@ function bouwStudentenLoonfiche(profiel: Profiel, refDatum: string, periode: str
         : 0;
     const netto = round2(bruto +
         woonwerkVrijgesteld +
-        profiel.onkostenvergoedingPerMaand -
+        onkosten.totaal -
         maaltijdchequeWerknemersbijdrage -
         profiel.hospitalisatieEigenBijdrage);
     const regels: LoonficheRegel[] = [];
@@ -423,16 +437,17 @@ function bouwStudentenLoonfiche(profiel: Profiel, refDatum: string, periode: str
             sortering: 600,
         }));
     }
-    if (profiel.onkostenvergoedingPerMaand > 0) {
+    onkosten.lijnen.forEach((lijn, index) => {
         regels.push(r({
-            code: "5010",
-            label: "Onkostenvergoeding",
+            code: `501${index}`,
+            label: lijn.label,
             type: "netto",
-            bedrag: profiel.onkostenvergoedingPerMaand,
+            bedrag: lijn.maandBedrag,
             teken: "plus",
-            sortering: 610,
+            sortering: 610 + index,
+            datapunten: [lijn.datapunt],
         }));
-    }
+    });
     if (maaltijdcheques && maaltijdchequeWerknemersbijdrage > 0) {
         regels.push(r({
             code: "4010",

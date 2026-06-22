@@ -3,6 +3,7 @@ import { berekenWoonwerkVerkeer, type WoonwerkVerkeerResultaat, } from "@/lib/wo
 import { vaaBedrijfswagen, type VaaBedrijfswagenResultaat, } from "@/lib/vaaBedrijfswagen";
 import { vaaForfaitsWerkmiddelen, type VaaForfaitsWerkmiddelenResultaat, } from "@/lib/vaaForfaits";
 import { berekenJaaroverzicht, type JaaroverzichtResultaat, } from "@/lib/jaaroverzicht";
+import { berekenOnkostenvergoeding, type OnkostenvergoedingResultaat } from "@/lib/onkostenvergoeding";
 import { berekenNetto, type NettoInput, type NettoResultaat } from "@/lib/netto";
 import { zoekBrutoVoorNetto, type NettoNaarBrutoResultaat, } from "@/lib/nettoNaarBruto";
 import { MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026, werkgeverskost, loonwig, type WerkgeverskostResultaat, } from "@/lib/werkgeverskost";
@@ -31,6 +32,13 @@ export interface ProfielKernOutputs {
     loonwigPct: number | null;
     nettoJaar: number | null;
     werkgeverskostJaar: number | null;
+}
+export function berekenOnkostenvergoedingVoorProfiel(p: Profiel, refDatum: string): OnkostenvergoedingResultaat {
+    return berekenOnkostenvergoeding({
+        categorieen: p.onkostenCategorieen,
+        arbeidsdagenPerMaand: p.arbeidsdagenPerMaand,
+        refDatum,
+    });
 }
 export function berekenMaaltijdchequeWaarde({ werkgeversaandeelPerDag, werknemersbijdragePerDag, werkdagen, }: {
     werkgeversaandeelPerDag: number;
@@ -173,7 +181,7 @@ function bouwNettoInputVoorProfiel(p: Profiel, refDatum: string, brutoloon: numb
             : 0,
         maaltijdchequeWerkdagen: maaltijdchequesActief ? p.arbeidsdagenPerMaand : 0,
         hospitalisatieEigenBijdrage: p.hospitalisatieEigenBijdrage,
-        onkostenvergoedingPerMaand: p.onkostenvergoedingPerMaand,
+        onkostenvergoedingPerMaand: berekenOnkostenvergoedingVoorProfiel(p, refDatum).totaal,
         woonwerkVergoedingPerMaand: berekenWoonwerkBelastbaarVoorBV(mobiliteit.woonwerk),
         woonwerkNettoVrijgesteldPerMaand: berekenWoonwerkNettoVrijgesteld(mobiliteit.woonwerk),
         woonwerkVrijgesteldPerMaand: berekenWoonwerkVrijgesteld(mobiliteit.woonwerk, p.woonwerkPrivewagenBeroepskostMethode),
@@ -203,7 +211,7 @@ export function berekenWerkgeverskostVoorProfiel(p: Profiel, refDatum: string, v
         extraEcocheques: 0,
         vaaRszPlichtigPerMaand: resolvedVaaWerkmiddelen.totaalPerMaand,
         vaaPerMaand,
-        onkostenvergoedingPerMaand: p.onkostenvergoedingPerMaand,
+        onkostenvergoedingPerMaand: berekenOnkostenvergoedingVoorProfiel(p, refDatum).totaal,
         woonwerkVergoedingPerMaand: resolvedMobiliteit.woonwerk.totaalVergoeding,
         doelgroepverminderingEersteAanwervingen: p.doelgroepverminderingEersteAanwervingen,
     });

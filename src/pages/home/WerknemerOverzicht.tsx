@@ -3,8 +3,9 @@ import type { JaarcomponentNetto } from "@/lib/jaaroverzicht";
 import { round2 } from "@/lib/money";
 import { refDatumVoorMaand, type Profiel } from "@/lib/profiel";
 import { generatieDatumLabel, profielPeriodeLabel, statuutLabel } from "@/lib/profielLabels";
-import { berekenNettoVoorProfiel, berekenWerkgeverskostVoorProfiel, berekenJaaroverzichtVoorProfiel, berekenVaaWerkmiddelenVoorProfiel, berekenMobiliteitVoorProfiel, berekenLoonwigVoorProfielResultaat, } from "@/lib/profielBerekeningen";
+import { berekenNettoVoorProfiel, berekenWerkgeverskostVoorProfiel, berekenJaaroverzichtVoorProfiel, berekenVaaWerkmiddelenVoorProfiel, berekenMobiliteitVoorProfiel, berekenLoonwigVoorProfielResultaat, berekenOnkostenvergoedingVoorProfiel, } from "@/lib/profielBerekeningen";
 import type { VaaForfaitsWerkmiddelenResultaat } from "@/lib/vaaForfaits";
+import type { OnkostenvergoedingResultaat } from "@/lib/onkostenvergoeding";
 
 interface WerknemerOverzichtProps {
     profiel: Profiel;
@@ -26,6 +27,7 @@ export function WerknemerOverzicht({ profiel }: WerknemerOverzichtProps) {
     let loonwigPct: number | null = null;
     let jaaroverzicht = null;
     let vaaWerkmiddelen: VaaForfaitsWerkmiddelenResultaat | null = null;
+    let onkosten: OnkostenvergoedingResultaat | null = null;
 
     if (profiel.statuut === "bediende") {
         try {
@@ -35,6 +37,7 @@ export function WerknemerOverzicht({ profiel }: WerknemerOverzichtProps) {
             wgk = berekenWerkgeverskostVoorProfiel(profiel, refDatum, vaaWerkmiddelen, mobiliteit);
             loonwigPct = berekenLoonwigVoorProfielResultaat(wgk, netto);
             jaaroverzicht = berekenJaaroverzichtVoorProfiel(profiel, refDatum, netto, wgk, vaaWerkmiddelen, mobiliteit);
+            onkosten = berekenOnkostenvergoedingVoorProfiel(profiel, refDatum);
         }
         catch {
             // Bij berekeningsfouten tonen we het overzicht zonder resultaten.
@@ -55,6 +58,9 @@ export function WerknemerOverzicht({ profiel }: WerknemerOverzichtProps) {
             : profiel.werkgeverGemeente || null,
     ].filter(Boolean).join(", ");
 
+    const heeftWerknemerInfo = Boolean(profiel.werknemerNaam || profiel.werknemerRijksregister || profiel.werknemerReferentie);
+    const heeftWerkgeverInfo = Boolean(profiel.werkgeverNaam || profiel.werkgeverOndernemingsnummer || werkgeverAdres);
+
     return (<ProFormaDocument className="werknemer-overzicht-document" contentClassName="wo-content">
       <DocumentHeader className="wo-header" title="Loonoverzicht" periode={periode} marginBottom={20} details={<>
             <div style={{ fontSize: 12, color: "var(--color-text-muted)", marginTop: 2 }}>
@@ -65,24 +71,42 @@ export function WerknemerOverzicht({ profiel }: WerknemerOverzichtProps) {
             </div>
           </>}/>
 
-      {(profiel.werknemerNaam || profiel.werkgeverNaam) && (<div className="wo-metadata" style={{
+      {(heeftWerknemerInfo || heeftWerkgeverInfo) && (<div className="wo-metadata" style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(2, 1fr)",
-                gap: 12,
+                gridTemplateColumns: heeftWerknemerInfo && heeftWerkgeverInfo ? "repeat(2, 1fr)" : "1fr",
+                gap: 16,
                 marginBottom: 20,
             }}>
-            {profiel.werknemerNaam
-                ? (<MetaCard label="Werknemer" value={profiel.werknemerNaam}/>)
-                : (<MetaCard label="Werknemer" value="—"/>)}
-            {profiel.werkgeverNaam
-                ? (<MetaCard label="Werkgever" value={profiel.werkgeverNaam}/>)
-                : profiel.werkgeverOndernemingsnummer
-                    ? (<MetaCard label="Werkgever" value="—"/>)
-                    : null}
-            {profiel.werknemerReferentie && (<MetaCard label="Referentie" value={profiel.werknemerReferentie}/>)}
-            {profiel.werkgeverOndernemingsnummer && (<MetaCard label="Ondernemingsnummer" value={profiel.werkgeverOndernemingsnummer}/>)}
-            {profiel.werknemerRijksregister && (<MetaCard label="Rijksregisternummer" value={profiel.werknemerRijksregister}/>)}
-            {werkgeverAdres && (<MetaCard label="Adres werkgever" value={werkgeverAdres}/>)}
+            {heeftWerknemerInfo && (<div className="wo-metadata-column" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <div style={{
+                        fontFamily: "var(--font-display)",
+                        fontSize: 11,
+                        fontWeight: 800,
+                        letterSpacing: "0.04em",
+                        textTransform: "uppercase",
+                        color: "var(--color-text-muted)",
+                    }}>
+                  Werknemer
+                </div>
+                <MetaCard label="Naam" value={profiel.werknemerNaam || "—"}/>
+                {profiel.werknemerRijksregister && (<MetaCard label="Rijksregisternummer" value={profiel.werknemerRijksregister}/>)}
+                {profiel.werknemerReferentie && (<MetaCard label="Referentie" value={profiel.werknemerReferentie}/>)}
+              </div>)}
+            {heeftWerkgeverInfo && (<div className="wo-metadata-column" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <div style={{
+                        fontFamily: "var(--font-display)",
+                        fontSize: 11,
+                        fontWeight: 800,
+                        letterSpacing: "0.04em",
+                        textTransform: "uppercase",
+                        color: "var(--color-text-muted)",
+                    }}>
+                  Werkgever
+                </div>
+                <MetaCard label="Naam" value={profiel.werkgeverNaam || "—"}/>
+                {profiel.werkgeverOndernemingsnummer && (<MetaCard label="Ondernemingsnummer" value={profiel.werkgeverOndernemingsnummer}/>)}
+                {werkgeverAdres && (<MetaCard label="Adres" value={werkgeverAdres}/>)}
+              </div>)}
           </div>)}
 
       {isStudent && (<div style={{
@@ -107,7 +131,7 @@ export function WerknemerOverzicht({ profiel }: WerknemerOverzichtProps) {
                 marginBottom: 24,
             }}>
               <DocumentSection title="Bruto Netto op maandbasis" className="wo-section">
-                <CompactTable rows={maakNettoMaandRijen(profiel, netto, vaaWerkmiddelen)}/>
+                <CompactTable rows={maakNettoMaandRijen(profiel, netto, vaaWerkmiddelen, onkosten)}/>
               </DocumentSection>
               <DocumentSection title="Loonkost op maandbasis" className="wo-section">
                 <CompactTable rows={maakWerkgeverskostMaandRijen(wgk)}/>
@@ -168,7 +192,7 @@ export function WerknemerOverzicht({ profiel }: WerknemerOverzichtProps) {
     </ProFormaDocument>);
 }
 
-function maakNettoMaandRijen(profiel: Profiel, netto: Exclude<ReturnType<typeof berekenNettoVoorProfiel>, null>, vaaWerkmiddelen: VaaForfaitsWerkmiddelenResultaat | null) {
+function maakNettoMaandRijen(profiel: Profiel, netto: Exclude<ReturnType<typeof berekenNettoVoorProfiel>, null>, vaaWerkmiddelen: VaaForfaitsWerkmiddelenResultaat | null, onkosten: OnkostenvergoedingResultaat | null) {
     const totaalTerugnameVaa = netto.vaaBedrijfswagenPerMaand + netto.vaaRszPlichtigPerMaand;
     const rows = [
         { label: "Brutoloon", bedrag: netto.brutoloon },
@@ -192,9 +216,7 @@ function maakNettoMaandRijen(profiel: Profiel, netto: Exclude<ReturnType<typeof 
         ...(netto.hospitalisatieEigenBijdrage > 0
             ? [{ label: "Hospitalisatie (eigen bijdrage)", bedrag: -netto.hospitalisatieEigenBijdrage }]
             : []),
-        ...(netto.onkostenvergoedingPerMaand > 0
-            ? [{ label: "Onkostenvergoedingen", bedrag: netto.onkostenvergoedingPerMaand }]
-            : []),
+        ...(onkosten?.lijnen ?? []).map((lijn) => ({ label: lijn.label, bedrag: lijn.maandBedrag })),
         ...(netto.woonwerkNettoVrijgesteldPerMaand > 0
             ? [{ label: "Woon-werkvergoeding (netto vrijgesteld)", bedrag: netto.woonwerkNettoVrijgesteldPerMaand }]
             : []),

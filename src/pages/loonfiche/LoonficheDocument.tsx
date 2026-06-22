@@ -52,9 +52,6 @@ export function LoonficheDocument({ loonfiche }: LoonficheDocumentProps) {
                         <div className="loonfiche-periode">
                             {periodeVanTot(p.berekeningsJaar, p.berekeningsMaand)}
                         </div>
-                        <div className="loonfiche-subtitle">
-                            uittreksel van de individuele rekening, zorgvuldig bewaren
-                        </div>
                     </div>
                 </header>
 
