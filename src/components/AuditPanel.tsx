@@ -100,7 +100,7 @@ export function AuditPanel({ datapunt, compact = false }: {
             background: compact ? "var(--color-surface)" : "var(--color-navy-50)",
             fontSize: compact ? 12 : 13,
         }}>
-      <button type="button" aria-expanded={open} onClick={() => setLocalOpen(!open)} style={{
+      <button type="button" aria-expanded={open} onClick={() => setLocalOpen(!open)} className="audit-source-toggle" style={{
             display: "flex",
             width: "100%",
             alignItems: "center",
@@ -112,7 +112,7 @@ export function AuditPanel({ datapunt, compact = false }: {
             border: "none",
             cursor: "pointer",
             transition: "background 0.15s",
-        }} onMouseEnter={(e) => (e.currentTarget.style.background = "var(--color-primary-soft)")} onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+        }}>
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 5, minWidth: 0 }}>
           <span style={{
             fontFamily: "var(--font-mono)",

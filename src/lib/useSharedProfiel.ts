@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { DEFAULTS, normaliseerProfiel, type Profiel } from "@/lib/profiel";
 const STORAGE_KEY = "jaakie:profiel";
 export const PROFIEL_STORAGE_SCOPE = "venster";
@@ -21,6 +21,7 @@ function writeProfielToStorage(profiel: Profiel): void {
     catch {
     }
 }
+const STORAGE_WRITE_DEBOUNCE_MS = 300;
 export function useSharedProfiel(): [
     Profiel,
     (p: Profiel | ((prev: Profiel) => Profiel)) => void
@@ -34,8 +35,19 @@ export function useSharedProfiel(): [
             return normaliseerProfiel(next);
         });
     }, []);
+    const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     useEffect(() => {
-        writeProfielToStorage(profiel);
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+        timeoutRef.current = setTimeout(() => {
+            writeProfielToStorage(profiel);
+        }, STORAGE_WRITE_DEBOUNCE_MS);
+        return () => {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+        };
     }, [profiel]);
     return [profiel, setProfiel];
 }

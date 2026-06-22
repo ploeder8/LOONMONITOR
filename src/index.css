@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 @import "./branding/brand.css";
 
 html, body, #root {
@@ -309,6 +308,7 @@ h1, h2, h3, h4 {
   justify-content: center;
   justify-self: center;
   min-width: max-content;
+  padding: 5px 0 6px;
 }
 
 .direction-toggle-track {
@@ -1538,6 +1538,22 @@ h1, h2, h3, h4 {
   grid-template-columns: repeat(4, 1fr);
 }
 
+
+.cockpit-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.audit-source-toggle:hover {
+  background: var(--color-primary-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-chat-loading svg,
+  .hero-summary-value {
+    animation: none !important;
+    transition: none !important;
+  }
+}
 
 @keyframes spin {
   from {

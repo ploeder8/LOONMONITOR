@@ -1,13 +1,14 @@
+import { Suspense, lazy } from "react";
 import { HashRouter, Route, Routes, useLocation } from "react-router-dom";
 import { BookOpen, Building2, Calculator, ChevronRight, FlaskConical, MessageCircle, MoreHorizontal } from "lucide-react";
-import { HomePage } from "@/pages/HomePage";
-import { LoonfichePage } from "@/pages/LoonfichePage";
-import { LoonmotorPage } from "@/pages/LoonmotorPage";
-import { LoonrunPage } from "@/pages/LoonrunPage";
-import { ScopePage } from "@/pages/ScopePage";
-import { TestcasesPage } from "@/pages/TestcasesPage";
 import { APP_BRAND } from "@/branding/brand";
 import { AiChatWidget } from "@/components/AiChatWidget";
+import { HomePage } from "@/pages/HomePage";
+const LoonfichePage = lazy(() => import("@/pages/LoonfichePage").then((m) => ({ default: m.LoonfichePage })));
+const LoonrunPage = lazy(() => import("@/pages/LoonrunPage").then((m) => ({ default: m.LoonrunPage })));
+const LoonmotorPage = lazy(() => import("@/pages/LoonmotorPage").then((m) => ({ default: m.LoonmotorPage })));
+const TestcasesPage = lazy(() => import("@/pages/TestcasesPage").then((m) => ({ default: m.TestcasesPage })));
+const ScopePage = lazy(() => import("@/pages/ScopePage").then((m) => ({ default: m.ScopePage })));
 const DEFAULT_CONTENT_MAX_WIDTH = 1180;
 const CALCULATOR_CONTENT_MAX_WIDTH = 1520;
 export const headerContentLayout = {
@@ -92,14 +93,16 @@ function AppShell() {
             {activeSection === "simulator" && <SimulatorSubnav pathname={location.pathname} placement="mobile"/>}
             {activeSection === "ontwikkeling" && <DevelopmentSubnav pathname={location.pathname}/>}
             <main className="app-main" style={{ maxWidth: mainMaxWidth, width: "100%", boxSizing: "border-box", margin: "0 auto", padding: "28px 28px" }}>
-              <Routes>
-                <Route path="/" element={<HomePage />}/>
-                <Route path="/loonfiche" element={<LoonfichePage />}/>
-                <Route path="/loonrun" element={<LoonrunPage />}/>
-                <Route path="/loonmotor" element={<LoonmotorPage />}/>
-                <Route path="/testcases" element={<TestcasesPage />}/>
-                <Route path="/scope" element={<ScopePage />}/>
-              </Routes>
+              <Suspense fallback={<PageLoader/>}>
+                <Routes>
+                  <Route path="/" element={<HomePage />}/>
+                  <Route path="/loonfiche" element={<LoonfichePage />}/>
+                  <Route path="/loonrun" element={<LoonrunPage />}/>
+                  <Route path="/loonmotor" element={<LoonmotorPage />}/>
+                  <Route path="/testcases" element={<TestcasesPage />}/>
+                  <Route path="/scope" element={<ScopePage />}/>
+                </Routes>
+              </Suspense>
             </main>
           </div>
         </div>
@@ -207,4 +210,17 @@ export function MobileBottomNav({ pathname }: {
 }
 function hashHref(to: string): string {
     return `#${to}`;
+}
+function PageLoader() {
+    return (<div style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: "50vh",
+            color: "var(--color-text-muted)",
+            fontSize: 14,
+            fontFamily: "var(--font-body)",
+        }}>
+        Pagina laden…
+      </div>);
 }

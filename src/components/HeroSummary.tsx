@@ -14,8 +14,9 @@ function AnimatedNumber({ value, prefix = "", suffix = "", decimals = 2, }: {
 }) {
     const [display, setDisplay] = useState(value);
     const hasAnimated = useRef(false);
+    const prefersReducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     useEffect(() => {
-        if (hasAnimated.current) {
+        if (prefersReducedMotion || hasAnimated.current) {
             setDisplay(value);
             return;
         }
@@ -24,16 +25,18 @@ function AnimatedNumber({ value, prefix = "", suffix = "", decimals = 2, }: {
         const start = performance.now();
         const from = 0;
         const to = value;
+        let rafId: number;
         const animate = (now: number) => {
             const elapsed = now - start;
             const progress = Math.min(elapsed / duration, 1);
             const eased = 1 - (1 - progress) * (1 - progress);
             setDisplay(from + (to - from) * eased);
             if (progress < 1)
-                requestAnimationFrame(animate);
+                rafId = requestAnimationFrame(animate);
         };
-        requestAnimationFrame(animate);
-    }, [value]);
+        rafId = requestAnimationFrame(animate);
+        return () => cancelAnimationFrame(rafId);
+    }, [value, prefersReducedMotion]);
     const formatted = decimals === 0
         ? Math.round(display).toString()
         : display.toLocaleString("nl-BE", {

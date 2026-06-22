@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Printer, SlidersHorizontal } from "lucide-react";
 import { Banner } from "@/components/Banner";
@@ -12,9 +12,9 @@ import { ProfielEditorDrawer } from "@/pages/profiel/ProfielEditorDrawer";
 import { ProfielSnapshot } from "@/pages/profiel/ProfielSnapshot";
 export function LoonfichePage() {
     const [p, setP] = useSharedProfiel();
-    const profiel = normaliseerProfiel(p);
+    const profiel = useMemo(() => normaliseerProfiel(p), [p]);
     const [profielEditorOpen, setProfielEditorOpen] = useState(false);
-    const set = ((kOfUpdate: keyof Profiel | ProfielUpdate, v?: Profiel[keyof Profiel]) => {
+    const set = useCallback(((kOfUpdate: keyof Profiel | ProfielUpdate, v?: Profiel[keyof Profiel]) => {
         setP((prev) => {
             const basis = normaliseerProfiel(prev);
             if (typeof kOfUpdate === "function")
@@ -23,7 +23,7 @@ export function LoonfichePage() {
                 return { ...basis, ...kOfUpdate };
             return { ...basis, [kOfUpdate]: v };
         });
-    }) as ProfielSetter;
+    }) as ProfielSetter, [setP]);
     const loonfiche = useMemo(() => {
         try {
             return bouwLoonficheVoorProfiel(profiel);
@@ -96,7 +96,7 @@ export function LoonfichePage() {
             }}>
               Opnieuw proberen
             </button>
-          </Banner>)} resetKeys={[JSON.stringify(profiel)]}>
+          </Banner>)} resetKeys={[profiel]}>
         <LoonficheDocument loonfiche={loonfiche}/>
       </ErrorBoundary>
 

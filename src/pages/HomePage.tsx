@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { Download, FileText, Printer, X } from "lucide-react";
@@ -25,14 +25,14 @@ export function HomePage() {
     const [toonCsvPaneel, setToonCsvPaneel] = useState(false);
     const [toonOverzicht, setToonOverzicht] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const profiel = normaliseerProfiel(p);
+    const profiel = useMemo(() => normaliseerProfiel(p), [p]);
     useEffect(() => {
         if (toonOverzicht) {
             document.body.classList.add("print-modal-open");
             return () => document.body.classList.remove("print-modal-open");
         }
     }, [toonOverzicht]);
-    const set = ((kOfUpdate: keyof Profiel | ProfielUpdate, v?: Profiel[keyof Profiel]) => {
+    const set = useCallback(((kOfUpdate: keyof Profiel | ProfielUpdate, v?: Profiel[keyof Profiel]) => {
         setP((prev) => {
             const basis = normaliseerProfiel(prev);
             if (typeof kOfUpdate === "function")
@@ -41,7 +41,7 @@ export function HomePage() {
                 return { ...basis, ...kOfUpdate };
             return { ...basis, [kOfUpdate]: v };
         });
-    }) as ProfielSetter;
+    }) as ProfielSetter, [setP]);
     function exporteerCsv() {
         const csv = profielNaarCsv({ profiel, commentaar });
         const vandaag = standaardCsvNaamPrefix().slice(0, -1);
@@ -174,8 +174,8 @@ export function HomePage() {
             }}>
               Opnieuw proberen
             </button>
-          </Banner>)} resetKeys={[JSON.stringify(profiel)]}>
-        <ResultBandsPanel profiel={profiel}/>
+          </Banner>)} resetKeys={[profiel]}>
+        <ResultBandsPanel profiel={profiel} summary={summary}/>
       </ErrorBoundary>
 
       {toonCsvPaneel && createPortal(<div role="dialog" aria-modal="true" aria-labelledby="csv-modal-title" style={{

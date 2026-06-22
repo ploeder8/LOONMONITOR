@@ -3,7 +3,7 @@
 **Bron:** `src/data/pc200_payroll_dataset_2026.json`
 **Peildatum:** 2026-05-30
 **Doeljaar:** 2026
-**Totaal:** 75 datapunten
+**Totaal:** 84 datapunten
 **Bronnen:** 15 bronrecords
 
 ---
@@ -25,7 +25,7 @@
 | `lonen_pc200_studenten_catC_01012026` | actief | Tier 2 | Sectorale minimum maandlonen PC 200 – Studentenschaal, Categorie C, per leeftijd |
 | `lonen_pc200_studenten_catD_01012026` | actief | Tier 2 | Sectorale minimum maandlonen PC 200 – Studentenschaal, Categorie D, per leeftijd |
 
-## `rsz` (13 datapunten)
+## `rsz` (15 datapunten)
 
 | ID | Status | Tier | Omschrijving |
 |---|---|---|---|
@@ -42,6 +42,8 @@
 | `provisie_dubbel_vakantiegeld_2026` | gemarkeerd_voor_review | Tier 1 | [DEPRECATED] Provisie dubbel vakantiegeld bedienden — vervangen door runtime-berekening obv 92%-percentage |
 | `vakantiegeld_dubbel_pct_2026` | actief | Tier 1 | Percentage dubbel vakantiegeld bedienden ten opzichte van brutomaandloon inclusief VAA |
 | `structurele_vermindering_laagloon_2026` | actief | Tier 1 | Structurele vermindering RSZ-werkgever voor lage lonen — hellingscoëfficiënt 0,1600 vanaf 1/4/2026 (KB 2/7/2025 BS 15/7/2025) |
+| `vakantiegeld_variabel_enkel_bonus_pct_2026` | actief | Tier 1 | Percentage variabel enkel vakantiegeld op bonus (bedienden) |
+| `vakantiegeld_variabel_dubbel_bonus_pct_2026` | actief | Tier 1 | Percentage variabel dubbel vakantiegeld op bonus (bedienden) |
 
 ## `fiscaliteit` (28 datapunten)
 
@@ -76,7 +78,7 @@
 | `berekeningsmethode_netto_naar_bruto` | actief | Tier 1 | Methodologie voor de omgekeerde berekening (netto → bruto) — numerieke inverse via binary search |
 | `netto_naar_bruto_tolerantie_eur` | actief | Tier 1 | Tolerantie voor de numerieke inverse (netto → bruto) — halve cent |
 
-## `premies_en_voordelen` (17 datapunten)
+## `premies_en_voordelen` (26 datapunten)
 
 | ID | Status | Tier | Omschrijving |
 |---|---|---|---|
@@ -97,6 +99,15 @@
 | `pc200_thuiswerkvergoeding_sectoraal` | niet_gevonden | ? | Sectorale thuiswerkvergoeding in PC 200 |
 | `pc200_landingsbaan_sectorvergoeding_2026` | actief | Tier 1 | Bijkomende sectorale vergoeding bij 1/5e landingsbaan PC 200 vanaf 1/6/2026 |
 | `pc200_vakantiegeld_bedienden` | actief | Tier 1 | Vakantiegeld voor bedienden PC 200 (enkel + dubbel vakantiegeld) – wettelijk regime en RSZ-basis dubbel vakantiegeld |
+| `rsz_parking_vergoeding_2026` | actief | Tier 1 | RSZ forfaitaire parkingvergoeding |
+| `rsz_carwash_vergoeding_2026` | actief | Tier 1 | RSZ forfaitaire carwashvergoeding |
+| `rsz_garage_vergoeding_2026` | actief | Tier 1 | RSZ forfaitaire garagevergoeding |
+| `rsz_maaltijd_vergoeding_2026` | actief | Tier 1 | RSZ forfaitaire maaltijdvergoeding voor niet-sedentaire werknemers |
+| `rsz_baan_vergoeding_2026` | actief | Tier 1 | RSZ forfaitaire baanvergoeding voor niet-sedentaire werknemers zonder faciliteiten |
+| `rsz_internet_vergoeding_2026` | actief | Tier 1 | RSZ forfaitaire internetvergoeding |
+| `rsz_thuiswerk_vergoeding_2026` | actief | Tier 1 | RSZ forfaitaire thuiswerkvergoeding |
+| `rsz_kilometervergoeding_2026_april` | actief | Tier 1 | RSZ kilometervergoeding woon-werk en beroepsverplaatsingen eigen wagen april 2026 |
+| `rsz_kilometervergoeding_2026_mei_juni_voorlopig` | mogelijk_verouderd | Tier 1 | RSZ kilometervergoeding woon-werk en beroepsverplaatsingen eigen wagen mei/juni 2026 (voorlopig) |
 
 ## `arbeidsvoorwaarden` (3 datapunten)
 
@@ -108,7 +119,7 @@
 
 ---
 
-**Totaal: 75 datapunten** (over 5 categorieën)
+**Totaal: 84 datapunten** (over 5 categorieën)
 
 **Bronnen: 15 bronrecords**
 
