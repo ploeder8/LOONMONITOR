@@ -12,10 +12,11 @@ import type { ProfielSetter } from "@/pages/home/types";
 
 const DOELGROEPVERMINDERING_OPMERKING = "de doelgroepvermindering kan echter enkel toegepast worden indien de onderneming daadwerkelijk extra werkgelegenheid creeert , waarbij rekening gehouden wordt met bestaande/voorafgaande tewerkstellingen in andere vennootschappen waarmee de nieuwe onderneming verbonden is";
 
-export function WerkgeverCard({ profiel, set, cardStyle }: {
+export function WerkgeverCard({ profiel, set, cardStyle, compact }: {
     profiel: Profiel;
     set: ProfielSetter;
     cardStyle?: import("react").CSSProperties;
+    compact?: boolean;
 }) {
     const [kboInput, setKboInput] = useState(profiel.werkgeverOndernemingsnummer);
     const [kboStatus, setKboStatus] = useState<{ kind: "idle" | "loading" | "error"; message?: string }>({ kind: "idle" });
@@ -58,6 +59,98 @@ export function WerkgeverCard({ profiel, set, cardStyle }: {
     return (
         <CockpitCard title="Werkgever" icon={<Building2 size={16}/>} style={cardStyle}>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                {compact ? (<>
+                    <div style={{ display: "grid", gap: 12, gridTemplateColumns: "minmax(140px, 1fr) 2fr", alignItems: "flex-end" }}>
+                        <div style={{ display: "flex", alignItems: "flex-end", gap: 8 }}>
+                            <FormField label={<>KBO-nummer <HelpTooltip text="Voer een Belgisch ondernemingsnummer in. Bij geldig nummer worden naam en adres automatisch ingevuld."/></>}>
+                                <input
+                                    type="text"
+                                    value={kboInput}
+                                    onChange={(e) => setKboInput(normalizeKboNumber(e.target.value))}
+                                    className={inputClass}
+                                    placeholder="bv. 0123.456.789"
+                                />
+                            </FormField>
+                            <button
+                                type="button"
+                                onClick={haalKboOp}
+                                disabled={kboStatus.kind === "loading"}
+                                aria-label="KBO-gegevens ophalen"
+                                title="KBO-gegevens ophalen"
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    width: 28,
+                                    height: 28,
+                                    flexShrink: 0,
+                                    borderRadius: "var(--radius-md)",
+                                    border: "1px solid var(--color-primary-border)",
+                                    background: "var(--color-primary)",
+                                    color: "#ffffff",
+                                    cursor: kboStatus.kind === "loading" ? "not-allowed" : "pointer",
+                                    opacity: kboStatus.kind === "loading" ? 0.7 : 1,
+                                }}
+                            >
+                                {kboStatus.kind === "loading" ? <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }}/> : <Search size={14}/>}
+                            </button>
+                        </div>
+                        <FormField label="Naam werkgever">
+                            <input
+                                type="text"
+                                value={profiel.werkgeverNaam}
+                                onChange={(e) => set("werkgeverNaam", e.target.value)}
+                                className={inputClass}
+                                placeholder="bv. Acme BV"
+                            />
+                        </FormField>
+                    </div>
+
+                    {kboStatus.kind === "error" && <Banner kind="error" title="KBO-ophaal mislukt">{kboStatus.message}</Banner>}
+
+                    <div style={{
+                        display: "grid",
+                        gap: 12,
+                        gridTemplateColumns: "2fr 90px 90px 2fr",
+                    }}>
+                        <FormField label="Straat">
+                            <input
+                                type="text"
+                                value={profiel.werkgeverStraat}
+                                onChange={(e) => set("werkgeverStraat", e.target.value)}
+                                className={inputClass}
+                                placeholder="bv. Kerkstraat"
+                            />
+                        </FormField>
+                        <FormField label="Huisnummer">
+                            <input
+                                type="text"
+                                value={profiel.werkgeverHuisnummer}
+                                onChange={(e) => set("werkgeverHuisnummer", e.target.value)}
+                                className={inputClass}
+                                placeholder="bv. 12 bus A"
+                            />
+                        </FormField>
+                        <FormField label="Postcode">
+                            <input
+                                type="text"
+                                value={profiel.werkgeverPostcode}
+                                onChange={(e) => set("werkgeverPostcode", e.target.value)}
+                                className={inputClass}
+                                placeholder="bv. 2000"
+                            />
+                        </FormField>
+                        <FormField label="Gemeente">
+                            <input
+                                type="text"
+                                value={profiel.werkgeverGemeente}
+                                onChange={(e) => set("werkgeverGemeente", e.target.value)}
+                                className={inputClass}
+                                placeholder="bv. Antwerpen"
+                            />
+                        </FormField>
+                    </div>
+                </>) : (<>
                     <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 12, alignItems: "flex-end" }}>
                         <FormField label={<>KBO-nummer <HelpTooltip text="Voer een Belgisch ondernemingsnummer in. Bij geldig nummer worden naam en adres automatisch ingevuld."/></>}>
                             <input
@@ -148,8 +241,9 @@ export function WerkgeverCard({ profiel, set, cardStyle }: {
                             />
                         </FormField>
                     </div>
-                </div>
-            </CockpitCard>
+                </>)}
+            </div>
+        </CockpitCard>
     );
 }
 

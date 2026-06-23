@@ -18,8 +18,8 @@ export function ProfielEditor({ profiel, set, toonWerkgever = true, onChangeRich
         return (
             <div style={{ display: "flex", flexDirection: "column", gap: "var(--cockpit-grid-gap)" }}>
                 <div className="simulator2-top-row" style={{ display: "grid", gap: "var(--cockpit-grid-gap)", alignItems: "stretch" }}>
-                    <WerkgeverCard profiel={profiel} set={set} cardStyle={{ height: "100%" }}/>
-                    <PersoonsgegevensCard profiel={profiel} set={set} cardStyle={{ height: "100%" }}/>
+                    <WerkgeverCard profiel={profiel} set={set} cardStyle={{ height: "100%" }} compact/>
+                    <PersoonsgegevensCard profiel={profiel} set={set} cardStyle={{ height: "100%" }} compact/>
                 </div>
                 <WerkgeversbijdragenAccordion profiel={profiel} set={set}/>
                 <InputCockpit profiel={profiel} set={set} onChangeRichting={onChangeRichting} hidePersoonsgegevens/>
