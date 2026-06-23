@@ -45,7 +45,7 @@ export function OnkostenvergoedingenContent({ profiel, set }: {
     return (<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4" style={{ gap: 16 }}>
       {(Object.keys(ONKOSTEN_LABELS) as OnkostenCategorieKey[]).map((key) => {
             const cat = profiel.onkostenCategorieen[key];
-            const lookup = safeGetValue(getOnkostenDatapuntId(key, refDatum), { refDatum });
+            const lookup = safeGetValue(getOnkostenDatapuntId(key, refDatum), { refDatum, toelatenMogelijkVerouderd: true });
             const forfait = lookup.waarde ?? cat.forfaitBedrag;
             const frequentie = (lookup.datapunt?.frequentie ?? "per_maand") as "per_maand" | "per_dag" | "per_km";
             const isPerDag = frequentie === "per_dag";
