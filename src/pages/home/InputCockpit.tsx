@@ -133,7 +133,7 @@ export function PersoonsgegevensCard({ profiel, set, cardStyle, compact }: {
         </div>
 
         {compact ? (<>
-            <div style={{ display: "grid", gap: 12, gridTemplateColumns: "100px 1fr 1fr" }}>
+            <div style={{ display: "grid", gap: 12, gridTemplateColumns: "100px max-content 1fr" }}>
               <FormField label="Statuut">
                 <select className={selectClass} value={profiel.statuut} onChange={(e) => set("statuut", e.target.value as Statuut)}>
                   <option value="bediende">Bediende</option>
@@ -142,16 +142,16 @@ export function PersoonsgegevensCard({ profiel, set, cardStyle, compact }: {
               </FormField>
 
               {profiel.statuut === "bediende" ? (<>
+                  <FormField label="Kinderen ten laste">
+                    <NumeriekeInput className={inputClass} min={0} max={12} value={profiel.kinderenTenLaste} modus="int" onValueChange={(waarde) => set("kinderenTenLaste", waarde)}/>
+                  </FormField>
+
                   <FormField label={<>Gezinstype (voor BV) <HelpTooltip text="Een partner is fiscaal niet ten laste. Bij geen of beperkt beroepsinkomen past de BV-berekening Schaal II toe, wat de bedrijfsvoorheffing verlaagt en het geraamde nettoloon verhoogt."/></>}>
                     <select className={selectClass} value={profiel.gezinstype} onChange={(e) => set("gezinstype", e.target.value as GezinsType)}>
                       <option value="alleenstaand">Alleenstaand / eenoudergezin</option>
                       <option value="gehuwd_met_inkomen">Gehuwd/wettelijk samenwonend - partner met inkomen</option>
                       <option value="gehuwd_zonder_inkomen">Gehuwd/wettelijk samenwonend - partner zonder of beperkt beroepsinkomen</option>
                     </select>
-                  </FormField>
-
-                  <FormField label="Kinderen ten laste">
-                    <NumeriekeInput className={inputClass} min={0} max={12} value={profiel.kinderenTenLaste} modus="int" onValueChange={(waarde) => set("kinderenTenLaste", waarde)}/>
                   </FormField>
                 </>) : (<>
                   <FormField label="Categorie">
