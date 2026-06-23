@@ -1,4 +1,3 @@
-import { cn } from "@/lib/cn";
 export function FormField({ label, htmlFor, helper, children, }: {
     label: React.ReactNode;
     htmlFor?: string;
@@ -13,5 +12,5 @@ export function FormField({ label, htmlFor, helper, children, }: {
       {helper && <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>{helper}</span>}
     </label>);
 }
-export const inputClass = cn("rounded-[12px] border bg-white px-3 py-2 text-sm w-full text-[var(--color-text)]", "focus:outline-none focus:ring-2", "border-[var(--color-border)] focus:border-[var(--color-primary)] focus:ring-[rgba(216,58,24,0.16)]");
+export const inputClass = "rounded-[12px] border bg-white px-3 py-2 text-sm w-full text-[var(--color-text)] focus:outline-none focus:ring-2 border-[var(--color-border)] focus:border-[var(--color-primary)] focus:ring-[rgba(216,58,24,0.16)]";
 export const selectClass = inputClass;

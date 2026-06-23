@@ -239,9 +239,13 @@ function berekenDubbelVakantiegeldComponent(input: JaaroverzichtInput, normaalBr
     };
 }
 function uniekeDatapunten(datapunten: Array<Datapunt | null | undefined>): Datapunt[] {
-    return datapunten.filter((dp, index, all): dp is Datapunt => {
+    const seen = new Map<string, Datapunt>();
+    for (const dp of datapunten) {
         if (!dp)
-            return false;
-        return all.findIndex((item) => item?.id === dp.id) === index;
-    });
+            continue;
+        if (!seen.has(dp.id)) {
+            seen.set(dp.id, dp);
+        }
+    }
+    return Array.from(seen.values());
 }

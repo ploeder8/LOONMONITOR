@@ -115,11 +115,13 @@ function baremaInlineStyle(ok: boolean): CSSProperties {
         gap: 4,
     };
 }
-function PersoonsgegevensCard({ profiel, set }: {
+export function PersoonsgegevensCard({ profiel, set, cardStyle, compact }: {
     profiel: Profiel;
     set: ProfielSetter;
+    cardStyle?: CSSProperties;
+    compact?: boolean;
 }) {
-    return (<CockpitCard title="Persoonsgegevens" icon={<User size={16}/>}>
+    return (<CockpitCard title="Persoonsgegevens" icon={<User size={16}/>} style={cardStyle}>
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 12 }}>
           <FormField label="Naam werknemer">
@@ -130,29 +132,43 @@ function PersoonsgegevensCard({ profiel, set }: {
           </FormField>
         </div>
 
-        <FormField label="Statuut">
-          <select className={selectClass} value={profiel.statuut} onChange={(e) => set("statuut", e.target.value as Statuut)}>
-            <option value="bediende">Bediende</option>
-            <option value="student">Student</option>
-          </select>
-        </FormField>
-
-        {profiel.statuut === "bediende" ? (<>
-            <FormField label={<>Gezinstype (voor BV) <HelpTooltip text="Een partner is fiscaal niet ten laste. Bij geen of beperkt beroepsinkomen past de BV-berekening Schaal II toe, wat de bedrijfsvoorheffing verlaagt en het geraamde nettoloon verhoogt."/></>}>
-              <select className={selectClass} value={profiel.gezinstype} onChange={(e) => set("gezinstype", e.target.value as GezinsType)}>
-                <option value="alleenstaand">Alleenstaand / eenoudergezin</option>
-                <option value="gehuwd_met_inkomen">Gehuwd/wettelijk samenwonend - partner met inkomen</option>
-                <option value="gehuwd_zonder_inkomen">Gehuwd/wettelijk samenwonend - partner zonder of beperkt beroepsinkomen</option>
-              </select>
-            </FormField>
-
-            <div className="grid grid-cols-2 gap-3">
-              <FormField label="Kinderen ten laste">
-                <NumeriekeInput className={inputClass} min={0} max={12} value={profiel.kinderenTenLaste} modus="int" onValueChange={(waarde) => set("kinderenTenLaste", waarde)}/>
+        {compact ? (<>
+            <div style={{ display: "grid", gap: 12, gridTemplateColumns: "100px 1fr 100px" }}>
+              <FormField label="Statuut">
+                <select className={selectClass} value={profiel.statuut} onChange={(e) => set("statuut", e.target.value as Statuut)}>
+                  <option value="bediende">Bediende</option>
+                  <option value="student">Student</option>
+                </select>
               </FormField>
+
+              {profiel.statuut === "bediende" ? (<>
+                  <FormField label={<>Gezinstype (voor BV) <HelpTooltip text="Een partner is fiscaal niet ten laste. Bij geen of beperkt beroepsinkomen past de BV-berekening Schaal II toe, wat de bedrijfsvoorheffing verlaagt en het geraamde nettoloon verhoogt."/></>}>
+                    <select className={selectClass} value={profiel.gezinstype} onChange={(e) => set("gezinstype", e.target.value as GezinsType)}>
+                      <option value="alleenstaand">Alleenstaand / eenoudergezin</option>
+                      <option value="gehuwd_met_inkomen">Gehuwd/wettelijk samenwonend - partner met inkomen</option>
+                      <option value="gehuwd_zonder_inkomen">Gehuwd/wettelijk samenwonend - partner zonder of beperkt beroepsinkomen</option>
+                    </select>
+                  </FormField>
+
+                  <FormField label="Kinderen ten laste">
+                    <NumeriekeInput className={inputClass} min={0} max={12} value={profiel.kinderenTenLaste} modus="int" onValueChange={(waarde) => set("kinderenTenLaste", waarde)}/>
+                  </FormField>
+                </>) : (<>
+                  <FormField label="Categorie">
+                    <select className={selectClass} value={profiel.studentenCat} onChange={(e) => set("studentenCat", e.target.value as StudentenCat)}>
+                      <option value="A">A</option>
+                      <option value="B">B</option>
+                      <option value="C">C</option>
+                      <option value="D">D</option>
+                    </select>
+                  </FormField>
+                  <FormField label="Leeftijd">
+                    <NumeriekeInput className={inputClass} min={14} max={30} value={profiel.studentLeeftijd} modus="int" onValueChange={(waarde) => set("studentLeeftijd", waarde)}/>
+                  </FormField>
+                </>)}
             </div>
 
-            {profiel.gezinstype === "alleenstaand" && profiel.kinderenTenLaste > 0 && (<label style={{
+            {profiel.statuut === "bediende" && profiel.gezinstype === "alleenstaand" && profiel.kinderenTenLaste > 0 && (<label style={{
                     display: "flex",
                     alignItems: "center",
                     gap: 8,
@@ -163,19 +179,54 @@ function PersoonsgegevensCard({ profiel, set }: {
                 <input type="checkbox" checked={profiel.fiscaalAlleenstaandeMetKind} onChange={(e) => set("fiscaalAlleenstaandeMetKind", e.target.checked)} style={{ accentColor: "var(--color-primary)", width: 15, height: 15 }}/>
                 Fiscaal alleenstaande ouder (+€52 BV-vermindering)
               </label>)}
-          </>) : (<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <FormField label="Categorie">
-              <select className={selectClass} value={profiel.studentenCat} onChange={(e) => set("studentenCat", e.target.value as StudentenCat)}>
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
-                <option value="D">D</option>
+          </>) : (<>
+            <FormField label="Statuut">
+              <select className={selectClass} value={profiel.statuut} onChange={(e) => set("statuut", e.target.value as Statuut)}>
+                <option value="bediende">Bediende</option>
+                <option value="student">Student</option>
               </select>
             </FormField>
-            <FormField label="Leeftijd">
-              <NumeriekeInput className={inputClass} min={14} max={30} value={profiel.studentLeeftijd} modus="int" onValueChange={(waarde) => set("studentLeeftijd", waarde)}/>
-            </FormField>
-          </div>)}
+
+            {profiel.statuut === "bediende" ? (<>
+                <FormField label={<>Gezinstype (voor BV) <HelpTooltip text="Een partner is fiscaal niet ten laste. Bij geen of beperkt beroepsinkomen past de BV-berekening Schaal II toe, wat de bedrijfsvoorheffing verlaagt en het geraamde nettoloon verhoogt."/></>}>
+                  <select className={selectClass} value={profiel.gezinstype} onChange={(e) => set("gezinstype", e.target.value as GezinsType)}>
+                    <option value="alleenstaand">Alleenstaand / eenoudergezin</option>
+                    <option value="gehuwd_met_inkomen">Gehuwd/wettelijk samenwonend - partner met inkomen</option>
+                    <option value="gehuwd_zonder_inkomen">Gehuwd/wettelijk samenwonend - partner zonder of beperkt beroepsinkomen</option>
+                  </select>
+                </FormField>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <FormField label="Kinderen ten laste">
+                    <NumeriekeInput className={inputClass} min={0} max={12} value={profiel.kinderenTenLaste} modus="int" onValueChange={(waarde) => set("kinderenTenLaste", waarde)}/>
+                  </FormField>
+                </div>
+
+                {profiel.gezinstype === "alleenstaand" && profiel.kinderenTenLaste > 0 && (<label style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 8,
+                        fontSize: 13,
+                        color: "var(--color-navy-500)",
+                        cursor: "pointer",
+                    }}>
+                    <input type="checkbox" checked={profiel.fiscaalAlleenstaandeMetKind} onChange={(e) => set("fiscaalAlleenstaandeMetKind", e.target.checked)} style={{ accentColor: "var(--color-primary)", width: 15, height: 15 }}/>
+                    Fiscaal alleenstaande ouder (+€52 BV-vermindering)
+                  </label>)}
+              </>) : (<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <FormField label="Categorie">
+                  <select className={selectClass} value={profiel.studentenCat} onChange={(e) => set("studentenCat", e.target.value as StudentenCat)}>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                  </select>
+                </FormField>
+                <FormField label="Leeftijd">
+                  <NumeriekeInput className={inputClass} min={14} max={30} value={profiel.studentLeeftijd} modus="int" onValueChange={(waarde) => set("studentLeeftijd", waarde)}/>
+                </FormField>
+              </div>)}
+          </>)}
       </div>
     </CockpitCard>);
 }
@@ -468,10 +519,11 @@ export function profielMetBerekeningsJaar(profiel: Profiel, jaar: string): Profi
         arbeidsdagenPerMaand: aantalWeekdagenInMaand(jaar, profiel.berekeningsMaand),
     };
 }
-export function InputCockpit({ profiel, set, onChangeRichting }: {
+export function InputCockpit({ profiel, set, onChangeRichting, hidePersoonsgegevens }: {
     profiel: Profiel;
     set: ProfielSetter;
     onChangeRichting?: (richting: BerekeningsRichting) => void;
+    hidePersoonsgegevens?: boolean;
 }) {
     function setBerekeningsMaand(maand: string) {
         set((prev) => profielMetBerekeningsMaand(prev, maand));
@@ -502,7 +554,7 @@ export function InputCockpit({ profiel, set, onChangeRichting }: {
     }
     return (<div style={{ display: "flex", flexDirection: "column", gap: "var(--cockpit-grid-gap)" }}>
 
-      <PersoonsgegevensCard profiel={profiel} set={set}/>
+      {!hidePersoonsgegevens && <PersoonsgegevensCard profiel={profiel} set={set}/>}
 
       <CockpitAccordion title="Contractgegevens" subtitle="Arbeidscontext, brutoloon, woon-werkverkeer, extra looncomponenten" icon={<Briefcase size={16}/>} defaultOpen>
         <div style={{ display: "flex", flexDirection: "column", gap: "var(--cockpit-grid-gap)" }}>

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { Calculator, Download, Eye, FileText, Trash2, Upload, Users, X, } from "lucide-react";
@@ -9,8 +9,8 @@ import { profielenUitCsv } from "@/lib/profielCsv";
 import { bouwLoonrun, type LoonrunWerknemerInput } from "@/lib/loonrun";
 import { bouwIntegratieExportBatch, integratieExportBatchNaarCsv, type IntegratieExportBatch } from "@/lib/integratieExport";
 import { clearLoonrunInputs, readLoonrunInputs, writeLoonrunInputs } from "@/lib/loonrunStorage";
-import { LoonficheDocument } from "@/pages/loonfiche/LoonficheDocument";
-import { WerkgeverRapport } from "@/pages/loonrun/WerkgeverRapport";
+const LoonficheDocument = lazy(() => import("@/pages/loonfiche/LoonficheDocument").then((m) => ({ default: m.LoonficheDocument })));
+const WerkgeverRapport = lazy(() => import("@/pages/loonrun/WerkgeverRapport").then((m) => ({ default: m.WerkgeverRapport })));
 import type { Loonfiche } from "@/lib/loonfiche";
 interface LoonrunPageProps {
     initialInputs?: LoonrunWerknemerInput[];
@@ -336,7 +336,9 @@ export function LoonrunPage({ initialInputs }: LoonrunPageProps = {}) {
             }}>
               <X size={16}/>
             </button>
-            <WerkgeverRapport loonrun={loonrun}/>
+            <Suspense fallback={<div style={{ color: "var(--color-text-muted)", fontSize: 14, padding: 24 }}>Rapport laden…</div>}>
+              <WerkgeverRapport loonrun={loonrun}/>
+            </Suspense>
             <div style={{
                 display: "flex",
                 justifyContent: "center",
@@ -531,7 +533,9 @@ function LoonficheModal({ loonfiche, onClose, }: {
         <ErrorBoundary fallbackRender={({ error }) => (<Banner kind="error" title="Fout bij tonen loonfiche">
               {(error as Error).message}
             </Banner>)}>
-          <LoonficheDocument loonfiche={loonfiche}/>
+          <Suspense fallback={<div style={{ color: "var(--color-text-muted)", fontSize: 14, padding: 24 }}>Loonfiche laden…</div>}>
+            <LoonficheDocument loonfiche={loonfiche}/>
+          </Suspense>
         </ErrorBoundary>
       </div>
     </div>);

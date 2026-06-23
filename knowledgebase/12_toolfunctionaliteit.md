@@ -18,9 +18,9 @@ De payrollberekeningen draaien client-side in de browser. De optionele AI-chat i
 Jaakie gebruikt een HashRouter met een rustige app-shell:
 
 - De topbar toont Jaakie-branding links. Binnen de Simulator-context staat de lokale simulator-subnavigatie op brede desktop rechts in de topbar; buiten de Simulator-context blijft de actieve contextstroom rechts staan.
-- Desktop gebruikt een vaste linkerrail met de hoofdmodules **Loonmotor**, **Simulator** en **Ontwikkeling**.
-- Mobiel gebruikt een compacte bottom navigation met **Loonmotor**, **Simulator** en **Meer**.
-- De Simulator-subnavigatie (`Calculator`, `Loonfiche`, `Loonrun`) verschijnt alleen binnen de simulatorcontext; op smallere viewports blijft ze als horizontale subnav onder de topbar staan.
+- Desktop gebruikt een vaste linkerrail met de hoofdmodules **Loonmotor**, **Simulator**, **Simulator 2** en **Ontwikkeling**. Simulator 2 is een tijdelijke exacte kopie van de Simulator-workspace om een nieuwe layout te testen; uiteindelijk blijft alleen Simulator over.
+- Mobiel gebruikt een compacte bottom navigation met **Loonmotor**, **Simulator** en **Meer** (Simulator 2 is op mobiel bereikbaar via de linkerrail/desktopweergave).
+- De Simulator-subnavigatie (`Calculator`, `Loonfiche`, `Loonrun`) verschijnt alleen binnen de simulatorcontext; de Simulator 2-subnavigatie toont dezelfde labels onder de Simulator 2-context. Op smallere viewports blijft de actieve simulator-subnav als horizontale subnav onder de topbar staan.
 - Ontwikkelingslinks (`Testcases`, `Scope & bekend manco`, `Onderzoeksdossier`) zijn secundair onder de Ontwikkeling-context.
 
 | Route | Functie |
@@ -28,6 +28,9 @@ Jaakie gebruikt een HashRouter met een rustige app-shell:
 | `/` | Profiel en calculator. Gebruikers voeren loon-, arbeids- en voordeelgegevens in en zien resultaten met audit-trail. |
 | `/loonfiche` | Pro-forma loonfiche voor één werknemer, opgemaakt als een echte loonstrook. Toont bovenaan een rode simulatie-banner, daarna werkgever-/werknemer-metadata en de brutoloon → netto regels. Deelt binnen hetzelfde browservenster de profielstate met de calculator. Ondersteunt identificatievelden (werknemer-/werkgevernaam, -referentie, -adres en -ondernemingsnummer) en print. |
 | `/loonrun` | Multi-werknemer loonrun. Importeert een multi-row CSV, berekent alle werknemers geïsoleerd, toont een overzichtstabel met totalen en laat individuele loonfiches bekijken per werknemer. |
+| `/simulator2` | Tijdelijke exacte kopie van de calculator (`/`) voor het testen van een nieuwe layout. Deelt dezelfde profielstate. |
+| `/simulator2/loonfiche` | Tijdelijke exacte kopie van `/loonfiche` voor het testen van een nieuwe layout. |
+| `/simulator2/loonrun` | Tijdelijke exacte kopie van `/loonrun` voor het testen van een nieuwe layout. |
 | `/loonmotor` | Dossiercockpit voor bedrijven en medewerkers. V1 bewaart lokale conceptdossiers in de browser, kan publieke KBO-basisgegevens ophalen via ondernemingsnummer en kan een medewerkerprofiel openen in de calculator. |
 | `/testcases` | Overzicht van testcases en validatiecontext. |
 | `/scope` | Scope, bekende beperkingen en manco's. |
@@ -67,9 +70,9 @@ De invoer is opgedeeld in twee hoofdsecties: **werkgever** en **werknemer**.
 
 De vroegere bouw-subsetoptie voor een aparte 1,80% aanvullende pensioenbijdrage is niet langer zichtbaar of actief. Oude CSV-profielen met `bouwVlag` blijven inleesbaar, maar Jaakie telt geen aparte bouwbijdrage bovenop de globale werkgevers-RSZ.
 
-De tijdelijke single-profile CSV import/export zit achter een sticky ontwikkelactie **CSV import/export**. Die opent een modal met exportnaam, commentaar, import en export; ingevulde exportnaam en commentaar blijven behouden wanneer de modal wordt gesloten en later opnieuw geopend.
+De tijdelijke single-profile CSV import/export zit achter een ontwikkelactie **CSV import/export** bovenaan de calculatorpagina. Die opent een modal met exportnaam, commentaar, import en export; ingevulde exportnaam en commentaar blijven behouden wanneer de modal wordt gesloten en later opnieuw geopend.
 
-De kerncijfers (`Bruto`, `Netto`, `Werkgeverskost`, `Loonwig`) en calculatoracties staan bovenaan in een compacte sticky rekenbalk, zodat de belangrijkste uitkomst zichtbaar blijft terwijl gebruikers door de invoerblokken scrollen.
+De kerncijfers (`Bruto`, `Netto`, `Werkgeverskost`, `Loonwig`) staan in de linkerrail onder de hoofdnavigatie, gestapeld en zichtbaar op simulatorroutes (`/`, `/loonfiche`, `/loonrun`). Op mobiel verbergt de rail, dus blijven de kerncijfers daar niet zichtbaar; de invoer en resultaatbanden blijven wel toegankelijk.
 
 De profielinvoer gebruikt compacte cockpitkaarten met lagere sectiekoppen, kleinere labels en lagere inputs op desktop, zodat meer kernvelden tegelijk zichtbaar zijn; mobiel behoudt leesbare touchruimte.
 

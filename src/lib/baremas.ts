@@ -1,5 +1,5 @@
 import type { Datapunt } from "@/types/dataset";
-import { allDatapunten } from "@/lib/dataset";
+import { baremasByKey } from "@/lib/dataset";
 import { safeGetValue } from "@/lib/periode";
 import { BaremaBuitenSchaalError, DatapuntOnbekend } from "@/lib/errors";
 import { round2 } from "@/lib/money";
@@ -15,7 +15,7 @@ export interface BaremaLookupResult {
 }
 export function lookupBarema(schaal: Schaal, categorie: BaremaCat, ervaringJaren: number, refDatum: string = DEFAULT_REF_DATUM): BaremaLookupResult {
     const dp = selectBaremaDatapunt({
-        idPattern: new RegExp(`^lonen_pc200_schaal${schaal}_cat${categorie}_\\d{8}$`),
+        key: `schaal${schaal}_cat${categorie}`,
         refDatum,
         omschrijving: `Schaal ${schaal} Cat ${categorie}`,
     });
@@ -52,7 +52,7 @@ export interface StudentenLookupResult {
 }
 export function lookupStudentenbarema(categorie: StudentenCat, leeftijdJaren: number, refDatum: string = DEFAULT_REF_DATUM): StudentenLookupResult {
     const dp = selectBaremaDatapunt({
-        idPattern: new RegExp(`^lonen_pc200_studenten_cat${categorie}_\\d{8}$`),
+        key: `studenten_cat${categorie}`,
         refDatum,
         omschrijving: `Studentenbarema Cat ${categorie}`,
     });
@@ -111,16 +111,14 @@ function normaliseerTewerkstellingsbreuk(tewerkstellingsbreuk: number): number {
         return 1;
     return tewerkstellingsbreuk;
 }
-function selectBaremaDatapunt({ idPattern, refDatum, omschrijving, }: {
-    idPattern: RegExp;
+function selectBaremaDatapunt({ key, refDatum, omschrijving, }: {
+    key: string;
     refDatum: string;
     omschrijving: string;
 }): Datapunt {
-    const candidates = allDatapunten()
-        .filter((dp) => dp.categorie === "lonen" && dp.type === "barema" && idPattern.test(dp.id))
-        .sort((a, b) => datumVoorSort(b.geldig_vanaf).localeCompare(datumVoorSort(a.geldig_vanaf)));
-    if (candidates.length === 0) {
-        throw new DatapuntOnbekend(`${omschrijving} (${idPattern.source})`);
+    const candidates = baremasByKey()[key];
+    if (!candidates || candidates.length === 0) {
+        throw new DatapuntOnbekend(`${omschrijving} (${key})`);
     }
     let firstError: unknown = null;
     for (const candidate of candidates) {
@@ -132,7 +130,4 @@ function selectBaremaDatapunt({ idPattern, refDatum, omschrijving, }: {
         }
     }
     throw firstError;
-}
-function datumVoorSort(datum: string | null | undefined): string {
-    return datum ?? "0000-00-00";
 }

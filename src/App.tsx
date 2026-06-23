@@ -1,20 +1,27 @@
+import { Suspense, lazy, useMemo } from "react";
 import { HashRouter, Route, Routes, useLocation } from "react-router-dom";
 import { BookOpen, Building2, Calculator, ChevronRight, FlaskConical, MessageCircle, MoreHorizontal } from "lucide-react";
-import { HomePage } from "@/pages/HomePage";
-import { LoonfichePage } from "@/pages/LoonfichePage";
-import { LoonmotorPage } from "@/pages/LoonmotorPage";
-import { LoonrunPage } from "@/pages/LoonrunPage";
-import { ScopePage } from "@/pages/ScopePage";
-import { TestcasesPage } from "@/pages/TestcasesPage";
 import { APP_BRAND } from "@/branding/brand";
 import { AiChatWidget } from "@/components/AiChatWidget";
+import { HeroSummary } from "@/components/HeroSummary";
+import { computeSummary } from "@/pages/home/ResultatenPanel";
+import { SharedProfielProvider, useSharedProfiel } from "@/lib/useSharedProfiel";
+import { HomePage } from "@/pages/HomePage";
+const LoonfichePage = lazy(() => import("@/pages/LoonfichePage").then((m) => ({ default: m.LoonfichePage })));
+const LoonrunPage = lazy(() => import("@/pages/LoonrunPage").then((m) => ({ default: m.LoonrunPage })));
+const LoonmotorPage = lazy(() => import("@/pages/LoonmotorPage").then((m) => ({ default: m.LoonmotorPage })));
+const Simulator2HomePage      = lazy(() => import("@/pages/simulator2/HomePage").then((m) => ({ default: m.Simulator2HomePage })));
+const Simulator2LoonfichePage = lazy(() => import("@/pages/simulator2/LoonfichePage").then((m) => ({ default: m.Simulator2LoonfichePage })));
+const Simulator2LoonrunPage   = lazy(() => import("@/pages/simulator2/LoonrunPage").then((m) => ({ default: m.Simulator2LoonrunPage })));
+const TestcasesPage = lazy(() => import("@/pages/TestcasesPage").then((m) => ({ default: m.TestcasesPage })));
+const ScopePage = lazy(() => import("@/pages/ScopePage").then((m) => ({ default: m.ScopePage })));
 const DEFAULT_CONTENT_MAX_WIDTH = 1180;
 const CALCULATOR_CONTENT_MAX_WIDTH = 1520;
 export const headerContentLayout = {
     maxWidth: "none",
     margin: "0",
 } as const;
-export type PrimarySection = "loonmotor" | "simulator" | "ontwikkeling";
+export type PrimarySection = "loonmotor" | "simulator" | "simulator2" | "ontwikkeling";
 export const PRIMARY_NAV_ITEMS = [
     {
         id: "loonmotor",
@@ -29,6 +36,12 @@ export const PRIMARY_NAV_ITEMS = [
         icon: Calculator,
     },
     {
+        id: "simulator2",
+        to: "/simulator2",
+        label: "Simulator 2",
+        icon: Calculator,
+    },
+    {
         id: "ontwikkeling",
         to: "/testcases",
         label: "Ontwikkeling",
@@ -40,13 +53,19 @@ export const SIMULATOR_SUBNAV_ITEMS = [
     { to: "/loonfiche", label: "Loonfiche" },
     { to: "/loonrun", label: "Loonrun" },
 ] as const;
+export const SIMULATOR2_SUBNAV_ITEMS = [
+    { to: "/simulator2", label: "Calculator" },
+    { to: "/simulator2/loonfiche", label: "Loonfiche" },
+    { to: "/simulator2/loonrun", label: "Loonrun" },
+] as const;
 const DEVELOPMENT_SUBNAV_ITEMS = [
     { type: "route", to: "/testcases", label: "Testcases" },
     { type: "route", to: "/scope", label: "Scope & bekend manco" },
     { type: "external", href: "/onderzoek/index.html", label: "Onderzoeksdossier" },
 ] as const;
 export function mainMaxWidthForPath(pathname: string): number {
-    if (pathname === "/" || pathname === "/loonfiche" || pathname === "/loonrun" || pathname === "/loonmotor")
+    if (pathname === "/" || pathname === "/loonfiche" || pathname === "/loonrun" || pathname === "/loonmotor" ||
+        pathname === "/simulator2" || pathname === "/simulator2/loonfiche" || pathname === "/simulator2/loonrun")
         return CALCULATOR_CONTENT_MAX_WIDTH;
     return DEFAULT_CONTENT_MAX_WIDTH;
 }
@@ -55,6 +74,8 @@ export function activeSectionForPath(pathname: string): PrimarySection {
         return "loonmotor";
     if (pathname === "/" || pathname === "/loonfiche" || pathname === "/loonrun")
         return "simulator";
+    if (pathname === "/simulator2" || pathname === "/simulator2/loonfiche" || pathname === "/simulator2/loonrun")
+        return "simulator2";
     return "ontwikkeling";
 }
 function sectionLabelForPath(pathname: string): string {
@@ -62,9 +83,11 @@ function sectionLabelForPath(pathname: string): string {
     return PRIMARY_NAV_ITEMS.find((item) => item.id === active)?.label ?? "Jaakie";
 }
 export function App() {
-    return (<HashRouter>
-      <AppShell />
-    </HashRouter>);
+    return (<SharedProfielProvider>
+      <HashRouter>
+        <AppShell />
+      </HashRouter>
+    </SharedProfielProvider>);
 }
 function AppShell() {
     const location = useLocation();
@@ -74,7 +97,11 @@ function AppShell() {
         <header className="app-topbar">
           <div className="app-topbar-inner" style={headerContentLayout}>
             <BrandLockup />
-            {activeSection === "simulator" ? (<SimulatorSubnav pathname={location.pathname} placement="header"/>) : (<div className="app-context">
+            {activeSection === "simulator" || activeSection === "simulator2" ? (
+                activeSection === "simulator2" ?
+                    <Simulator2Subnav pathname={location.pathname} placement="header"/> :
+                    <SimulatorSubnav pathname={location.pathname} placement="header"/>
+              ) : (<div className="app-context">
                 <span>{sectionLabelForPath(location.pathname)}</span>
                 <ChevronRight size={14}/>
                 <span>{activeSection === "ontwikkeling" ? "Werkruimte" : "Dossiercockpit"}</span>
@@ -90,16 +117,22 @@ function AppShell() {
           <PrimaryRail pathname={location.pathname}/>
           <div className="app-content-column">
             {activeSection === "simulator" && <SimulatorSubnav pathname={location.pathname} placement="mobile"/>}
+            {activeSection === "simulator2" && <Simulator2Subnav pathname={location.pathname} placement="mobile"/>}
             {activeSection === "ontwikkeling" && <DevelopmentSubnav pathname={location.pathname}/>}
             <main className="app-main" style={{ maxWidth: mainMaxWidth, width: "100%", boxSizing: "border-box", margin: "0 auto", padding: "28px 28px" }}>
-              <Routes>
-                <Route path="/" element={<HomePage />}/>
-                <Route path="/loonfiche" element={<LoonfichePage />}/>
-                <Route path="/loonrun" element={<LoonrunPage />}/>
-                <Route path="/loonmotor" element={<LoonmotorPage />}/>
-                <Route path="/testcases" element={<TestcasesPage />}/>
-                <Route path="/scope" element={<ScopePage />}/>
-              </Routes>
+              <Suspense fallback={<PageLoader/>}>
+                <Routes>
+                  <Route path="/" element={<HomePage />}/>
+                  <Route path="/loonfiche" element={<LoonfichePage />}/>
+                  <Route path="/loonrun" element={<LoonrunPage />}/>
+                  <Route path="/simulator2" element={<Simulator2HomePage />}/>
+                  <Route path="/simulator2/loonfiche" element={<Simulator2LoonfichePage />}/>
+                  <Route path="/simulator2/loonrun" element={<Simulator2LoonrunPage />}/>
+                  <Route path="/loonmotor" element={<LoonmotorPage />}/>
+                  <Route path="/testcases" element={<TestcasesPage />}/>
+                  <Route path="/scope" element={<ScopePage />}/>
+                </Routes>
+              </Suspense>
             </main>
           </div>
         </div>
@@ -146,7 +179,17 @@ export function PrimaryRail({ pathname }: {
         })}
       </nav>
       {active === "ontwikkeling" && <DevelopmentRailLinks />}
+      <RailHeroSummary active={active}/>
     </aside>);
+}
+function RailHeroSummary({ active }: { active: PrimarySection }) {
+    const [profiel] = useSharedProfiel();
+    const summary = useMemo(() => computeSummary(profiel), [profiel]);
+    if (active !== "simulator" && active !== "simulator2")
+        return null;
+    return (<div className="rail-hero-summary">
+      <HeroSummary brutoloon={summary.bruto} nettoloon={summary.netto} werkgeverskost={summary.werkgeverskost} loonwig={summary.loonwig}/>
+    </div>);
 }
 function DevelopmentRailLinks() {
     return (<div className="app-rail-secondary" aria-label="Ontwikkeling links">
@@ -166,6 +209,20 @@ export function SimulatorSubnav({ pathname, placement = "mobile" }: {
       <div className={isHeader ? "app-header-subnav-inner" : "app-subnav-inner"}>
         <span className="app-subnav-kicker"><Calculator size={14}/> Simulator</span>
         {SIMULATOR_SUBNAV_ITEMS.map((item) => (<a key={item.to} href={hashHref(item.to)} aria-current={pathname === item.to ? "page" : undefined} className={`app-subnav-link ${pathname === item.to ? "is-active" : ""}`}>
+          {item.label}
+        </a>))}
+      </div>
+    </nav>);
+}
+export function Simulator2Subnav({ pathname, placement = "mobile" }: {
+    pathname: string;
+    placement?: "header" | "mobile";
+}) {
+    const isHeader = placement === "header";
+    return (<nav className={isHeader ? "app-header-subnav" : "app-subnav app-subnav-mobile"} aria-label="Simulator 2 navigatie">
+      <div className={isHeader ? "app-header-subnav-inner" : "app-subnav-inner"}>
+        <span className="app-subnav-kicker"><Calculator size={14}/> Simulator 2</span>
+        {SIMULATOR2_SUBNAV_ITEMS.map((item) => (<a key={item.to} href={hashHref(item.to)} aria-current={pathname === item.to ? "page" : undefined} className={`app-subnav-link ${pathname === item.to ? "is-active" : ""}`}>
           {item.label}
         </a>))}
       </div>
@@ -207,4 +264,17 @@ export function MobileBottomNav({ pathname }: {
 }
 function hashHref(to: string): string {
     return `#${to}`;
+}
+function PageLoader() {
+    return (<div style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: "50vh",
+            color: "var(--color-text-muted)",
+            fontSize: 14,
+            fontFamily: "var(--font-body)",
+        }}>
+        Pagina laden…
+      </div>);
 }

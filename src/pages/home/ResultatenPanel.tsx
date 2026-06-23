@@ -13,11 +13,12 @@ import { NettoJaaroverzichtPanel, WerkgeverJaaroverzichtPanel } from "@/pages/ho
 import { NettoPanel } from "@/pages/home/NettoPanelen";
 import { WerkgeverskostPanel } from "@/pages/home/WerkgeverskostPanel";
 import type { BouwResultaten, ResultBandSpec, ResultSummary } from "@/pages/home/types";
-export function ResultBandsPanel({ profiel, }: {
+export function ResultBandsPanel({ profiel, summary: summaryProp, }: {
     profiel: Profiel;
+    summary?: ResultSummary;
 }) {
     const [auditForce, setAuditForce] = useState<AuditForceState>(null);
-    const { bands } = useMemo(() => bouwResultaten(profiel), [profiel]);
+    const { bands } = useMemo(() => bouwResultaten(profiel, summaryProp), [profiel, summaryProp]);
     const anchors: JumpAnchor[] = bands.map((b) => ({ id: b.id, label: b.shortLabel }));
     return (<section style={{ display: "flex", flexDirection: "column", gap: 16, minWidth: 0 }}>
       
@@ -110,9 +111,9 @@ function safeRender<T>(fn: () => T, render: (r: T) => React.ReactNode): React.Re
         return renderError(e);
     }
 }
-function bouwResultaten(p: Profiel): BouwResultaten {
+function bouwResultaten(p: Profiel, summaryProp?: ResultSummary): BouwResultaten {
     const refDatum = refDatumVoorMaand(p.berekeningsJaar, p.berekeningsMaand);
-    const summary = computeSummary(p);
+    const summary = summaryProp ?? computeSummary(p);
     const bands: ResultBandSpec[] = [];
     if (p.statuut === "bediende") {
         try {

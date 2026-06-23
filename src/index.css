@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 @import "./branding/brand.css";
 
 html, body, #root {
@@ -109,7 +108,7 @@ h1, h2, h3, h4 {
 
 .app-body {
   display: grid;
-  grid-template-columns: 92px minmax(0, 1fr);
+  grid-template-columns: 120px minmax(0, 1fr);
   min-height: calc(100vh - 64px);
 }
 
@@ -121,9 +120,35 @@ h1, h2, h3, h4 {
   display: flex;
   flex-direction: column;
   gap: 18px;
-  padding: 18px 12px;
+  padding: 18px 10px;
   border-right: 1px solid var(--color-border);
   background: var(--color-surface);
+}
+
+.rail-hero-summary {
+  margin-top: auto;
+  width: 100%;
+}
+
+.rail-hero-summary .hero-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rail-hero-summary .hero-summary-card {
+  min-height: auto;
+  padding: 8px 6px;
+  text-align: center;
+}
+
+.rail-hero-summary .hero-summary-label {
+  font-size: 9px;
+}
+
+.rail-hero-summary .hero-summary-value {
+  font-size: 14px;
+  text-align: center;
 }
 
 .app-primary-rail-nav {
@@ -239,33 +264,11 @@ h1, h2, h3, h4 {
   display: none;
 }
 
-.calculator-sticky-summary {
-  position: sticky;
-  top: 64px;
-  z-index: 80;
-  display: grid;
-  gap: 6px;
-  margin: 0 0 12px;
-  padding: 15px 0 6px;
-  background: var(--color-background);
-}
-
-.calculator-sticky-summary::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 100%;
-  height: 120px;
-  background: var(--color-background);
-  z-index: -1;
-}
-
-.calculator-summary-controls {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  align-items: center;
-  gap: 12px;
+.calculator-page-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0;
+  padding: 0;
 }
 
 .calculator-dev-actions {
@@ -309,6 +312,7 @@ h1, h2, h3, h4 {
   justify-content: center;
   justify-self: center;
   min-width: max-content;
+  padding: 5px 0 6px;
 }
 
 .direction-toggle-track {
@@ -383,15 +387,6 @@ h1, h2, h3, h4 {
     display: block;
   }
 
-  .calculator-sticky-summary {
-    top: 122px;
-    padding-top: 5px;
-  }
-
-  .calculator-summary-controls {
-    align-items: flex-start;
-  }
-
   .hero-summary {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -418,6 +413,10 @@ h1, h2, h3, h4 {
     display: none;
   }
 
+  .rail-hero-summary {
+    display: none;
+  }
+
   .app-subnav {
     top: 58px;
     padding: 10px 16px 0;
@@ -441,16 +440,12 @@ h1, h2, h3, h4 {
     overflow-x: hidden;
   }
 
-  .calculator-sticky-summary {
-    top: 110px;
-    gap: 6px;
-    padding-top: 4px;
+  .calculator-page-actions {
+    justify-content: stretch;
   }
 
-  .calculator-summary-controls {
-    display: flex;
-    align-items: stretch;
-    flex-direction: column;
+  .calculator-page-actions .calculator-dev-actions {
+    width: 100%;
   }
 
   .direction-toggle,
@@ -571,7 +566,7 @@ h1, h2, h3, h4 {
 .home-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 12px;
+  gap: 6px;
   min-width: 0;
 }
 
@@ -601,6 +596,19 @@ h1, h2, h3, h4 {
 
 .home-layout > aside {
   overflow-wrap: anywhere;
+}
+
+.simulator2-top-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--cockpit-grid-gap);
+  align-items: stretch;
+}
+
+@media (max-width: 900px) {
+  .simulator2-top-row {
+    grid-template-columns: 1fr;
+  }
 }
 
 .kbo-lookup-card {
@@ -1538,6 +1546,22 @@ h1, h2, h3, h4 {
   grid-template-columns: repeat(4, 1fr);
 }
 
+
+.cockpit-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.audit-source-toggle:hover {
+  background: var(--color-primary-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-chat-loading svg,
+  .hero-summary-value {
+    animation: none !important;
+    transition: none !important;
+  }
+}
 
 @keyframes spin {
   from {

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { AlertTriangle, Building2, Database, ExternalLink, FileLock2, Loader2, Plus, Save, Search, Trash2, UserPlus, Users } from "lucide-react";
 import { Banner } from "@/components/Banner";
 import { FormField, inputClass, selectClass } from "@/components/Field";
@@ -37,10 +37,9 @@ type Status = { kind: "success" | "error" | "info"; tekst: string } | null;
 export function LoonmotorPage({ initialDossiers }: LoonmotorPageProps) {
   const [dossiers, setDossiers] = useState<LoonmotorDossier[]>(() => initialDossiers ?? readLoonmotorDossiers());
   const [selectedId, setSelectedId] = useState(() => dossiers[0]?.bedrijf.id ?? "");
-  const [kboInput, setKboInput] = useState("");
-  const [kboLoading, setKboLoading] = useState(false);
   const [status, setStatus] = useState<Status>(null);
   const [toonMedewerkerForm, setToonMedewerkerForm] = useState(false);
+  const openMedewerkerForm = useCallback(() => setToonMedewerkerForm(true), []);
   const [teVerwijderenBedrijf, setTeVerwijderenBedrijf] = useState<LoonmotorDossier | null>(null);
   const [, setSharedProfiel] = useSharedProfiel();
 
@@ -55,18 +54,17 @@ export function LoonmotorPage({ initialDossiers }: LoonmotorPageProps) {
 
   const selected = dossiers.find((dossier) => dossier.bedrijf.id === selectedId) ?? dossiers[0] ?? null;
 
-  async function maakBedrijfViaKbo() {
-    const formatted = normalizeKboNumber(kboInput);
+  const maakBedrijfViaKbo = useCallback(async (kboNummer: string) => {
+    const formatted = normalizeKboNumber(kboNummer);
     if (!/^\d{4}\.\d{3}\.\d{3}$/.test(formatted)) {
       setStatus({ kind: "error", tekst: "Gebruik formaat XXXX.XXX.XXX." });
-      return;
+      throw new Error("Ongeldig formaat");
     }
     if (!isValidKboNumber(formatted)) {
       setStatus({ kind: "error", tekst: "Ongeldig ondernemingsnummer." });
-      return;
+      throw new Error("Ongeldig ondernemingsnummer");
     }
 
-    setKboLoading(true);
     setStatus({ kind: "info", tekst: "KBO-gegevens worden opgehaald." });
     try {
       const result = await fetchKboHtml(formatted.replace(/\D/g, ""));
@@ -89,7 +87,6 @@ export function LoonmotorPage({ initialDossiers }: LoonmotorPageProps) {
         };
         voegDossierToe(bedrijf);
         setStatus({ kind: "success", tekst: `Gegevens opgehaald${parsed.name ? `: ${parsed.name}` : ""}.` });
-        setKboInput(formatted);
         return;
       }
       if (!result.ok) {
@@ -101,16 +98,15 @@ export function LoonmotorPage({ initialDossiers }: LoonmotorPageProps) {
       }
     } catch (error) {
       setStatus({ kind: "error", tekst: `KBO-lookup niet beschikbaar: ${error instanceof Error ? error.message : "onbekende fout"}.` });
-    } finally {
-      setKboLoading(false);
+      throw error;
     }
-  }
+  }, []);
 
-  function voegHandmatigBedrijfToe() {
+  const voegHandmatigBedrijfToe = useCallback(() => {
     const bedrijf = createLeegBedrijf();
     voegDossierToe(bedrijf);
     setStatus({ kind: "success", tekst: "Handmatig bedrijfsconcept aangemaakt." });
-  }
+  }, []);
 
   function voegDossierToe(bedrijf: LoonmotorBedrijf) {
     setDossiers((prev) => {
@@ -163,12 +159,12 @@ export function LoonmotorPage({ initialDossiers }: LoonmotorPageProps) {
     setStatus({ kind: "success", tekst: "Medewerker toegevoegd aan lokaal conceptdossier." });
   }
 
-  function openInCalculator(medewerker: LoonmotorMedewerker) {
+  const openInCalculator = useCallback((medewerker: LoonmotorMedewerker) => {
     setSharedProfiel(normaliseerProfiel(medewerker.profiel));
     if (typeof window !== "undefined") window.location.hash = "#/";
-  }
+  }, [setSharedProfiel]);
 
-  function voegMedewerkersToeAanLoonrun(medewerkers: LoonmotorMedewerker[]) {
+  const voegMedewerkersToeAanLoonrun = useCallback((medewerkers: LoonmotorMedewerker[]) => {
     if (medewerkers.length === 0) {
       setStatus({ kind: "error", tekst: "Voeg eerst minstens één medewerker toe." });
       return;
@@ -181,11 +177,11 @@ export function LoonmotorPage({ initialDossiers }: LoonmotorPageProps) {
       tekst: `${additions.length} medewerker${additions.length === 1 ? "" : "s"} toegevoegd aan loonrun.`,
     });
     if (typeof window !== "undefined") window.location.hash = "#/loonrun";
-  }
+  }, []);
 
-  function voegMedewerkerToeAanLoonrun(medewerker: LoonmotorMedewerker) {
+  const voegMedewerkerToeAanLoonrun = useCallback((medewerker: LoonmotorMedewerker) => {
     voegMedewerkersToeAanLoonrun([medewerker]);
-  }
+  }, [voegMedewerkersToeAanLoonrun]);
 
   function conceptBewaren() {
     writeLoonmotorDossiers(undefined, dossiers);
@@ -230,10 +226,7 @@ export function LoonmotorPage({ initialDossiers }: LoonmotorPageProps) {
 
       {dossiers.length === 0 ? (
         <LegeStaat
-          kboInput={kboInput}
-          setKboInput={setKboInput}
-          kboLoading={kboLoading}
-          onLookup={() => void maakBedrijfViaKbo()}
+          onLookup={maakBedrijfViaKbo}
           onManual={voegHandmatigBedrijfToe}
         />
       ) : (
@@ -241,10 +234,7 @@ export function LoonmotorPage({ initialDossiers }: LoonmotorPageProps) {
           <BedrijvenLijst
             dossiers={dossiers}
             selectedId={selected?.bedrijf.id ?? ""}
-            kboInput={kboInput}
-            setKboInput={setKboInput}
-            kboLoading={kboLoading}
-            onLookup={() => void maakBedrijfViaKbo()}
+            onLookup={maakBedrijfViaKbo}
             onManual={voegHandmatigBedrijfToe}
             onSelect={setSelectedId}
           />
@@ -265,7 +255,7 @@ export function LoonmotorPage({ initialDossiers }: LoonmotorPageProps) {
                 medewerkers={selected.medewerkers}
                 onOpenInCalculator={openInCalculator}
                 onAddToLoonrun={voegMedewerkerToeAanLoonrun}
-                onAddEmployee={() => setToonMedewerkerForm(true)}
+                onAddEmployee={openMedewerkerForm}
               />
             </div>
           )}
@@ -286,34 +276,58 @@ export function LoonmotorPage({ initialDossiers }: LoonmotorPageProps) {
   );
 }
 
-function LegeStaat({ kboInput, setKboInput, kboLoading, onLookup, onManual }: {
-  kboInput: string;
-  setKboInput: (value: string) => void;
-  kboLoading: boolean;
-  onLookup: () => void;
+function KboZoekVeld({ onLookup, inputStyle }: {
+  onLookup: (kboNummer: string) => void | Promise<void>;
+  inputStyle?: React.CSSProperties;
+}) {
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  async function handleLookup() {
+    const normalized = normalizeKboNumber(input);
+    if (normalized) setInput(normalized);
+    setLoading(true);
+    try {
+      await onLookup(normalized || input);
+    } finally {
+      setLoading(false);
+    }
+  }
+  return (
+    <div className="kbo-lookup-row">
+      <input
+        className={inputClass}
+        value={input}
+        onChange={(event) => setInput(event.target.value)}
+        onBlur={(event) => {
+          const normalized = normalizeKboNumber(event.target.value);
+          if (normalized) setInput(normalized);
+        }}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            void handleLookup();
+          }
+        }}
+        placeholder="XXXX.XXX.XXX"
+        style={inputStyle}
+      />
+      <button type="button" onClick={() => void handleLookup()} disabled={loading} style={buttonStyle("primary")}>
+        {loading ? <Loader2 size={15} /> : <Search size={15} />}
+        Ophalen uit KBO
+      </button>
+    </div>
+  );
+}
+
+function LegeStaat({ onLookup, onManual }: {
+  onLookup: (kboNummer: string) => void | Promise<void>;
   onManual: () => void;
 }) {
   return (
     <section style={{ ...panelStyle, marginTop: 18, padding: 24 }}>
       <div className="kbo-lookup-card">
         <div className="kbo-field-label">Ondernemingsnummer</div>
-        <div className="kbo-lookup-row">
-          <input
-            className={inputClass}
-            value={kboInput}
-            onChange={(event) => setKboInput(event.target.value)}
-            onBlur={(event) => {
-              const normalized = normalizeKboNumber(event.target.value);
-              if (normalized) setKboInput(normalized);
-            }}
-            placeholder="XXXX.XXX.XXX"
-            style={{ minHeight: 44, fontSize: 16 }}
-          />
-          <button type="button" onClick={onLookup} disabled={kboLoading} style={buttonStyle("primary")}>
-            {kboLoading ? <Loader2 size={15} /> : <Search size={15} />}
-            Ophalen uit KBO
-          </button>
-        </div>
+        <KboZoekVeld onLookup={onLookup} inputStyle={{ minHeight: 44, fontSize: 16 }} />
         <div className="kbo-helper-text">Vul bijvoorbeeld 0452.085.227 in. Jaakie vult publieke KBO-gegevens aan waar beschikbaar.</div>
         <div className="kbo-secondary-actions">
           <span>Geen ondernemingsnummer bij de hand?</span>
@@ -327,13 +341,10 @@ function LegeStaat({ kboInput, setKboInput, kboLoading, onLookup, onManual }: {
   );
 }
 
-function BedrijvenLijst({ dossiers, selectedId, kboInput, setKboInput, kboLoading, onLookup, onManual, onSelect }: {
+const BedrijvenLijst = memo(function BedrijvenLijst({ dossiers, selectedId, onLookup, onManual, onSelect }: {
   dossiers: LoonmotorDossier[];
   selectedId: string;
-  kboInput: string;
-  setKboInput: (value: string) => void;
-  kboLoading: boolean;
-  onLookup: () => void;
+  onLookup: (kboNummer: string) => void | Promise<void>;
   onManual: () => void;
   onSelect: (id: string) => void;
 }) {
@@ -371,20 +382,7 @@ function BedrijvenLijst({ dossiers, selectedId, kboInput, setKboInput, kboLoadin
         </summary>
         <div style={{ display: "grid", gap: 8, marginTop: 10 }}>
           <div className="kbo-field-label">Ondernemingsnummer</div>
-          <input
-            className={inputClass}
-            value={kboInput}
-            onChange={(event) => setKboInput(event.target.value)}
-            onBlur={(event) => {
-              const normalized = normalizeKboNumber(event.target.value);
-              if (normalized) setKboInput(normalized);
-            }}
-            placeholder="XXXX.XXX.XXX"
-          />
-          <button type="button" onClick={onLookup} disabled={kboLoading} style={buttonStyle("primary")}>
-            {kboLoading ? <Loader2 size={15} /> : <Search size={15} />}
-            Ophalen uit KBO
-          </button>
+          <KboZoekVeld onLookup={onLookup} />
           <button type="button" onClick={onManual} style={buttonStyle("secondary")}>
             <Plus size={15} />
             Handmatig bedrijf aanmaken
@@ -393,7 +391,7 @@ function BedrijvenLijst({ dossiers, selectedId, kboInput, setKboInput, kboLoadin
       </details>
     </aside>
   );
-}
+});
 
 function BedrijfHeader({ bedrijf, medewerkerAantal }: { bedrijf: LoonmotorBedrijf; medewerkerAantal: number }) {
   const adres = [bedrijf.adres.straat && `${bedrijf.adres.straat} ${bedrijf.adres.huisnummer}`.trim(), bedrijf.adres.postcode && `${bedrijf.adres.postcode} ${bedrijf.adres.gemeente}`.trim()].filter(Boolean).join(", ");
@@ -588,7 +586,38 @@ function VerwijderBedrijfModal({ dossier, onCancel, onConfirm }: {
   );
 }
 
-function MedewerkersTabel({ medewerkers, onOpenInCalculator, onAddToLoonrun, onAddEmployee }: {
+const MedewerkerRij = memo(function MedewerkerRij({ medewerker, onOpenInCalculator, onAddToLoonrun }: {
+  medewerker: LoonmotorMedewerker;
+  onOpenInCalculator: (medewerker: LoonmotorMedewerker) => void;
+  onAddToLoonrun: (medewerker: LoonmotorMedewerker) => void;
+}) {
+  const indicatie = useMemo(() => berekenIndicatie(medewerker), [medewerker]);
+  const openInCalculator = useCallback(() => onOpenInCalculator(medewerker), [onOpenInCalculator, medewerker]);
+  const addToLoonrun = useCallback(() => onAddToLoonrun(medewerker), [onAddToLoonrun, medewerker]);
+  return (
+    <tr style={{ borderBottom: "1px solid var(--color-navy-50)" }}>
+      <td style={tdStyle}><strong>{medewerker.naam || "Naam ontbreekt"}</strong><br /><span style={mutedStyle}>{medewerker.referentie || "Geen referentie"}</span></td>
+      <td style={tdStyle}>{medewerker.statuut}</td>
+      <td style={tdStyle}>{medewerker.functie || "-"}</td>
+      <td style={tdRightStyle}>{formatEUR(medewerker.profiel.brutoloon)}</td>
+      <td style={tdRightStyle}>{Math.round(medewerker.profiel.tewerkstellingsbreuk * 100)}%</td>
+      <td style={tdStyle}>{medewerker.startdatum || "-"}</td>
+      <td style={tdRightStyle}>{indicatie.netto}</td>
+      <td style={tdRightStyle}>{indicatie.werkgeverskost}</td>
+      <td style={tdStyle}>{maskInsz(medewerker.insz) || "-"}</td>
+      <td style={{ ...tdStyle, display: "flex", gap: 6, flexWrap: "wrap" }}>
+        <button type="button" onClick={openInCalculator} style={smallButtonStyle}>
+          Open in calculator
+        </button>
+        <button type="button" onClick={addToLoonrun} style={smallButtonStyle}>
+          Naar loonrun
+        </button>
+      </td>
+    </tr>
+  );
+});
+
+const MedewerkersTabel = memo(function MedewerkersTabel({ medewerkers, onOpenInCalculator, onAddToLoonrun, onAddEmployee }: {
   medewerkers: LoonmotorMedewerker[];
   onOpenInCalculator: (medewerker: LoonmotorMedewerker) => void;
   onAddToLoonrun: (medewerker: LoonmotorMedewerker) => void;
@@ -618,37 +647,21 @@ function MedewerkersTabel({ medewerkers, onOpenInCalculator, onAddToLoonrun, onA
               </tr>
             </thead>
             <tbody>
-              {medewerkers.map((medewerker) => {
-                const indicatie = berekenIndicatie(medewerker);
-                return (
-                  <tr key={medewerker.id} style={{ borderBottom: "1px solid var(--color-navy-50)" }}>
-                    <td style={tdStyle}><strong>{medewerker.naam || "Naam ontbreekt"}</strong><br /><span style={mutedStyle}>{medewerker.referentie || "Geen referentie"}</span></td>
-                    <td style={tdStyle}>{medewerker.statuut}</td>
-                    <td style={tdStyle}>{medewerker.functie || "-"}</td>
-                    <td style={tdRightStyle}>{formatEUR(medewerker.profiel.brutoloon)}</td>
-                    <td style={tdRightStyle}>{Math.round(medewerker.profiel.tewerkstellingsbreuk * 100)}%</td>
-                    <td style={tdStyle}>{medewerker.startdatum || "-"}</td>
-                    <td style={tdRightStyle}>{indicatie.netto}</td>
-                    <td style={tdRightStyle}>{indicatie.werkgeverskost}</td>
-                    <td style={tdStyle}>{maskInsz(medewerker.insz) || "-"}</td>
-                    <td style={{ ...tdStyle, display: "flex", gap: 6, flexWrap: "wrap" }}>
-                      <button type="button" onClick={() => onOpenInCalculator(medewerker)} style={smallButtonStyle}>
-                        Open in calculator
-                      </button>
-                      <button type="button" onClick={() => onAddToLoonrun(medewerker)} style={smallButtonStyle}>
-                        Naar loonrun
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
+              {medewerkers.map((medewerker) => (
+                <MedewerkerRij
+                  key={medewerker.id}
+                  medewerker={medewerker}
+                  onOpenInCalculator={onOpenInCalculator}
+                  onAddToLoonrun={onAddToLoonrun}
+                />
+              ))}
             </tbody>
           </table>
         </div>
       )}
     </section>
   );
-}
+});
 
 function MedewerkerModal({ bedrijf, onClose, onSave }: {
   bedrijf: LoonmotorBedrijf;

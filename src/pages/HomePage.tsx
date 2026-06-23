@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { Download, FileText, Printer, X } from "lucide-react";
 import { Banner } from "@/components/Banner";
-import { HeroSummary } from "@/components/HeroSummary";
 import { useSharedProfiel } from "@/lib/useSharedProfiel";
 import { normaliseerProfiel, refDatumVoorMaand, type BerekeningsRichting, type Profiel, } from "@/lib/profiel";
 import { normaliseerCsvBestandsnaam, profielNaarCsv, profielUitCsv, standaardCsvNaamPrefix, } from "@/lib/profielCsv";
@@ -12,9 +11,9 @@ import { CsvPaneel } from "@/pages/home/CsvPaneel";
 import { WerknemerOverzicht } from "@/pages/home/WerknemerOverzicht";
 import { computeSummary, ResultBandsPanel } from "@/pages/home/ResultatenPanel";
 import type { ProfielSetter, ProfielUpdate } from "@/pages/home/types";
-import { ProfielEditor } from "@/pages/profiel/ProfielEditor";
+import { ProfielEditor, type ProfielEditorLayout } from "@/pages/profiel/ProfielEditor";
 export { waardeUitNumeriekeInput } from "@/pages/home/FormControls";
-export function HomePage() {
+export function HomePage({ layout }: { layout?: ProfielEditorLayout } = {}) {
     const [p, setP] = useSharedProfiel();
     const [exportNaam, setExportNaam] = useState(() => standaardCsvNaamPrefix());
     const [commentaar, setCommentaar] = useState("");
@@ -25,14 +24,14 @@ export function HomePage() {
     const [toonCsvPaneel, setToonCsvPaneel] = useState(false);
     const [toonOverzicht, setToonOverzicht] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const profiel = normaliseerProfiel(p);
+    const profiel = useMemo(() => normaliseerProfiel(p), [p]);
     useEffect(() => {
         if (toonOverzicht) {
             document.body.classList.add("print-modal-open");
             return () => document.body.classList.remove("print-modal-open");
         }
     }, [toonOverzicht]);
-    const set = ((kOfUpdate: keyof Profiel | ProfielUpdate, v?: Profiel[keyof Profiel]) => {
+    const set = useCallback(((kOfUpdate: keyof Profiel | ProfielUpdate, v?: Profiel[keyof Profiel]) => {
         setP((prev) => {
             const basis = normaliseerProfiel(prev);
             if (typeof kOfUpdate === "function")
@@ -41,7 +40,7 @@ export function HomePage() {
                 return { ...basis, ...kOfUpdate };
             return { ...basis, [kOfUpdate]: v };
         });
-    }) as ProfielSetter;
+    }) as ProfielSetter, [setP]);
     function exporteerCsv() {
         const csv = profielNaarCsv({ profiel, commentaar });
         const vandaag = standaardCsvNaamPrefix().slice(0, -1);
@@ -141,24 +140,21 @@ export function HomePage() {
         profiel.vaaGsmAbonnementActief,
     ]);
     const summary = useMemo(() => computeSummary(profiel), [profiel]);
-    return (<div className="home-layout" style={{ maxWidth: 1280, margin: "-18px auto 0", padding: "0 1rem 1.5rem" }}>
-      <div className="calculator-sticky-summary">
-        <div className="calculator-summary-controls">
-          <div className="calculator-dev-actions calculator-summary-actions" style={{ marginLeft: 0 }}>
-            <button type="button" onClick={() => setToonCsvPaneel(true)} className="calculator-dev-action-button">
-              <Download size={14}/>
-              CSV import/export
-            </button>
-            <button type="button" onClick={() => setToonOverzicht(true)} className="calculator-dev-action-button">
-              <FileText size={14}/>
-              Print overzicht
-            </button>
-          </div>
+    return (<div className="home-layout" style={{ maxWidth: 1280, margin: "-22px auto 0", padding: "0 1rem 1.5rem" }}>
+      <div className="calculator-page-actions">
+        <div className="calculator-dev-actions" style={{ marginLeft: 0 }}>
+          <button type="button" onClick={() => setToonCsvPaneel(true)} className="calculator-dev-action-button">
+            <Download size={14}/>
+            CSV import/export
+          </button>
+          <button type="button" onClick={() => setToonOverzicht(true)} className="calculator-dev-action-button">
+            <FileText size={14}/>
+            Print overzicht
+          </button>
         </div>
-        <HeroSummary brutoloon={summary.bruto} nettoloon={summary.netto} werkgeverskost={summary.werkgeverskost} loonwig={summary.loonwig}/>
       </div>
 
-      <ProfielEditor profiel={profiel} set={set} onChangeRichting={setBerekeningsRichting}/>
+      <ProfielEditor profiel={profiel} set={set} onChangeRichting={setBerekeningsRichting} layout={layout}/>
 
       <ErrorBoundary fallbackRender={({ error, resetErrorBoundary }) => (<Banner kind="error" title="Onverwachte fout">
             <p>{(error as Error).message}</p>
@@ -174,8 +170,8 @@ export function HomePage() {
             }}>
               Opnieuw proberen
             </button>
-          </Banner>)} resetKeys={[JSON.stringify(profiel)]}>
-        <ResultBandsPanel profiel={profiel}/>
+          </Banner>)} resetKeys={[profiel]}>
+        <ResultBandsPanel profiel={profiel} summary={summary}/>
       </ErrorBoundary>
 
       {toonCsvPaneel && createPortal(<div role="dialog" aria-modal="true" aria-labelledby="csv-modal-title" style={{
