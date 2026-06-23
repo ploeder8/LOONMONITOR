@@ -322,30 +322,34 @@ function BrutoloonCard({ profiel, set, onChangeRichting }: {
       </div>
     </CockpitCard>);
 }
-function ExtraLooncomponentenContent({ profiel, set }: {
+function LooncomponentCard({ icon, title, children }: {
+    icon: ReactNode;
+    title: string;
+    children: ReactNode;
+}) {
+    return (<div className="extra-loon-card">
+      <div className="extra-loon-title">
+        {icon}
+        {title}
+      </div>
+      {children}
+    </div>);
+}
+
+function ExtraLooncomponentenContent({ profiel, set, layout = "default" }: {
     profiel: Profiel;
     set: ProfielSetter;
+    layout?: "default" | "simulator2";
 }) {
-    return (<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4" style={{ gap: 16 }}>
-      <div style={{
-            background: "var(--cockpit-subsection-bg)",
-            borderRadius: "var(--cockpit-subsection-radius)",
-            padding: 16,
-        }}>
-        <div style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            marginBottom: 12,
-            fontSize: 11,
-            fontWeight: 700,
-            letterSpacing: "0.05em",
-            textTransform: "uppercase",
-            color: "var(--color-text-muted)",
-        }}>
-          <Shield size={14}/> Verzekeringen
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+    const vaaItems = [
+        { label: "Laptop / pc", checked: profiel.vaaPcLaptopActief, onChange: (v: boolean) => set("vaaPcLaptopActief", v) },
+        { label: "GSM", checked: profiel.vaaGsmSmartphoneActief, onChange: (v: boolean) => set("vaaGsmSmartphoneActief", v) },
+        { label: "Internet", checked: profiel.vaaInternetActief, onChange: (v: boolean) => set("vaaInternetActief", v) },
+        { label: "GSM-abonnement", checked: profiel.vaaGsmAbonnementActief, onChange: (v: boolean) => set("vaaGsmAbonnementActief", v) },
+    ];
+    return (<div className={`extra-loon-grid ${layout === "simulator2" ? "is-simulator2" : ""}`}>
+      <LooncomponentCard icon={<Shield size={14}/>} title="Verzekeringen">
+        <div className="extra-loon-stack">
           <FormField label="Groepsverz. eigen bijdr. (€/m)">
             <NumeriekeInput className={inputClass} step="0.01" min={0} value={profiel.groepsverzekeringEigenBijdrage} onValueChange={(waarde) => set("groepsverzekeringEigenBijdrage", waarde)}/>
           </FormField>
@@ -353,156 +357,46 @@ function ExtraLooncomponentenContent({ profiel, set }: {
             <NumeriekeInput className={inputClass} step="0.01" min={0} value={profiel.hospitalisatieEigenBijdrage} onValueChange={(waarde) => set("hospitalisatieEigenBijdrage", waarde)}/>
           </FormField>
         </div>
-      </div>
+      </LooncomponentCard>
 
-      <div style={{
-            background: "var(--cockpit-subsection-bg)",
-            borderRadius: "var(--cockpit-subsection-radius)",
-            padding: 16,
-        }}>
-        <div style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            marginBottom: 12,
-            fontSize: 11,
-            fontWeight: 700,
-            letterSpacing: "0.05em",
-            textTransform: "uppercase",
-            color: "var(--color-text-muted)",
-        }}>
-          <Receipt size={14}/> Maaltijdcheques
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <label style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            fontSize: 13,
-            color: "var(--color-navy-500)",
-            cursor: "pointer",
-            padding: "4px 0",
-        }}>
-            <input type="checkbox" checked={profiel.maaltijdchequesActief} onChange={(e) => set("maaltijdchequesActief", e.target.checked)} style={{ accentColor: "var(--color-primary)", width: 16, height: 16 }}/>
-            <span style={{ fontWeight: 600 }}>Maaltijdcheques toepassen</span>
+      <LooncomponentCard icon={<Receipt size={14}/>} title="Maaltijdcheques">
+        <div className="extra-loon-stack">
+          <label className="extra-loon-toggle">
+            <input type="checkbox" checked={profiel.maaltijdchequesActief} onChange={(e) => set("maaltijdchequesActief", e.target.checked)}/>
+            <span>Maaltijdcheques toepassen</span>
           </label>
-          {profiel.maaltijdchequesActief && (<>
+          {profiel.maaltijdchequesActief && (<div className="extra-loon-field-row">
               <FormField label={<>WG-aandeel (€/dag) <HelpTooltip text={`Max €${MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026.toFixed(2).replace(".", ",")}/dag × ${profiel.arbeidsdagenPerMaand} werkdagen.`}/></>}>
                 <NumeriekeInput className={inputClass} step="0.01" min={0} max={MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026} value={profiel.maaltijdchequeWerkgeversaandeelPerDag} onValueChange={(waarde) => set("maaltijdchequeWerkgeversaandeelPerDag", waarde)}/>
               </FormField>
               <FormField label={<>WN-bijdrage (€/dag) <HelpTooltip text={`Min €1,09/dag × ${profiel.arbeidsdagenPerMaand} werkdagen.`}/></>}>
                 <NumeriekeInput className={inputClass} step="0.01" min={0} value={profiel.maaltijdchequeWerknemersbijdragePerDag} onValueChange={(waarde) => set("maaltijdchequeWerknemersbijdragePerDag", waarde)}/>
               </FormField>
-            </>)}
+            </div>)}
         </div>
-      </div>
+      </LooncomponentCard>
 
-      <div style={{
-            background: "var(--cockpit-subsection-bg)",
-            borderRadius: "var(--cockpit-subsection-radius)",
-            padding: 16,
-        }}>
-        <div style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            marginBottom: 12,
-            fontSize: 11,
-            fontWeight: 700,
-            letterSpacing: "0.05em",
-            textTransform: "uppercase",
-            color: "var(--color-text-muted)",
-        }}>
-          <Car size={14}/> VAA werkmiddelen
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          {[
-            {
-                label: "Laptop / pc",
-                checked: profiel.vaaPcLaptopActief,
-                onChange: (v: boolean) => set("vaaPcLaptopActief", v),
-            },
-            {
-                label: "GSM",
-                checked: profiel.vaaGsmSmartphoneActief,
-                onChange: (v: boolean) => set("vaaGsmSmartphoneActief", v),
-            },
-            {
-                label: "Internet",
-                checked: profiel.vaaInternetActief,
-                onChange: (v: boolean) => set("vaaInternetActief", v),
-            },
-            {
-                label: "GSM-abonnement",
-                checked: profiel.vaaGsmAbonnementActief,
-                onChange: (v: boolean) => set("vaaGsmAbonnementActief", v),
-            },
-        ].map((item) => (<label key={item.label} style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                padding: "4px 0",
-                cursor: "pointer",
-                fontSize: 13,
-                color: "var(--color-navy-500)",
-            }}>
-              <input type="checkbox" checked={item.checked} onChange={(e) => item.onChange(e.target.checked)} style={{ accentColor: "var(--color-primary)", width: 16, height: 16 }}/>
-              {item.label}
+      <LooncomponentCard icon={<Car size={14}/>} title="VAA werkmiddelen">
+        <div className="extra-loon-checkgrid">
+          {vaaItems.map((item) => (<label key={item.label} className="extra-loon-check">
+              <input type="checkbox" checked={item.checked} onChange={(e) => item.onChange(e.target.checked)}/>
+              <span>{item.label}</span>
             </label>))}
         </div>
-      </div>
+      </LooncomponentCard>
 
-      <div style={{
-            background: "var(--cockpit-subsection-bg)",
-            borderRadius: "var(--cockpit-subsection-radius)",
-            padding: 16,
-        }}>
-        <div style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            marginBottom: 12,
-            fontSize: 11,
-            fontWeight: 700,
-            letterSpacing: "0.05em",
-            textTransform: "uppercase",
-            color: "var(--color-text-muted)",
-        }}>
-          <Gift size={14}/> Bonus
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      <LooncomponentCard icon={<Gift size={14}/>} title="Bonus">
+        <div className="extra-loon-field-row">
           <FormField label={<>Bonusbedrag (€) <HelpTooltip text="Een maandbedrag wordt omgerekend naar een jaarbonus. De bonus telt alleen mee in het jaaroverzicht en wordt belast als exceptionele vergoeding."/></>}>
             <NumeriekeInput className={inputClass} step="0.01" min={0} value={profiel.bonusBedrag} onValueChange={(waarde) => set("bonusBedrag", waarde)}/>
           </FormField>
-          <div role="group" aria-label="Bonusperiode" style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 6,
-        }}>
-            {([
-            ["maand", "Per maand"],
-            ["jaar", "Per jaar"],
-        ] as Array<[
-            BonusPeriode,
-            string
-        ]>).map(([waarde, label]) => (<button key={waarde} type="button" aria-pressed={profiel.bonusPeriode === waarde} onClick={() => set("bonusPeriode", waarde)} style={{
-                border: "1px solid var(--color-primary-border)",
-                borderRadius: "var(--radius-md)",
-                background: profiel.bonusPeriode === waarde
-                    ? "var(--color-primary)"
-                    : "var(--color-surface)",
-                color: profiel.bonusPeriode === waarde ? "#ffffff" : "var(--color-primary)",
-                fontSize: 12,
-                fontWeight: 700,
-                padding: "7px 8px",
-                cursor: "pointer",
-                fontFamily: "var(--font-body)",
-            }}>
+          <div role="group" aria-label="Bonusperiode" className="extra-loon-period">
+            {([["maand", "Per maand"], ["jaar", "Per jaar"]] as Array<[BonusPeriode, string]>).map(([waarde, label]) => (<button key={waarde} type="button" aria-pressed={profiel.bonusPeriode === waarde} onClick={() => set("bonusPeriode", waarde)} className={`extra-loon-period-btn ${profiel.bonusPeriode === waarde ? "is-active" : ""}`}>
                 {label}
               </button>))}
           </div>
         </div>
-      </div>
+      </LooncomponentCard>
     </div>);
 }
 export function profielMetBerekeningsMaand(profiel: Profiel, maand: string): Profiel {
@@ -519,10 +413,11 @@ export function profielMetBerekeningsJaar(profiel: Profiel, jaar: string): Profi
         arbeidsdagenPerMaand: aantalWeekdagenInMaand(jaar, profiel.berekeningsMaand),
     };
 }
-export function ContractgegevensAccordion({ profiel, set, onChangeRichting }: {
+export function ContractgegevensAccordion({ profiel, set, onChangeRichting, layout = "default" }: {
     profiel: Profiel;
     set: ProfielSetter;
     onChangeRichting?: (richting: BerekeningsRichting) => void;
+    layout?: "default" | "simulator2";
 }) {
     function setBerekeningsMaand(maand: string) {
         set((prev) => profielMetBerekeningsMaand(prev, maand));
@@ -551,8 +446,8 @@ export function ContractgegevensAccordion({ profiel, set, onChangeRichting }: {
             }));
         }
     }
-    return (<CockpitAccordion title="Contractgegevens" subtitle="Arbeidscontext, brutoloon, woon-werkverkeer, extra looncomponenten" icon={<Briefcase size={16}/>} defaultOpen>
-      <div style={{ display: "flex", flexDirection: "column", gap: "var(--cockpit-grid-gap)" }}>
+    const isSimulator2 = layout === "simulator2";
+    const content = (<>
         <Subsection title="Arbeidscontext" icon={<Building2 size={14}/>}>
           <ArbeidscontextCard profiel={profiel} set={set} setBerekeningsMaand={setBerekeningsMaand} setBerekeningsJaar={setBerekeningsJaar}/>
         </Subsection>
@@ -566,18 +461,34 @@ export function ContractgegevensAccordion({ profiel, set, onChangeRichting }: {
         </Subsection>
 
         <Subsection title="Extra looncomponenten" icon={<Gift size={14}/>}>
-          <ExtraLooncomponentenContent profiel={profiel} set={set}/>
+          <ExtraLooncomponentenContent profiel={profiel} set={set} layout={layout}/>
         </Subsection>
-      </div>
+    </>);
+    return (<CockpitAccordion title="Contractgegevens" subtitle="Arbeidscontext, brutoloon, woon-werkverkeer, extra looncomponenten" icon={<Briefcase size={16}/>} defaultOpen>
+      {isSimulator2 ? (<div className="simulator2-contract-grid">
+        {content}
+      </div>) : (<div style={{ display: "flex", flexDirection: "column", gap: "var(--cockpit-grid-gap)" }}>
+        {content}
+      </div>)}
     </CockpitAccordion>);
 }
 
-export function InputCockpit({ profiel, set, onChangeRichting, hidePersoonsgegevens, hideContractgegevens }: {
+export function OnkostenvergoedingenAccordion({ profiel, set }: {
+    profiel: Profiel;
+    set: ProfielSetter;
+}) {
+    return (<CockpitAccordion title="Onkostenvergoedingen" subtitle="Forfaitaire kostenvergoedingen vrijgesteld van RSZ" icon={<Wallet size={16}/>}>
+      <OnkostenvergoedingenContent profiel={profiel} set={set}/>
+    </CockpitAccordion>);
+}
+
+export function InputCockpit({ profiel, set, onChangeRichting, hidePersoonsgegevens, hideContractgegevens, hideOnkostenvergoedingen }: {
     profiel: Profiel;
     set: ProfielSetter;
     onChangeRichting?: (richting: BerekeningsRichting) => void;
     hidePersoonsgegevens?: boolean;
     hideContractgegevens?: boolean;
+    hideOnkostenvergoedingen?: boolean;
 }) {
     return (<div style={{ display: "flex", flexDirection: "column", gap: "var(--cockpit-grid-gap)" }}>
 
@@ -585,9 +496,7 @@ export function InputCockpit({ profiel, set, onChangeRichting, hidePersoonsgegev
 
       {!hideContractgegevens && <ContractgegevensAccordion profiel={profiel} set={set} onChangeRichting={onChangeRichting}/>}
 
-      <CockpitAccordion title="Onkostenvergoedingen" subtitle="Forfaitaire kostenvergoedingen vrijgesteld van RSZ" icon={<Wallet size={16}/>}>
-        <OnkostenvergoedingenContent profiel={profiel} set={set}/>
-      </CockpitAccordion>
+      {!hideOnkostenvergoedingen && <OnkostenvergoedingenAccordion profiel={profiel} set={set}/>}
 
     </div>);
 }

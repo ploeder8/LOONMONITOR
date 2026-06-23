@@ -249,7 +249,7 @@ describe("Profiel formulier", () => {
     it("plaatst bedrijfswagen in het woon-werkrijtje zonder aparte VAA-onderverdeling", () => {
         const html = renderWithProfiel(createElement(HomePage));
         expect(html.indexOf("Bedrijfswagen")).toBeGreaterThan(html.indexOf("Trein"));
-        expect(html.indexOf("Bedrijfswagen")).toBeLessThan(html.indexOf("Selecteer alle vergoedingen"));
+        expect(html.indexOf("Selecteer alle vergoedingen")).toBeLessThan(html.indexOf("Bedrijfswagen"));
         expect(html).not.toContain("Voordeel Alle Aard");
     });
     it("plaatst tewerkstelling in de arbeidscontext subsection", () => {

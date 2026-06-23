@@ -1,7 +1,7 @@
 import { UserRound } from "lucide-react";
 import type { BerekeningsRichting } from "@/lib/profiel";
 import type { Profiel } from "@/lib/profiel";
-import { ContractgegevensAccordion, InputCockpit, PersoonsgegevensCard } from "@/pages/home/InputCockpit";
+import { ContractgegevensAccordion, InputCockpit, OnkostenvergoedingenAccordion, PersoonsgegevensCard } from "@/pages/home/InputCockpit";
 import { WerkgeverCard, WerkgeversbijdragenAccordion, WerkgeverPaneel } from "@/pages/home/WerkgeverPaneel";
 import type { ProfielSetter } from "@/pages/home/types";
 
@@ -22,10 +22,12 @@ export function ProfielEditor({ profiel, set, toonWerkgever = true, onChangeRich
                     <PersoonsgegevensCard profiel={profiel} set={set} cardStyle={{ height: "100%" }} compact/>
                 </div>
                 <div className="simulator2-mid-row" style={{ display: "grid", gap: "var(--cockpit-grid-gap)", alignItems: "stretch" }}>
-                    <WerkgeversbijdragenAccordion profiel={profiel} set={set}/>
-                    <ContractgegevensAccordion profiel={profiel} set={set} onChangeRichting={onChangeRichting}/>
+                    <ContractgegevensAccordion profiel={profiel} set={set} onChangeRichting={onChangeRichting} layout="simulator2"/>
                 </div>
-                <InputCockpit profiel={profiel} set={set} onChangeRichting={onChangeRichting} hidePersoonsgegevens hideContractgegevens/>
+                <div className="simulator2-bottom-row" style={{ display: "grid", gap: "var(--cockpit-grid-gap)", alignItems: "stretch" }}>
+                    <OnkostenvergoedingenAccordion profiel={profiel} set={set}/>
+                    <WerkgeversbijdragenAccordion profiel={profiel} set={set}/>
+                </div>
             </div>
         );
     }

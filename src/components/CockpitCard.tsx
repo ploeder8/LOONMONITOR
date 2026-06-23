@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 interface CockpitCardProps {
-    title: string;
+    title?: string;
     icon: ReactNode;
     children: ReactNode;
     highlight?: boolean;
@@ -16,7 +16,7 @@ export function CockpitCard({ title, icon, children, highlight, style }: Cockpit
             transition: "box-shadow 0.2s ease",
             ...style,
         }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+      {title && (<div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
         <div style={{
             width: 24,
             height: 24,
@@ -38,7 +38,7 @@ export function CockpitCard({ title, icon, children, highlight, style }: Cockpit
         }}>
           {title}
         </span>
-      </div>
+      </div>)}
       {children}
     </div>);
 }
