@@ -1012,6 +1012,83 @@ h1, h2, h3, h4 {
   }
 }
 
+/* ── Simulator 2: Onkostenvergoedingen & Werkgeversbijdragen mini-cards ── */
+
+.simulator2-onkosten-grid,
+.simulator2-werkgever-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: stretch;
+}
+
+.simulator2-onkosten-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-navy-500);
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.simulator2-onkosten-label input[type="checkbox"] {
+  accent-color: var(--color-primary);
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.simulator2-onkosten-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.simulator2-onkosten-forfait-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.simulator2-onkosten-override-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--color-navy-500);
+  cursor: pointer;
+}
+
+.simulator2-onkosten-override-toggle input[type="checkbox"] {
+  accent-color: var(--color-primary);
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.simulator2-onkosten-total {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-text);
+  text-align: right;
+}
+
+.simulator2-onkosten-muted {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 700px) {
+  .simulator2-onkosten-grid,
+  .simulator2-werkgever-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .kbo-lookup-card {
   display: grid;
   gap: 9px;

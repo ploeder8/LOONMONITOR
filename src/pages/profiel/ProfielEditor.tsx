@@ -25,8 +25,8 @@ export function ProfielEditor({ profiel, set, toonWerkgever = true, onChangeRich
                     <ContractgegevensAccordion profiel={profiel} set={set} onChangeRichting={onChangeRichting} layout="simulator2"/>
                 </div>
                 <div className="simulator2-bottom-row" style={{ display: "grid", gap: "var(--cockpit-grid-gap)", alignItems: "stretch" }}>
-                    <OnkostenvergoedingenAccordion profiel={profiel} set={set}/>
-                    <WerkgeversbijdragenAccordion profiel={profiel} set={set}/>
+                    <OnkostenvergoedingenAccordion profiel={profiel} set={set} layout="simulator2"/>
+                    <WerkgeversbijdragenAccordion profiel={profiel} set={set} layout="simulator2"/>
                 </div>
             </div>
         );

@@ -470,12 +470,13 @@ export function ContractgegevensAccordion({ profiel, set, onChangeRichting, layo
     </CockpitAccordion>);
 }
 
-export function OnkostenvergoedingenAccordion({ profiel, set }: {
+export function OnkostenvergoedingenAccordion({ profiel, set, layout = "default" }: {
     profiel: Profiel;
     set: ProfielSetter;
+    layout?: "default" | "simulator2";
 }) {
     return (<CockpitAccordion title="Onkostenvergoedingen" subtitle="Forfaitaire kostenvergoedingen vrijgesteld van RSZ" icon={<Wallet size={16}/>}>
-      <OnkostenvergoedingenContent profiel={profiel} set={set}/>
+      <OnkostenvergoedingenContent profiel={profiel} set={set} layout={layout}/>
     </CockpitAccordion>);
 }
 

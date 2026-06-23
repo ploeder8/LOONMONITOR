@@ -247,13 +247,14 @@ export function WerkgeverCard({ profiel, set, cardStyle, compact }: {
     );
 }
 
-export function WerkgeversbijdragenAccordion({ profiel, set }: {
+export function WerkgeversbijdragenAccordion({ profiel, set, layout = "default" }: {
     profiel: Profiel;
     set: ProfielSetter;
+    layout?: "default" | "simulator2";
 }) {
     return (
         <CockpitAccordion title="Werkgeversbijdragen" subtitle="Arbeidsongevallen, groepsverzekering, hospitalisatie" icon={<Shield size={16}/>}>
-            <WerkgeversbijdragenContent profiel={profiel} set={set}/>
+            <WerkgeversbijdragenContent profiel={profiel} set={set} layout={layout}/>
         </CockpitAccordion>
     );
 }
@@ -270,10 +271,71 @@ export function WerkgeverPaneel({ profiel, set }: {
     );
 }
 
-function WerkgeversbijdragenContent({ profiel, set }: {
+function WerkgeversbijdragenContent({ profiel, set, layout = "default" }: {
     profiel: Profiel;
     set: ProfielSetter;
+    layout?: "default" | "simulator2";
 }) {
+    if (layout === "simulator2") {
+        return (
+            <div className="simulator2-werkgever-grid">
+                <CockpitCard icon={null} style={{ height: "100%" }}>
+                    <FormField label={<>Arbeidsongevallen (%) <HelpTooltip text="Burelen: ~0,3%. Controleer uw polis."/></>}>
+                        <NumeriekeInput
+                            className={inputClass}
+                            step="0.01"
+                            min={0}
+                            max={10}
+                            value={profiel.arbeidsongevallenPct * 100}
+                            formatValue={(waarde) => waarde.toFixed(2)}
+                            onValueChange={(waarde) => set("arbeidsongevallenPct", waarde / 100)}
+                        />
+                    </FormField>
+                </CockpitCard>
+                <CockpitCard icon={null} style={{ height: "100%" }}>
+                    <FormField label="Patronale groepsverzekering (€/m)">
+                        <NumeriekeInput
+                            className={inputClass}
+                            step="0.01"
+                            min={0}
+                            value={profiel.extraGroepsverzekering}
+                            onValueChange={(waarde) => set("extraGroepsverzekering", waarde)}
+                        />
+                    </FormField>
+                </CockpitCard>
+                <CockpitCard icon={null} style={{ height: "100%" }}>
+                    <FormField label="Hospitalisatieverzekering (€/m)">
+                        <NumeriekeInput
+                            className={inputClass}
+                            step="0.01"
+                            min={0}
+                            value={profiel.extraHospitalisatie}
+                            onValueChange={(waarde) => set("extraHospitalisatie", waarde)}
+                        />
+                    </FormField>
+                </CockpitCard>
+                <CockpitCard icon={null} style={{ height: "100%" }}>
+                    <FormField label={<>Doelgroepvermindering eerste aanwervingen <HelpTooltip text="Programmawet 30 mei 2026: vanaf 1 juli 2026 maximaal €2.000/kwartaal voor de eerste werknemer en €1.000/kwartaal voor werknemers 2 tot 5 binnen het toepassingsvenster."/></>}>
+                        <select
+                            className={selectClass}
+                            value={profiel.doelgroepverminderingEersteAanwervingen}
+                            onChange={(e) => set("doelgroepverminderingEersteAanwervingen", e.target.value as DoelgroepverminderingEersteAanwervingen)}
+                            style={{ width: "100%" }}
+                        >
+                            <option value="geen">Geen doelgroepvermindering</option>
+                            <option value="eerste_werknemer">Eerste werknemer - max. €2.000/kwartaal</option>
+                            <option value="tweede_tot_vijfde_werknemer">Tweede tot vijfde werknemer - max. €1.000/kwartaal</option>
+                        </select>
+                    </FormField>
+                    {profiel.doelgroepverminderingEersteAanwervingen !== "geen" && (
+                        <Banner kind="warning" title="Voorwaarde doelgroepvermindering">
+                            {DOELGROEPVERMINDERING_OPMERKING}
+                        </Banner>
+                    )}
+                </CockpitCard>
+            </div>
+        );
+    }
     return (
         <div style={{ display: "grid", gap: 16 }}>
             <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 16 }}>
