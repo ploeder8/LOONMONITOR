@@ -278,61 +278,55 @@ function WerkgeversbijdragenContent({ profiel, set, layout = "default" }: {
 }) {
     if (layout === "simulator2") {
         return (
-            <div className="simulator2-werkgever-grid">
-                <CockpitCard icon={null} style={{ height: "100%" }}>
-                    <FormField label={<>Arbeidsongevallen (%) <HelpTooltip text="Burelen: ~0,3%. Controleer uw polis."/></>}>
-                        <NumeriekeInput
-                            className={inputClass}
-                            step="0.01"
-                            min={0}
-                            max={10}
-                            value={profiel.arbeidsongevallenPct * 100}
-                            formatValue={(waarde) => waarde.toFixed(2)}
-                            onValueChange={(waarde) => set("arbeidsongevallenPct", waarde / 100)}
-                        />
-                    </FormField>
-                </CockpitCard>
-                <CockpitCard icon={null} style={{ height: "100%" }}>
-                    <FormField label="Patronale groepsverzekering (€/m)">
-                        <NumeriekeInput
-                            className={inputClass}
-                            step="0.01"
-                            min={0}
-                            value={profiel.extraGroepsverzekering}
-                            onValueChange={(waarde) => set("extraGroepsverzekering", waarde)}
-                        />
-                    </FormField>
-                </CockpitCard>
-                <CockpitCard icon={null} style={{ height: "100%" }}>
-                    <FormField label="Hospitalisatieverzekering (€/m)">
-                        <NumeriekeInput
-                            className={inputClass}
-                            step="0.01"
-                            min={0}
-                            value={profiel.extraHospitalisatie}
-                            onValueChange={(waarde) => set("extraHospitalisatie", waarde)}
-                        />
-                    </FormField>
-                </CockpitCard>
-                <CockpitCard icon={null} style={{ height: "100%" }}>
-                    <FormField label={<>Doelgroepvermindering eerste aanwervingen <HelpTooltip text="Programmawet 30 mei 2026: vanaf 1 juli 2026 maximaal €2.000/kwartaal voor de eerste werknemer en €1.000/kwartaal voor werknemers 2 tot 5 binnen het toepassingsvenster."/></>}>
-                        <select
-                            className={selectClass}
-                            value={profiel.doelgroepverminderingEersteAanwervingen}
-                            onChange={(e) => set("doelgroepverminderingEersteAanwervingen", e.target.value as DoelgroepverminderingEersteAanwervingen)}
-                            style={{ width: "100%" }}
-                        >
-                            <option value="geen">Geen doelgroepvermindering</option>
-                            <option value="eerste_werknemer">Eerste werknemer - max. €2.000/kwartaal</option>
-                            <option value="tweede_tot_vijfde_werknemer">Tweede tot vijfde werknemer - max. €1.000/kwartaal</option>
-                        </select>
-                    </FormField>
-                    {profiel.doelgroepverminderingEersteAanwervingen !== "geen" && (
-                        <Banner kind="warning" title="Voorwaarde doelgroepvermindering">
+            <div className="simulator2-werkgever-form">
+                <FormField label={<>Arbeidsongevallen (%) <HelpTooltip text="Burelen: ~0,3%. Controleer uw polis."/></>}>
+                    <NumeriekeInput
+                        className={inputClass}
+                        step="0.01"
+                        min={0}
+                        max={10}
+                        value={profiel.arbeidsongevallenPct * 100}
+                        formatValue={(waarde) => waarde.toFixed(2)}
+                        onValueChange={(waarde) => set("arbeidsongevallenPct", waarde / 100)}
+                    />
+                </FormField>
+                <FormField label="Groepsverzekering (€/m)">
+                    <NumeriekeInput
+                        className={inputClass}
+                        step="0.01"
+                        min={0}
+                        value={profiel.extraGroepsverzekering}
+                        onValueChange={(waarde) => set("extraGroepsverzekering", waarde)}
+                    />
+                </FormField>
+                <FormField label="Hospitalisatie (€/m)">
+                    <NumeriekeInput
+                        className={inputClass}
+                        step="0.01"
+                        min={0}
+                        value={profiel.extraHospitalisatie}
+                        onValueChange={(waarde) => set("extraHospitalisatie", waarde)}
+                    />
+                </FormField>
+                <FormField label={<>Doelgroepvermindering <HelpTooltip text="Programmawet 30 mei 2026: vanaf 1 juli 2026 maximaal €2.000/kwartaal voor de eerste werknemer en €1.000/kwartaal voor werknemers 2 tot 5 binnen het toepassingsvenster."/></>}>
+                    <select
+                        className={selectClass}
+                        value={profiel.doelgroepverminderingEersteAanwervingen}
+                        onChange={(e) => set("doelgroepverminderingEersteAanwervingen", e.target.value as DoelgroepverminderingEersteAanwervingen)}
+                        style={{ width: "100%" }}
+                    >
+                        <option value="geen">Geen</option>
+                        <option value="eerste_werknemer">Eerste werknemer</option>
+                        <option value="tweede_tot_vijfde_werknemer">2e tot 5e werknemer</option>
+                    </select>
+                </FormField>
+                {profiel.doelgroepverminderingEersteAanwervingen !== "geen" && (
+                    <div style={{ gridColumn: "1 / -1" }}>
+                        <Banner kind="warning" title="Voorwaarde">
                             {DOELGROEPVERMINDERING_OPMERKING}
                         </Banner>
-                    )}
-                </CockpitCard>
+                    </div>
+                )}
             </div>
         );
     }

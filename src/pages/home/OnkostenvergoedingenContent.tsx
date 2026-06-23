@@ -1,4 +1,3 @@
-import { CockpitCard } from "@/components/CockpitCard";
 import { FormField, inputClass } from "@/components/Field";
 import { formatEUR } from "@/lib/money";
 import { refDatumVoorMaand, type OnkostenCategorieKey, type Profiel } from "@/lib/profiel";
@@ -45,7 +44,7 @@ export function OnkostenvergoedingenContent({ profiel, set, layout = "default" }
         }));
     }
     const isSimulator2 = layout === "simulator2";
-    return (<div className={isSimulator2 ? "simulator2-onkosten-grid" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4"} style={{ gap: 16 }}>
+    return (<div className={isSimulator2 ? "simulator2-onkosten-list" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4"} style={{ gap: 16 }}>
       {(Object.keys(ONKOSTEN_LABELS) as OnkostenCategorieKey[]).map((key) => {
             const cat = profiel.onkostenCategorieen[key];
             const lookup = safeGetValue(getOnkostenDatapuntId(key, refDatum), { refDatum, toelatenMogelijkVerouderd: true });
@@ -61,36 +60,29 @@ export function OnkostenvergoedingenContent({ profiel, set, layout = "default" }
                     ? toegepastBedrag * Math.max(cat.aantalKm, 0)
                     : toegepastBedrag;
             if (isSimulator2) {
-                return (<CockpitCard key={key} icon={null} style={{ height: "100%" }}>
-                  <label className="simulator2-onkosten-label">
+                return (<div key={key} className={`simulator2-onkosten-row ${cat.actief ? "" : "is-inactive"}`}>
+                  <label className="simulator2-onkosten-toggle">
                     <input type="checkbox" checked={cat.actief} onChange={(e) => updateCategorie(key, { actief: e.target.checked })}/>
                     <span>{ONKOSTEN_LABELS[key]}</span>
+                    {lookup.waarschuwing && <HelpTooltip text={lookup.waarschuwing}/>}
                   </label>
-                  {cat.actief ? (<div className="simulator2-onkosten-body">
-                      <div className="simulator2-onkosten-forfait-row">
-                        <span>Forfait: {formatEUR(forfait)} {ONKOSTEN_EENHEID[key]}</span>
-                        {lookup.waarschuwing && <HelpTooltip text={lookup.waarschuwing}/>}
-                      </div>
-                      <label className="simulator2-onkosten-override-toggle">
-                        <input type="checkbox" checked={heeftOverride} onChange={(e) => updateCategorie(key, { overrideBedrag: e.target.checked ? forfait : null })}/>
-                        <span>Overschrijven</span>
-                      </label>
-                      {heeftOverride && (<FormField label={`Bedrag (${ONKOSTEN_EENHEID[key]})`}>
-                          <NumeriekeInput className={inputClass} step="0.01" min={0} value={cat.overrideBedrag ?? 0} onValueChange={(waarde) => updateCategorie(key, { overrideBedrag: waarde })}/>
-                        </FormField>)}
-                      {isPerDag && (<FormField label="Aantal dagen">
-                          <NumeriekeInput className={inputClass} step="1" min={0} value={cat.aantalDagen} onValueChange={(waarde) => updateCategorie(key, { aantalDagen: waarde })}/>
-                        </FormField>)}
-                      {isPerKm && (<FormField label="Aantal km">
-                          <NumeriekeInput className={inputClass} step="0.01" min={0} value={cat.aantalKm} onValueChange={(waarde) => updateCategorie(key, { aantalKm: waarde })}/>
-                        </FormField>)}
-                      <div className="simulator2-onkosten-total">
-                        = {formatEUR(maandBedrag)}/m
-                      </div>
-                    </div>) : (<div className="simulator2-onkosten-muted">
-                      Forfait: {formatEUR(forfait)} {ONKOSTEN_EENHEID[key]}
-                    </div>)}
-                </CockpitCard>);
+                  <div className="simulator2-onkosten-inputs">
+                    <div className="simulator2-onkosten-bedrag-wrap">
+                      <NumeriekeInput
+                        className={`${inputClass} simulator2-onkosten-input`}
+                        step="0.01"
+                        min={0}
+                        disabled={!cat.actief}
+                        value={toegepastBedrag}
+                        onValueChange={(waarde) => updateCategorie(key, { overrideBedrag: waarde })}
+                      />
+                      <span className="simulator2-onkosten-unit">{ONKOSTEN_EENHEID[key]}</span>
+                      {heeftOverride && <button type="button" className="simulator2-onkosten-reset" onClick={() => updateCategorie(key, { overrideBedrag: null })}>Herstel</button>}
+                    </div>
+                    {isPerDag && <NumeriekeInput className={`${inputClass} simulator2-onkosten-input simulator2-onkosten-aantal`} step="1" min={0} disabled={!cat.actief} value={cat.aantalDagen} onValueChange={(waarde) => updateCategorie(key, { aantalDagen: waarde })}/>}
+                    {isPerKm && <NumeriekeInput className={`${inputClass} simulator2-onkosten-input simulator2-onkosten-aantal`} step="0.01" min={0} disabled={!cat.actief} value={cat.aantalKm} onValueChange={(waarde) => updateCategorie(key, { aantalKm: waarde })}/>}
+                  </div>
+                </div>);
             }
             return (<div key={key} style={{
                     background: "var(--cockpit-subsection-bg)",
