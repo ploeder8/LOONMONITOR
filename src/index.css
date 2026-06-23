@@ -605,8 +605,25 @@ h1, h2, h3, h4 {
   align-items: stretch;
 }
 
+.simulator2-mid-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--cockpit-grid-gap);
+  align-items: stretch;
+}
+
+.simulator2-layout .help-tooltip-mark {
+  width: 14px;
+  height: 14px;
+  font-size: 9px;
+}
+
 @media (max-width: 900px) {
   .simulator2-top-row {
+    grid-template-columns: 1fr;
+  }
+
+  .simulator2-mid-row {
     grid-template-columns: 1fr;
   }
 }

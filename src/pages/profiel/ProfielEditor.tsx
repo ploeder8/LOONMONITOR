@@ -1,7 +1,7 @@
 import { UserRound } from "lucide-react";
 import type { BerekeningsRichting } from "@/lib/profiel";
 import type { Profiel } from "@/lib/profiel";
-import { InputCockpit, PersoonsgegevensCard } from "@/pages/home/InputCockpit";
+import { ContractgegevensAccordion, InputCockpit, PersoonsgegevensCard } from "@/pages/home/InputCockpit";
 import { WerkgeverCard, WerkgeversbijdragenAccordion, WerkgeverPaneel } from "@/pages/home/WerkgeverPaneel";
 import type { ProfielSetter } from "@/pages/home/types";
 
@@ -16,13 +16,16 @@ export function ProfielEditor({ profiel, set, toonWerkgever = true, onChangeRich
 }) {
     if (layout === "simulator2" && toonWerkgever) {
         return (
-            <div style={{ display: "flex", flexDirection: "column", gap: "var(--cockpit-grid-gap)" }}>
+            <div className="simulator2-layout" style={{ display: "flex", flexDirection: "column", gap: "var(--cockpit-grid-gap)" }}>
                 <div className="simulator2-top-row" style={{ display: "grid", gap: "var(--cockpit-grid-gap)", alignItems: "stretch" }}>
                     <WerkgeverCard profiel={profiel} set={set} cardStyle={{ height: "100%" }} compact/>
                     <PersoonsgegevensCard profiel={profiel} set={set} cardStyle={{ height: "100%" }} compact/>
                 </div>
-                <WerkgeversbijdragenAccordion profiel={profiel} set={set}/>
-                <InputCockpit profiel={profiel} set={set} onChangeRichting={onChangeRichting} hidePersoonsgegevens/>
+                <div className="simulator2-mid-row" style={{ display: "grid", gap: "var(--cockpit-grid-gap)", alignItems: "stretch" }}>
+                    <WerkgeversbijdragenAccordion profiel={profiel} set={set}/>
+                    <ContractgegevensAccordion profiel={profiel} set={set} onChangeRichting={onChangeRichting}/>
+                </div>
+                <InputCockpit profiel={profiel} set={set} onChangeRichting={onChangeRichting} hidePersoonsgegevens hideContractgegevens/>
             </div>
         );
     }

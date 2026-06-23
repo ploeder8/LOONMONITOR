@@ -133,7 +133,7 @@ export function PersoonsgegevensCard({ profiel, set, cardStyle, compact }: {
         </div>
 
         {compact ? (<>
-            <div style={{ display: "grid", gap: 12, gridTemplateColumns: "100px 1fr 100px" }}>
+            <div style={{ display: "grid", gap: 12, gridTemplateColumns: "100px 1fr 1fr" }}>
               <FormField label="Statuut">
                 <select className={selectClass} value={profiel.statuut} onChange={(e) => set("statuut", e.target.value as Statuut)}>
                   <option value="bediende">Bediende</option>
@@ -519,11 +519,10 @@ export function profielMetBerekeningsJaar(profiel: Profiel, jaar: string): Profi
         arbeidsdagenPerMaand: aantalWeekdagenInMaand(jaar, profiel.berekeningsMaand),
     };
 }
-export function InputCockpit({ profiel, set, onChangeRichting, hidePersoonsgegevens }: {
+export function ContractgegevensAccordion({ profiel, set, onChangeRichting }: {
     profiel: Profiel;
     set: ProfielSetter;
     onChangeRichting?: (richting: BerekeningsRichting) => void;
-    hidePersoonsgegevens?: boolean;
 }) {
     function setBerekeningsMaand(maand: string) {
         set((prev) => profielMetBerekeningsMaand(prev, maand));
@@ -552,29 +551,39 @@ export function InputCockpit({ profiel, set, onChangeRichting, hidePersoonsgegev
             }));
         }
     }
+    return (<CockpitAccordion title="Contractgegevens" subtitle="Arbeidscontext, brutoloon, woon-werkverkeer, extra looncomponenten" icon={<Briefcase size={16}/>} defaultOpen>
+      <div style={{ display: "flex", flexDirection: "column", gap: "var(--cockpit-grid-gap)" }}>
+        <Subsection title="Arbeidscontext" icon={<Building2 size={14}/>}>
+          <ArbeidscontextCard profiel={profiel} set={set} setBerekeningsMaand={setBerekeningsMaand} setBerekeningsJaar={setBerekeningsJaar}/>
+        </Subsection>
+
+        <Subsection title="Brutoloon" icon={<Euro size={14}/>}>
+          <BrutoloonCard profiel={profiel} set={set} onChangeRichting={onChangeRichting}/>
+        </Subsection>
+
+        <Subsection title="Woon-werkverkeer" icon={<Car size={14}/>}>
+          <MobiliteitPaneel profiel={profiel} set={set} setAlleWoonwerk={setAlleWoonwerk}/>
+        </Subsection>
+
+        <Subsection title="Extra looncomponenten" icon={<Gift size={14}/>}>
+          <ExtraLooncomponentenContent profiel={profiel} set={set}/>
+        </Subsection>
+      </div>
+    </CockpitAccordion>);
+}
+
+export function InputCockpit({ profiel, set, onChangeRichting, hidePersoonsgegevens, hideContractgegevens }: {
+    profiel: Profiel;
+    set: ProfielSetter;
+    onChangeRichting?: (richting: BerekeningsRichting) => void;
+    hidePersoonsgegevens?: boolean;
+    hideContractgegevens?: boolean;
+}) {
     return (<div style={{ display: "flex", flexDirection: "column", gap: "var(--cockpit-grid-gap)" }}>
 
       {!hidePersoonsgegevens && <PersoonsgegevensCard profiel={profiel} set={set}/>}
 
-      <CockpitAccordion title="Contractgegevens" subtitle="Arbeidscontext, brutoloon, woon-werkverkeer, extra looncomponenten" icon={<Briefcase size={16}/>} defaultOpen>
-        <div style={{ display: "flex", flexDirection: "column", gap: "var(--cockpit-grid-gap)" }}>
-          <Subsection title="Arbeidscontext" icon={<Building2 size={14}/>}>
-            <ArbeidscontextCard profiel={profiel} set={set} setBerekeningsMaand={setBerekeningsMaand} setBerekeningsJaar={setBerekeningsJaar}/>
-          </Subsection>
-
-          <Subsection title="Brutoloon" icon={<Euro size={14}/>}>
-            <BrutoloonCard profiel={profiel} set={set} onChangeRichting={onChangeRichting}/>
-          </Subsection>
-
-          <Subsection title="Woon-werkverkeer" icon={<Car size={14}/>}>
-            <MobiliteitPaneel profiel={profiel} set={set} setAlleWoonwerk={setAlleWoonwerk}/>
-          </Subsection>
-
-          <Subsection title="Extra looncomponenten" icon={<Gift size={14}/>}>
-            <ExtraLooncomponentenContent profiel={profiel} set={set}/>
-          </Subsection>
-        </div>
-      </CockpitAccordion>
+      {!hideContractgegevens && <ContractgegevensAccordion profiel={profiel} set={set} onChangeRichting={onChangeRichting}/>}
 
       <CockpitAccordion title="Onkostenvergoedingen" subtitle="Forfaitaire kostenvergoedingen vrijgesteld van RSZ" icon={<Wallet size={16}/>}>
         <OnkostenvergoedingenContent profiel={profiel} set={set}/>

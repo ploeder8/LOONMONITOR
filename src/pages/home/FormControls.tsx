@@ -21,7 +21,7 @@ export function HelpTooltip({ text }: {
     const hide = () => setVisible(false);
     return (<>
       <span ref={triggerRef} className="inline-flex items-center justify-center ml-1 cursor-help align-middle" onMouseEnter={show} onMouseLeave={hide}>
-        <span className="text-[10px] font-bold text-white rounded-full w-4 h-4 flex items-center justify-center" style={{ backgroundColor: "var(--color-primary)" }}>
+        <span className="help-tooltip-mark text-[10px] font-bold text-white rounded-full w-4 h-4 flex items-center justify-center" style={{ backgroundColor: "var(--color-primary)" }}>
           ?
         </span>
       </span>
