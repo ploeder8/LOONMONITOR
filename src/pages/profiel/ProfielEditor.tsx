@@ -1,10 +1,9 @@
-import { UserRound, Wallet } from "lucide-react";
-import { CockpitAccordion } from "@/components/CockpitAccordion";
+import { useState } from "react";
+import { UserRound } from "lucide-react";
 import type { BerekeningsRichting } from "@/lib/profiel";
 import type { Profiel } from "@/lib/profiel";
-import { ContractgegevensAccordion, InputCockpit, PersoonsgegevensCard } from "@/pages/home/InputCockpit";
-import { OnkostenvergoedingenContent } from "@/pages/home/OnkostenvergoedingenContent";
-import { WerkgeverCard, WerkgeversbijdragenContent, WerkgeverPaneel } from "@/pages/home/WerkgeverPaneel";
+import { ContractgegevensAccordion, InputCockpit, OnkostenvergoedingenAccordion, PersoonsgegevensCard } from "@/pages/home/InputCockpit";
+import { WerkgeverCard, WerkgeversbijdragenAccordion, WerkgeverPaneel } from "@/pages/home/WerkgeverPaneel";
 import type { ProfielSetter } from "@/pages/home/types";
 
 export type ProfielEditorLayout = "default" | "simulator2";
@@ -17,6 +16,8 @@ export function ProfielEditor({ profiel, set, toonWerkgever = true, onChangeRich
     layout?: ProfielEditorLayout;
 }) {
     if (layout === "simulator2" && toonWerkgever) {
+        const [bottomOpen, setBottomOpen] = useState(true);
+        const toggleBottom = () => setBottomOpen((prev) => !prev);
         return (
             <div className="simulator2-layout" style={{ display: "flex", flexDirection: "column", gap: "var(--cockpit-grid-gap)" }}>
                 <div className="simulator2-top-row" style={{ display: "grid", gap: "var(--cockpit-grid-gap)", alignItems: "stretch" }}>
@@ -27,12 +28,8 @@ export function ProfielEditor({ profiel, set, toonWerkgever = true, onChangeRich
                     <ContractgegevensAccordion profiel={profiel} set={set} onChangeRichting={onChangeRichting} layout="simulator2"/>
                 </div>
                 <div className="simulator2-bottom-row" style={{ display: "grid", gap: "var(--cockpit-grid-gap)", alignItems: "stretch" }}>
-                    <CockpitAccordion title="Onkostenvergoedingen & werkgeversbijdragen" subtitle="Forfaitaire kostenvergoedingen en werkgeversbijdragen" icon={<Wallet size={16}/>} defaultOpen>
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--cockpit-grid-gap)" }}>
-                            <OnkostenvergoedingenContent profiel={profiel} set={set} layout="simulator2"/>
-                            <WerkgeversbijdragenContent profiel={profiel} set={set} layout="simulator2"/>
-                        </div>
-                    </CockpitAccordion>
+                    <OnkostenvergoedingenAccordion profiel={profiel} set={set} layout="simulator2" open={bottomOpen} onToggle={toggleBottom}/>
+                    <WerkgeversbijdragenAccordion profiel={profiel} set={set} layout="simulator2" open={bottomOpen} onToggle={toggleBottom}/>
                 </div>
             </div>
         );

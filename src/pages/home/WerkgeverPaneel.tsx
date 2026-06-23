@@ -247,13 +247,15 @@ export function WerkgeverCard({ profiel, set, cardStyle, compact }: {
     );
 }
 
-export function WerkgeversbijdragenAccordion({ profiel, set, layout = "default" }: {
+export function WerkgeversbijdragenAccordion({ profiel, set, layout = "default", open, onToggle }: {
     profiel: Profiel;
     set: ProfielSetter;
     layout?: "default" | "simulator2";
+    open?: boolean;
+    onToggle?: () => void;
 }) {
     return (
-        <CockpitAccordion title="Werkgeversbijdragen" subtitle="Arbeidsongevallen, groepsverzekering, hospitalisatie" icon={<Shield size={16}/>}>
+        <CockpitAccordion title="Werkgeversbijdragen" subtitle="Arbeidsongevallen, groepsverzekering, hospitalisatie" icon={<Shield size={16}/>} open={open} onToggle={onToggle}>
             <WerkgeversbijdragenContent profiel={profiel} set={set} layout={layout}/>
         </CockpitAccordion>
     );

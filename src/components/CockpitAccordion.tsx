@@ -6,9 +6,20 @@ interface CockpitAccordionProps {
     icon: ReactNode;
     children: ReactNode;
     defaultOpen?: boolean;
+    open?: boolean;
+    onToggle?: () => void;
 }
-export function CockpitAccordion({ title, subtitle, icon, children, defaultOpen = false, }: CockpitAccordionProps) {
-    const [open, setOpen] = useState(defaultOpen);
+export function CockpitAccordion({ title, subtitle, icon, children, defaultOpen = false, open: controlledOpen, onToggle, }: CockpitAccordionProps) {
+    const [internalOpen, setInternalOpen] = useState(defaultOpen);
+    const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
+    function toggle() {
+        if (onToggle) {
+            onToggle();
+        }
+        else {
+            setInternalOpen(!open);
+        }
+    }
     return (<div style={{
             background: "var(--cockpit-card-bg)",
             border: "1px solid var(--cockpit-card-border)",
@@ -16,7 +27,7 @@ export function CockpitAccordion({ title, subtitle, icon, children, defaultOpen 
             boxShadow: "var(--cockpit-card-shadow)",
             overflow: "hidden",
         }}>
-      <button type="button" aria-expanded={open} onClick={() => setOpen(!open)} style={{
+      <button type="button" aria-expanded={open} onClick={toggle} style={{
             width: "100%",
             display: "flex",
             alignItems: "center",
