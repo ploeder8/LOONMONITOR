@@ -1,9 +1,10 @@
 import { describe, expect, it } from "bun:test";
 import { renderToStaticMarkup } from "react-dom/server";
+import { SharedProfielProvider } from "@/lib/useSharedProfiel";
 import { LoonfichePage } from "@/pages/LoonfichePage";
 describe("LoonfichePage", () => {
     it("rendert een profielsnapshot en geen incomplete calculator-toolbar", () => {
-        const html = renderToStaticMarkup(<LoonfichePage />);
+        const html = renderToStaticMarkup(<SharedProfielProvider><LoonfichePage /></SharedProfielProvider>);
         expect(html).toContain("Profiel bewerken");
         expect(html).toContain("Profielsnapshot");
         expect(html).toContain("Brutoloon");

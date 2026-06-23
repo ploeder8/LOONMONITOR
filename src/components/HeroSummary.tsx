@@ -37,12 +37,12 @@ function AnimatedNumber({ value, prefix = "", suffix = "", decimals = 2, }: {
         rafId = requestAnimationFrame(animate);
         return () => cancelAnimationFrame(rafId);
     }, [value, prefersReducedMotion]);
-    const formatted = decimals === 0
-        ? Math.round(display).toString()
-        : display.toLocaleString("nl-BE", {
+    const formatted = display
+        .toLocaleString("nl-BE", {
             minimumFractionDigits: decimals,
             maximumFractionDigits: decimals,
-        });
+        })
+        .replace(/\s/g, ".");
     return (<span>
       {prefix}
       {formatted}
@@ -56,7 +56,7 @@ export function HeroSummary({ brutoloon, nettoloon, werkgeverskost, loonwig, }: 
             value: brutoloon,
             prefix: "€ ",
             suffix: "",
-            decimals: 2,
+            decimals: 0,
             bg: "var(--hero-bruto-bg)",
             border: "var(--hero-bruto-border)",
             text: "var(--hero-bruto-text)",
@@ -67,7 +67,7 @@ export function HeroSummary({ brutoloon, nettoloon, werkgeverskost, loonwig, }: 
             value: nettoloon ?? 0,
             prefix: "€ ",
             suffix: "",
-            decimals: 2,
+            decimals: 0,
             bg: "var(--hero-netto-bg)",
             border: "var(--hero-netto-border)",
             text: "var(--hero-netto-text)",
@@ -78,7 +78,7 @@ export function HeroSummary({ brutoloon, nettoloon, werkgeverskost, loonwig, }: 
             value: werkgeverskost ?? 0,
             prefix: "€ ",
             suffix: "",
-            decimals: 2,
+            decimals: 0,
             bg: "var(--hero-kost-bg)",
             border: "var(--hero-kost-border)",
             text: "var(--hero-kost-text)",

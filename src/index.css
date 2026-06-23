@@ -1014,72 +1014,79 @@ h1, h2, h3, h4 {
 
 /* ── Simulator 2: compacte Onkostenvergoedingen & Werkgeversbijdragen ── */
 
-.simulator2-onkosten-list {
+.simulator2-onkosten-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px 12px;
-  align-items: stretch;
+  gap: 4px 8px;
+  align-items: start;
 }
 
 .simulator2-onkosten-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  padding: 6px 8px;
+  gap: 10px;
+  padding: 6px 10px;
   border-radius: var(--radius-md);
-  background: var(--cockpit-subsection-bg);
-  min-height: 36px;
+  border: 1px solid var(--cockpit-toggle-inactive-border);
+  background: var(--cockpit-toggle-inactive-bg);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
 }
 
-.simulator2-onkosten-row.is-inactive {
-  opacity: 0.65;
+.simulator2-onkosten-row.is-active {
+  border-color: var(--cockpit-toggle-active-border);
+  background: var(--cockpit-toggle-active-bg);
 }
 
-.simulator2-onkosten-toggle {
-  display: inline-flex;
+.simulator2-onkosten-row-left {
+  display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 12px;
+  gap: 8px;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.simulator2-onkosten-row-left input[type="checkbox"] {
+  accent-color: var(--color-primary);
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.simulator2-onkosten-row-label {
+  font-size: 13px;
   font-weight: 600;
   color: var(--color-navy-500);
-  cursor: pointer;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  flex-shrink: 1;
 }
 
-.simulator2-onkosten-toggle input[type="checkbox"] {
-  accent-color: var(--color-primary);
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
+.simulator2-onkosten-row.is-active .simulator2-onkosten-row-label {
+  color: var(--color-primary);
 }
 
-.simulator2-onkosten-inputs {
+.simulator2-onkosten-row-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.simulator2-onkosten-input-group {
   display: flex;
   align-items: center;
   gap: 6px;
-  flex-shrink: 0;
-}
-
-.simulator2-onkosten-bedrag-wrap {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .simulator2-onkosten-input {
-  width: 72px;
+  width: 66px;
   height: 28px;
   padding: 0 6px;
   font-size: 12px;
-}
-
-.simulator2-onkosten-input:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
 }
 
 .simulator2-onkosten-aantal {
@@ -1088,6 +1095,14 @@ h1, h2, h3, h4 {
 
 .simulator2-onkosten-unit {
   font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.simulator2-onkosten-forfait {
+  font-size: 12px;
+  font-weight: 600;
   color: var(--color-text-muted);
   white-space: nowrap;
 }
@@ -1105,6 +1120,26 @@ h1, h2, h3, h4 {
 
 .simulator2-onkosten-reset:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 700px) {
+  .simulator2-onkosten-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .simulator2-onkosten-row {
+    flex-wrap: wrap;
+  }
+
+  .simulator2-onkosten-row-right {
+    width: 100%;
+    justify-content: flex-start;
+    padding-left: 24px;
+  }
+
+  .simulator2-onkosten-input-group {
+    justify-content: flex-start;
+  }
 }
 
 .simulator2-werkgever-form {
@@ -1132,7 +1167,6 @@ h1, h2, h3, h4 {
 }
 
 @media (max-width: 700px) {
-  .simulator2-onkosten-list,
   .simulator2-werkgever-form {
     grid-template-columns: 1fr;
   }

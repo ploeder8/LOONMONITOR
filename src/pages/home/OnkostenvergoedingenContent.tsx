@@ -18,13 +18,13 @@ const ONKOSTEN_LABELS: Record<OnkostenCategorieKey, string> = {
 };
 
 const ONKOSTEN_EENHEID: Record<OnkostenCategorieKey, string> = {
-    parking: "€/maand",
-    carwash: "€/maand",
-    garage: "€/maand",
-    maaltijd: "€/dag",
-    baan: "€/dag",
-    internet: "€/maand",
-    thuiswerk: "€/maand",
+    parking: "€/m",
+    carwash: "€/m",
+    garage: "€/m",
+    maaltijd: "€/d",
+    baan: "€/d",
+    internet: "€/m",
+    thuiswerk: "€/m",
     kilometer: "€/km",
 };
 
@@ -44,7 +44,7 @@ export function OnkostenvergoedingenContent({ profiel, set, layout = "default" }
         }));
     }
     const isSimulator2 = layout === "simulator2";
-    return (<div className={isSimulator2 ? "simulator2-onkosten-list" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4"} style={{ gap: 16 }}>
+    return (<div className={isSimulator2 ? "simulator2-onkosten-grid" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4"} style={{ gap: 16 }}>
       {(Object.keys(ONKOSTEN_LABELS) as OnkostenCategorieKey[]).map((key) => {
             const cat = profiel.onkostenCategorieen[key];
             const lookup = safeGetValue(getOnkostenDatapuntId(key, refDatum), { refDatum, toelatenMogelijkVerouderd: true });
@@ -60,27 +60,27 @@ export function OnkostenvergoedingenContent({ profiel, set, layout = "default" }
                     ? toegepastBedrag * Math.max(cat.aantalKm, 0)
                     : toegepastBedrag;
             if (isSimulator2) {
-                return (<div key={key} className={`simulator2-onkosten-row ${cat.actief ? "" : "is-inactive"}`}>
-                  <label className="simulator2-onkosten-toggle">
+                return (<div key={key} className={`simulator2-onkosten-row ${cat.actief ? "is-active" : ""}`}>
+                  <label className="simulator2-onkosten-row-left">
                     <input type="checkbox" checked={cat.actief} onChange={(e) => updateCategorie(key, { actief: e.target.checked })}/>
-                    <span>{ONKOSTEN_LABELS[key]}</span>
+                    <span className="simulator2-onkosten-row-label">{ONKOSTEN_LABELS[key]}</span>
                     {lookup.waarschuwing && <HelpTooltip text={lookup.waarschuwing}/>}
                   </label>
-                  <div className="simulator2-onkosten-inputs">
-                    <div className="simulator2-onkosten-bedrag-wrap">
-                      <NumeriekeInput
-                        className={`${inputClass} simulator2-onkosten-input`}
-                        step="0.01"
-                        min={0}
-                        disabled={!cat.actief}
-                        value={toegepastBedrag}
-                        onValueChange={(waarde) => updateCategorie(key, { overrideBedrag: waarde })}
-                      />
-                      <span className="simulator2-onkosten-unit">{ONKOSTEN_EENHEID[key]}</span>
-                      {heeftOverride && <button type="button" className="simulator2-onkosten-reset" onClick={() => updateCategorie(key, { overrideBedrag: null })}>Herstel</button>}
-                    </div>
-                    {isPerDag && <NumeriekeInput className={`${inputClass} simulator2-onkosten-input simulator2-onkosten-aantal`} step="1" min={0} disabled={!cat.actief} value={cat.aantalDagen} onValueChange={(waarde) => updateCategorie(key, { aantalDagen: waarde })}/>}
-                    {isPerKm && <NumeriekeInput className={`${inputClass} simulator2-onkosten-input simulator2-onkosten-aantal`} step="0.01" min={0} disabled={!cat.actief} value={cat.aantalKm} onValueChange={(waarde) => updateCategorie(key, { aantalKm: waarde })}/>}
+                  <div className="simulator2-onkosten-row-right">
+                    {cat.actief ? (<div className="simulator2-onkosten-input-group">
+                        <NumeriekeInput
+                          className={`${inputClass} simulator2-onkosten-input`}
+                          step="0.01"
+                          min={0}
+                          value={toegepastBedrag}
+                          onValueChange={(waarde) => updateCategorie(key, { overrideBedrag: waarde })}
+                        />
+                        <span className="simulator2-onkosten-unit">{ONKOSTEN_EENHEID[key]}</span>
+                        {heeftOverride && <button type="button" className="simulator2-onkosten-reset" onClick={() => updateCategorie(key, { overrideBedrag: null })}>Herstel</button>}
+                        {isPerDag && <NumeriekeInput className={`${inputClass} simulator2-onkosten-input simulator2-onkosten-aantal`} step="1" min={0} value={cat.aantalDagen} onValueChange={(waarde) => updateCategorie(key, { aantalDagen: waarde })}/>}
+                        {isPerKm && <NumeriekeInput className={`${inputClass} simulator2-onkosten-input simulator2-onkosten-aantal`} step="0.01" min={0} value={cat.aantalKm} onValueChange={(waarde) => updateCategorie(key, { aantalKm: waarde })}/>}
+                        {(isPerDag || isPerKm) && <span className="simulator2-onkosten-unit">{isPerDag ? "d" : "km"}</span>}
+                      </div>) : (<span className="simulator2-onkosten-forfait">{formatEUR(forfait)} {ONKOSTEN_EENHEID[key]}</span>)}
                   </div>
                 </div>);
             }

@@ -3,6 +3,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { DEFAULTS } from "@/lib/profiel";
 import { LoonrunPage } from "@/pages/LoonrunPage";
 import { LOONRUN_STORAGE_KEY } from "@/lib/loonrunStorage";
+import { SharedProfielProvider } from "@/lib/useSharedProfiel";
 
 function withLocalStorage(value: string, callback: () => void) {
   const previous = globalThis.localStorage;
@@ -30,7 +31,7 @@ function withLocalStorage(value: string, callback: () => void) {
 describe("LoonrunPage exportvoorbereiding", () => {
   it("toont de generieke exportvoorbereiding als controlelaag", () => {
     const html = renderToStaticMarkup(
-      <LoonrunPage
+      <SharedProfielProvider><LoonrunPage
         initialInputs={[
           {
             id: "wn-1",
@@ -44,7 +45,7 @@ describe("LoonrunPage exportvoorbereiding", () => {
             },
           },
         ]}
-      />,
+      /></SharedProfielProvider>,
     );
 
     expect(html).toContain("Exportvoorbereiding");
@@ -56,12 +57,12 @@ describe("LoonrunPage exportvoorbereiding", () => {
 
   it("schermt download af wanneer loonrunvalidaties export blokkeren", () => {
     const html = renderToStaticMarkup(
-      <LoonrunPage
+      <SharedProfielProvider><LoonrunPage
         initialInputs={[
           { id: "wn-1", naam: "Jan", profiel: { ...DEFAULTS, berekeningsMaand: "06" } },
           { id: "wn-2", naam: "Piet", profiel: { ...DEFAULTS, berekeningsMaand: "07" } },
         ]}
-      />,
+      /></SharedProfielProvider>,
     );
 
     expect(html).toContain("Geblokkeerd");
@@ -85,7 +86,7 @@ describe("LoonrunPage exportvoorbereiding", () => {
         },
       ]),
       () => {
-        const html = renderToStaticMarkup(<LoonrunPage />);
+        const html = renderToStaticMarkup(<SharedProfielProvider><LoonrunPage /></SharedProfielProvider>);
 
         expect(html).toContain("Storage Werknemer");
         expect(html).toContain("Exportvoorbereiding");

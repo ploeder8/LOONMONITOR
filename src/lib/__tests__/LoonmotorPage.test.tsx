@@ -3,11 +3,12 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { DEFAULTS } from "@/lib/profiel";
 import { createLeegBedrijf, createMedewerkerVoorBedrijf } from "@/lib/loonmotor";
+import { SharedProfielProvider } from "@/lib/useSharedProfiel";
 import { LoonmotorPage } from "@/pages/LoonmotorPage";
 
 describe("LoonmotorPage", () => {
   it("toont de lege dossiercockpit met KBO-ophaalactie", () => {
-    const html = renderToStaticMarkup(createElement(LoonmotorPage, { initialDossiers: [] }));
+    const html = renderToStaticMarkup(<SharedProfielProvider>{createElement(LoonmotorPage, { initialDossiers: [] })}</SharedProfielProvider>);
 
     expect(html).toContain("Loonmotor");
     expect(html).toContain("Ondernemingsnummer");
@@ -39,9 +40,9 @@ describe("LoonmotorPage", () => {
     });
 
     const html = renderToStaticMarkup(
-      createElement(LoonmotorPage, {
+      <SharedProfielProvider>{createElement(LoonmotorPage, {
         initialDossiers: [{ bedrijf, medewerkers: [medewerker] }],
-      }),
+      })}</SharedProfielProvider>,
     );
 
     expect(html).toContain("Jaakie Payroll BV");
@@ -62,9 +63,9 @@ describe("LoonmotorPage", () => {
     };
 
     const html = renderToStaticMarkup(
-      createElement(LoonmotorPage, {
+      <SharedProfielProvider>{createElement(LoonmotorPage, {
         initialDossiers: [{ bedrijf, medewerkers: [] }],
-      }),
+      })}</SharedProfielProvider>,
     );
 
     expect(html).toContain("Bedrijf toevoegen");
