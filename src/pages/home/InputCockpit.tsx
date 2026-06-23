@@ -115,11 +115,12 @@ function baremaInlineStyle(ok: boolean): CSSProperties {
         gap: 4,
     };
 }
-function PersoonsgegevensCard({ profiel, set }: {
+export function PersoonsgegevensCard({ profiel, set, cardStyle }: {
     profiel: Profiel;
     set: ProfielSetter;
+    cardStyle?: CSSProperties;
 }) {
-    return (<CockpitCard title="Persoonsgegevens" icon={<User size={16}/>}>
+    return (<CockpitCard title="Persoonsgegevens" icon={<User size={16}/>} style={cardStyle}>
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 12 }}>
           <FormField label="Naam werknemer">
@@ -468,10 +469,11 @@ export function profielMetBerekeningsJaar(profiel: Profiel, jaar: string): Profi
         arbeidsdagenPerMaand: aantalWeekdagenInMaand(jaar, profiel.berekeningsMaand),
     };
 }
-export function InputCockpit({ profiel, set, onChangeRichting }: {
+export function InputCockpit({ profiel, set, onChangeRichting, hidePersoonsgegevens }: {
     profiel: Profiel;
     set: ProfielSetter;
     onChangeRichting?: (richting: BerekeningsRichting) => void;
+    hidePersoonsgegevens?: boolean;
 }) {
     function setBerekeningsMaand(maand: string) {
         set((prev) => profielMetBerekeningsMaand(prev, maand));
@@ -502,7 +504,7 @@ export function InputCockpit({ profiel, set, onChangeRichting }: {
     }
     return (<div style={{ display: "flex", flexDirection: "column", gap: "var(--cockpit-grid-gap)" }}>
 
-      <PersoonsgegevensCard profiel={profiel} set={set}/>
+      {!hidePersoonsgegevens && <PersoonsgegevensCard profiel={profiel} set={set}/>}
 
       <CockpitAccordion title="Contractgegevens" subtitle="Arbeidscontext, brutoloon, woon-werkverkeer, extra looncomponenten" icon={<Briefcase size={16}/>} defaultOpen>
         <div style={{ display: "flex", flexDirection: "column", gap: "var(--cockpit-grid-gap)" }}>

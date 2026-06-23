@@ -12,9 +12,10 @@ import type { ProfielSetter } from "@/pages/home/types";
 
 const DOELGROEPVERMINDERING_OPMERKING = "de doelgroepvermindering kan echter enkel toegepast worden indien de onderneming daadwerkelijk extra werkgelegenheid creeert , waarbij rekening gehouden wordt met bestaande/voorafgaande tewerkstellingen in andere vennootschappen waarmee de nieuwe onderneming verbonden is";
 
-export function WerkgeverPaneel({ profiel, set }: {
+export function WerkgeverCard({ profiel, set, cardStyle }: {
     profiel: Profiel;
     set: ProfielSetter;
+    cardStyle?: import("react").CSSProperties;
 }) {
     const [kboInput, setKboInput] = useState(profiel.werkgeverOndernemingsnummer);
     const [kboStatus, setKboStatus] = useState<{ kind: "idle" | "loading" | "error"; message?: string }>({ kind: "idle" });
@@ -55,9 +56,8 @@ export function WerkgeverPaneel({ profiel, set }: {
     }
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "var(--cockpit-grid-gap)" }}>
-            <CockpitCard title="Werkgever" icon={<Building2 size={16}/>}>
-                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <CockpitCard title="Werkgever" icon={<Building2 size={16}/>} style={cardStyle}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                     <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 12, alignItems: "flex-end" }}>
                         <FormField label={<>KBO-nummer <HelpTooltip text="Voer een Belgisch ondernemingsnummer in. Bij geldig nummer worden naam en adres automatisch ingevuld."/></>}>
                             <input
@@ -150,10 +150,28 @@ export function WerkgeverPaneel({ profiel, set }: {
                     </div>
                 </div>
             </CockpitCard>
+    );
+}
 
-            <CockpitAccordion title="Werkgeversbijdragen" subtitle="Arbeidsongevallen, groepsverzekering, hospitalisatie" icon={<Shield size={16}/>}>
-                <WerkgeversbijdragenContent profiel={profiel} set={set}/>
-            </CockpitAccordion>
+export function WerkgeversbijdragenAccordion({ profiel, set }: {
+    profiel: Profiel;
+    set: ProfielSetter;
+}) {
+    return (
+        <CockpitAccordion title="Werkgeversbijdragen" subtitle="Arbeidsongevallen, groepsverzekering, hospitalisatie" icon={<Shield size={16}/>}>
+            <WerkgeversbijdragenContent profiel={profiel} set={set}/>
+        </CockpitAccordion>
+    );
+}
+
+export function WerkgeverPaneel({ profiel, set }: {
+    profiel: Profiel;
+    set: ProfielSetter;
+}) {
+    return (
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--cockpit-grid-gap)" }}>
+            <WerkgeverCard profiel={profiel} set={set}/>
+            <WerkgeversbijdragenAccordion profiel={profiel} set={set}/>
         </div>
     );
 }
