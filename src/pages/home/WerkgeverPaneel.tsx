@@ -271,7 +271,7 @@ export function WerkgeverPaneel({ profiel, set }: {
     );
 }
 
-function WerkgeversbijdragenContent({ profiel, set, layout = "default" }: {
+export function WerkgeversbijdragenContent({ profiel, set, layout = "default" }: {
     profiel: Profiel;
     set: ProfielSetter;
     layout?: "default" | "simulator2";
