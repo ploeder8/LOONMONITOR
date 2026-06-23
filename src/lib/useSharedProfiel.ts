@@ -1,7 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { createContext, createElement, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { DEFAULTS, normaliseerProfiel, type Profiel } from "@/lib/profiel";
+
 const STORAGE_KEY = "jaakie:profiel";
 export const PROFIEL_STORAGE_SCOPE = "venster";
+
 function readProfielFromStorage(): Profiel | null {
     try {
         const raw = sessionStorage.getItem(STORAGE_KEY);
@@ -14,6 +16,7 @@ function readProfielFromStorage(): Profiel | null {
         return null;
     }
 }
+
 function writeProfielToStorage(profiel: Profiel): void {
     try {
         sessionStorage.setItem(STORAGE_KEY, JSON.stringify(profiel));
@@ -21,11 +24,17 @@ function writeProfielToStorage(profiel: Profiel): void {
     catch {
     }
 }
+
 const STORAGE_WRITE_DEBOUNCE_MS = 300;
-export function useSharedProfiel(): [
-    Profiel,
-    (p: Profiel | ((prev: Profiel) => Profiel)) => void
-] {
+
+interface SharedProfielContextValue {
+    profiel: Profiel;
+    setProfiel: (p: Profiel | ((prev: Profiel) => Profiel)) => void;
+}
+
+const SharedProfielContext = createContext<SharedProfielContextValue | null>(null);
+
+export function SharedProfielProvider({ children }: { children: ReactNode }) {
     const [profiel, setProfielState] = useState<Profiel>(() => {
         return readProfielFromStorage() ?? DEFAULTS;
     });
@@ -49,5 +58,16 @@ export function useSharedProfiel(): [
             }
         };
     }, [profiel]);
-    return [profiel, setProfiel];
+    return createElement(SharedProfielContext.Provider, { value: { profiel, setProfiel } }, children);
+}
+
+export function useSharedProfiel(): [
+    Profiel,
+    (p: Profiel | ((prev: Profiel) => Profiel)) => void
+] {
+    const ctx = useContext(SharedProfielContext);
+    if (!ctx) {
+        throw new Error("useSharedProfiel moet binnen een SharedProfielProvider gebruikt worden");
+    }
+    return [ctx.profiel, ctx.setProfiel];
 }
