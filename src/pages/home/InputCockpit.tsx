@@ -322,18 +322,15 @@ function BrutoloonCard({ profiel, set, onChangeRichting }: {
       </div>
     </CockpitCard>);
 }
-function LooncomponentCard({ icon, title, children }: {
+function LooncomponentCard({ icon, title, children, compact = false }: {
     icon: ReactNode;
     title: string;
     children: ReactNode;
+    compact?: boolean;
 }) {
-    return (<div className="extra-loon-card">
-      <div className="extra-loon-title">
-        {icon}
-        {title}
-      </div>
+    return (<CockpitCard title={title} icon={icon} style={{ height: "100%", padding: compact ? 10 : undefined }}>
       {children}
-    </div>);
+    </CockpitCard>);
 }
 
 function ExtraLooncomponentenContent({ profiel, set, layout = "default" }: {
@@ -348,7 +345,7 @@ function ExtraLooncomponentenContent({ profiel, set, layout = "default" }: {
         { label: "GSM-abonnement", checked: profiel.vaaGsmAbonnementActief, onChange: (v: boolean) => set("vaaGsmAbonnementActief", v) },
     ];
     return (<div className={`extra-loon-grid ${layout === "simulator2" ? "is-simulator2" : ""}`}>
-      <LooncomponentCard icon={<Shield size={14}/>} title="Verzekeringen">
+      <LooncomponentCard icon={<Shield size={14}/>} title="Verzekeringen" compact={layout === "simulator2"}>
         <div className="extra-loon-stack">
           <FormField label="Groepsverz. eigen bijdr. (€/m)">
             <NumeriekeInput className={inputClass} step="0.01" min={0} value={profiel.groepsverzekeringEigenBijdrage} onValueChange={(waarde) => set("groepsverzekeringEigenBijdrage", waarde)}/>
@@ -359,7 +356,7 @@ function ExtraLooncomponentenContent({ profiel, set, layout = "default" }: {
         </div>
       </LooncomponentCard>
 
-      <LooncomponentCard icon={<Receipt size={14}/>} title="Maaltijdcheques">
+      <LooncomponentCard icon={<Receipt size={14}/>} title="Maaltijdcheques" compact={layout === "simulator2"}>
         <div className="extra-loon-stack">
           <label className="extra-loon-toggle">
             <input type="checkbox" checked={profiel.maaltijdchequesActief} onChange={(e) => set("maaltijdchequesActief", e.target.checked)}/>
@@ -376,7 +373,7 @@ function ExtraLooncomponentenContent({ profiel, set, layout = "default" }: {
         </div>
       </LooncomponentCard>
 
-      <LooncomponentCard icon={<Car size={14}/>} title="VAA werkmiddelen">
+      <LooncomponentCard icon={<Car size={14}/>} title="VAA werkmiddelen" compact={layout === "simulator2"}>
         <div className="extra-loon-checkgrid">
           {vaaItems.map((item) => (<label key={item.label} className="extra-loon-check">
               <input type="checkbox" checked={item.checked} onChange={(e) => item.onChange(e.target.checked)}/>
@@ -385,7 +382,7 @@ function ExtraLooncomponentenContent({ profiel, set, layout = "default" }: {
         </div>
       </LooncomponentCard>
 
-      <LooncomponentCard icon={<Gift size={14}/>} title="Bonus">
+      <LooncomponentCard icon={<Gift size={14}/>} title="Bonus" compact={layout === "simulator2"}>
         <div className="extra-loon-field-row">
           <FormField label={<span className="extra-loon-label-with-tooltip">Bonusbedrag (€)<HelpTooltip text="Een maandbedrag wordt omgerekend naar een jaarbonus. De bonus telt alleen mee in het jaaroverzicht en wordt belast als exceptionele vergoeding."/></span>}>
             <NumeriekeInput className={inputClass} step="0.01" min={0} value={profiel.bonusBedrag} onValueChange={(waarde) => set("bonusBedrag", waarde)}/>
