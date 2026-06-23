@@ -236,7 +236,7 @@ function ArbeidscontextCard({ profiel, set, setBerekeningsMaand, setBerekeningsJ
     setBerekeningsMaand: (maand: string) => void;
     setBerekeningsJaar: (jaar: string) => void;
 }) {
-    return (<CockpitCard title="Arbeidscontext" icon={<Building2 size={16}/>}>
+    return (<CockpitCard title="Arbeidscontext" icon={<Building2 size={16}/>} style={{ height: "100%" }}>
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {profiel.statuut === "bediende" && (<div className="grid grid-cols-3 gap-3">
             <FormField label="Schaal">
@@ -296,8 +296,8 @@ function BrutoloonCard({ profiel, set, onChangeRichting }: {
     set: ProfielSetter;
     onChangeRichting?: (richting: BerekeningsRichting) => void;
 }) {
-    return (<CockpitCard title="Brutoloon" icon={<Euro size={16}/>}>
-      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+    return (<CockpitCard title="Brutoloon" icon={<Euro size={16}/>} style={{ height: "100%" }}>
+      <div className="brutoloon-content" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         {profiel.statuut === "bediende" && onChangeRichting && (
           <FormField label="Berekeningsrichting">
             <DirectionToggle value={profiel.berekeningsRichting} onChange={onChangeRichting}/>
@@ -365,14 +365,14 @@ function ExtraLooncomponentenContent({ profiel, set, layout = "default" }: {
             <input type="checkbox" checked={profiel.maaltijdchequesActief} onChange={(e) => set("maaltijdchequesActief", e.target.checked)}/>
             <span>Maaltijdcheques toepassen</span>
           </label>
-          {profiel.maaltijdchequesActief && (<div className="extra-loon-field-row">
-              <FormField label={<>WG-aandeel (€/dag) <HelpTooltip text={`Max €${MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026.toFixed(2).replace(".", ",")}/dag × ${profiel.arbeidsdagenPerMaand} werkdagen.`}/></>}>
-                <NumeriekeInput className={inputClass} step="0.01" min={0} max={MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026} value={profiel.maaltijdchequeWerkgeversaandeelPerDag} onValueChange={(waarde) => set("maaltijdchequeWerkgeversaandeelPerDag", waarde)}/>
-              </FormField>
-              <FormField label={<>WN-bijdrage (€/dag) <HelpTooltip text={`Min €1,09/dag × ${profiel.arbeidsdagenPerMaand} werkdagen.`}/></>}>
-                <NumeriekeInput className={inputClass} step="0.01" min={0} value={profiel.maaltijdchequeWerknemersbijdragePerDag} onValueChange={(waarde) => set("maaltijdchequeWerknemersbijdragePerDag", waarde)}/>
-              </FormField>
-            </div>)}
+          <div className="extra-loon-field-row">
+            <FormField label={<>WG-aandeel (€/dag) <HelpTooltip text={`Max €${MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026.toFixed(2).replace(".", ",")}/dag × ${profiel.arbeidsdagenPerMaand} werkdagen.`}/></>}>
+              {profiel.maaltijdchequesActief ? (<NumeriekeInput className={inputClass} step="0.01" min={0} max={MAALTIJDCHEQUE_MAX_WG_PER_DAG_2026} value={profiel.maaltijdchequeWerkgeversaandeelPerDag} onValueChange={(waarde) => set("maaltijdchequeWerkgeversaandeelPerDag", waarde)}/>) : (<input type="text" className={`${inputClass} extra-loon-disabled-input`} value="—" disabled/>)}
+            </FormField>
+            <FormField label={<>WN-bijdrage (€/dag) <HelpTooltip text={`Min €1,09/dag × ${profiel.arbeidsdagenPerMaand} werkdagen.`}/></>}>
+              {profiel.maaltijdchequesActief ? (<NumeriekeInput className={inputClass} step="0.01" min={0} value={profiel.maaltijdchequeWerknemersbijdragePerDag} onValueChange={(waarde) => set("maaltijdchequeWerknemersbijdragePerDag", waarde)}/>) : (<input type="text" className={`${inputClass} extra-loon-disabled-input`} value="—" disabled/>)}
+            </FormField>
+          </div>
         </div>
       </LooncomponentCard>
 
@@ -387,7 +387,7 @@ function ExtraLooncomponentenContent({ profiel, set, layout = "default" }: {
 
       <LooncomponentCard icon={<Gift size={14}/>} title="Bonus">
         <div className="extra-loon-field-row">
-          <FormField label={<>Bonusbedrag (€) <HelpTooltip text="Een maandbedrag wordt omgerekend naar een jaarbonus. De bonus telt alleen mee in het jaaroverzicht en wordt belast als exceptionele vergoeding."/></>}>
+          <FormField label={<span className="extra-loon-label-with-tooltip">Bonusbedrag (€)<HelpTooltip text="Een maandbedrag wordt omgerekend naar een jaarbonus. De bonus telt alleen mee in het jaaroverzicht en wordt belast als exceptionele vergoeding."/></span>}>
             <NumeriekeInput className={inputClass} step="0.01" min={0} value={profiel.bonusBedrag} onValueChange={(waarde) => set("bonusBedrag", waarde)}/>
           </FormField>
           <div role="group" aria-label="Bonusperiode" className="extra-loon-period">
@@ -448,12 +448,12 @@ export function ContractgegevensAccordion({ profiel, set, onChangeRichting, layo
     }
     const isSimulator2 = layout === "simulator2";
     const content = (<>
-        <Subsection title="Arbeidscontext" icon={<Building2 size={14}/>}>
-          <ArbeidscontextCard profiel={profiel} set={set} setBerekeningsMaand={setBerekeningsMaand} setBerekeningsJaar={setBerekeningsJaar}/>
-        </Subsection>
-
         <Subsection title="Brutoloon" icon={<Euro size={14}/>}>
           <BrutoloonCard profiel={profiel} set={set} onChangeRichting={onChangeRichting}/>
+        </Subsection>
+
+        <Subsection title="Arbeidscontext" icon={<Building2 size={14}/>}>
+          <ArbeidscontextCard profiel={profiel} set={set} setBerekeningsMaand={setBerekeningsMaand} setBerekeningsJaar={setBerekeningsJaar}/>
         </Subsection>
 
         <Subsection title="Woon-werkverkeer" icon={<Car size={14}/>}>
